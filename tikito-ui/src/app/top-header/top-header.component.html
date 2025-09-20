@@ -1,0 +1,17 @@
+<ng-container>
+  <div class="top-menu">
+    <div class="top-menu-links" id="top-menu-links" style="float: left;">
+      <app-header-item icon="home" [attr.data-cy]="'top-menu-home-button'" *ngIf="!initialInstallation" displayValue="Home" routerLink="/"></app-header-item>
+      <app-header-item routerLink="/account" icon="location_city" *ngIf="loggedIn" [displayValue]="'user-account' | translate"></app-header-item>
+      <app-header-item icon="account_balance" routerLink="/money-transaction" *ngIf="loggedIn" [displayValue]="'money/money' | translate"></app-header-item>
+      <app-header-item icon="group_work" routerLink="/money/transaction-group" *ngIf="loggedIn" [displayValue]="'money/transaction-group' | translate"></app-header-item>
+      <app-header-item icon="bar_chart" routerLink="/security" *ngIf="loggedIn" [displayValue]="'security/securities' | translate"></app-header-item>
+      <app-header-item icon="cloud_download" routerLink="/account/import" *ngIf="loggedIn" [displayValue]="'import' | translate"></app-header-item>
+      <app-header-item icon="build" routerLink="/admin" *ngIf="loggedIn" [displayValue]="'admin' | translate"></app-header-item>
+      <app-header-item icon="person" routerLink="/login" *ngIf="!loggedIn && !initialInstallation" [displayValue]="'login' | translate"></app-header-item>
+<!--      <app-header-item icon="person" routerLink="/register" *ngIf="!loggedIn" [displayValue]="'register' | translate"></app-header-item>-->
+      <app-header-item icon="exit_to_app" routerLink="/logout" *ngIf="loggedIn" [displayValue]="'logout' | translate"></app-header-item>
+    </div>
+    <div style="float: right"><img src="/assets/images/logo.png" style="width: 75px; height: 75px; padding-right: 50px; padding-top: 10px"/></div>
+  </div>
+</ng-container>

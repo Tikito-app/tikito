@@ -1,0 +1,12 @@
+<div class="main-side-column main-column">
+</div>
+<div class="main-center-column main-column">
+  <ng-container *ngIf="aggregatedHistoricalMoneyHoldingValues.length == 0">
+    <div [innerHTML]="'overview/extended-overview-message' | translate"></div>
+  </ng-container>
+  <mat-grid-list cols="4" rowHeight="200px">
+    <mat-grid-tile colspan="3" rowspan="3">
+      <div echarts [options]="chartOption" [initOpts]="initOptions" class="full-width"></div>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

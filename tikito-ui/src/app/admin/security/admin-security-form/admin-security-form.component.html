@@ -1,0 +1,69 @@
+<div class="main-side-column main-column">
+</div>
+<div class="main-center-column-small main-column">
+  <mat-card class="full-width" *ngIf="form" style="width: 100%;">
+    <mat-card-header>
+      <mat-card-title>{{ 'admin/security/edit-security-title' | translate }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form">
+        <ng-container>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ 'admin/security/name' | translate }}</mat-label>
+            <input type="text" [attr.data-cy]="'name'" matInput formControlName="name">
+            <mat-icon matSuffix>name</mat-icon>
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ 'security/security-type' | translate }}</mat-label>
+            <mat-select formControlName="securityType" [attr.data-cy]="'security-type'">
+              @for (securityType of Util.getSecurityTypes(); track securityType) {
+                <mat-option [value]="securityType">{{ 'security/security-type-' + securityType | translate }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ 'currency' | translate }}</mat-label>
+            <mat-select formControlName="currencyId" [attr.data-cy]="'currencyId'">
+              @for (currency of CacheService.getCurrencies(); track currency) {
+                <mat-option [value]="currency">{{ 'currency/' + currency.isins[0].isin | translate }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ 'security/sector' | translate }}</mat-label>
+            <input type="text" [attr.data-cy]="'sector'" matInput formControlName="sector">
+            <mat-icon matSuffix>sector</mat-icon>
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ 'security/industry' | translate }}</mat-label>
+            <input type="text" [attr.data-cy]="'industry'" matInput formControlName="industry">
+            <mat-icon matSuffix>industry</mat-icon>
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ 'security/exchange' | translate }}</mat-label>
+            <input type="text" [attr.data-cy]="'exchange'" matInput formControlName="exchange">
+            <mat-icon matSuffix>exchange</mat-icon>
+          </mat-form-field>
+          <br/>
+
+        </ng-container>
+        <br/>
+        <button [attr.data-cy]="'save-button'" mat-raised-button color="primary"
+                (click)="onSaveButtonClicked();">{{ 'save' | translate }}
+        </button>&nbsp;
+        <button [attr.data-cy]="'cancel-button'" mat-raised-button color="secundary"
+                (click)="onCancelButtonClicked()">{{ 'cancel' | translate }}
+        </button>
+        <button [attr.data-cy]="'delete-button'" mat-button color="warn" style="float: right;"
+                (click)="onDeleteButtonClicked();">{{ 'delete' | translate }}
+        </button>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

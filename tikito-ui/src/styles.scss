@@ -1,0 +1,103 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Overpass, sans-serif; }
+
+
+
+.mat-card-content {
+  font-family: Overpass, sans-serif;
+  font-size: 17px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+
+.main-column {
+  float: left;
+  padding: 20px;
+}
+
+.main-side-column {
+  width: 20%;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+.main-center-column {
+  width: 75%;
+}
+.main-center-column-small {
+  width: 50%;
+}
+
+.top-menu {
+  top: 0;
+  //     background-color: #DCC54E;
+  width: 100%;
+  border-bottom: 1px solid #b9b9b9;
+  z-index: 10;
+  height: 100px;
+  position:-webkit-sticky;
+  position: sticky;
+  background-color: white;
+}
+
+.top-menu-title {
+  font-size: 32px;
+  padding: 25px;
+  text-align: center;
+}
+
+.top-menu-links {
+  padding-top: 40px;
+  padding-left: 20px;
+}
+
+
+.full-width {
+  width: 100%;
+}
+.half-width {
+  width: 50%;
+}
+
+.fab-button {
+  //float: right;
+}
+
+
+@media only screen and (min-width: 1000px) {
+  .hide-on-normal-screen {
+    display: none !important;
+  }
+}
+@media only screen and (max-width: 1000px) {
+  .hide-on-mobile-device {
+    display: none !important;
+  }
+  .main-column {
+    padding: 20px 0px;
+  }
+  .main-side-column {
+    width: 100%;
+    position: inherit;
+  }
+  .main-center-column {
+    width: 100%;
+  }
+  .large-card {
+    width: 100%;
+  }
+  .small-card {
+    width: 100%;
+    margin-top: 0px !important;
+  }
+  .custom-modalbox {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+

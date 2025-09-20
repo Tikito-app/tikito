@@ -1,0 +1,45 @@
+<form [formGroup]="form">
+<div class="mat-elevation-z8" *ngIf="dataSource">
+  <table mat-table [dataSource]="dataSource">
+
+    @for (columnInFile of state.parsedContent[0]; track columnInFile; let i = $index) {
+      <ng-container matColumnDef="column-{{i}}">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ columnInFile | translate }}
+          <mat-form-field>
+            <mat-select formControlName="column-{{i}}" [attr.data-cy]="'transaction-field'" (selectionChange)="onColumnChanged()">
+              @for (requiredColumn of requiredColumns; track requiredColumns) {
+                <mat-option [value]="requiredColumn">{{'account/import/required-column-' + requiredColumn | translate}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" *ngIf="displayBuySellValueFieldOnColumn == i">
+            <mat-label>{{ 'account/import/buy-value' | translate }}</mat-label>
+            <input type="text" [attr.data-cy]="'buy-value'" matInput formControlName="buy-value">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" *ngIf="displayTimestampFormatFieldOnColumn == i">
+            <mat-label>{{ 'account/import/timestamp-format' | translate }}</mat-label>
+            <input type="text" [attr.data-cy]="'timestamp-format'" matInput formControlName="timestamp-format">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" *ngIf="displayDateFormatFieldOnColumn == i">
+            <mat-label>{{ 'account/import/date-format' | translate }}</mat-label>
+            <input type="text" [attr.data-cy]="'date-format'" matInput formControlName="date-format" (change)="UserPreferenceService.onInputChange(UserPreference.IMPORT_DATE_FORMAT, $event)">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" *ngIf="displayTimeFormatFieldOnColumn == i">
+            <mat-label>{{ 'account/import/time-format' | translate }}</mat-label>
+            <input type="text" [attr.data-cy]="'time-format'" matInput formControlName="time-format">
+          </mat-form-field>
+
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element[i] }} </td>
+      </ng-container>
+    }
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+  </table>
+</div>
+</form>

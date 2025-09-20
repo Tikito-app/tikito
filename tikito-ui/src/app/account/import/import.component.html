@@ -1,0 +1,47 @@
+<div class="main-side-column main-column">
+</div>
+<div class="main-center-column main-column" *ngIf="accounts">
+  <div *ngIf="accounts.length == 0">
+    {{'import/introduction-text' | translate}}
+  </div>
+  <form [formGroup]="form">
+    <mat-form-field class="half-width" *ngIf="accounts.length > 0">
+      <mat-label>{{ 'account' | translate }}</mat-label>
+      <mat-select formControlName="account" [attr.data-cy]="'account'">
+        @for (account of accounts; track account) {
+          <mat-option [value]="account">{{ account.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <br/>
+    <input type="file" class="file-input" *ngIf="form.value.account" (change)="onFileSelected($event)" #fileUpload/>
+    <br/>
+    <br/>
+    <ng-container *ngIf="showCsvImportOptions">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'account/import/csv-file-separator' | translate }}</mat-label>
+        <input type="text" [attr.data-cy]="'csv-separator'" matInput formControlName="csvSeparator">
+      </mat-form-field>
+      <button mat-raised-button
+              color="{{showCustomHeaderConfig || moneyImportResult || securityImportResult ? 'secondary' : 'primary'}}"
+              (click)="processImportFileContent()">{{ 'account/import/continue' | translate }}
+      </button>
+    </ng-container>
+    <br/>
+    <ng-container *ngIf="moneyImportResult || securityImportResult">
+      <p>{{ 'account/import/do-import-no-dry-run-text' | translate }}</p>
+      <button mat-raised-button color="primary"
+              (click)="uploadFileToBackend(false)">{{ 'account/import' | translate }}
+      </button>
+    </ng-container>
+    <br/>
+    <app-money-import-result *ngIf="moneyImportResult" [transactions]="moneyImportResult"></app-money-import-result>
+    <app-security-import-result *ngIf="securityImportResult"
+                                [transactions]="securityImportResult"></app-security-import-result>
+
+  </form>
+</div>
+<button mat-button color="primary" *ngIf="showCustomHeaderConfig"
+        (click)="uploadFileToBackend(true)">{{ 'account/import/test-custom-import' | translate }}
+</button>
+<app-select-columns *ngIf="showCustomHeaderConfig" [state]="importFileState"></app-select-columns>
