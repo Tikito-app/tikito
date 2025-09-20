@@ -1,0 +1,31 @@
+<form [formGroup]="form">
+  <ng-container>
+    <mat-form-field class="half-width">
+      <mat-label>{{'start-date' | translate}}</mat-label>
+      <input matInput [matDatepicker]="pickerStartDate" formControlName="startDate">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-icon *ngIf="form.value['startDate']" matIconSuffix (click)="form.controls['startDate'].setValue(null);" class="clickable">close</mat-icon>
+      <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
+      <mat-datepicker #pickerStartDate></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field class="half-width">
+      <mat-label>{{'end-date' | translate}}</mat-label>
+      <input matInput [matDatepicker]="pickerEndDate" formControlName="endDate">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-icon *ngIf="form.value['endDate']" matIconSuffix (click)="form.controls['endDate'].setValue(null);" class="clickable">close</mat-icon>
+      <mat-datepicker-toggle matIconSuffix [for]="pickerEndDate"></mat-datepicker-toggle>
+      <mat-datepicker #pickerEndDate></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 50%">
+      <mat-label>{{'loan/part/interest/amount' | translate}}</mat-label>
+      <input type="text" [attr.data-cy]="'amount'" matInput formControlName="amount" >
+      <mat-icon matSuffix>amount</mat-icon>
+    </mat-form-field>
+  </ng-container>
+  <br/>
+  <button [attr.data-cy]="'save-button'" mat-raised-button color="primary" (click)="onSaveButtonClicked();">{{'save' | translate}}</button>&nbsp;
+  <button [attr.data-cy]="'cancel-button'" mat-raised-button color="secundary" (click)="onCancelButtonClicked()">{{'cancel' | translate}}</button>
+  <button [attr.data-cy]="'delete-button'" style="float: right" mat-button color="warn" (click)="onDeleteButtonClicked();">{{'delete' | translate}}</button>
+
+</form>

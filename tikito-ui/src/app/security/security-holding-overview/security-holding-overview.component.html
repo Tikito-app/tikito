@@ -1,0 +1,52 @@
+<div class="main-side-column main-column">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{'filter' | translate}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content *ngIf="form">
+      <form [formGroup]="form">
+        <!--        todo: uncomment after fixing -->
+<!--        <mat-checkbox formControlName="startAtZeroFromBeginning" (change)="UserPreferenceService.onCheckboxChange(UserPreference.SECURITY_START_AT_ZERO_FROM_BEGINNING, $event.checked)">{{ 'money/graph/start-at-zero-from-beginning' | translate}}</mat-checkbox>-->
+<!--        <app-popover text="money/graph/start-at-zero-from-beginning-tooltip"></app-popover>-->
+<!--        <mat-checkbox formControlName="startAtZeroAfterDateAggregation" (change)="UserPreferenceService.onCheckboxChange(UserPreference.SECURITY_START_AT_ZERO_AFTER_DATE_RANGE, $event.checked)">{{ 'money/graph/start-at-zero-after-date-aggregation' | translate}}</mat-checkbox>-->
+<!--        <app-popover text="money/graph/start-at-zero-after-date-aggregation-tooltip"></app-popover>-->
+
+
+        <mat-form-field class="full-width">
+          <mat-label>{{'security/holdings' | translate}}</mat-label>
+          <mat-select [attr.data-cy]="'holdingIds'" multiple formControlName="holdingIds" (selectionChange)="resetUrlFromFilter()">
+            @for (holding of holdings; track holding) {
+              <mat-option [value]="holding.id">{{holding.security.name}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-checkbox formControlName="aggregateDateRange" (change)="onAggregateDateRangeChanged($event.checked)">{{ 'money/graph/aggregate-date-range' | translate}}</mat-checkbox>
+        <app-popover text="money/graph/aggregate-date-range-tooltip"></app-popover><br/>
+        <mat-radio-group *ngIf="form.value.aggregateDateRange" formControlName="dateRange" (change)="UserPreferenceService.onRadioChange(UserPreference.SECURITY_DATE_RANGE, $event.value);">
+          <mat-radio-button style="padding-left: 30px;" value="ALL">{{'money/graph/aggregate-all' | translate}}</mat-radio-button><br/>
+          <mat-radio-button style="padding-left: 30px;" value="YEAR">{{'money/graph/aggregate-per-year' | translate}}</mat-radio-button><br/>
+          <mat-radio-button style="padding-left: 30px;" value="MONTH">{{'money/graph/aggregate-per-month' | translate}}</mat-radio-button><br/>
+          <mat-radio-button style="padding-left: 30px;" value="WEEK">{{'money/graph/aggregate-per-week' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <br/>
+
+        <mat-form-field>
+          <mat-label>{{'start-date' | translate}}</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="startDate" (dateChange)="resetUrlFromFilter()">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <br/>
+        <button mat-raised-button (click)="onUpdateFilterButtonClicked()" color="primary">{{'update' | translate}}</button><br/>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div class="main-center-column main-column">
+  <mat-tab-group *ngIf="form">
+    <mat-tab [label]="'security/graph' | translate"> <app-security-holding-graph [height]="600" [showLegend]="true" [showTooltip]="true" (onChartSeriesSelectedCallback)="onChartSeriesSelectedCallback($event)" [onFilterUpdateCallback]="onFilterUpdateCallback" [securityHoldingFilter]="getTransactionFilter()"></app-security-holding-graph> </mat-tab>
+    <mat-tab [label]="'security/holding/transactions' | translate"> <app-security-transaction-list [onFilterUpdateCallback]="onFilterUpdateCallback" [securityHoldingFilter]="getTransactionFilter()"></app-security-transaction-list> </mat-tab>
+  </mat-tab-group>
+</div>

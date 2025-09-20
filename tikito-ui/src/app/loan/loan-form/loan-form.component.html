@@ -1,0 +1,53 @@
+<div class="main-side-column main-column">
+  <button mat-button (click)="onCancelButtonClicked();" *ngIf="!nameInEdit"><mat-icon>arrow_back</mat-icon> {{'money/transaction-group/back-to-list' | translate}}</button>
+</div>
+
+<div class="main-center-column-small main-column">
+  <mat-card class="full-width" *ngIf="form && loan" style="max-width: 100%; width: 100%;">
+    <mat-card-header>
+      <mat-card-title>{{'loan/loan' | translate}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form">
+
+        <ng-container *ngIf="!nameInEdit">
+          {{loan.name}} <button mat-button (click)="nameInEdit = true"><mat-icon>edit</mat-icon></button>
+          <br/><br/>
+        </ng-container>
+
+        <ng-container *ngIf="nameInEdit">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{'loan/name' | translate}}</mat-label>
+            <input type="text" [attr.data-cy]="'name'" matInput formControlName="name" >
+            <mat-icon matSuffix>name</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'loan/part/money-transaction-groups' | translate }}</mat-label>
+            <mat-select formControlName="groupIds" [attr.data-cy]="'groupIds'" multiple>
+              @for (group of groups; track group) {
+                <mat-option [value]="group.id">{{ group.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </ng-container>
+
+
+
+        <div *ngIf="nameInEdit">
+          <button [attr.data-cy]="'save-button'"  mat-raised-button color="primary" (click)="onSaveButtonClicked(); nameInEdit = false">{{'save' | translate}}</button>&nbsp;
+          <button [attr.data-cy]="'cancel-button'"  mat-raised-button color="secundary" (click)="nameInEdit = false">{{'cancel' | translate}}</button>
+          <button [attr.data-cy]="'delete-button'" style="float: right" mat-button color="warn" (click)="onDeleteButtonClicked();">{{'delete' | translate}}</button>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <br/>
+  <app-loan-part-list *ngIf="loan" [loanParts]="loan.loanParts" [loan]="loan"></app-loan-part-list>
+</div>
+<div class="main-side-column main-column">
+  <br/><br/><br/><br/><br/>
+  <button *ngIf="!nameInEdit && !interestInEdit" mat-fab (click)="onAddLoanPartClicked()" class="fab-button"><mat-icon>add</mat-icon></button>
+
+</div>

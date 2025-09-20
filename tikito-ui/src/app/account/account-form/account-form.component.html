@@ -1,0 +1,57 @@
+<div class="main-side-column main-column">
+</div>
+<div class="main-center-column-small main-column">
+  <mat-card class="full-width" *ngIf="form" style="width: 100%;">
+    <mat-card-header>
+      <mat-card-title>{{ 'user-account/create-account' | translate }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <ng-container *ngIf="CacheService.getCurrencies().length == 0">No currencies available, please refresh your browser.</ng-container>
+      <form [formGroup]="form">
+        <ng-container>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ 'user-account/name' | translate }}</mat-label>
+            <input type="text" [attr.data-cy]="'name'" matInput formControlName="name">
+            <mat-icon matSuffix>name</mat-icon>
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>{{ 'user-account/account-number' | translate }}</mat-label>
+            <input type="text" [attr.data-cy]="'account-number'" matInput formControlName="accountNumber">
+            <mat-icon matSuffix>account-number</mat-icon>
+          </mat-form-field>
+          &nbsp;
+          <mat-form-field>
+            <mat-label>{{ 'user-account/account-type' | translate }}</mat-label>
+            <mat-select formControlName="accountType" [attr.data-cy]="'account-type'">
+              @for (accountType of Util.getAccountTypes(); track accountType) {
+                <mat-option [value]="accountType">{{ 'user-account/account-type-' + accountType | translate }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          &nbsp;
+          <mat-form-field>
+            <mat-label>{{ 'currency' | translate }}</mat-label>
+            <mat-select formControlName="currencyId" [attr.data-cy]="'currency'">
+              @for (currency of CacheService.getCurrencies(); track currency) {
+                <mat-option [value]="currency.id">{{ 'currency/' + currency.isins[0].isin | translate }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+        </ng-container>
+        <br/>
+        <button [attr.data-cy]="'save-button'" mat-raised-button color="primary"
+                (click)="onSaveButtonClicked();">{{ 'save' | translate }}
+        </button>&nbsp;
+        <button [attr.data-cy]="'cancel-button'" mat-raised-button color="secundary"
+                (click)="onCancelButtonClicked()">{{ 'cancel' | translate }}
+        </button>
+        <button [attr.data-cy]="'delete-button'" mat-button color="warn" style="float: right;"
+                (click)="onDeleteButtonClicked();">{{ 'delete' | translate }}
+        </button>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

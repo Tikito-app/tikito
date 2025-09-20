@@ -1,0 +1,32 @@
+<form [formGroup]="form">
+  <ng-container>
+
+    <mat-form-field style="width: 30%" appearance="fill">
+      <mat-label>{{'money/transaction-group/field' | translate}}</mat-label>
+      <mat-select formControlName="transactionField" [attr.data-cy]="'transaction-field'">
+        @for (transactionField of Util.getMoneyTransactionFields(); track transactionField) {
+          <mat-option [value]="transactionField">{{'money/transaction-group/' + transactionField | translate}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field style="width: 20%">
+      <mat-label>{{'money/transaction-group/qualifier-type' | translate}}</mat-label>
+      <mat-select formControlName="qualifierType" [attr.data-cy]="'qualifier-type'">
+        @for (qualifierType of Util.getQualifierTypes(); track qualifierType) {
+          <mat-option [value]="qualifierType">{{'money/transaction-group/' + qualifierType | translate}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 50%">
+      <mat-label>{{'money/transaction-group/qualifier' | translate}}</mat-label>
+      <input type="text" [attr.data-cy]="'qualifier'" matInput formControlName="qualifier" >
+      <mat-icon matSuffix>qualifier</mat-icon>
+    </mat-form-field>
+  </ng-container>
+  <br/>
+  <button [attr.data-cy]="'save-button'" mat-raised-button color="primary" (click)="onSaveButtonClicked();">{{'save' | translate}}</button>&nbsp;
+  <button [attr.data-cy]="'cancel-button'" mat-raised-button color="secundary" (click)="onCancelButtonClicked()">{{'cancel' | translate}}</button>
+  <button [attr.data-cy]="'delete-button'" style="float: right" mat-button color="warn" (click)="onDeleteButtonClicked();">{{'delete' | translate}}</button>
+
+</form>

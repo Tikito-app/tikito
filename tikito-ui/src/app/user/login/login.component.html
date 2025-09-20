@@ -1,0 +1,37 @@
+<div class="main-side-column main-column"></div>
+
+<div class="main-center-column-small main-column">
+  <mat-card class="full-width" *ngIf="!authenticated">
+    <mat-card-header>
+      <mat-card-title>{{'login' | translate}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <ng-container>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{'email' | translate}}</mat-label>
+            <input type="text" [attr.data-cy]="'email'" id="email" matInput formControlName="email">
+            <mat-icon matSuffix>email</mat-icon>
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{'register/enter-your-password' | translate}}</mat-label>
+            <input [attr.data-cy]="'password'" [type]="showPasswordFlag ? 'text' : 'password'" id="password" matInput placeholder="Password" formControlName="password">
+            <mat-icon class="clickable" (click)="showPasswordFlag=!showPasswordFlag" matSuffix>{{ showPasswordFlag ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </mat-form-field>
+          <br/>
+          <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
+        </ng-container>
+        <button type="submit" id="login-button" [attr.data-cy]="'login-button'" mat-raised-button color="primary">{{'login' | translate}}</button>&nbsp;
+<!--        <button mat-button color="secondary" style="float: right" (click)="routeToRegister()">{{'register' | translate}}</button>-->
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <ng-container *ngIf="authenticated">
+    <div>
+      <button mat-raised-button color="primary" (click)="logout()">{{'logout' | translate}}</button>
+    </div>
+  </ng-container>
+</div>
+<div class="main-side-column main-column"></div>

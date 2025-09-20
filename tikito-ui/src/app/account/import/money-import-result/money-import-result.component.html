@@ -1,0 +1,60 @@
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" #input>
+</mat-form-field>
+
+<div class="mat-elevation-z8" *ngIf="dataSource">
+  <table mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="row">
+      <th mat-header-cell *matHeaderCellDef>{{'account/import/row' | translate}}</th>
+      <td mat-cell *matCellDef="let element"> <p style="color: {{ element.failed ? 'red' : 'green' }}"> {{element.lineNumber}}</p> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="timestamp">
+      <th mat-header-cell *matHeaderCellDef>{{'money/transaction/date' | translate}}</th>
+      <td mat-cell *matCellDef="let element"> {{element.timestamp | date : Util.DATE_FORMAT}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="debit-credit">
+      <th mat-header-cell *matHeaderCellDef>{{'money/transaction/debit-credit' | translate}}</th>
+      <td mat-cell *matCellDef="let element"> {{element.debitCredit}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="counterpart-account-name">
+      <th mat-header-cell *matHeaderCellDef>{{'money/transaction/counterparty-account-name' | translate}}</th>
+      <td mat-cell *matCellDef="let element"> {{element.counterpartAccountName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="exchange-rate">
+      <th mat-header-cell *matHeaderCellDef>{{'money/transaction/exchange-rate' | translate}}</th>
+      <td mat-cell *matCellDef="let element"> {{element.exchangeRate}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="counterpart-account-number">
+      <th mat-header-cell *matHeaderCellDef>{{'money/transaction/counterparty-account-number' | translate}}</th>
+      <td mat-cell *matCellDef="let element"> {{element.counterpartAccountNumber}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>{{'money/transaction/amount' | translate}}</th>
+      <td mat-cell *matCellDef="let element"><app-currency [amount]="element.amount" [currencyId]="element.currencyId"></app-currency>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef>{{'money/transaction/description' | translate}}</th>
+      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="failed-reason">
+      <th mat-header-cell *matHeaderCellDef>{{'account/import/failed-reason' | translate}}</th>
+      <td mat-cell *matCellDef="let element"> {{element.failedReason}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <app-paginator></app-paginator>
+</div>

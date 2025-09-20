@@ -1,0 +1,67 @@
+<h2>{{holding.security.name}}</h2>
+<div style="float: right">
+  <button mat-button (click)="onDetailsButtonClicked()" color="primary">{{'details' | translate}}</button>
+  <button mat-button (click)="onCloseButtonClicked()"><mat-icon>close</mat-icon></button>
+</div>
+<br/>
+
+<app-security-holding-graph
+  [height]="100"
+  [securityHoldingFilter]="getSecurityHoldingFilter()"></app-security-holding-graph>
+
+<mat-list>
+  <mat-list-item>
+    <div class="detail-list-item-left">{{'security/holding/position-value' | translate}}</div>
+<!--    todo: currency id-->
+    <div class="detail-list-item-right"><app-currency [amount]="holding.amount * holding.price" [currencyId]="holding.currencyId"></app-currency></div>
+  </mat-list-item>
+  <mat-list-item>
+    <div class="detail-list-item-left">{{'security/holding/performance' | translate}}</div>
+    <div class="detail-list-item-right"><app-percentage [amount]="SecurityUtil.getPerformance(holding)"></app-percentage></div>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item>
+    <div class="detail-list-item-left">{{'security/holding/cash-invested' | translate}}</div>
+    <div class="detail-list-item-right"><app-currency [amount]="holding.maxCashInvested" [currencyId]="holding.currencyId"></app-currency></div>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item>
+    <div class="detail-list-item-left">{{'security/holding/amount' | translate}}</div>
+    <div class="detail-list-item-right">{{holding.amount}}</div>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item>
+    <div class="detail-list-item-left">{{'security/holding/dividend' | translate}}</div>
+    <div class="detail-list-item-right"><app-currency [amount]="holding.totalDividend" [currencyId]="holding.currencyId"></app-currency></div>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item>
+    <div class="detail-list-item-left">{{'security/holding/transaction-costs' | translate}}</div>
+    <div class="detail-list-item-right"><app-currency [amount]="holding.totalTransactionCosts" [currencyId]="holding.currencyId"></app-currency></div>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item>
+    <div class="detail-list-item-left">{{'security/holding/taxes' | translate}}</div>
+    <div class="detail-list-item-right"><app-currency [amount]="holding.totalTaxes" [currencyId]="holding.currencyId"></app-currency></div>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item>
+    <div class="detail-list-item-left">{{'security/industry' | translate}}</div>
+    <div class="detail-list-item-right">{{holding.security.industry}}</div>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item>
+    <div class="detail-list-item-left">{{'security/sector' | translate}}</div>
+    <div class="detail-list-item-right">{{holding.security.sector}}</div>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item>
+    <div class="detail-list-item-left">{{'security/exchange' | translate}}</div>
+    <div class="detail-list-item-right">{{holding.security.exchange}}</div>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item>
+    <div class="detail-list-item-left">{{'accounts' | translate}}</div>
+    <div class="detail-list-item-right">{{mapAccountIds(holding)}}</div>
+  </mat-list-item>
+</mat-list>
