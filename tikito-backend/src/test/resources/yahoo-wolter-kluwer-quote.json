@@ -1,0 +1,111 @@
+{
+  "explains": [],
+  "count": 4,
+  "quotes": [
+    {
+      "exchange": "AMS",
+      "shortname": "WOLTERS KLUWER",
+      "quoteType": "EQUITY",
+      "symbol": "WKL.AS",
+      "index": "quotes",
+      "score": 1.0001E7,
+      "typeDisp": "Equity",
+      "longname": "Wolters Kluwer N.V.",
+      "exchDisp": "Amsterdam",
+      "sector": "Industrials",
+      "sectorDisp": "Industrials",
+      "industry": "Specialty Business Services",
+      "industryDisp": "Specialty Business Services",
+      "isYahooFinance": true
+    }
+  ],
+  "news": [
+    {
+      "uuid": "ac8a1e4c-7e76-3578-ba31-76e23bdff9a5",
+      "title": "Haaland fires Man City to opening win at Wolves",
+      "publisher": "AFP",
+      "link": "https://finance.yahoo.com/m/ac8a1e4c-7e76-3578-ba31-76e23bdff9a5/haaland-fires-man-city-to.html",
+      "providerPublishTime": 1755369488,
+      "type": "STORY",
+      "thumbnail": {
+        "resolutions": [
+          {
+            "url": "https://s.yimg.com/uu/api/res/1.2/a.GUbtafSHBiRz8UDoUtoA--~B/aD01MTI7dz03Njg7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/afp.com/3eb22f6483414b9e9f6c3bdc63bec2c9",
+            "width": 768,
+            "height": 512,
+            "tag": "original"
+          },
+          {
+            "url": "https://s.yimg.com/uu/api/res/1.2/A8uIBDjGhWrRhwp56ZMAQw--~B/Zmk9ZmlsbDtoPTE0MDtweW9mZj0wO3c9MTQwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/afp.com/3eb22f6483414b9e9f6c3bdc63bec2c9",
+            "width": 140,
+            "height": 140,
+            "tag": "140x140"
+          }
+        ]
+      }
+    },
+    {
+      "uuid": "c6cea6b0-856a-32f1-b761-bab472d49544",
+      "title": "Spurs get Frank off to flier as Haaland sparks revamped Man City",
+      "publisher": "AFP",
+      "link": "https://finance.yahoo.com/m/c6cea6b0-856a-32f1-b761-bab472d49544/spurs-get-frank-off-to-flier.html",
+      "providerPublishTime": 1755369254,
+      "type": "STORY",
+      "thumbnail": {
+        "resolutions": [
+          {
+            "url": "https://s.yimg.com/uu/api/res/1.2/Zri_0dq8d5aPeiwZE6NUcw--~B/aD01MTE7dz03Njg7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/afp.com/141bcb3ebd060a36f4e03f2bc1df11b5",
+            "width": 768,
+            "height": 511,
+            "tag": "original"
+          },
+          {
+            "url": "https://s.yimg.com/uu/api/res/1.2/Z9gAcWSndUZoEEW5aOPc5Q--~B/Zmk9ZmlsbDtoPTE0MDtweW9mZj0wO3c9MTQwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/afp.com/141bcb3ebd060a36f4e03f2bc1df11b5",
+            "width": 140,
+            "height": 140,
+            "tag": "140x140"
+          }
+        ]
+      }
+    },
+    {
+      "uuid": "c8941454-0cc5-3036-b8c9-17418c8763de",
+      "title": "Trump offers Putin, Zelensky contrasting approaches",
+      "publisher": "USA TODAY",
+      "link": "https://finance.yahoo.com/m/c8941454-0cc5-3036-b8c9-17418c8763de/trump-offers-putin%2C-zelensky.html",
+      "providerPublishTime": 1755369068,
+      "type": "STORY",
+      "thumbnail": {
+        "resolutions": [
+          {
+            "url": "https://s.yimg.com/uu/api/res/1.2/4jutaPAj0kXmHzV3lzh2ug--~B/aD0zMTMyO3c9NDcxNjthcHBpZD15dGFjaHlvbg--/https://media.zenfs.com/en/usa_today_news_641/91d1f7c393ae84f0cfbb28859cafa1dc",
+            "width": 4716,
+            "height": 3132,
+            "tag": "original"
+          },
+          {
+            "url": "https://s.yimg.com/uu/api/res/1.2/9YqJUWK4d2rtJucju.7Xzw--~B/Zmk9ZmlsbDtoPTE0MDtweW9mZj0wO3c9MTQwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/usa_today_news_641/91d1f7c393ae84f0cfbb28859cafa1dc",
+            "width": 140,
+            "height": 140,
+            "tag": "140x140"
+          }
+        ]
+      }
+    }
+  ],
+  "nav": [],
+  "lists": [],
+  "researchReports": [],
+  "screenerFieldResults": [],
+  "totalTime": 33,
+  "timeTakenForQuotes": 419,
+  "timeTakenForNews": 700,
+  "timeTakenForAlgowatchlist": 0,
+  "timeTakenForPredefinedScreener": 0,
+  "timeTakenForCrunchbase": 0,
+  "timeTakenForNav": 400,
+  "timeTakenForResearchReports": 800,
+  "timeTakenForScreenerField": 0,
+  "timeTakenForCulturalAssets": 750,
+  "timeTakenForSearchLists": 0
+}

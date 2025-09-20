@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3306/tikito?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8useMysqlMetadata=true
+    username: CHANGE_TO_YOUR_USERNAME
+    password: CHANGE_TO_YOUR_PASSWORD
+
+server:
+  port: 4242
+
+tikito:
+  finnhub:
+    token: CHANGE_TO_YOUR_FINNHUB_TOKEN

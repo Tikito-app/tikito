@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://mariadb:3306/tikito?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8useMysqlMetadata=true
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
+  flyway:
+    enabled: true
+    locations: db/migration
+
+server:
+  max-http-header-size: 20000
+  port: ${TIKITO_API_PORT}}
+
+tikito:
+  finnhub:
+    token: ${FINNHUB_TOKEN}
