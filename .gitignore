@@ -122,3 +122,29 @@ mvnw*
 application-local.yaml
 application-test.yaml
 .env
+
+
+# Compiled output
+/tikito-ui/dist
+/tikito-ui/tmp
+/tikito-ui/out-tsc
+/tikito-ui/bazel-out
+
+# Node
+/tikito-ui/node_modules
+npm-debug.log
+yarn-error.log
+
+# Miscellaneous
+/tikito-ui/.angular/cache
+.sass-cache/
+/tikito-ui/connect.lock
+/tikito-ui/coverage
+/tikito-ui/libpeerconnection.log
+testem.log
+/tikito-ui/typings
+tikito-ui/package-lock.json
+
+# System files
+.DS_Store
+Thumbs.db
