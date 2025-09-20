@@ -1,0 +1,38 @@
+{
+  "explains": [],
+  "count": 1,
+  "quotes": [
+    {
+      "exchange": "AMS",
+      "shortname": "WOLTERS KLUWER",
+      "quoteType": "EQUITY",
+      "symbol": "WKL.AS",
+      "index": "quotes",
+      "score": 20006.0,
+      "typeDisp": "Equity",
+      "longname": "Wolters Kluwer N.V.",
+      "exchDisp": "Amsterdam",
+      "sector": "Industrials",
+      "sectorDisp": "Industrials",
+      "industry": "Specialty Business Services",
+      "industryDisp": "Specialty Business Services",
+      "isYahooFinance": true
+    }
+  ],
+  "news": [],
+  "nav": [],
+  "lists": [],
+  "researchReports": [],
+  "screenerFieldResults": [],
+  "totalTime": 52,
+  "timeTakenForQuotes": 434,
+  "timeTakenForNews": 700,
+  "timeTakenForAlgowatchlist": 0,
+  "timeTakenForPredefinedScreener": 0,
+  "timeTakenForCrunchbase": 0,
+  "timeTakenForNav": 400,
+  "timeTakenForResearchReports": 800,
+  "timeTakenForScreenerField": 0,
+  "timeTakenForCulturalAssets": 750,
+  "timeTakenForSearchLists": 0
+}

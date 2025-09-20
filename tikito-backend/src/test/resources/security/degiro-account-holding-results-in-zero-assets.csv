@@ -1,0 +1,4 @@
+"Datum";"Tijd";"Valutadatum";"Product";"ISIN";"Omschrijving";"FX";"Mutatie";;"Saldo";;"Order Id"
+"04-05-2023";"09:16";"04-05-2023";"RANDSTAD";"NL0000379121";"Verkoop 15 @ 47,66 EUR";;"EUR";714.9;"EUR";1013.07;"9ba29a22-22a9-4d15-bec8-0c4112fe1a19"
+"04-05-2023";"09:16";"04-05-2023";"RANDSTAD";"NL0000379121";"Verkoop 2 @ 47,66 EUR";;"EUR";95.32;"EUR";298.17;"9ba29a22-22a9-4d15-bec8-0c4112fe1a19"
+"02-05-2022";"17:07";"02-05-2022";"RANDSTAD";"NL0000379121";"Koop 17 @ 49,36 EUR";;"EUR";-839.12;"EUR";43.7;"97e605a7-9789-437e-b770-15cdb0eeff25"
