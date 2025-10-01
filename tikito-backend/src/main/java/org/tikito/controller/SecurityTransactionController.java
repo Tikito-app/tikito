@@ -1,7 +1,6 @@
 package org.tikito.controller;
 
 import org.tikito.auth.AuthUser;
-import org.tikito.dto.ImportSettings;
 import org.tikito.dto.security.SecurityTransactionDto;
 import org.tikito.dto.security.SecurityTransactionImportLine;
 import org.tikito.dto.security.SecurityTransactionImportResultDto;
@@ -47,7 +46,7 @@ public class SecurityTransactionController {
                                                                                   @RequestParam(name = "buy-value", required = false) final String buyValue,
                                                                                   @RequestParam(name = "csv-separator", required = false) final String csvSeparator,
                                                                                   @RequestParam("dryRun") final boolean dryRun) throws IOException, UnsupportedImportFormatException {
-        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(authUser.getId(), new ImportSettings(true), accountId, file, getSeparator(csvSeparator), '"', dryRun, customHeaderConfigString, buyValue, timestampFormat, dateFormat, timeFormat);
+        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(authUser.getId(), accountId, file, getSeparator(csvSeparator), '"', dryRun, customHeaderConfigString, buyValue, timestampFormat, dateFormat, timeFormat);
         return ResponseEntity.ok(result.getLines().reversed());
     }
 
