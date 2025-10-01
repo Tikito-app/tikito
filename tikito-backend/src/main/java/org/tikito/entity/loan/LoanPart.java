@@ -4,12 +4,15 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.dto.export.LoanPartExportDto;
 import org.tikito.dto.loan.LoanPartDto;
 import org.tikito.dto.loan.LoanType;
+import org.tikito.entity.security.Security;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -42,6 +45,22 @@ public class LoanPart {
         this.loan = loan;
     }
 
+    public LoanPart(final long userId, final LoanPartExportDto dto, final Map<String, Security> currenciesByIsin, final Loan loan) {
+        this.userId = userId;
+        this.name = dto.getName();
+        this.startDate = dto.getStartDate();
+        this.endDate = dto.getEndDate();
+        this.amount = dto.getAmount();
+        this.currencyId = currenciesByIsin.get(dto.getCurrency()).getId();
+        this.loanType = dto.getLoanType();
+        this.loan = loan;
+        this.interests = new ArrayList<>(dto
+                .getInterests()
+                .stream()
+                .map(interest -> new LoanInterest(interest, this))
+                .toList());
+    }
+
     public LoanPartDto toDto() {
         return new LoanPartDto(
                 id,
@@ -56,5 +75,16 @@ public class LoanPart {
                 currencyId,
                 loanType,
                 interests.stream().map(LoanInterest::toDto).toList());
+    }
+
+    public LoanPartExportDto toExportDto(final Map<Long, Security> currenciesById) {
+        return new LoanPartExportDto(
+                name,
+                startDate,
+                endDate,
+                amount,
+                currenciesById.get(currencyId).getCurrentIsin(),
+                loanType,
+                interests.stream().map(LoanInterest::toExportDto).toList());
     }
 }
