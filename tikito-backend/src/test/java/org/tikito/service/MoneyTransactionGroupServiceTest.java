@@ -5,6 +5,7 @@ import org.tikito.controller.request.CreateOrUpdateMoneyTransactionGroupRequest;
 import org.tikito.dto.money.MoneyTransactionGroupDto;
 import org.tikito.dto.money.MoneyTransactionGroupQualifierDto;
 import org.tikito.dto.money.MoneyTransactionGroupQualifierType;
+import org.tikito.dto.money.MoneyTransactionGroupType;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.entity.money.MoneyTransactionGroup;
 import org.tikito.entity.money.MoneyTransactionGroupQualifier;
@@ -17,7 +18,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.tikito.dto.money.MoneyTransactionField.DESCRIPTION;
 import static org.tikito.dto.money.MoneyTransactionGroupQualifierType.REGEX;
@@ -46,6 +50,7 @@ class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
     void testCreateOrUpdateGroup() {
         final CreateOrUpdateMoneyTransactionGroupRequest request = new CreateOrUpdateMoneyTransactionGroupRequest();
         request.setName("My group");
+        request.setAccountIds(Set.of(DEFAULT_ACCOUNT.getId()));
         request.setQualifiers(List.of(
                 qualifier(REGEX, "Some value"),
                 qualifier(SIMILAR, "Other value")
@@ -69,6 +74,7 @@ class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
         request.setId(TRANSACTION_GROUP_REGEX.getId());
         request.setName("My group");
         request.setQualifiers(List.of());
+        request.setAccountIds(Set.of(DEFAULT_ACCOUNT.getId()));
         final MoneyTransactionGroupDto dto = groupService.createOrUpdateGroup(DEFAULT_USER_ACCOUNT.getId(), request);
 
         assertEquals(0, dto.getQualifiers().size());
@@ -159,6 +165,7 @@ class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
         qualifiers.forEach(qualifier -> qualifier.setGroup(group));
         group.setName(TestUtil.randomString(5, 10));
         group.setUserId(DEFAULT_USER_ACCOUNT.getId());
+        group.setGroupTypes(Arrays.stream(MoneyTransactionGroupType.values()).collect(Collectors.toSet()));
         return transactionGroupRepository.save(group);
     }
 
