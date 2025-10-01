@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.tikito.dto.AccountDto;
 import org.tikito.dto.ImportFileType;
-import org.tikito.dto.ImportSettings;
 import org.tikito.dto.security.SecurityTransactionDto;
 import org.tikito.dto.security.SecurityTransactionImportLine;
 import org.tikito.dto.security.SecurityTransactionImportResultDto;
@@ -77,7 +76,6 @@ public class SecurityImportService {
      */
     @Transactional(propagation = Propagation.MANDATORY)
     public SecurityTransactionImportResultDto importTransactions(final long userId,
-                                                                 final ImportSettings importSettings,
                                                                  final Long accountId,
                                                                  final MultipartFile file,
                                                                  final char separatorChar,
@@ -93,11 +91,10 @@ public class SecurityImportService {
         };
 
         final HashMap<String, Integer> headerConfig = mapper.readValue(customHeaderConfigString, typeRef);
-        return importTransactions(userId, importSettings, accountId, file, separatorChar, quoteChar, dryRun, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        return importTransactions(userId, accountId, file, separatorChar, quoteChar, dryRun, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
     }
 
     public SecurityTransactionImportResultDto importTransactions(final long userId,
-                                                                 final ImportSettings importSettings,
                                                                  final Long accountId,
                                                                  final MultipartFile file,
                                                                  final char separatorChar,
