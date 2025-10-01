@@ -98,7 +98,7 @@ public class MoneyImportService {
     private MoneyTransactionImportResultDto importTransactionsFromMT940(final AccountDto account, final MultipartFile file, final boolean dryRun) {
         try {
             final MoneyTransactionImportResultDto result = new MoneyTransactionImportResultDto(account, MT940Parser.parse(new String(file.getBytes())), file.getOriginalFilename());
-            return processResults(account, result, dryRun);
+            return importTransactions(account, result, dryRun);
         } catch (final IOException e) {
             log.error(e.getMessage(), e);
             return null;
@@ -136,10 +136,10 @@ public class MoneyImportService {
         final MoneyTransactionImportSettings settings = importer.getSettings();
         final MoneyTransactionImportResultDto result = MoneySettingsService.applySettings(settings, lines, importer, file.getOriginalFilename());
 
-        return processResults(account, result, dryRun);
+        return importTransactions(account, result, dryRun);
     }
 
-    private MoneyTransactionImportResultDto processResults(final AccountDto account, final MoneyTransactionImportResultDto result, final boolean dryRun) {
+    public MoneyTransactionImportResultDto importTransactions(final AccountDto account, final MoneyTransactionImportResultDto result, final boolean dryRun) {
         importers.stream()
                 .filter(importer -> importer.applies(result))
                 .findAny()

@@ -27,7 +27,7 @@ public class SecurityTransactionImportResultDto {
     public static final String FAILED_ISIN_CHANGE_SAME_ISIN = "Expected a different isin, because it should be changed";
     public static final String FAILED_NO_AMOUNT = "Could not extract amount";
 
-    private final List<SecurityTransactionImportLine> lines;
+    private List<SecurityTransactionImportLine> lines;
     private final Map<String, Security> newSecuritiesByIsin = new HashMap<>();
     private final Map<String, Isin> newIsinsByIsin = new HashMap<>();
     private final List<SecurityHolding> newSecurityHoldings = new ArrayList<>();
@@ -39,5 +39,9 @@ public class SecurityTransactionImportResultDto {
         for (int i = 0; i < csv.size(); i++) {
             lines.add(new SecurityTransactionImportLine(i, csv.get(i)));
         }
+    }
+
+    public void setImportedTransactions(final List<SecurityTransactionImportLine> lines) {
+        this.lines = new ArrayList<>(lines);
     }
 }

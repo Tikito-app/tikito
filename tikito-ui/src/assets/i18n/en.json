@@ -234,6 +234,13 @@
 
   "admin/import": "Import",
   "admin/export": "Export",
+  "admin/export-text": "Select the data that you want to export",
+  "admin/import-text": "Select the data that you want to import",
+  "admin/import-export-accounts": "Accounts",
+  "admin/import-export-money-transaction-groups": "Money transaction groups",
+  "admin/import-export-money-transactions": "Money transactions",
+  "admin/import-export-security-transactions": "Security transactions",
+  "admin/import-export-loans": "Loans",
 
 
   "--------------- LOAN ---------------------": "",
