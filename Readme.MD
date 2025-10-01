@@ -32,17 +32,17 @@
 
 ## Features
 
-| Features                              | Supported   |
-|:--------------------------------------|-------------|
-| Import of stock transactions          | Yes         |
-| Import of debit transactions          | Yes         |
-| Retrieve security prices from Yahoo   | Yes         |
-| Group your money transactions         | Yes         |
-| Visualise your stock and money growth | Yes         |
-| Loans, such as mortgages              | Comnig soon |
-| Budgeting                             | Comnig soon |
-| Backup and restore                    | Comnig soon |
-| More options to import data           | Comnig soon |
-| Manually add transactions             | Comnig soon |
-| Translations                          | Comnig soon |
+| Features                                | Supported   |
+|:----------------------------------------|-------------|
+| Import of stock transactions            | Yes         |
+| Import of debit transactions            | Yes         |
+| Retrieve security prices from Yahoo     | Yes         |
+| Group your money transactions           | Yes         |
+| Visualise your stock and money growth   | Yes         |
+| Loans, such as mortgages (only annuity) | Yes         |
+| Budgeting                               | Comnig soon |
+| Backup and restore                      | Comnig soon |
+| More options to import data             | Comnig soon |
+| Manually add transactions               | Comnig soon |
+| Translations                            | Comnig soon |
 
