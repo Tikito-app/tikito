@@ -3,6 +3,7 @@ package org.tikito.dto.export;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.dto.money.MoneyTransactionImportLine;
 
 import java.time.Instant;
 
@@ -35,7 +36,18 @@ public class MoneyTransactionExportDto {
         this.finalBalance = finalBalance;
         this.description = description;
         this.currency = currency;
+    }
 
-
+    public MoneyTransactionImportLine toImportLine() {
+        return MoneyTransactionImportLine
+                .builder()
+                .counterpartAccountName(counterpartAccountName)
+                .counterpartAccountNumber(counterpartAccountNumber)
+                .timestamp(timestamp)
+                .amount(amount)
+                .finalBalance(finalBalance)
+                .description(description)
+                .currency(currency)
+                .build();
     }
 }

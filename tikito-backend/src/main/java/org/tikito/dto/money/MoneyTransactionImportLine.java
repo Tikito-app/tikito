@@ -1,10 +1,9 @@
 package org.tikito.dto.money;
 
+import lombok.*;
 import org.tikito.dto.AccountDto;
 import org.tikito.dto.DebitCredit;
 import org.tikito.service.MT940.MT940Transaction;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -12,6 +11,9 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MoneyTransactionImportLine {
     private String counterpartAccountNumber;
     private String counterpartAccountName;

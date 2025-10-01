@@ -2,7 +2,10 @@
   <button mat-button (click)="routeToAdmin();"><mat-icon>arrow_back</mat-icon> {{'admin/back-to-admin' | translate}}</button>
 </div>
 <div class="main-center-column-small main-column">
-  <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload/>
+    {{'admin/export-text' | translate}}
+    <app-admin-import-export-setting></app-admin-import-export-setting>
+
+    <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload/>
 
   <button mat-raised-button
           color="primary"

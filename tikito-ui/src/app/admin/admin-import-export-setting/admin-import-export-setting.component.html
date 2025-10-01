@@ -1,0 +1,7 @@
+<form [formGroup]="form">
+    <mat-checkbox formControlName="accounts" [disabled]="accountsDisabled">{{ 'admin/import-export-accounts' | translate}}</mat-checkbox><br/>
+    <mat-checkbox formControlName="moneyTransactionGroups" (change)="setAccountChecked()">{{ 'admin/import-export-money-transaction-groups' | translate}}</mat-checkbox><br/>
+    <mat-checkbox formControlName="moneyTransactions" (change)="setAccountChecked()">{{ 'admin/import-export-money-transactions' | translate}}</mat-checkbox><br/>
+    <mat-checkbox formControlName="securityTransactions" (change)="setAccountChecked()">{{ 'admin/import-export-security-transactions' | translate}}</mat-checkbox><br/>
+    <mat-checkbox formControlName="loans" (change)="setAccountChecked()">{{ 'admin/import-export-loans' | translate}}</mat-checkbox><br/>
+</form>

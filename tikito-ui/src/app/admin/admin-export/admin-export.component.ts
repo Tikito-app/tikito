@@ -6,16 +6,18 @@ import {HttpService} from "../../service/http.service";
 import {HttpRequestData} from "../../dto/http-request-data";
 import {MatIcon} from "@angular/material/icon";
 import {Router} from "@angular/router";
+import {AdminImportExportSettingComponent} from "../admin-import-export-setting/admin-import-export-setting.component";
 
 @Component({
   selector: 'app-admin-export',
   standalone: true,
-  imports: [
-    MatButton,
-    ReactiveFormsModule,
-    TranslatePipe,
-    MatIcon
-  ],
+    imports: [
+        MatButton,
+        ReactiveFormsModule,
+        TranslatePipe,
+        MatIcon,
+        AdminImportExportSettingComponent
+    ],
   templateUrl: './admin-export.component.html',
   styleUrl: './admin-export.component.scss'
 })

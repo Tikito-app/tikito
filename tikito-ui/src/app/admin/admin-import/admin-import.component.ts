@@ -8,16 +8,18 @@ import {HttpService} from "../../service/http.service";
 import {DialogService} from "../../service/dialog.service";
 import {MatIcon} from "@angular/material/icon";
 import {Router} from "@angular/router";
+import {AdminImportExportSettingComponent} from "../admin-import-export-setting/admin-import-export-setting.component";
 
 @Component({
   selector: 'app-admin-import',
   standalone: true,
-  imports: [
-    MatButton,
-    TranslatePipe,
-    NgIf,
-    MatIcon
-  ],
+    imports: [
+        MatButton,
+        TranslatePipe,
+        NgIf,
+        MatIcon,
+        AdminImportExportSettingComponent
+    ],
   templateUrl: './admin-import.component.html',
   styleUrl: './admin-import.component.scss'
 })

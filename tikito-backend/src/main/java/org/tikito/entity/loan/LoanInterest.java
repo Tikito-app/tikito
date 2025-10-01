@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.dto.export.LoanInterestExportDto;
 import org.tikito.dto.loan.LoanInterestDto;
 
 import java.time.LocalDate;
@@ -32,6 +33,12 @@ public class LoanInterest {
         this.amount = amount;
     }
 
+    public LoanInterest(final LoanInterestExportDto dto, final LoanPart loanPart) {
+        this.startDate = dto.getStartDate();
+        this.endDate = dto.getEndDate();
+        this.loanPart = loanPart;
+    }
+
     public LoanInterestDto toDto() {
         return new LoanInterestDto(
                 id,
@@ -40,4 +47,10 @@ public class LoanInterest {
                 amount);
     }
 
+    public LoanInterestExportDto toExportDto() {
+        return new LoanInterestExportDto(
+                startDate,
+                endDate,
+                amount);
+    }
 }

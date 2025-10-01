@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.tikito.dto.export.AccountExportDto;
+import org.tikito.entity.security.Security;
+
+import java.util.Map;
 
 
 @Entity
@@ -30,12 +33,12 @@ public class Account {
         this.userId = userId;
     }
 
-    public Account(final long userId, final AccountExportDto export) {
+    public Account(final long userId, final AccountExportDto export, final Map<String, Security> currenciesByIsin) {
         this.userId = userId;
         this.name = export.getName();
         this.accountType = export.getAccountType();
         this.accountNumber = export.getAccountNumber();
-        this.currencyId = export.getCurrencyId();
+        this.currencyId = currenciesByIsin.get(export.getCurrency()).getId();
     }
 
     public AccountDto toDto() {
@@ -48,12 +51,11 @@ public class Account {
                 currencyId);
     }
 
-    public AccountExportDto toExportDto() {
-        return null;
-//        new AccountExportDto(
-//                name,
-//                accountType,
-//                accountNumber,
-//                currencyId);
+    public AccountExportDto toExportDto(final Map<Long, Security> currenciesById) {
+        return new AccountExportDto(
+                name,
+                accountType,
+                accountNumber,
+                currenciesById.get(currencyId).getCurrentIsin());
     }
 }

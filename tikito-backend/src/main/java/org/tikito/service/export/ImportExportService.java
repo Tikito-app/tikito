@@ -2,18 +2,21 @@ package org.tikito.service.export;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.tikito.dto.export.AccountExportDto;
-import org.tikito.dto.export.MoneyTransactionGroupExportDto;
-import org.tikito.dto.export.TikitoExportDto;
+import org.tikito.dto.export.*;
+import org.tikito.dto.money.MoneyTransactionImportResultDto;
+import org.tikito.dto.security.SecurityTransactionImportResultDto;
 import org.tikito.dto.security.SecurityType;
 import org.tikito.entity.Account;
+import org.tikito.entity.loan.Loan;
 import org.tikito.entity.money.MoneyTransactionGroup;
 import org.tikito.entity.security.Security;
 import org.tikito.repository.*;
 import org.tikito.service.money.MoneyImportService;
 import org.tikito.service.security.SecurityImportService;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -47,24 +50,41 @@ public class ImportExportService {
         this.loanRepository = loanRepository;
     }
 
-    public TikitoExportDto export(final long userId) {
+    public TikitoExportDto export(final long userId, final ImportExportSettings settings) {
         final TikitoExportDto export = new TikitoExportDto();
 
         final Map<Long, Account> accountsById = getAccountsById(userId);
+        final Map<String, Account> accountsByName = getAccountsByName(userId);
         final Map<Long, Security> currenciesById = getCurrenciesById();
 
-        exportMoneyGroups(userId, export, accountsById);
-        exportAccounts(userId, export);
-        exportLoans(userId, export, currenciesById);
+        if(settings.isAccounts()) {
+            exportAccounts(userId, export, currenciesById);
+        }
+
+        export.getAccounts().forEach(account -> {
+            if(settings.isSecurityTransactions()) {
+                exportSecurityTransactions(accountsByName.get(account.getName()), account, currenciesById);
+            }
+            if(settings.isMoneyTransactions()) {
+                exportMoneyTransactions(accountsByName.get(account.getName()), account, currenciesById);
+            }
+        });
+        if(settings.isMoneyTransactionGroups()) {
+            exportMoneyGroups(userId, export, accountsById);
+        }
+        if(settings.isLoans()) {
+            exportLoans(userId, export, currenciesById);
+        }
 
         return export;
     }
 
     private void exportLoans(final long userId, final TikitoExportDto export, final Map<Long, Security> currenciesById) {
-//        export.setLoans(loanRepository
-//                .findByUserId(userId)
-//                .stream()
-//                .map(loan -> loan.toExportDto(currenciesById)));
+        export.setLoans(loanRepository
+                .findByUserId(userId)
+                .stream()
+                .map(loan -> loan.toExportDto(currenciesById))
+                .toList());
     }
 
     private Map<Long, Account> getAccountsById(final long userId) {
@@ -81,6 +101,13 @@ public class ImportExportService {
                 .collect(Collectors.toMap(Account::getName, Function.identity()));
     }
 
+    private Map<String, MoneyTransactionGroup> getMoneyTransactionGroupsByName(final long userId) {
+        return moneyTransactionGroupRepository
+                .findByUserId(userId)
+                .stream()
+                .collect(Collectors.toMap(MoneyTransactionGroup::getName, Function.identity()));
+    }
+
     private Map<Long, Security> getCurrenciesById() {
         return securityRepository
                 .findBySecurityType(SecurityType.CURRENCY)
@@ -88,31 +115,19 @@ public class ImportExportService {
                 .collect(Collectors.toMap(Security::getId, Function.identity()));
     }
 
-//    private Map<String, Security> getSecuritiesByIsin() {
-//        final Map<String, Security> currenciesByIsin = new HashMap<>();
-//        securityRepository
-//                .findAll()
-//                .forEach(security -> {
-//                    security.getIsins().forEach(isin -> currenciesByIsin.put(isin.getIsin(), security));
-//                });
-//        return currenciesByIsin;
-//    }
+    private Map<String, Security> getCurrenciesByIsin() {
+        return securityRepository
+                .findBySecurityType(SecurityType.CURRENCY)
+                .stream()
+                .collect(Collectors.toMap(Security::getCurrentIsin, Function.identity()));
+    }
 
-    public void exportAccounts(final long userId, final TikitoExportDto export) {
+    public void exportAccounts(final long userId, final TikitoExportDto export, final Map<Long, Security> currenciesById) {
         export.setAccounts(accountRepository
                 .findByUserId(userId)
                 .stream()
-                .map(this::exportAccount)
+                .map(account -> account.toExportDto(currenciesById))
                 .toList());
-    }
-
-    private AccountExportDto exportAccount(final Account account) {
-        final AccountExportDto dto = account.toExportDto();
-
-//        exportMoneyTransactions(dto, accountsById, currenciesById);
-//        exportSecurityTransactions(dto, accountsById, currenciesById);
-
-        return dto;
     }
 
     public void exportMoneyGroups(final long userId, final TikitoExportDto export, final Map<Long, Account> accountsById) {
@@ -120,82 +135,89 @@ public class ImportExportService {
 
         export.setMoneyGroups(groups
                 .stream()
-                .map(group -> group.toExportDto(
-                        group.getAccountIds()
-                                .stream()
-                                .map(accountId -> accountsById.get(accountId).getName())
-                                .collect(Collectors.toSet())
-                ))
+                .map(group -> group.toExportDto(accountsById))
                 .toList());
     }
 
-    public void exportMoneyTransactions(final long userId, final TikitoExportDto export, final Map<Long, Account> accountsById, final Map<Long, Security> currenciesById) {
-//        export.setMoneyTransactions(moneyTransactionRepository
-//                .findAllByUserId(userId)
-//                .stream()
-//                .map(transaction -> transaction.toExportDto(accountsById.get(transaction.getAccountId()).getName(), currenciesById.get(transaction.getCurrencyId()).getIsins().get(0).getIsin()))
-//                .toList());
+    public void exportMoneyTransactions(final Account account, final AccountExportDto accountExportDto, final Map<Long, Security> currenciesById) {
+        accountExportDto.setMoneyTransactions(moneyTransactionRepository
+                .findByAccountId(account.getId())
+                .stream()
+                .map(transaction -> transaction.toExportDto(accountExportDto.getName(), currenciesById.get(transaction.getCurrencyId()).getCurrentIsin())) // todo: replace with proper isin
+                .toList());
     }
 
-    public void exportSecurityTransactions(final long userId, final TikitoExportDto export, final Map<Long, Account> accountsById, final Map<Long, Security> currenciesById) {
-//        export.setSecurityTransactions(securityTransactionRepository
-//                .findAllByUserId(userId)
-//                .stream()
-//                .map(transaction -> transaction.toExportDto(accountsById.get(transaction.getAccountId()).getName(), currenciesById.get(transaction.getCurrencyId()).getIsins().get(0).getIsin()))
-//                .toList());
+    public void exportSecurityTransactions(final Account account, final AccountExportDto accountExportDto, final Map<Long, Security> currenciesById) {
+        accountExportDto.setSecurityTransactions(securityTransactionRepository
+                .findByAccountId(account.getId())
+                .stream()
+                .map(transaction -> transaction.toExportDto(accountExportDto.getName(), currenciesById.get(transaction.getCurrencyId()).getCurrentIsin())) // todo: replace with proper isin
+                .toList());
     }
 
-    public void importFrom(final long userId, final TikitoExportDto dto) {
-        importAccounts(userId, dto);
+    public void importFrom(final long userId, final TikitoExportDto dto, final ImportExportSettings settings) {
+        final Map<String, Security> currenciesByIsin = getCurrenciesByIsin();
+        if(settings.isAccounts()) {
+            importAccounts(userId, dto, currenciesByIsin);
+        }
 
         final Map<String, Account> accountsByName = getAccountsByName(userId);
-//        final Map<String, Security> securitiesByIsin = getSecuritiesByIsin();
+        if(settings.isMoneyTransactionGroups()) {
+            importMoneyTransactionGroups(userId, dto);
+        }
 
-        importMoneyTransactionGroups(userId, dto);
-//        importMoneyTransactions(userId, dto, securitiesByIsin, accountsByName);
-//        importSecurityTransactions(userId, dto, securitiesByIsin, accountsByName);
+        final Map<String, MoneyTransactionGroup> moneyTransactionGroupsByName = getMoneyTransactionGroupsByName(userId);
+        // todo add group information to imported transactions
 
+        if(settings.isMoneyTransactions()) {
+            importMoneyTransactions(dto, accountsByName);
+        }
+        if(settings.isSecurityTransactions()) {
+            importSecurityTransactions(dto, accountsByName);
+        }
+        if(settings.isLoans()) {
+            importLoans(userId, dto, moneyTransactionGroupsByName, currenciesByIsin);
+        }
     }
 
-    private void importMoneyTransactions(final long userId, final TikitoExportDto dto, final Map<String, Security> securitiesByIsin, final Map<String, Account> accountsByName) {
-//        if (dto.getMoneyTransactions() == null) {
-//            return;
-//        }
-//        log.info("Importing {} money transactions", dto.getMoneyTransactions().size());
-//
-//        moneyTransactionRepository.saveAllAndFlush(dto
-//                .getMoneyTransactions()
-//                .stream()
-//                .map(transaction -> new MoneyTransaction(
-//                        userId,
-//                        accountsByName.get(transaction.getAccountName()).getId(),
-//                        securitiesByIsin.get(transaction.getCurrency()).getId(),
-//                        transaction))
-//                .toList());
+    private void importMoneyTransactions(final TikitoExportDto dto, final Map<String, Account> accountsByName) {
+        dto.getAccounts().forEach(importedAccount -> {
+            final Account account = accountsByName.get(importedAccount.getName());
+            if (account == null) {
+                log.warn("Cannot find account {}", importedAccount.getName());
+            } else {
+                log.info("Importing {} money transactions to account {}", importedAccount.getMoneyTransactions().size(), importedAccount.getName());
+                final MoneyTransactionImportResultDto resultDto = new MoneyTransactionImportResultDto(
+                        importedAccount
+                                .getMoneyTransactions()
+                                .stream()
+                                .map(MoneyTransactionExportDto::toImportLine)
+                                .toList());
+                moneyImportService.importTransactions(account.toDto(), resultDto, false);
+            }
+        });
     }
 
-    private void importSecurityTransactions(final long userId, final TikitoExportDto dto, final Map<String, Security> securitiesByIsin, final Map<String, Account> accountsByName) {
-//        if (dto.getSecurityTransactions() == null) {
-//            return;
-//        }
-//        log.info("Importing {} security transactions", dto.getSecurityTransactions().size());
-//
-//        final ImportSettings importSettings;
-//        final SecurityTransactionImportResultDto result;
-//        securityImportService.importTransactions(account, importSettings, result);
-//        securityTransactionRepository.saveAllAndFlush(dto
-//                .getSecurityTransactions()
-//                .stream()
-//                .map(transaction -> new SecurityTransaction(
-//                        userId,
-//                        accountsByName.get(transaction.getAccountName()).getId(),
-//                        securitiesByIsin.get(transaction.getIsin()) == null ? null : securitiesByIsin.get(transaction.getIsin()).getId(),
-//                        securitiesByIsin.get(transaction.getCurrency()).getId(),
-//                        transaction))
-//                .toList());
+    private void importSecurityTransactions(final TikitoExportDto dto, final Map<String, Account> accountsByName) {
+        dto.getAccounts().forEach(importedAccount -> {
+            final Account account = accountsByName.get(importedAccount.getName());
+            if (account == null) {
+                log.warn("Cannot find account {}", importedAccount.getName());
+            } else {
+                log.info("Importing {} security transactions to account {}", importedAccount.getSecurityTransactions().size(), importedAccount.getName());
+                final SecurityTransactionImportResultDto resultDto = new SecurityTransactionImportResultDto(List.of());
+                resultDto.setImportedTransactions(
+                        importedAccount
+                                .getSecurityTransactions()
+                                .stream()
+                                .map(SecurityTransactionExportDto::toImportLine)
+                                .toList());
+                securityImportService.importTransactions(account.toDto(), resultDto, true);
+            }
+        });
     }
 
-    private void importAccounts(final long userId, final TikitoExportDto dto) {
+    private void importAccounts(final long userId, final TikitoExportDto dto, final Map<String, Security> currenciesByIsin) {
         if (dto.getAccounts() == null) {
             return;
         }
@@ -209,7 +231,7 @@ public class ImportExportService {
         accountRepository.saveAllAndFlush(dto.getAccounts()
                 .stream()
                 .filter(account -> !accountNames.contains(account.getName()))
-                .map(account -> new Account(userId, account))
+                .map(account -> new Account(userId, account, currenciesByIsin))
                 .toList());
     }
 
@@ -240,6 +262,17 @@ public class ImportExportService {
                                 group)
                 ).toList();
         moneyTransactionGroupRepository.saveAllAndFlush(groups);
+    }
+
+    private void importLoans(final long userId, final TikitoExportDto dto, final Map<String, MoneyTransactionGroup> moneyTransactionGroupsByName, final Map<String, Security> currenciesByIsin) {
+        if(dto.getLoans() == null) {
+            return ;
+        }
+        log.info("Importing {} loans", dto.getLoans().size());
+        loanRepository.saveAllAndFlush(dto.getLoans()
+                .stream()
+                .map(loan -> new Loan(userId, loan, moneyTransactionGroupsByName, currenciesByIsin))
+                .toList());
     }
 
     private boolean isValid(final MoneyTransactionGroupExportDto moneyTransactionGroupExportDto) {

@@ -7,13 +7,12 @@ import lombok.Setter;
 import org.tikito.dto.export.MoneyTransactionGroupExportDto;
 import org.tikito.dto.money.MoneyTransactionGroupDto;
 import org.tikito.dto.money.MoneyTransactionGroupType;
+import org.tikito.entity.Account;
 import org.tikito.entity.budget.Budget;
 import org.tikito.entity.loan.Loan;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -88,14 +87,11 @@ public class MoneyTransactionGroup {
                 accountIds);
     }
 
-    public MoneyTransactionGroupExportDto toExportDto(final Set<String> accountNames) {
+    public MoneyTransactionGroupExportDto toExportDto(final Map<Long, Account> accountsById) {
         return new MoneyTransactionGroupExportDto(
                 name,
                 groupTypes,
-                qualifiers
-                        .stream()
-                        .map(MoneyTransactionGroupQualifier::toExportDto)
-                        .toList(),
-                        accountNames);
+                qualifiers.stream().map(MoneyTransactionGroupQualifier::toExportDto).toList(),
+                accountIds.stream().map(id -> accountsById.get(id).getName()).collect(Collectors.toSet()));
     }
 }

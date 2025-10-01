@@ -13,6 +13,7 @@ import org.tikito.entity.security.Security;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -39,6 +40,20 @@ public class Loan {
         this.userId = userId;
     }
 
+    public Loan(final long userId, final LoanExportDto dto, final Map<String, MoneyTransactionGroup> moneyTransactionGroupByName, final Map<String, Security> currenciesByIsin) {
+        this.userId = userId;
+        this.dateRange = dto.getDateRange();
+        this.name = dto.getName();
+        this.groups = new ArrayList<>(dto.getGroups()
+                .stream()
+                .map(moneyTransactionGroupByName::get)
+                .toList());
+        this.loanParts = new ArrayList<>(dto.getLoanParts()
+                .stream()
+                .map(part -> new LoanPart(userId, part, currenciesByIsin, this))
+                .toList());
+    }
+
     public LoanDto toDto() {
         return new LoanDto(
                 id,
@@ -50,6 +65,10 @@ public class Loan {
     }
 
     public LoanExportDto toExportDto(final Map<Long, Security> currenciesById) {
-        return new LoanExportDto();
+        return new LoanExportDto(
+                dateRange,
+                name,
+                groups.stream().map(MoneyTransactionGroup::getName).collect(Collectors.toSet()),
+                loanParts.stream().map(loanPart -> loanPart.toExportDto(currenciesById)).toList());
     }
 }
