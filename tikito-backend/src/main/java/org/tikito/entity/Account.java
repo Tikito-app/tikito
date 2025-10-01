@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.dto.export.AccountExportDto;
 
 
 @Entity
@@ -29,6 +30,14 @@ public class Account {
         this.userId = userId;
     }
 
+    public Account(final long userId, final AccountExportDto export) {
+        this.userId = userId;
+        this.name = export.getName();
+        this.accountType = export.getAccountType();
+        this.accountNumber = export.getAccountNumber();
+        this.currencyId = export.getCurrencyId();
+    }
+
     public AccountDto toDto() {
         return new AccountDto(
                 id,
@@ -37,5 +46,14 @@ public class Account {
                 accountType,
                 accountNumber,
                 currencyId);
+    }
+
+    public AccountExportDto toExportDto() {
+        return null;
+//        new AccountExportDto(
+//                name,
+//                accountType,
+//                accountNumber,
+//                currencyId);
     }
 }

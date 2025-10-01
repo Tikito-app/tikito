@@ -2,6 +2,7 @@ package org.tikito.service.job;
 
 import org.tikito.entity.Job;
 import org.tikito.exception.InvalidJobException;
+import org.tikito.service.LoanValueService;
 import org.tikito.service.money.MoneyHoldingService;
 import org.tikito.service.money.MoneyTransactionGroupService;
 import org.tikito.service.security.SecurityHoldingService;
@@ -19,12 +20,14 @@ public class JobExecutor {
     public JobExecutor(final SecurityService securityService,
                        final SecurityHoldingService securityHoldingService,
                        final MoneyHoldingService moneyHoldingService,
-                       final MoneyTransactionGroupService moneyTransactionGroupService) {
+                       final MoneyTransactionGroupService moneyTransactionGroupService,
+                       final LoanValueService loanValueService) {
         processors = new ArrayList<>();
         processors.add(securityService);
         processors.add(securityHoldingService);
         processors.add(moneyHoldingService);
         processors.add(moneyTransactionGroupService);
+        processors.add(loanValueService);
 
     }
 

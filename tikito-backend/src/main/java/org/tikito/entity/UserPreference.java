@@ -1,13 +1,11 @@
 package org.tikito.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.util.StringUtils;
+import org.tikito.dto.UserPreferenceKey;
 
 @Entity
 @Getter
@@ -18,14 +16,15 @@ public class UserPreference {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private long userId;
-    private String valueKey;
+    @Enumerated(EnumType.STRING)
+    private UserPreferenceKey valueKey;
     private String value;
 
-    public UserPreference(final long userId, final String valueKey) {
+    public UserPreference(final long userId, final UserPreferenceKey valueKey) {
         this(userId, valueKey, null);
     }
 
-    public UserPreference(final long userId, final String valueKey, final String value) {
+    public UserPreference(final long userId, final UserPreferenceKey valueKey, final String value) {
         this.userId = userId;
         this.valueKey = valueKey;
         this.value = value;

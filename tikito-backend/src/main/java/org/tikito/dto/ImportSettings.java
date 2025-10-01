@@ -6,6 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ImportSettings {
-    private boolean canImportNewIsin;
     private boolean canImportNewCurrency;
 }

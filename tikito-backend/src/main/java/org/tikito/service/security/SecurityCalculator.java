@@ -30,6 +30,10 @@ public final class SecurityCalculator {
         }
 
         if (transactions != null) {
+            // because we could sell/buy at the same date, we order the transactions here to
+            // that we first sell and then buy. Even if we would first buy and then sell, in terms of aggregation,
+            // the money would still flow as if it was sell first and then buy
+            transactions.sort((t1, t2) -> t2.getTransactionType().compareTo(t1.getTransactionType()));
             transactions.forEach(transaction -> applyTransaction(newHoldingValue, transaction));
         }
         calculateWorth(newHoldingValue);

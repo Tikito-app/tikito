@@ -1,5 +1,6 @@
 package org.tikito.entity.security;
 
+import org.tikito.dto.export.SecurityTransactionExportDto;
 import org.tikito.dto.security.SecurityTransactionDto;
 import org.tikito.dto.security.SecurityTransactionImportLine;
 import org.tikito.dto.security.SecurityTransactionType;
@@ -37,7 +38,7 @@ public class SecurityTransaction {
 
     public SecurityTransaction(final long userId, final Long accountId, final SecurityTransactionImportLine line) {
         this.userId = userId;
-        this.securityId = line.getSecurityId();
+        this.securityId = line.getSecurity() == null ? null : line.getSecurity().getId();
         this.isin = line.getIsin();
         this.accountId = accountId;
         this.currencyId = line.getCurrencyId();
@@ -48,6 +49,20 @@ public class SecurityTransaction {
         this.transactionType = line.getTransactionType();
         this.cash = line.getCash() == null ? null : line.getCash() * line.getExchangeRate();
         this.exchangeRate = line.getExchangeRate();
+    }
+
+    public SecurityTransaction(final long userId, final long accountId, final Long securityId, final long currencyId, final SecurityTransactionExportDto dto) {
+        this.userId = userId;
+        this.securityId = securityId;
+        this.accountId = accountId;
+        this.currencyId = currencyId;
+        this.amount = dto.getAmount();
+        this.price = dto.getPrice();
+        this.description = dto.getDescription();
+        this.timestamp = dto.getTimestamp();
+        this.cash = dto.getCash();
+        this.exchangeRate = dto.getExchangeRate();
+        this.transactionType = dto.getTransactionType();
     }
 
     public SecurityTransactionDto toDto() {
@@ -65,5 +80,19 @@ public class SecurityTransaction {
                 transactionType,
                 cash,
                 null);
+    }
+
+    public SecurityTransactionExportDto toExportDto(final String accountName, final String currency) {
+        return new SecurityTransactionExportDto(
+                isin,
+                accountName,
+                currency,
+                amount,
+                price,
+                description,
+                timestamp,
+                cash,
+                exchangeRate,
+                transactionType);
     }
 }

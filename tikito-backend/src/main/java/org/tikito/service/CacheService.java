@@ -1,12 +1,15 @@
 package org.tikito.service;
 
+import org.springframework.stereotype.Service;
+import org.tikito.dto.security.IsinDto;
 import org.tikito.dto.security.SecurityDto;
 import org.tikito.dto.security.SecurityType;
 import org.tikito.entity.security.Security;
+import org.tikito.repository.IsinRepository;
 import org.tikito.repository.SecurityPriceRepository;
 import org.tikito.repository.SecurityRepository;
 import org.tikito.repository.UserAccountRepository;
-import org.springframework.stereotype.Service;
+import org.tikito.service.security.IsinHelper;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -18,22 +21,25 @@ import java.util.stream.Collectors;
 @Service
 public class CacheService {
     private final SecurityRepository securityRepository;
+    private final IsinRepository isinRepository;
     private final SecurityPriceRepository securityPriceRepository;
     private final UserAccountRepository userAccountRepository;
 
-    private Map<Long, SecurityDto> securities = new HashMap<>();
+    private Map<Long, SecurityDto> securitiesById = new HashMap<>();
+    private Map<Long, List<IsinDto>> isinsBySecurityId = new HashMap<>();
     private final Map<Long, Map<LocalDate, Double>> currencyToEuroMultiplier = new HashMap<>();
     private final List<SecurityDto> currencies = new ArrayList<>();
     private Boolean firstEverUser;
 
     public CacheService(final SecurityRepository securityRepository,
+                        final IsinRepository isinRepository,
                         final SecurityPriceRepository securityPriceRepository,
                         final UserAccountRepository userAccountRepository) {
         this.securityRepository = securityRepository;
+        this.isinRepository = isinRepository;
         this.securityPriceRepository = securityPriceRepository;
         this.userAccountRepository = userAccountRepository;
 
-        refreshSecurities();
         refreshCurrencies();
         refreshFirstEverUser();
     }
@@ -43,14 +49,22 @@ public class CacheService {
     }
 
     public void refreshSecurities() {
-        this.securities = securityRepository
+        this.securitiesById = securityRepository
                 .findAll()
                 .stream()
                 .map(Security::toDto)
                 .collect(Collectors.toMap(SecurityDto::getId, Function.identity()));
+        isinsBySecurityId = new HashMap<>();
+        isinRepository
+                .findAll()
+                .forEach(isin -> {
+                    isinsBySecurityId.putIfAbsent(isin.getSecurityId(), new ArrayList<>());
+                    isinsBySecurityId.get(isin.getSecurityId()).add(isin.toDto());
+                });
     }
 
     public void refreshCurrencies() {
+        refreshSecurities();
         currencies.clear();
         currencies.addAll(securityRepository
                 .findBySecurityType(SecurityType.CURRENCY)
@@ -76,16 +90,15 @@ public class CacheService {
         return currencies
                 .stream()
                 .filter(currency ->
-                        currency
-                                .getIsins()
+                        isinsBySecurityId
+                                .get(currency.getId())
                                 .stream()
-                                .anyMatch(isinDto -> isinDto.getIsin().equals(isin) && isinDto.isValid(date, null))
-                )
+                                .anyMatch(isinDto -> isinDto.getIsin().equals(isin) && IsinHelper.isValid(isinDto, date, null)))
                 .findFirst();
     }
 
     public SecurityDto getSecurity(final long securityId) {
-        return securities.get(securityId);
+        return securitiesById.get(securityId);
     }
 
     public double getCurrencyMultiplier(final long currencyId, final LocalDate date) {

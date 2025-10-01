@@ -1,7 +1,5 @@
 package org.tikito.entity.money;
 
-import org.tikito.dto.money.MoneyTransactionDto;
-import org.tikito.dto.money.MoneyTransactionImportLine;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,6 +7,10 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.dto.export.MoneyTransactionExportDto;
+import org.tikito.dto.export.TikitoExportDto;
+import org.tikito.dto.money.MoneyTransactionDto;
+import org.tikito.dto.money.MoneyTransactionImportLine;
 
 import java.time.Instant;
 
@@ -31,6 +33,8 @@ public class MoneyTransaction {
     private String description;
     private long currencyId;
     private Long groupId;
+    private Long budgetId;
+    private Long loanId;
     private double exchangeRate;
 
     public MoneyTransaction(final long userId, final long accountId, final MoneyTransactionImportLine line) {
@@ -46,6 +50,20 @@ public class MoneyTransaction {
         this.exchangeRate = line.getExchangeRate();
     }
 
+    public MoneyTransaction(final long userId, final long accountId, final long currencyId, final MoneyTransactionExportDto dto) {
+        this.userId = userId;
+        this.accountId = accountId;
+        this.counterpartAccountName = dto.getCounterpartAccountName();
+        this.counterpartAccountNumber = dto.getCounterpartAccountNumber();
+//        this.counterpartAccountId = dto.getCounterpartAccountName(; // todo
+        this.timestamp = dto.getTimestamp();
+        this.amount = dto.getAmount();
+        this.finalBalance = dto.getFinalBalance();
+        this.description = dto.getDescription();
+        this.currencyId = currencyId;
+        // todo: groupID, etc
+    }
+
     public MoneyTransactionDto toDto() {
         return new MoneyTransactionDto(
                 id,
@@ -58,6 +76,24 @@ public class MoneyTransaction {
                 finalBalance,
                 description,
                 currencyId,
-                groupId);
+                groupId,
+                budgetId,
+                loanId);
+    }
+
+    public MoneyTransactionExportDto toExportDto(final String accountName, final String currency) {
+        return new MoneyTransactionExportDto(
+                accountName,
+                counterpartAccountName,
+                counterpartAccountNumber,
+                timestamp,
+                amount,
+                finalBalance,
+                description,
+                currency
+//                groupId, // todo
+//                budgetId,
+//                loanId
+        );
     }
 }

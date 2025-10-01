@@ -20,7 +20,7 @@ public class LoginController {
     }
 
     @PostMapping
-    public ResponseEntity<LoggedInUserDto> login(@RequestBody @Validated final LoginRequest request) {
+    public ResponseEntity<LoggedInUserDto> login(@Validated @RequestBody final LoginRequest request) {
         return ResponseEntity.ok(userAccountService.login(request));
     }
 }

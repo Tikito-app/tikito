@@ -1,7 +1,7 @@
 package org.tikito.service.security;
 
 import org.springframework.util.StringUtils;
-import org.tikito.dto.IsinDto;
+import org.tikito.dto.security.IsinDto;
 import org.tikito.dto.security.SecurityDto;
 import org.tikito.dto.security.SecurityPriceDto;
 import org.tikito.dto.security.SecurityType;
@@ -12,6 +12,7 @@ import org.tikito.entity.security.SecurityPrice;
 import org.tikito.repository.IsinRepository;
 import org.tikito.repository.SecurityPriceRepository;
 import org.tikito.repository.SecurityRepository;
+import org.tikito.service.CacheService;
 import org.tikito.service.importer.security.YahooImporter;
 import org.tikito.service.job.JobProcessor;
 import org.tikito.service.job.JobType;
@@ -32,15 +33,18 @@ public class SecurityService implements JobProcessor {
     private final SecurityPriceRepository securityPriceRepository;
     private final SecurityEnricherService securityEnricherService;
     private final IsinRepository isinRepository;
+    private final CacheService cacheService;
 
     public SecurityService(final SecurityRepository securityRepository,
                            final SecurityPriceRepository securityPriceRepository,
                            final SecurityEnricherService securityEnricherService,
-                           final IsinRepository isinRepository) {
+                           final IsinRepository isinRepository,
+                           final CacheService cacheService) {
         this.securityRepository = securityRepository;
         this.securityPriceRepository = securityPriceRepository;
         this.securityEnricherService = securityEnricherService;
         this.isinRepository = isinRepository;
+        this.cacheService = cacheService;
     }
 
     public SecurityDto getSecurity(final long id) {
@@ -72,6 +76,7 @@ public class SecurityService implements JobProcessor {
     @Transactional(propagation = Propagation.MANDATORY)
     public void updateSecurityPrices(final long securityId) {
         final SecurityDto security = getSecurity(securityId);
+        final List<Isin> isins = isinRepository.findBySecurityId(securityId);
         final Set<String> processedDates = securityPriceRepository
                 .findAllBySecurityId(securityId)
                 .stream()
@@ -86,7 +91,7 @@ public class SecurityService implements JobProcessor {
         boolean hasSetDateFromIsin = false;
 
         while (startDate.isBefore(now)) {
-            final Optional<IsinDto> optionalIsin = security.getIsin(startDate, null);
+            final Optional<Isin> optionalIsin = IsinHelper.getIsin(isins, startDate, null);
 
             if (optionalIsin.isEmpty()) {
                 log.error("No isin for security {} at {}", security.getId(), startDate);
@@ -96,7 +101,7 @@ public class SecurityService implements JobProcessor {
                 return;
             }
 
-            final IsinDto isin = optionalIsin.get();
+            final Isin isin = optionalIsin.get();
             final LocalDate isinEndDate = isin.getValidTo();
 
             LocalDate endDate = startDate.plusDays(365);
@@ -142,6 +147,10 @@ public class SecurityService implements JobProcessor {
                         .stream()
                         .map(SecurityPrice::new)
                         .toList());
+
+        if(security.getSecurityType() == SecurityType.CURRENCY) {
+            cacheService.refreshCurrencies();
+        }
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -189,7 +198,15 @@ public class SecurityService implements JobProcessor {
         return YahooImporter.retrieveHistoricalSecurityPrice(symbol, securityId, from, to, foundDates);
     }
 
-    public List<SecurityPriceDto> getPrices(final Long id) {
+    public List<IsinDto> getIsins(final long id) {
+        return isinRepository
+                .findBySecurityId(id)
+                .stream()
+                .map(Isin::toDto)
+                .toList();
+    }
+
+    public List<SecurityPriceDto> getPrices(final long id) {
         return securityPriceRepository
                 .findAllBySecurityId(id)
                 .stream()

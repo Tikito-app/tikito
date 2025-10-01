@@ -9,9 +9,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.tikito.auth.AuthUser;
 import org.tikito.auth.PasswordUtil;
+import org.tikito.dto.loan.LoanType;
 import org.tikito.dto.security.HistoricalSecurityHoldingValueDto;
 import org.tikito.dto.security.SecurityType;
 import org.tikito.entity.UserAccount;
+import org.tikito.entity.loan.LoanInterest;
+import org.tikito.entity.loan.LoanPart;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.entity.security.Isin;
 import org.tikito.entity.security.Security;
@@ -64,7 +67,7 @@ public class BaseTest {
     protected static HistoricalSecurityHoldingValueDto randomHistoricalHoldingValueDto(final long currencyId) {
         final HistoricalSecurityHoldingValueDto value = HistoricalSecurityHoldingValueDto
                 .builder()
-                .accountIds(Set.of())
+                .accountIds(new Long[]{})
                 .currencyId(currencyId)
                 .currencyMultiplier(randomDouble(1, 2))
                 .date(LocalDate.now().minusDays(randomInt(0, 1000)))
@@ -154,13 +157,12 @@ public class BaseTest {
         return isin;
     }
 
-    protected Security security(final String name, final long currencyId, final List<Isin> isins) {
+    protected Security security(final String name, final long currencyId, final String currentIsin) {
         final Security security = new Security();
         security.setName(name);
-        security.setIsins(isins);
-        security.getIsins().forEach(isin -> isin.setSecurity(security));
         security.setCurrencyId(currencyId);
         security.setSecurityType(SecurityType.STOCK);
+        security.setCurrentIsin(currentIsin);
         return security;
     }
 
@@ -171,7 +173,8 @@ public class BaseTest {
                                                 final double amount,
                                                 final double finalBalance,
                                                 final String counterpartAccountNumber,
-                                                final String counterpartAccountName) {
+                                                final String counterpartAccountName,
+                                                final String description) {
         final MoneyTransaction transaction = new MoneyTransaction();
         transaction.setUserId(userId);
         transaction.setAccountId(accountId);
@@ -181,6 +184,7 @@ public class BaseTest {
         transaction.setCounterpartAccountName(counterpartAccountName);
         transaction.setAmount(amount);
         transaction.setFinalBalance(finalBalance);
+        transaction.setDescription(description);
         return transaction;
     }
 
@@ -200,6 +204,27 @@ public class BaseTest {
             userAccount.setActivationCode(randomString(20));
         }
         return userAccount;
+    }
+
+    protected LoanPart loanPart(final String name, final double amount, final double periodicPayment, final LocalDate startDate, final LocalDate endDate, final LoanType loanType, final List<LoanInterest> interests) {
+        final LoanPart loanPart = new LoanPart();
+        loanPart.setName(name);
+        loanPart.setAmount(amount);
+        loanPart.setRemainingAmount(amount);
+        loanPart.setPeriodicPayment(periodicPayment);
+        loanPart.setStartDate(startDate);
+        loanPart.setEndDate(endDate);
+        loanPart.setLoanType(loanType);
+        loanPart.setInterests(interests);
+        return loanPart;
+    }
+
+    protected LoanInterest loanInterest(final double amount, final LocalDate startDate, final LocalDate endDate) {
+        final LoanInterest interest = new LoanInterest();
+        interest.setAmount(amount);
+        interest.setStartDate(startDate);
+        interest.setEndDate(endDate);
+        return interest;
     }
 
     protected void assertDoubleEquals(final double d1, final double d2) {

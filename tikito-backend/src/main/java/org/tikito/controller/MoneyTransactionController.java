@@ -1,5 +1,6 @@
 package org.tikito.controller;
 
+import org.springframework.validation.annotation.Validated;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.SetMoneyTransactionGroupIdRequest;
 import org.tikito.dto.money.MoneyTransactionDto;
@@ -7,6 +8,7 @@ import org.tikito.dto.money.MoneyTransactionFilter;
 import org.tikito.dto.money.MoneyTransactionImportLine;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.exception.CannotReadFileException;
+import org.tikito.service.money.MoneyImportService;
 import org.tikito.service.money.MoneyTransactionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
@@ -21,19 +23,27 @@ import java.util.List;
 @Transactional
 public class MoneyTransactionController {
     private final MoneyTransactionService moneyTransactionService;
+    private final MoneyImportService moneyImportService;
 
-    public MoneyTransactionController(final MoneyTransactionService moneyTransactionService) {
+    public MoneyTransactionController(final MoneyTransactionService moneyTransactionService,
+                                      final MoneyImportService moneyImportService) {
         this.moneyTransactionService = moneyTransactionService;
+        this.moneyImportService = moneyImportService;
     }
 
     @PostMapping
-    public ResponseEntity<List<MoneyTransactionDto>> getTransactions(final AuthUser authUser, @RequestBody final MoneyTransactionFilter filter) {
+    public ResponseEntity<List<MoneyTransactionDto>> getTransactions(final AuthUser authUser, @Validated @RequestBody final MoneyTransactionFilter filter) {
         return ResponseEntity.ok(moneyTransactionService.getTransactions(authUser.getId(), filter));
+    }
+
+    @GetMapping("/loan")
+    public ResponseEntity<List<MoneyTransactionDto>> getTransactionsForLoans(final AuthUser authUser) {
+        return ResponseEntity.ok(moneyTransactionService.getTransactionsForLoans(authUser.getId()));
     }
 
     @PostMapping
     @RequestMapping("/set-group-id")
-    public ResponseEntity<MoneyTransaction> setTransactionGroupId(final AuthUser authUser, @RequestBody final SetMoneyTransactionGroupIdRequest request) {
+    public ResponseEntity<MoneyTransaction> setTransactionGroupId(final AuthUser authUser, @Validated @RequestBody final SetMoneyTransactionGroupIdRequest request) {
         return ResponseEntity.ok(moneyTransactionService.setTransactionGroupId(authUser.getId(), request.getTransactionId(), request.getGroupId()));
     }
 
@@ -55,7 +65,7 @@ public class MoneyTransactionController {
                                                                                @RequestParam(name = "time-format", required = false) final String timeFormat,
                                                                                @RequestParam("dryRun") final boolean dryRun) throws CannotReadFileException {
         try {
-            return ResponseEntity.ok(moneyTransactionService
+            return ResponseEntity.ok(moneyImportService
                     .importTransactions(authUser.getId(), accountId, file, dryRun, customHeaderConfigString, debitIndication, timestampFormat, dateFormat, timeFormat, csvSeparator)
                     .getLines());
         } catch (final JsonProcessingException e) {

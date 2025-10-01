@@ -22,6 +22,7 @@ public class Job {
     private Long userId;
     private Long securityId;
     private Long accountId;
+    private Long loanId;
 
     public static JobBuilder create(final JobType jobType) {
         return Job.builder().jobType(jobType);
@@ -47,5 +48,11 @@ public class Job {
         return create(jobType)
                 .userId(userId)
                 .accountId(accountId);
+    }
+
+    public static JobBuilder loan(final JobType jobType, final long loanId, final long userId) {
+        return create(jobType)
+                .userId(userId)
+                .loanId(loanId);
     }
 }

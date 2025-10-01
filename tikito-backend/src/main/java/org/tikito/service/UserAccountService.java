@@ -1,10 +1,17 @@
 package org.tikito.service;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.tikito.auth.*;
 import org.tikito.controller.request.ActivateRequest;
 import org.tikito.controller.request.LoginRequest;
-import org.tikito.dto.UserAccountDto;
 import org.tikito.dto.DateRange;
+import org.tikito.dto.UserAccountDto;
+import org.tikito.dto.UserPreferenceKey;
 import org.tikito.dto.security.SecurityType;
 import org.tikito.entity.UserAccount;
 import org.tikito.entity.UserPreference;
@@ -14,19 +21,13 @@ import org.tikito.exception.EmailAlreadyExistsException;
 import org.tikito.exception.InvalidCredentialsException;
 import org.tikito.exception.PasswordNotLongEnoughException;
 import org.tikito.exception.RequestNotAllowedException;
+import org.tikito.repository.IsinRepository;
 import org.tikito.repository.SecurityRepository;
 import org.tikito.repository.UserAccountRepository;
 import org.tikito.repository.UserPreferenceRepository;
 import org.tikito.service.importer.FileReader;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,15 +37,18 @@ public class UserAccountService {
     private final UserAccountRepository userAccountRepository;
     private final CacheService cacheService;
     private final SecurityRepository securityRepository;
+    private final IsinRepository isinRepository;
     private final UserPreferenceRepository userPreferenceRepository;
 
     public UserAccountService(final UserAccountRepository userAccountRepository,
                               final CacheService cacheService,
                               final SecurityRepository securityRepository,
+                              final IsinRepository isinRepository,
                               final UserPreferenceRepository userPreferenceRepository) {
         this.userAccountRepository = userAccountRepository;
         this.cacheService = cacheService;
         this.securityRepository = securityRepository;
+        this.isinRepository = isinRepository;
         this.userPreferenceRepository = userPreferenceRepository;
     }
 
@@ -78,7 +82,7 @@ public class UserAccountService {
         if (!PasswordUtil.checkBcryptHash(currentPassword.toCharArray(), userAccount.getPassword())) {
             throw new RequestNotAllowedException();
         } else if (!StringUtils.hasText(newPassword) || newPassword.length() < 10) {
-            throw new PasswordNotLongEnoughException();
+            throw new PasswordNotLongEnoughException("Password must be more than 10 characters long");
         } else {
             userAccount.setPassword(PasswordUtil.createBcryptHash(newPassword.toCharArray()));
             userAccountRepository.save(userAccount);
@@ -117,39 +121,39 @@ public class UserAccountService {
 
     private void generateDefaultPreferences(final long userAccountId) {
         userPreferenceRepository.saveAllAndFlush(List.of(
-                new UserPreference(userAccountId, "AGGREGATE_DATE_RANGE", "true"),
-                new UserPreference(userAccountId, "AMOUNT_OF_OTHER_GROUPS", "5"),
-                new UserPreference(userAccountId, "MONEY_SHOW_OTHER", "true"),
-                new UserPreference(userAccountId, "DATE_RANGE", DateRange.MONTH.name()),
-                new UserPreference(userAccountId, "SECURITY_DATE_RANGE", DateRange.MONTH.name()),
-                new UserPreference(userAccountId, "SHOW_CLOSED_POSITIONS", "true"),
-                new UserPreference(userAccountId, "START_AT_ZERO_FROM_BEGINNING", "true"),
-                new UserPreference(userAccountId, "SECURITY_START_AT_ZERO_FROM_BEGINNING", "true"),
-                new UserPreference(userAccountId, "START_AT_ZERO_AFTER_DATE_RANGE", "true"),
-                new UserPreference(userAccountId, "SECURITY_START_AT_ZERO_AFTER_DATE_RANGE", "true")));
+                new UserPreference(userAccountId, UserPreferenceKey.AGGREGATE_DATE_RANGE, "true"),
+                new UserPreference(userAccountId, UserPreferenceKey.AMOUNT_OF_OTHER_GROUPS, "5"),
+                new UserPreference(userAccountId, UserPreferenceKey.MONEY_SHOW_OTHER, "true"),
+                new UserPreference(userAccountId, UserPreferenceKey.DATE_RANGE, DateRange.MONTH.name()),
+                new UserPreference(userAccountId, UserPreferenceKey.SECURITY_DATE_RANGE, DateRange.MONTH.name()),
+                new UserPreference(userAccountId, UserPreferenceKey.SHOW_CLOSED_POSITIONS, "true"),
+                new UserPreference(userAccountId, UserPreferenceKey.START_AT_ZERO_FROM_BEGINNING, "true"),
+                new UserPreference(userAccountId, UserPreferenceKey.SECURITY_START_AT_ZERO_FROM_BEGINNING, "true"),
+                new UserPreference(userAccountId, UserPreferenceKey.START_AT_ZERO_AFTER_DATE_RANGE, "true"),
+                new UserPreference(userAccountId, UserPreferenceKey.SECURITY_START_AT_ZERO_AFTER_DATE_RANGE, "true")));
     }
 
     private void generateCurrencies() throws IOException {
         final List<List<String>> lists = FileReader.readCsv(new ClassPathResource("initial_currencies.csv").getInputStream(), ';', '"');
-        final List<Security> currencies = new ArrayList<>();
 
         lists.stream().skip(1).forEach(currency -> {
             final Security security = new Security();
             final Isin isin = new Isin();
             security.setName(currency.get(1));
             security.setSecurityType(SecurityType.CURRENCY);
+            security.setCurrentIsin(currency.get(0));
+            final Security persistedSecurity = securityRepository.saveAndFlush(security);
+
             isin.setIsin(currency.get(0));
             isin.setSymbol(currency.get(2));
-            isin.setSecurity(security);
-            security.setIsins(List.of(isin));
-            currencies.add(security);
+            isin.setSecurityId(persistedSecurity.getId());
+            isinRepository.saveAndFlush(isin);
         });
-        securityRepository.saveAllAndFlush(currencies);
     }
 
     private void assertPasswordStrongEnough(final String password) throws PasswordNotLongEnoughException {
         if (password.length() < 10) {
-            throw new PasswordNotLongEnoughException();
+            throw new PasswordNotLongEnoughException("Password must be more than 10 characters long");
         }
     }
 
@@ -172,7 +176,7 @@ public class UserAccountService {
 
         if (StringUtils.hasText(password)) {
             if (!StringUtils.hasText(password) || password.length() < 10) {
-                throw new PasswordNotLongEnoughException();
+                throw new PasswordNotLongEnoughException("Password must be more than 10 characters long");
             } else {
                 userAccount.setPassword(PasswordUtil.createBcryptHash(password.toCharArray()));
             }

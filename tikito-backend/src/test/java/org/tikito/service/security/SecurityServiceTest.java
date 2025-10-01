@@ -37,7 +37,7 @@ class SecurityServiceTest extends BaseIntegrationTest {
         withDefaultCurrencies();
         withDefaultUserAccount();
         withDefaultAccounts();
-        withDefaultCompanies();
+        withDefaultSecurities();
     }
 
     @Test
@@ -54,7 +54,8 @@ class SecurityServiceTest extends BaseIntegrationTest {
 
     @Test
     void testFillInTheBlanks() {
-        final LocalDate isinValidTo = WOLTER_KLUWER.getIsins().getFirst().getValidTo();
+        final Isin isin = isinRepository.findById(ISIN_ONE_OLD).orElseThrow();
+        final LocalDate isinValidTo = isin.getValidTo();
         final List<SecurityPriceDto> firstList = List.of(new SecurityPriceDto(WOLTER_KLUWER.getId(), isinValidTo.minusDays(1), randomDouble(1, 5)));
         final List<SecurityPriceDto> secondList = List.of(new SecurityPriceDto(WOLTER_KLUWER.getId(), isinValidTo.plusDays(2), randomDouble(1, 5)));
 
@@ -87,7 +88,7 @@ class SecurityServiceTest extends BaseIntegrationTest {
     @Test
     void testEnrichSecurityMore() throws IOException {
         final String json = getClassPathResource("yahoo-wolter-kluwer-quote.json");
-        final Isin isin = WOLTER_KLUWER.getLatestIsin();
+        final Isin isin = isinRepository.findById(WOLTER_KLUWER.getCurrentIsin()).orElseThrow();
         final String yahooUrl = "https://query2.finance.yahoo.com/v1/finance/search?q=" +isin.getSymbol() + "&lang=en-US&region=US&quotesCount=6&newsCount=3&listsCount=2&enableFuzzyQuery=false&quotesQueryId=tss_match_phrase_query&multiQuoteQueryId=multi_quote_single_token_query&newsQueryId=news_cie_vespa&enableCb=false&enableNavLinks=true&enableEnhancedTrivialQuery=true&enableResearchReports=true&enableCulturalAssets=true&enableLogoUrl=true&enableLists=false&recommendCount=5&enablePrivateCompany=true";
         WOLTER_KLUWER.setName("");
         securityRepository.save(WOLTER_KLUWER);

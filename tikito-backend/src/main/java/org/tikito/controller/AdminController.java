@@ -2,16 +2,19 @@ package org.tikito.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.AdminEditSecurityRequest;
 import org.tikito.controller.request.AdminEditUserRequest;
 import org.tikito.controller.request.UpdateIsinRequest;
-import org.tikito.dto.IsinDto;
 import org.tikito.dto.UserAccountDto;
+import org.tikito.dto.export.TikitoExportDto;
+import org.tikito.dto.security.IsinDto;
 import org.tikito.dto.security.SecurityDto;
 import org.tikito.entity.Job;
 import org.tikito.exception.PasswordNotLongEnoughException;
+import org.tikito.service.export.ImportExportService;
 import org.tikito.service.JobService;
 import org.tikito.service.UserAccountService;
 import org.tikito.service.job.JobType;
@@ -26,13 +29,16 @@ public class AdminController {
     private final UserAccountService userAccountService;
     private final SecurityService securityService;
     private final JobService jobService;
+    private final ImportExportService importExportService;
 
     public AdminController(final UserAccountService userAccountService,
                            final SecurityService securityService,
-                           final JobService jobService) {
+                           final JobService jobService,
+                           final ImportExportService importExportService) {
         this.userAccountService = userAccountService;
         this.securityService = securityService;
         this.jobService = jobService;
+        this.importExportService = importExportService;
     }
 
     @GetMapping("/users")
@@ -41,7 +47,7 @@ public class AdminController {
     }
 
     @PostMapping("/users/{userAccountId}")
-    public ResponseEntity<UserAccountDto> editUser(final AuthUser authUser, @PathVariable("userAccountId") final long userAccountId, @RequestBody final AdminEditUserRequest request) throws PasswordNotLongEnoughException {
+    public ResponseEntity<UserAccountDto> editUser(final AuthUser authUser, @PathVariable("userAccountId") final long userAccountId, @Validated @RequestBody final AdminEditUserRequest request) throws PasswordNotLongEnoughException {
         return ResponseEntity.ok(userAccountService.editUser(userAccountId, request.getEmail(), request.getPassword()));
     }
 
@@ -56,7 +62,7 @@ public class AdminController {
     }
 
     @PostMapping("/securities/{securityId}")
-    public ResponseEntity<SecurityDto> editSecurity(final AuthUser authUser, @PathVariable("securityId") final long securityId, @RequestBody final AdminEditSecurityRequest request) {
+    public ResponseEntity<SecurityDto> editSecurity(final AuthUser authUser, @PathVariable("securityId") final long securityId, @Validated @RequestBody final AdminEditSecurityRequest request) {
         return ResponseEntity.ok(securityService.editSecurity(securityId, request.getName()));
     }
 
@@ -69,6 +75,12 @@ public class AdminController {
     @PostMapping("/securities/update-all")
     public ResponseEntity<Void> updateAllSecurities(final AuthUser authUser) {
         jobService.updateAllSecurities(authUser.getId());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/securities/update-all-values")
+    public ResponseEntity<Void> updateAllSecurityValues(final AuthUser authUser) {
+        jobService.updateAllSecurityValues(authUser.getId());
         return ResponseEntity.ok().build();
     }
 
@@ -102,7 +114,7 @@ public class AdminController {
     }
 
     @PostMapping("/securities/isin/{isin}")
-    public ResponseEntity<IsinDto> updateIsin(final AuthUser authUser, @PathVariable("isin") final String isin, @RequestBody final UpdateIsinRequest request) {
+    public ResponseEntity<IsinDto> updateIsin(final AuthUser authUser, @PathVariable("isin") final String isin, @Validated @RequestBody final UpdateIsinRequest request) {
         return ResponseEntity.ok(securityService.updateIsin(isin, request.getSymbol(), request.getValidFrom(), request.getValidTo()));
     }
 
@@ -121,6 +133,17 @@ public class AdminController {
     @PostMapping("/money/group-transactions")
     public ResponseEntity<Void> groupMoneyTransaction(final AuthUser authUser) {
         jobService.addJob(Job.account(JobType.GROUP_MONEY_TRANSACTIONS, authUser.getId()).build());
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/export")
+    public ResponseEntity<TikitoExportDto> export(final AuthUser authUser) {
+        return ResponseEntity.ok(importExportService.export(authUser.getId()));
+    }
+
+    @PostMapping("/import")
+    public ResponseEntity<Void> doImport(final AuthUser authUser, @Validated @RequestBody final TikitoExportDto dto) {
+        importExportService.importFrom(authUser.getId(), dto);
         return ResponseEntity.ok().build();
     }
 }

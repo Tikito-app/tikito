@@ -1,5 +1,11 @@
 package org.tikito.controller;
 
+import lombok.Builder;
+import lombok.Getter;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.CreateOrUpdateAccountRequest;
 import org.tikito.dto.AccountDto;
@@ -9,12 +15,6 @@ import org.tikito.service.AccountService;
 import org.tikito.service.importer.money.ABNFileParser;
 import org.tikito.service.importer.money.INGFileParser;
 import org.tikito.service.importer.security.DeGiroAccountImporter;
-import jakarta.validation.Valid;
-import lombok.Builder;
-import lombok.Getter;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +41,7 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<AccountDto> createOrUpdateAccount(final AuthUser authUser, @Valid @RequestBody final CreateOrUpdateAccountRequest request) throws ResourceNotFoundException {
+    public ResponseEntity<AccountDto> createOrUpdateAccount(final AuthUser authUser, @Validated @RequestBody final CreateOrUpdateAccountRequest request) throws ResourceNotFoundException {
         return ResponseEntity.ok(accountService.createOrUpdate(authUser.getId(), request));
     }
 

@@ -35,4 +35,6 @@ public interface SecurityTransactionRepository extends JpaRepository<SecurityTra
 
     @Query("select distinct(t.securityId) from SecurityTransaction t where t.userId = :userId and t.securityId is not null")
     Set<Long> findSecurityIdsByUserId(long userId);
+
+    List<SecurityTransaction> findAllByUserId(long userId);
 }

@@ -5,6 +5,7 @@ import org.tikito.dto.AccountDto;
 import org.tikito.dto.AccountType;
 import org.tikito.entity.Account;
 import org.tikito.entity.Job;
+import org.tikito.exception.AccountNumberAlreadyExistsException;
 import org.tikito.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -73,6 +74,9 @@ public class AccountService {
         }
         if (request.getId() != 0) {
             account = accountRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
+        }
+        if(accountRepository.countByAccountNumberAndNotMyId(userId, request.getAccountNumber(), account.getId()) > 0) {
+            throw new AccountNumberAlreadyExistsException();
         }
         account.setName(request.getName());
         account.setAccountNumber(request.getAccountNumber());

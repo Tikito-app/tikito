@@ -1,5 +1,6 @@
 package org.tikito.controller.request;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ChangePasswordRequest {
-    @NotEmpty
+    @NotBlank
     private String currentPassword;
-    @NotEmpty
+    @NotBlank
     private String newPassword;
 }

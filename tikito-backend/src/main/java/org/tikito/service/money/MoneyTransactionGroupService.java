@@ -23,10 +23,7 @@ import org.springframework.util.StringUtils;
 import org.tikito.service.job.JobProcessor;
 import org.tikito.service.job.JobType;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -76,6 +73,8 @@ public class MoneyTransactionGroupService implements JobProcessor {
         final Map<Long, MoneyTransactionGroupQualifier> existingQualifiersMap = group.getQualifiers().stream().collect(Collectors.toMap(MoneyTransactionGroupQualifier::getId, Function.identity()));
         group.setName(request.getName());
         group.getQualifiers().clear();
+        group.setGroupTypes(request.getGroupTypes());
+        group.setAccountIds(new HashSet<>(request.getAccountIds()));
         if (request.getQualifiers() != null) {
             request
                     .getQualifiers()
@@ -106,27 +105,36 @@ public class MoneyTransactionGroupService implements JobProcessor {
         log.info("Grouping money transactions for {}", accountId);
         final List<MoneyTransactionGroup> groups = groupRepository.findByUserId(userId);
         final Map<String, AccountDto> accountsByAccountNumber = accountRepository
-                .findAll()
+                .findByUserId(userId)
                 .stream()
                 .map(Account::toDto)
                 .collect(Collectors.toMap(AccountDto::getAccountNumber, Function.identity()));
         final List<MoneyTransaction> transactions = moneyTransactionRepository.findByAccountId(accountId);
         transactions.forEach(transaction -> groupTransaction(transaction, groups, accountsByAccountNumber));
         moneyTransactionRepository.saveAllAndFlush(transactions);
-        log.info("Done grouping");
+        log.info("Done grouping {} transactions", transactions.size());
     }
 
     private void groupTransaction(final MoneyTransaction transaction, final List<MoneyTransactionGroup> groups, final Map<String, AccountDto> accountsByAccountNumber) {
+        transaction.setGroupId(null);
+        transaction.setBudgetId(null);
+        transaction.setLoanId(null);
+
         for (final MoneyTransactionGroup group : groups) {
             if (appliesToTransaction(transaction, group)) {
-                transaction.setGroupId(group.getId());
-                return;
+                group.getGroupTypes().forEach(groupType -> {
+                    switch (groupType) {
+                        case MONEY -> transaction.setGroupId(group.getId());
+                        case BUDGET -> transaction.setBudgetId(group.getId());
+                        case LOAN -> transaction.setLoanId(group.getId()); // todo: why not the loan id itself?
+                    }
+                });
+                break;
             }
         }
         if (accountsByAccountNumber.containsKey(transaction.getCounterpartAccountNumber())) {
             transaction.setCounterpartAccountId(accountsByAccountNumber.get(transaction.getCounterpartAccountNumber()).getId());
         }
-        transaction.setGroupId(null);
     }
 
     private boolean appliesToTransaction(final MoneyTransaction transaction, final MoneyTransactionGroup group) {
@@ -205,6 +213,5 @@ public class MoneyTransactionGroupService implements JobProcessor {
             case GROUP_MONEY_TRANSACTIONS -> groupTransactions(job.getUserId());
             default -> throw new IllegalStateException();
         }
-
     }
 }

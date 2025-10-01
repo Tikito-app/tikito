@@ -1,12 +1,13 @@
 package org.tikito.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.tikito.auth.AuthUser;
 import org.tikito.dto.security.*;
 import org.tikito.service.security.SecurityHoldingService;
 import org.tikito.service.security.SecurityTransactionService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,13 +18,13 @@ import java.util.stream.Collectors;
 @Transactional
 public class SecurityHoldingController {
 
-    private final SecurityTransactionService securityTransactionService;
     private final SecurityHoldingService securityHoldingService;
+    private final SecurityTransactionService securityTransactionService;
 
-    public SecurityHoldingController(final SecurityTransactionService securityTransactionService,
-                                     final SecurityHoldingService securityHoldingService) {
-        this.securityTransactionService = securityTransactionService;
+    public SecurityHoldingController(final SecurityHoldingService securityHoldingService,
+                                     final SecurityTransactionService securityTransactionService) {
         this.securityHoldingService = securityHoldingService;
+        this.securityTransactionService = securityTransactionService;
     }
 
     @GetMapping
@@ -43,12 +44,12 @@ public class SecurityHoldingController {
     }
 
     @PostMapping("/transactions")
-    public ResponseEntity<List<SecurityTransactionDto>> getSecurityTransactions(final AuthUser authUser, @RequestBody final SecurityHoldingFilter filter) {
+    public ResponseEntity<List<SecurityTransactionDto>> getSecurityTransactions(final AuthUser authUser, @Validated @RequestBody final SecurityHoldingFilter filter) {
         return ResponseEntity.ok(securityTransactionService.getSecurityTransactions(authUser.getId(), filter));
     }
 
     @PostMapping("/historical-values")
-    public ResponseEntity<List<HistoricalSecurityHoldingValueDto>> getHistoricalHoldingValues(final AuthUser authUser, @RequestBody final SecurityHoldingFilter filter) {
+    public ResponseEntity<List<HistoricalSecurityHoldingValueDto>> getHistoricalHoldingValues(final AuthUser authUser, @Validated @RequestBody final SecurityHoldingFilter filter) {
         return ResponseEntity.ok(securityHoldingService.getHistoricalHoldingValues(authUser.getId(), filter));
     }
 

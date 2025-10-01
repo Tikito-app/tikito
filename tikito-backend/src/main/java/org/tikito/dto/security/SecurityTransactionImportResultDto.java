@@ -1,5 +1,6 @@
 package org.tikito.dto.security;
 
+import org.tikito.entity.security.Isin;
 import org.tikito.entity.security.SecurityHolding;
 import org.tikito.entity.security.SecurityTransaction;
 import org.tikito.entity.security.Security;
@@ -20,7 +21,7 @@ public class SecurityTransactionImportResultDto {
     public static final String FAILED_NO_TRANSACTION_COST = "Cannot extract transaction cost";
     public static final String FAILED_NO_ADMIN_COST = "Cannot extract admin cost";
     public static final String FAILED_DUPLICATE_TRANSACTION = "Duplicate transaction";
-    public static final String FAILED_EXPECTED_BUY_ISIN_CHANGE = "Expected buy transaction for a new isin";
+    public static final String FAILED_EXPECTED_SELL_ISIN_CHANGE = "Expected sell transaction before a new isin change";
     public static final String FAILED_EXPECTED_BUY_NEW_ISIN_SAME_TIMESTAMP = "Expected next transaction has the same timestamp";
     public static final String FAILED_INVALID_LINE = "Invalid line";
     public static final String FAILED_ISIN_CHANGE_SAME_ISIN = "Expected a different isin, because it should be changed";
@@ -28,6 +29,7 @@ public class SecurityTransactionImportResultDto {
 
     private final List<SecurityTransactionImportLine> lines;
     private final Map<String, Security> newSecuritiesByIsin = new HashMap<>();
+    private final Map<String, Isin> newIsinsByIsin = new HashMap<>();
     private final List<SecurityHolding> newSecurityHoldings = new ArrayList<>();
     private final List<SecurityTransaction> importedTransactions = new ArrayList<>();
     private final Map<Long, SecurityHolding> existingSecurityHoldings = new HashMap<>();

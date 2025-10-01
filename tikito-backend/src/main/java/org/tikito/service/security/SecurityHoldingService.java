@@ -1,5 +1,9 @@
 package org.tikito.service.security;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.tikito.dto.security.AggregatedHistoricalSecurityHoldingValueDto;
 import org.tikito.dto.security.HistoricalSecurityHoldingValueDto;
 import org.tikito.dto.security.SecurityHoldingDto;
@@ -9,10 +13,6 @@ import org.tikito.entity.security.*;
 import org.tikito.repository.*;
 import org.tikito.service.CacheService;
 import org.tikito.service.job.JobProcessor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -71,7 +71,7 @@ public class SecurityHoldingService implements JobProcessor {
                                                                                  final Long securityId,
                                                                                  final Long securityHoldingId,
                                                                                  final long currencyId,
-                                                                                 final Map<LocalDate, SecurityPrice> companyPricePerTimestamp,
+                                                                                 final Map<LocalDate, SecurityPrice> securityPricePerTimestamp,
                                                                                  final Map<LocalDate, List<SecurityTransaction>> transactionsPerTimestamp) {
         final LocalDate firstTimestamp = getFirstTimestamp(transactionsPerTimestamp);
         final List<HistoricalSecurityHoldingValue> historicalSecurityHoldingValues = new ArrayList<>();
@@ -88,7 +88,7 @@ public class SecurityHoldingService implements JobProcessor {
             currentHoldingValue = SecurityCalculator.calculateHistoricalValue(
                     currentTimestamp,
                     currentHoldingValue,
-                    companyPricePerTimestamp.get(currentTimestamp),
+                    securityPricePerTimestamp.get(currentTimestamp),
                     transactionsPerTimestamp.get(currentTimestamp));
 
             historicalSecurityHoldingValues.add(new HistoricalSecurityHoldingValue(userId, currentHoldingValue));
@@ -172,7 +172,7 @@ public class SecurityHoldingService implements JobProcessor {
         final SecurityHolding holding = securityHoldingRepository.findByUserIdAndId(userId, securityHoldingId).orElseThrow();
         final Security security = securityRepository.findById(holding.getSecurityId()).orElseThrow();
         final Map<LocalDate, List<SecurityTransaction>> transactionsPerTimestamp = getTransactionsPerTimestamp(holding.getSecurityId());
-        final Map<LocalDate, SecurityPrice> companyPricePerTimestamp = securityPriceRepository
+        final Map<LocalDate, SecurityPrice> securityPricePerTimestamp = securityPriceRepository
                 .findAllBySecurityId(security.getId())
                 .stream()
                 .collect(Collectors.toMap(SecurityPrice::getDate, Function.identity()));
@@ -182,10 +182,8 @@ public class SecurityHoldingService implements JobProcessor {
                 holding.getSecurityId(),
                 holding.getId(),
                 security.getCurrencyId(),
-                companyPricePerTimestamp,
+                securityPricePerTimestamp,
                 transactionsPerTimestamp);
-
-        log.info("Storing {} historical security holding values for {}", historicalSecurityHoldingValues.size(), securityHoldingId);
 
         if (!historicalSecurityHoldingValues.isEmpty()) {
             final HistoricalSecurityHoldingValue latestValue = historicalSecurityHoldingValues.getLast();
@@ -202,12 +200,17 @@ public class SecurityHoldingService implements JobProcessor {
         if (!historicalSecurityHoldingValues.isEmpty()) {
             holding.apply(historicalSecurityHoldingValues.getLast());
         }
+        log.info("Deleting previous values");
         historicalSecurityHoldingValueRepository.deleteAllBySecurityHoldingId(securityHoldingId);
+
+        log.info("Storing {} historical security holding values for {}", historicalSecurityHoldingValues.size(), securityHoldingId);
         historicalSecurityHoldingValueRepository.saveAllAndFlush(historicalSecurityHoldingValues);
         securityHoldingRepository.saveAndFlush(holding);
 
+        log.info("Recalculating aggregated values");
         // todo: remove and make a job, so that we don't calculate it unnecessary.
         recalculateAggregatedHistoricalHoldingValues(userId);
+        log.info("Done");
     }
 
     /**

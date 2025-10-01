@@ -4,5 +4,6 @@ public enum DateRange {
     YEAR,
     MONTH,
     WEEK,
+    DAY,
     ALL,
 }

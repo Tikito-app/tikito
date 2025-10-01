@@ -44,6 +44,7 @@ public class DataGenerator {
     private final MoneyTransactionRepository moneyTransactionRepository;
     private final SecurityHoldingService securityHoldingService;
     private final SecurityRepository securityRepository;
+    private final IsinRepository isinRepository;
     private final SecurityPriceRepository securityPriceRepository;
     private final MoneyHoldingService moneyHoldingService;
     private final UserAccountService userAccountService;
@@ -68,11 +69,13 @@ public class DataGenerator {
                          final MoneyTransactionRepository moneyTransactionRepository,
                          final SecurityHoldingService securityHoldingService,
                          final SecurityRepository securityRepository,
+                         final IsinRepository isinRepository,
                          final SecurityPriceRepository securityPriceRepository,
                          final MoneyHoldingService moneyHoldingService,
                          final UserAccountService userAccountService1,
                          final SecurityHoldingRepository securityHoldingRepository,
-                         final CacheService cacheService, final SecurityService securityService) {
+                         final CacheService cacheService,
+                         final SecurityService securityService) {
         this.securityTransactionRepository = securityTransactionRepository;
         this.moneyTransactionGroupService = moneyTransactionGroupService;
 
@@ -80,6 +83,7 @@ public class DataGenerator {
         this.moneyTransactionRepository = moneyTransactionRepository;
         this.securityHoldingService = securityHoldingService;
         this.securityRepository = securityRepository;
+        this.isinRepository = isinRepository;
         this.securityPriceRepository = securityPriceRepository;
         this.moneyHoldingService = moneyHoldingService;
 
@@ -151,26 +155,20 @@ public class DataGenerator {
     }
 
     public void generateSecurities() {
-        final Isin isin1 = new Isin();
-        final Isin isin2 = new Isin();
-        final Isin isin3 = new Isin();
-        isin1.setIsin("NL0011540547");
-        isin1.setSymbol("ABN.AS");
-
         SECURITY1 = new Security();
         SECURITY1.setName("Stock ABC");
         SECURITY1.setCurrencyId(EURO_ID);
         SECURITY1.setSecurityType(SecurityType.STOCK);
-        SECURITY1.setIsins(new ArrayList<>(List.of(isin1)));
         SECURITY1.setIndustry("Tech");
         SECURITY1.setExchange("AMS");
         SECURITY1.setSector("Health");
-
-        isin1.setSecurity(SECURITY1);
-
         SECURITY1 = securityRepository.saveAndFlush(SECURITY1);
-//        SECURITY2 = securityRepository.saveAndFlush(SECURITY2);
-//        SECURITY3 = securityRepository.saveAndFlush(SECURITY3);
+
+        final Isin isin1 = new Isin();
+        isin1.setIsin("NL0011540547");
+        isin1.setSymbol("ABN.AS");
+        isin1.setSecurityId(SECURITY1.getId());
+        isinRepository.saveAndFlush(isin1);
     }
 
     public void generateSecurityPrices(final Security security, final boolean down) {
@@ -214,7 +212,7 @@ public class DataGenerator {
         for (int i = 0; i < randomInt(5, 10); i++) {
             final SecurityTransaction transaction = new SecurityTransaction();
             transaction.setTimestamp(currentDate.atStartOfDay().toInstant(ZoneOffset.UTC));
-            transaction.setIsin(security.getLatestIsin().getIsin());
+//            transaction.setIsin(security.getLatestIsin().getIsin()); todo
             transaction.setAccountId(accountId);
             transaction.setUserId(USER_ID);
             transaction.setSecurityId(SECURITY1.getId());

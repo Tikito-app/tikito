@@ -74,4 +74,13 @@ public class JobService {
                 });
         addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
     }
+
+    @Transactional
+    public void updateAllSecurityValues(final long userId) {
+        securityTransactionRepository.findSecurityIdsByUserId(userId)
+                .forEach(securityId -> {
+                    addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, securityId, userId).build());
+                });
+        addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
+    }
 }

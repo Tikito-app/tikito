@@ -30,6 +30,7 @@ public final class HttpUtil {
      * Don't use this method when non-text (like pdf) is expected.
      */
     public static String downloadUrl(final String url) throws ResourceNotFoundException {
+        log.info("Downloading {}", url);
         if (httpClient == null) {
             httpClient = createTrustAllHttpClientBuilder().build();
         }

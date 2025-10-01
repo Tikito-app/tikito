@@ -75,9 +75,8 @@ public final class YahooImporter {
         return "https://query1.finance.yahoo.com/v8/finance/chart/" + symbol + "?events=split&formatted=true&includeAdjustedClose=true&interval=1d&period1=" + startEpoch + "&period2=" + endEpoch + "&symbol=" + symbol + "&userYfid=true&lang=en-US&region=US";
     }
 
-    public static void enrichSecurity(final Isin isin) {
-        final Security security = isin.getSecurity();
-        final String searchUrl = "https://query2.finance.yahoo.com/v1/finance/search?q=" + isin.getSymbol() + "&lang=en-US&region=US&quotesCount=6&newsCount=3&listsCount=2&enableFuzzyQuery=false&quotesQueryId=tss_match_phrase_query&multiQuoteQueryId=multi_quote_single_token_query&newsQueryId=news_cie_vespa&enableCb=false&enableNavLinks=true&enableEnhancedTrivialQuery=true&enableResearchReports=true&enableCulturalAssets=true&enableLogoUrl=true&enableLists=false&recommendCount=5&enablePrivateCompany=true";
+    public static void enrichSecurity(final Security security, final String isin, final String symbol) {
+        final String searchUrl = "https://query2.finance.yahoo.com/v1/finance/search?q=" + symbol + "&lang=en-US&region=US&quotesCount=6&newsCount=3&listsCount=2&enableFuzzyQuery=false&quotesQueryId=tss_match_phrase_query&multiQuoteQueryId=multi_quote_single_token_query&newsQueryId=news_cie_vespa&enableCb=false&enableNavLinks=true&enableEnhancedTrivialQuery=true&enableResearchReports=true&enableCulturalAssets=true&enableLogoUrl=true&enableLists=false&recommendCount=5&enablePrivateCompany=true";
 
         try {
             log.info(searchUrl);
@@ -103,7 +102,7 @@ public final class YahooImporter {
                 }
             }
         } catch (final ResourceNotFoundException | JsonProcessingException e) {
-            log.warn("Cannot retrieve company info for isin {}:", isin.getIsin(), e);
+            log.warn("Cannot retrieve security info for isin {}:", isin, e);
         }
     }
 //    https://query1.finance.yahoo.com/v7/finance/quote?fields=fiftyTwoWeekHigh,fiftyTwoWeekLow,fromCurrency,fromExchange,headSymbolAsString,logoUrl,longName,marketCap,messageBoardId,optionsType,overnightMarketTime,overnightMarketPrice,overnightMarketChange,overnightMarketChangePercent,regularMarketTime,regularMarketChange,regularMarketChangePercent,regularMarketOpen,regularMarketPrice,regularMarketSource,regularMarketVolume,postMarketTime,postMarketPrice,postMarketChange,postMarketChangePercent,preMarketTime,preMarketPrice,preMarketChange,preMarketChangePercent,shortName,toCurrency,toExchange,underlyingExchangeSymbol,underlyingSymbol&formatted=true&imgHeights=50&imgLabels=logoUrl&imgWidths=50&symbols=URW.PA&lang=en-AU&region=AU&crumb=.8ihKSax2ZO

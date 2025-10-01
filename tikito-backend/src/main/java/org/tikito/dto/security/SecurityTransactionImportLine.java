@@ -1,6 +1,7 @@
 package org.tikito.dto.security;
 
 import lombok.*;
+import org.tikito.entity.security.Security;
 
 import java.time.Instant;
 import java.util.List;
@@ -22,7 +23,7 @@ public class SecurityTransactionImportLine {
     private SecurityTransactionType transactionType;
     private String country;
     private Double cash;
-    private Long securityId;
+    private Security security;
     private int lineNumber;
     private List<String> cells;
     private boolean failed;

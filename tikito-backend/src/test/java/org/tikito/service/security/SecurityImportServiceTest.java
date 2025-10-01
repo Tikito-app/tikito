@@ -30,10 +30,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-public class SecurityTransactionServiceTest extends BaseIntegrationTest {
+public class SecurityImportServiceTest extends BaseIntegrationTest {
 
     @Autowired
-    SecurityTransactionService securityTransactionService;
+    SecurityImportService securityImportService;
 
     private Map<String, Integer> headerConfig;
     private final String buyValue = "";
@@ -49,40 +49,41 @@ public class SecurityTransactionServiceTest extends BaseIntegrationTest {
 
         WOLTER_KLUWER = withExistingSecurity("WOLTERS KLUWER", CURRENCY_EURO_ID, new ArrayList<>(List.of(
                 isin(ISIN_ONE_OLD, TWENTY_YEARS_AGO, null, "WKL.AS"))));
+        cacheService.refreshSecurities();
     }
 
     @Test
     void testImportNonExistingCurrency() throws IOException, UnsupportedImportFormatException {
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-non-existing-currency.csv", "Account.csv");
-        final SecurityTransactionImportResultDto result = securityTransactionService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true, true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertLineFailed(result, FAILED_NO_KNOWN_CURRENCY);
     }
 
     @Test
     void testImportNoTransactionType() throws IOException, UnsupportedImportFormatException {
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-no-transaction-type.csv", "Account.csv");
-        final SecurityTransactionImportResultDto result = securityTransactionService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true, true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertLineFailed(result, FAILED_NO_TRANSACTION_TYPE);
     }
 
     @Test
     void testImportNoValidTimestampDate() throws IOException, UnsupportedImportFormatException {
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-no-valid-timestamp-date.csv", "Account.csv");
-        final SecurityTransactionImportResultDto result = securityTransactionService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true, true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertLineFailed(result, FAILED_NO_VALID_TIMESTAMP);
     }
 
     @Test
     void testImportNoValidTimestampTime() throws IOException, UnsupportedImportFormatException {
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-no-valid-timestamp-time.csv", "Account.csv");
-        final SecurityTransactionImportResultDto result = securityTransactionService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true, true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertLineFailed(result, FAILED_NO_VALID_TIMESTAMP);
     }
 
     @Test
     void testImportNoValidPrice() throws IOException, UnsupportedImportFormatException {
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-no-price.csv", "Account.csv");
-        final SecurityTransactionImportResultDto result = securityTransactionService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true, true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertLineFailed(result, FAILED_NO_PRICE);
     }
 
@@ -91,12 +92,12 @@ public class SecurityTransactionServiceTest extends BaseIntegrationTest {
         final SecurityTransaction transaction = getSecurityTransaction();
         securityTransactionRepository.saveAndFlush(transaction);
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-duplicate-transaction.csv", "Account.csv");
-        final SecurityTransactionImportResultDto result = securityTransactionService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true, true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertEquals(4, result.getLines().size());
         assertEquals(3, result.getImportedTransactions().size());
         assertEquals(1, result.getLines().stream().filter(line -> FAILED_DUPLICATE_TRANSACTION.equals(line.getFailedReason())).count());
 
-        final SecurityTransactionImportResultDto newRsult = securityTransactionService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true, true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        final SecurityTransactionImportResultDto newRsult = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertEquals(4, newRsult.getLines().size());
         assertEquals(0, newRsult.getImportedTransactions().size());
     }
@@ -104,18 +105,18 @@ public class SecurityTransactionServiceTest extends BaseIntegrationTest {
     @Test
     void testImportNewAndExistingSecurity() throws IOException, UnsupportedImportFormatException {
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-new-and-existing-trading-company.csv", "Account.csv");
-        final SecurityTransactionImportResultDto result = securityTransactionService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true, true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertEquals(1, result.getNewSecuritiesByIsin().size());
         assertTrue(result.getNewSecuritiesByIsin().containsKey("NL0011540547"));
         final Security security = result.getNewSecuritiesByIsin().get("NL0011540547");
-        assertEquals(List.of("NL0011540547"), security.getIsins().stream().map(Isin::getIsin).toList());
+        assertTrue(result.getNewIsinsByIsin().containsKey("NL0011540547"));
         assertEquals("ABN AMRO BANK NV", security.getName());
     }
 
     @Test
     void testImportIsinChange() throws IOException, UnsupportedImportFormatException {
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-import-existing-company-with-new-isin.csv", "Account.csv");
-        final SecurityTransactionImportResultDto result = securityTransactionService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true, true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         final List<SecurityTransaction> importedTransactions = result.getImportedTransactions();
 
         assertEquals(5, result.getLines().size());
@@ -126,7 +127,7 @@ public class SecurityTransactionServiceTest extends BaseIntegrationTest {
                 .filter(s -> "ROYAL DUTCH SHELL A".equals(s.getName()))
                 .toList()
                 .getFirst();
-        final List<Isin> isins = security.getIsins();
+        final List<Isin> isins = isinRepository.findBySecurityId(security.getId());
         assertEquals(2, isins.size());
         final Isin firstIsin = isins.getFirst();
         final Isin secondIsin = isins.get(1);
@@ -151,7 +152,7 @@ public class SecurityTransactionServiceTest extends BaseIntegrationTest {
         securityHoldingRepository.saveAndFlush(securityHolding);
 
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-new-and-existing-security-holding.csv", "Account.csv");
-        final SecurityTransactionImportResultDto result = securityTransactionService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true, true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertEquals(1, result.getNewSecurityHoldings().size());
         assertNotEquals(WOLTER_KLUWER.getId(), result.getNewSecurityHoldings().getFirst().getSecurityId());
     }
@@ -159,7 +160,7 @@ public class SecurityTransactionServiceTest extends BaseIntegrationTest {
     @Test
     void testImportExistingHoldingResultsInZeroAssets() throws IOException, UnsupportedImportFormatException {
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-holding-results-in-zero-assets.csv", "Account.csv");
-        final SecurityTransactionImportResultDto result = securityTransactionService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true, true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertEquals(1, result.getNewSecurityHoldings().size());
         assertEquals(0, result.getNewSecurityHoldings().getFirst().getAmount());
     }
@@ -167,7 +168,7 @@ public class SecurityTransactionServiceTest extends BaseIntegrationTest {
     @Test
     void testImportNewHoldingResultsInZeroAssets() throws IOException, UnsupportedImportFormatException {
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-new-holding-results-in-zero-assets.csv", "Account.csv");
-        final SecurityTransactionImportResultDto result = securityTransactionService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true, true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertEquals(1, result.getNewSecurityHoldings().size());
         assertEquals(0, result.getNewSecurityHoldings().getFirst().getAmount());
     }
@@ -176,7 +177,7 @@ public class SecurityTransactionServiceTest extends BaseIntegrationTest {
     void testImportIsinChangeWithoutIsinChanged() throws IOException, UnsupportedImportFormatException {
         final String oldIsin = "GB00B03MLX29";
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-import-isin-change-with-same-isin.csv", "Account.csv");
-        final SecurityTransactionImportResultDto result = securityTransactionService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true, true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertEquals(1, result.getNewSecurityHoldings().size());
         assertEquals(1, result.getNewSecuritiesByIsin().size());
         assertTrue(result.getNewSecuritiesByIsin().containsKey(oldIsin));
@@ -185,16 +186,16 @@ public class SecurityTransactionServiceTest extends BaseIntegrationTest {
         assertEquals(65, holding.getAmount());
 
         assertTrue(result.getNewSecuritiesByIsin().containsKey(oldIsin));
-        final Security company = result.getNewSecuritiesByIsin().get(oldIsin);
+        final Security security = result.getNewSecuritiesByIsin().get(oldIsin);
 
-        assertEquals(1, company.getIsins().size());
+        assertEquals(1, isinRepository.findBySecurityId(security.getId()).size());
     }
 
     @Test
-    void testImportExistingCompanyProductChangeNoIsinChange() throws IOException, UnsupportedImportFormatException {
+    void testImportExistingSecurityProductChangeNoIsinChange() throws IOException, UnsupportedImportFormatException {
         final String oldIsin = "GB00B03MLX29";
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-import-product-change-no-new-isin.csv", "Account.csv");
-        final SecurityTransactionImportResultDto result = securityTransactionService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true, true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), new ImportSettings(true), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertEquals(1, result.getNewSecurityHoldings().size());
         assertEquals(1, result.getNewSecuritiesByIsin().size());
         assertTrue(result.getNewSecuritiesByIsin().containsKey(oldIsin));
@@ -203,9 +204,9 @@ public class SecurityTransactionServiceTest extends BaseIntegrationTest {
         assertEquals(65, holding.getAmount());
 
         assertTrue(result.getNewSecuritiesByIsin().containsKey(oldIsin));
-        final Security company = result.getNewSecuritiesByIsin().get(oldIsin);
+        final Security security = result.getNewSecuritiesByIsin().get(oldIsin);
 
-        assertEquals(1, company.getIsins().size());
+        assertEquals(1, isinRepository.findBySecurityId(security.getId()).size());
     }
 
     private void assertLineFailed(final SecurityTransactionImportResultDto result, final String expectedFailedReason) {

@@ -43,7 +43,7 @@ public class SecurityHolding {
     public SecurityHolding(final long userId, final Set<Long> accountIds, final SecurityTransactionImportLine transaction) {
         this.userId = userId;
         this.accountIds = new HashSet<>(accountIds);
-        this.securityId = transaction.getSecurityId();
+        this.securityId = transaction.getSecurity().getId();
         this.amount = transaction.getAmount();
         this.securityType = SecurityType.STOCK;
         this.currencyId = transaction.getCurrencyId();
@@ -82,17 +82,21 @@ public class SecurityHolding {
         }
     }
 
+    /**
+     * Applies the latest historical holding value and reverts the exchange rate. This means that the prices, costs etc
+     * are persisted in the original currency.
+     */
     public void apply(final HistoricalSecurityHoldingValue historicalSecurityHoldingValue) {
         this.currencyId = historicalSecurityHoldingValue.getCurrencyId(); // we update it here, because the currency can change if the exchange changes
-        this.price = historicalSecurityHoldingValue.getPrice();
-        this.totalDividend = historicalSecurityHoldingValue.getTotalDividend();
-        this.totalAdministrativeCosts = historicalSecurityHoldingValue.getTotalAdministrativeCosts();
-        this.totalTaxes = historicalSecurityHoldingValue.getTotalTaxes();
-        this.totalTransactionCosts = historicalSecurityHoldingValue.getTotalTransactionCosts();
-        this.totalCashInvested = historicalSecurityHoldingValue.getTotalCashInvested();
-        this.totalCashWithdrawn = historicalSecurityHoldingValue.getTotalCashWithdrawn();
-        this.worth = historicalSecurityHoldingValue.getWorth();
-        this.maxCashInvested = historicalSecurityHoldingValue.getMaxCashInvested();
-        this.cashOnHand = historicalSecurityHoldingValue.getCashOnHand();
+        this.price = historicalSecurityHoldingValue.getPrice() / historicalSecurityHoldingValue.getCurrencyMultiplier();
+        this.totalDividend = historicalSecurityHoldingValue.getTotalDividend() / historicalSecurityHoldingValue.getCurrencyMultiplier();
+        this.totalAdministrativeCosts = historicalSecurityHoldingValue.getTotalAdministrativeCosts() / historicalSecurityHoldingValue.getCurrencyMultiplier();
+        this.totalTaxes = historicalSecurityHoldingValue.getTotalTaxes() / historicalSecurityHoldingValue.getCurrencyMultiplier();
+        this.totalTransactionCosts = historicalSecurityHoldingValue.getTotalTransactionCosts() / historicalSecurityHoldingValue.getCurrencyMultiplier();
+        this.totalCashInvested = historicalSecurityHoldingValue.getTotalCashInvested() / historicalSecurityHoldingValue.getCurrencyMultiplier();
+        this.totalCashWithdrawn = historicalSecurityHoldingValue.getTotalCashWithdrawn() / historicalSecurityHoldingValue.getCurrencyMultiplier();
+        this.worth = historicalSecurityHoldingValue.getWorth() / historicalSecurityHoldingValue.getCurrencyMultiplier();
+        this.maxCashInvested = historicalSecurityHoldingValue.getMaxCashInvested() / historicalSecurityHoldingValue.getCurrencyMultiplier();
+        this.cashOnHand = historicalSecurityHoldingValue.getCashOnHand() / historicalSecurityHoldingValue.getCurrencyMultiplier();
     }
 }

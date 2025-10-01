@@ -1,4 +1,9 @@
 package org.tikito.exception;
 
-public class PasswordNotLongEnoughException extends Exception {
+import org.springframework.security.core.AuthenticationException;
+
+public class PasswordNotLongEnoughException extends AuthenticationException {
+    public PasswordNotLongEnoughException(final String msg) {
+        super(msg);
+    }
 }

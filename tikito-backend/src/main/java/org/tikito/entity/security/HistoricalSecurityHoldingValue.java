@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -45,7 +47,7 @@ public class HistoricalSecurityHoldingValue {
     public HistoricalSecurityHoldingValue(final long userId, final HistoricalSecurityHoldingValueDto dto) {
         this.id = dto.getId();
         this.userId = userId;
-        this.accountIds = new HashSet<>(dto.getAccountIds());
+        this.accountIds = Arrays.stream(dto.getAccountIds()).collect(Collectors.toSet());
         this.securityHoldingId = dto.getSecurityHoldingId();
         this.securityId = dto.getSecurityId();
         this.currencyId = dto.getCurrencyId();
@@ -61,13 +63,14 @@ public class HistoricalSecurityHoldingValue {
         this.worth = dto.getWorth() * dto.getCurrencyMultiplier();
         this.maxCashInvested = dto.getMaxCashInvested() * dto.getCurrencyMultiplier();
         this.cashOnHand = dto.getCashOnHand() * dto.getCurrencyMultiplier();
+        this.currencyMultiplier = dto.getCurrencyMultiplier();
     }
 
     public HistoricalSecurityHoldingValueDto toDto() {
         return new HistoricalSecurityHoldingValueDto(
                 id,
                 userId,
-                new HashSet<>(accountIds),
+                null,//accountIds.toArray(Long[]::new), // todo: speed up
                 securityHoldingId,
                 securityId,
                 date,

@@ -1,5 +1,6 @@
 package org.tikito.controller.user;
 
+import org.springframework.validation.annotation.Validated;
 import org.tikito.controller.request.RegisterRequest;
 import org.tikito.exception.EmailAlreadyExistsException;
 import org.tikito.exception.PasswordNotLongEnoughException;
@@ -26,7 +27,7 @@ public class RegisterController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<Void> register(@RequestBody final RegisterRequest request, final HttpServletRequest httpServletRequest) throws EmailAlreadyExistsException, PasswordNotLongEnoughException, IOException {
+    public ResponseEntity<Void> register(@Validated @RequestBody final RegisterRequest request, final HttpServletRequest httpServletRequest) throws EmailAlreadyExistsException, PasswordNotLongEnoughException, IOException {
         userService.register(request.getEmail(), request.getPassword());
         return ResponseEntity.ok().build();
     }

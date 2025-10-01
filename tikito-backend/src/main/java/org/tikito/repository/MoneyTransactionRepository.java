@@ -1,9 +1,9 @@
 package org.tikito.repository;
 
-import org.springframework.data.jpa.repository.Modifying;
-import org.tikito.entity.money.MoneyTransaction;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.tikito.entity.money.MoneyTransaction;
 
 import java.time.Instant;
 import java.util.List;
@@ -33,4 +33,14 @@ public interface MoneyTransactionRepository extends JpaRepository<MoneyTransacti
 
     @Query("select distinct(t.currencyId) from MoneyTransaction t")
     Set<Long> getCurrencyIdsInUse();
+
+    List<MoneyTransaction> findByLoanId(final long loanId);
+
+    @Query("select t from MoneyTransaction t where t.groupId in :moneyGroupIds")
+    List<MoneyTransaction> findByGroupIdIn(Set<Long> moneyGroupIds);
+
+    List<MoneyTransaction> findAllByUserId(long userId);
+
+    @Query("select t from MoneyTransaction t where t.userId = :userId and t.loanId is not null")
+    List<MoneyTransaction> findByUserIdAndLoanIdNotNull(long userId);
 }

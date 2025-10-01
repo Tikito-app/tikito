@@ -1,11 +1,5 @@
-package org.tikito.service;
+package org.tikito.service.money;
 
-import org.tikito.dto.money.MoneyTransactionImportResultDto;
-import org.tikito.entity.money.MoneyTransaction;
-import org.tikito.exception.CannotReadFileException;
-import org.tikito.repository.MoneyTransactionRepository;
-import org.tikito.service.money.MoneyTransactionService;
-import org.tikito.util.MoneyImportLineBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,27 +7,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
+import org.tikito.dto.AccountDto;
+import org.tikito.dto.money.MoneyTransactionImportLine;
+import org.tikito.dto.money.MoneyTransactionImportResultDto;
+import org.tikito.entity.money.MoneyTransaction;
+import org.tikito.exception.CannotReadFileException;
+import org.tikito.repository.MoneyTransactionRepository;
+import org.tikito.service.BaseIntegrationTest;
+import org.tikito.util.MoneyImportLineBuilder;
 
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.tikito.dto.security.SecurityTransactionImportResultDto.FAILED_DUPLICATE_TRANSACTION;
 import static org.tikito.service.importer.money.CustomMoneyImportHeaderName.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
-class MoneyTransactionServiceTest extends BaseIntegrationTest {
+class MoneyImportServiceTest extends BaseIntegrationTest {
 
     @Autowired
-    MoneyTransactionRepository repository;
+    private MoneyTransactionRepository repository;
+
     @Autowired
-    private MoneyTransactionService service;
+    private MoneyImportService service;
 
     @BeforeEach
     public void setup() {
@@ -103,6 +107,45 @@ class MoneyTransactionServiceTest extends BaseIntegrationTest {
                         DESCRIPTION, 7), "debit", "yyyyMMdd", "yyyyMMdd", null, ";");
 
         validateResults(result);
+    }
+
+
+    @Test
+    void enrichValidateAndMap_shouldAssignDifferentCurrency_givenDifferentAccountCurrency() {
+        final AccountDto accountDto = new AccountDto();
+        final MoneyTransactionImportLine line = new MoneyTransactionImportLine(0, List.of());
+        final List<MoneyTransactionImportLine> lines = new ArrayList<>();
+        accountDto.setCurrencyId(CURRENCY_EURO_ID);
+        line.setCurrency("USD");
+        line.setTimestamp(Instant.now());
+        lines.add(line);
+        service.enrichValidateAndMap(accountDto, lines, 0);
+        assertEquals(CURRENCY_DOLLAR_ID, line.getCurrencyId());
+    }
+
+    @Test
+    void enrichValidateAndMap_shouldAssignCurrency_givenNoCurrencyOnLine() {
+        final AccountDto accountDto = new AccountDto();
+        final MoneyTransactionImportLine line = new MoneyTransactionImportLine(0, List.of());
+        final List<MoneyTransactionImportLine> lines = new ArrayList<>();
+        accountDto.setCurrencyId(CURRENCY_EURO_ID);
+        line.setCurrency(null);
+        line.setTimestamp(Instant.now());
+        lines.add(line);
+        service.enrichValidateAndMap(accountDto, lines, 0);
+        assertEquals(CURRENCY_EURO_ID, line.getCurrencyId());
+    }
+
+    @Test
+    void enrichValidateAndMap_removeSpacesOfAccountNumber() {
+        final AccountDto accountDto = new AccountDto();
+        final MoneyTransactionImportLine line = new MoneyTransactionImportLine(0, List.of());
+        final List<MoneyTransactionImportLine> lines = new ArrayList<>();
+        line.setCounterpartAccountNumber(" 1234    657 ");
+        line.setTimestamp(Instant.now());
+        lines.add(line);
+        service.enrichValidateAndMap(accountDto, lines, 0);
+        assertEquals("1234657", line.getCounterpartAccountNumber());
     }
 
     void validateResults(final MoneyTransactionImportResultDto result) {

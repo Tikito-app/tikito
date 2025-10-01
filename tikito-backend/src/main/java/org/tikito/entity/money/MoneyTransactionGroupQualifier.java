@@ -1,5 +1,6 @@
 package org.tikito.entity.money;
 
+import org.tikito.dto.export.MoneyTransactionGroupQualifierExportDto;
 import org.tikito.dto.money.MoneyTransactionField;
 import org.tikito.dto.money.MoneyTransactionGroupQualifierDto;
 import org.tikito.dto.money.MoneyTransactionGroupQualifierType;
@@ -32,7 +33,19 @@ public class MoneyTransactionGroupQualifier {
     @Enumerated(EnumType.STRING)
     private MoneyTransactionField transactionField;
 
-//    double accuracy;
+    public MoneyTransactionGroupQualifier(final MoneyTransactionGroup group, final MoneyTransactionGroupQualifierDto dto) {
+        this.group = group;
+        this.qualifierType = dto.getQualifierType();
+        this.qualifier = dto.getQualifier();
+        this.transactionField = dto.getTransactionField();
+    }
+
+    public MoneyTransactionGroupQualifier(final MoneyTransactionGroup group, final MoneyTransactionGroupQualifierExportDto dto) {
+        this.group = group;
+        this.qualifierType = dto.getQualifierType();
+        this.qualifier = dto.getQualifier();
+        this.transactionField = dto.getTransactionField();
+    }
 
     public MoneyTransactionGroupQualifierDto toDto() {
         return new MoneyTransactionGroupQualifierDto(
@@ -56,5 +69,13 @@ public class MoneyTransactionGroupQualifier {
     @Override
     public int hashCode() {
         return Objects.hash(group.getId(), qualifierType, qualifier, transactionField);
+    }
+
+    public MoneyTransactionGroupQualifierExportDto toExportDto() {
+        return new MoneyTransactionGroupQualifierExportDto(
+                group.getName(),
+                qualifierType,
+                qualifier,
+                transactionField);
     }
 }

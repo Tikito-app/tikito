@@ -7,6 +7,7 @@ import org.tikito.dto.budget.HistoricalBudgetDto;
 import org.tikito.entity.money.MoneyTransactionGroup;
 import org.tikito.entity.budget.Budget;
 import org.tikito.entity.budget.HistoricalBudget;
+import org.tikito.repository.AccountRepository;
 import org.tikito.repository.MoneyTransactionGroupRepository;
 import org.tikito.repository.BudgetRepository;
 import org.tikito.repository.HistoricalBudgetRepository;
@@ -22,13 +23,16 @@ public class BudgetService {
     private final BudgetRepository budgetRepository;
     private final HistoricalBudgetRepository historicalBudgetRepository;
     private final MoneyTransactionGroupRepository moneyTransactionGroupRepository;
+    private final AccountRepository accountRepository;
 
     public BudgetService(final BudgetRepository budgetRepository,
                          final HistoricalBudgetRepository historicalBudgetRepository,
-                         final MoneyTransactionGroupRepository moneyTransactionGroupRepository) {
+                         final MoneyTransactionGroupRepository moneyTransactionGroupRepository,
+                         final AccountRepository accountRepository) {
         this.budgetRepository = budgetRepository;
         this.historicalBudgetRepository = historicalBudgetRepository;
         this.moneyTransactionGroupRepository = moneyTransactionGroupRepository;
+        this.accountRepository = accountRepository;
     }
 
     public List<BudgetDto> getBudgets(final long userId) {
@@ -49,13 +53,24 @@ public class BudgetService {
     @Transactional(propagation = Propagation.MANDATORY)
     public BudgetDto createOrUpdateBudget(final long userId, final CreateOrUpdateBudgetRequest request) {
         final Budget budget = request.isNew() ? new Budget(userId) : budgetRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
-
+        assertAccountIdsExists(request.getAccountIds());
+        final List<MoneyTransactionGroup> groups = moneyTransactionGroupRepository.findAllById(request.getGroupIds());
+        if(groups.size() != request.getGroupIds().size()) {
+            throw new NoSuchElementException();
+        }
         budget.setName(request.getName());
-        budget.setGroups(moneyTransactionGroupRepository.findAllById(request.getGroupIds()));
+        budget.setStartDate(request.getStartDate());
+        budget.setEndDate(request.getEndDate());
         budget.setDateRange(request.getDateRange());
         budget.setAmount(request.getAmount());
+        budget.setAccountIds(request.getAccountIds());
+        budget.setGroups(groups);
 
-        return budgetRepository.saveAndFlush(budget).toDto();
+        // todo: what about the unselected groups. We need to set the budget_id to null
+        final Budget entity = budgetRepository.saveAndFlush(budget);
+        groups.forEach(group -> group.setBudget(entity));
+        moneyTransactionGroupRepository.saveAllAndFlush(groups);
+        return entity.toDto();
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -95,5 +110,13 @@ public class BudgetService {
                 .filter(group -> !existingGroupIdsUsed.contains(group.getId()))
                 .map(MoneyTransactionGroup::toDto)
                 .toList();
+    }
+
+    private void assertAccountIdsExists(final Set<Long> accountIds) {
+        if(accountIds != null) {
+            if(accountRepository.findAllById(accountIds).size() != accountIds.size()) {
+                throw new NoSuchElementException();
+            }
+        }
     }
 }

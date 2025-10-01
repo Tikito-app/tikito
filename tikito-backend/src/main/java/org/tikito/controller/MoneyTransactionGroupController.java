@@ -1,5 +1,6 @@
 package org.tikito.controller;
 
+import org.springframework.validation.annotation.Validated;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.CreateOrUpdateMoneyTransactionGroupRequest;
 import org.tikito.dto.money.MoneyTransactionGroupDto;
@@ -31,7 +32,7 @@ public class MoneyTransactionGroupController {
     }
 
     @PostMapping
-    public ResponseEntity<MoneyTransactionGroupDto> createOrUpdate(final AuthUser authUser, @RequestBody final CreateOrUpdateMoneyTransactionGroupRequest request) {
+    public ResponseEntity<MoneyTransactionGroupDto> createOrUpdate(final AuthUser authUser, @Validated @RequestBody final CreateOrUpdateMoneyTransactionGroupRequest request) {
         return ResponseEntity.ok(groupService.createOrUpdateGroup(authUser.getId(), request));
     }
 

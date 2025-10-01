@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 
 @Getter
 @Setter
@@ -22,21 +24,19 @@ public class MoneyTransactionDto {
     private String description;
     private long currencyId;
     private Long groupId;
+    private Long budgetId;
+    private Long loanId;
 
     public static String getUniqueKey(final MoneyTransaction transaction) {
-        return transaction.getCounterpartAccountName() + "#" +
-                transaction.getCounterpartAccountNumber() + "#" +
-                transaction.getTimestamp() + "#" +
-                transaction.getFinalBalance() + "#" +
+        return transaction.getCounterpartAccountNumber() + "#" +
+                LocalDate.ofInstant(transaction.getTimestamp(), ZoneOffset.UTC) + "#" +
                 transaction.getAmount() + "#" +
                 transaction.getCurrencyId();
     }
 
     public static String getUniqueKey(final MoneyTransactionImportLine line) {
-        return line.getCounterpartAccountName() + "#" +
-                line.getCounterpartAccountNumber() + "#" +
-                line.getTimestamp() + "#" +
-                line.getFinalBalance() + "#" +
+        return line.getCounterpartAccountNumber() + "#" +
+                LocalDate.ofInstant(line.getTimestamp(), ZoneOffset.UTC) + "#" +
                 line.getAmount() + "#" +
                 line.getCurrencyId();
     }
