@@ -1,12 +1,15 @@
 <div class="main-side-column main-column">
 </div>
-<div class="main-center-column main-column">
+<div class="main-center-column-small main-column">
+  <h2>Assets</h2>
   <ng-container *ngIf="aggregatedHistoricalMoneyHoldingValues.length == 0">
     <div [innerHTML]="'overview/extended-overview-message' | translate"></div>
   </ng-container>
-  <mat-grid-list cols="4" rowHeight="200px">
-    <mat-grid-tile colspan="3" rowspan="3">
-      <div echarts [options]="chartOption" [initOpts]="initOptions" class="full-width"></div>
-    </mat-grid-tile>
-  </mat-grid-list>
+  <div echarts [options]="chartOption" [initOpts]="initOptions" class="full-width"></div>
+</div>
+<div class="main-side-column main-column">
+  <h2>Loans</h2>
+  <ng-container *ngFor="let loanId of Object.keys(loansById)">
+    <app-overview-loan [loan]="loansById[loanId]" [value]="loanValuesPerLoanId[loanId]"></app-overview-loan>
+  </ng-container>
 </div>

@@ -41,7 +41,7 @@ export class AccountApi {
   }
 
   getImporterTypesHeaders(): Observable<any> {
-    return this.http.basicHttpRequest(new HttpRequestData()
+    return this.http.basicHttpRequestWithErrorHandling(new HttpRequestData()
       .withRequestMethod(HttpRequestMethod.GET)
       .withUrl('/api/account/importer-types-headers'));
   }

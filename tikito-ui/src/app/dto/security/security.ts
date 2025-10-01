@@ -10,4 +10,5 @@ export class Security {
     sector: string;
     industry: string;
     exchange: string;
+    currentIsin: string;
 }

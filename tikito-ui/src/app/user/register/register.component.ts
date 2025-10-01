@@ -55,7 +55,7 @@ export class RegisterComponent implements OnInit {
       password: new FormControl(''),
     });
 
-    this.http.basicHttpRequest(new HttpRequestData()
+    this.http.basicHttpRequestWithErrorHandling(new HttpRequestData()
       .withUrl('/api/user/register')
       .withSecurityCheck(false)
       .withResponseType('text')

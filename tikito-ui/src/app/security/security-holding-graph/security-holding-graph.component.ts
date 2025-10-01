@@ -317,7 +317,11 @@ export class SecurityHoldingGraphComponent implements OnInit {
           data: seriesPerSecurityId[securityId].dividendValues,
           name: SecurityHoldingGraphDisplayField.DIVIDEND,
           type: 'line',
-          areaStyle: {},
+          areaStyle: {
+            color: Util.getColor(colorIndex),
+            opacity: 0.3
+          },
+          stack: 'y',
           showSymbol: false,
           color: Util.getColor(colorIndex),
           lineStyle: {color: Util.getColor(colorIndex)}
@@ -329,7 +333,11 @@ export class SecurityHoldingGraphComponent implements OnInit {
         series.push({
           data: seriesPerSecurityId[securityId].currentHoldingValues,
           name: SecurityHoldingGraphDisplayField.HOLDING_VALUE,
-          areaStyle: {},
+          areaStyle: {
+            color: Util.getColor(colorIndex),
+            opacity: 0.3
+          },
+          stack: 'y',
           type: 'line',
           showSymbol: false,
           color: Util.getColor(colorIndex),
@@ -343,7 +351,11 @@ export class SecurityHoldingGraphComponent implements OnInit {
           data: seriesPerSecurityId[securityId].taxValues,
           name: SecurityHoldingGraphDisplayField.TAX,
           type: 'line',
-          areaStyle: {},
+          stack: 'y',
+          areaStyle: {
+            color: Util.getColor(colorIndex),
+            opacity: 0.3
+          },
           showSymbol: false,
           color: Util.getColor(colorIndex),
           lineStyle: {color: Util.getColor(colorIndex)}
@@ -357,7 +369,10 @@ export class SecurityHoldingGraphComponent implements OnInit {
           name: SecurityHoldingGraphDisplayField.ADMIN_COST,
           type: 'line',
           stack: 'y',
-          areaStyle: {},
+          areaStyle: {
+            color: Util.getColor(colorIndex),
+            opacity: 0.3
+          },
           showSymbol: false,
           color: Util.getColor(colorIndex),
           lineStyle: {color: Util.getColor(colorIndex)}
@@ -410,16 +425,14 @@ export class SecurityHoldingGraphComponent implements OnInit {
         }
 
         return '<table>' +
-          `<tr><td>${date}</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px;">${holdingsPerSecurityId[holding.securityId].security.name}</span></td>`) + '</tr>' +
-          `<tr><td>${getMarker(params, SecurityHoldingGraphDisplayField.PRICE)} Price * amount</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px;">${Util.currencyFormatWithSymbol(holding.price, holding.currencyId)} * ${holding.amount}</span></td>`) + '</tr>' +
-          `<tr><td>${getMarker(params, SecurityHoldingGraphDisplayField.HOLDING_VALUE)} Current value</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holding.price * holding.amount)};">${Util.currencyFormatWithSymbol(holding.price * holding.amount, holding.currencyId)}</span></td>`) + '</tr>' +
-          // `<tr><td>${getMarker(params, SecurityHoldingGraphDisplayField.MAX_CASH_INVESTED)} Invested </td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holding.maxCashInvested)};">${Util.currencyFormatWithSymbol(holding.maxCashInvested, holding.currencyId)}</span></td>`) + '</tr>' +
-          `<tr><td>${getMarker(params, SecurityHoldingGraphDisplayField.ADMIN_COST)} Admin costs</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holding.totalAdministrativeCosts)};">${Util.currencyFormatWithSymbol(holding.totalAdministrativeCosts, holding.currencyId)}</span></td>`) + '</tr>' +
-          `<tr><td>${getMarker(params, SecurityHoldingGraphDisplayField.TAX)} Taxes</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holding.totalTaxes)};">${Util.currencyFormatWithSymbol(holding.totalTaxes, holding.currencyId)}</span></td>`) + '</tr>' +
-          `<tr><td>${getMarker(params, SecurityHoldingGraphDisplayField.DIVIDEND)} Dividend</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holding.totalDividend)};">${Util.currencyFormatWithSymbol(holding.totalDividend, holding.currencyId)}</span></td>`) + '</tr>' +
-          // `<tr><td>${getMarker(params, SecurityHoldingGraphDisplayField.CASH_INVESTED)} Invested </td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holding.cashInvested)};">${Util.currencyFormatWithSymbol(holding.cashInvested, holding.currencyId)}</span></td>`) + '</tr>' +
-          // `<tr><td>${getMarker(params, SecurityHoldingGraphDisplayField.CASH_ON_HAND)} On hand</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holding.cashOnHand)};">${Util.currencyFormatWithSymbol(holding.cashOnHand, holding.currencyId)}</span></td>`) + '</tr>' +
-          `<tr><td>${getMarker(params, SecurityHoldingGraphDisplayField.PERFORMANCE)} Performance</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(SecurityUtil.getPerformance(holding))};">${Util.percentageFormat(SecurityUtil.getPerformance(holding))}</span></td>`) + '</tr>' +
+          `<tr><td>${date}</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px;">${holdingsPerSecurityId[holding.securityId].security.name}</span></td>`).join('') + '</tr>' +
+          `<tr><td>${getMarker(params, SecurityHoldingGraphDisplayField.PRICE)} Price * amount</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px;">${Util.currencyFormatWithSymbol(holding.price, holding.currencyId)} * ${holding.amount}</span></td>`).join('') + '</tr>' +
+          `<tr><td>${getMarker(params, SecurityHoldingGraphDisplayField.HOLDING_VALUE)} Current value</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holding.price * holding.amount)};">${Util.currencyFormatWithSymbol(holding.price * holding.amount, holding.currencyId)}</span></td>`).join('') + '</tr>' +
+          `<tr><td>${getMarker(params, SecurityHoldingGraphDisplayField.ADMIN_COST)} Admin costs</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holding.totalAdministrativeCosts)};">${Util.currencyFormatWithSymbol(holding.totalAdministrativeCosts, holding.currencyId)}</span></td>`).join('') + '</tr>' +
+          `<tr><td>${getMarker(params, SecurityHoldingGraphDisplayField.TAX)} Taxes</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holding.totalTaxes)};">${Util.currencyFormatWithSymbol(holding.totalTaxes, holding.currencyId)}</span></td>`).join('') + '</tr>' +
+          `<tr><td>${getMarker(params, SecurityHoldingGraphDisplayField.DIVIDEND)} Dividend</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holding.totalDividend)};">${Util.currencyFormatWithSymbol(holding.totalDividend, holding.currencyId)}</span></td>`).join('') + '</tr>' +
+          `<tr><td>${getMarker(params, SecurityHoldingGraphDisplayField.PERFORMANCE)} Performance</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(SecurityUtil.getPerformance(holding))};">${Util.percentageFormat(SecurityUtil.getPerformance(holding))}</span></td>`).join('') + '</tr>' +
+          `<tr><td>Cash invested</td>` + Object.values(holdingValue).map((holding: any) => `<td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holding.maxCashInvested)};">${Util.currencyFormat(holding.maxCashInvested)}</span></td>`).join('') + '</tr>' +
           '</table>';
       }
     }

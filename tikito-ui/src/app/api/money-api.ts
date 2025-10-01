@@ -8,7 +8,7 @@ import MoneyTransactionGroupQualifier from "../dto/money/money-transaction-group
 import {MoneyTransactionsFilter} from "../dto/money/money-transactions-filter";
 import {AggregatedHistoricalMoneyHoldingValue} from "../dto/money/aggregated-historical-money-holding-value";
 import {MoneyTransactionImportLine} from "../dto/money/money-transaction-import-line";
-import {HttpRequestMethod} from "../dto/http-request-method";
+import {MoneyTransactionGroupType} from "../dto/money-transaction-group-type";
 
 @Injectable({
   providedIn: 'root'
@@ -39,13 +39,20 @@ export class MoneyApi {
       .withBody(filter));
   }
 
-  createOrUpdateMoneyTransactionGroup(id: number | null, name: string, qualifiers: MoneyTransactionGroupQualifier[]): Observable<MoneyTransactionGroup> {
+  getTransactionsForLoans(): Observable<MoneyTransaction[]> {
+    return this.http.httpGetList<MoneyTransaction>(MoneyTransaction, new HttpRequestData()
+      .withUrl('/api/money/transaction/loan'));
+  }
+
+  createOrUpdateMoneyTransactionGroup(id: number | null, name: string, groupTypes: MoneyTransactionGroupType[], qualifiers: MoneyTransactionGroupQualifier[], accountIds: number[]): Observable<MoneyTransactionGroup> {
     return this.http.httpPost<MoneyTransactionGroup>(new HttpRequestData()
       .withUrl('/api/money/transactions-group')
       .withBody({
         id: id,
         name: name,
-        qualifiers: qualifiers
+        groupTypes: groupTypes,
+        qualifiers: qualifiers,
+        accountIds: accountIds
       }));
   }
 
@@ -79,7 +86,7 @@ export class MoneyApi {
       transactionId: transactionId
     };
 
-    if(groupId != null) {
+    if (groupId != null) {
       body['groupId'] = groupId;
     }
 

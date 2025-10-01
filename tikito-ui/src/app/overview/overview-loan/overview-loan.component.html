@@ -1,0 +1,9 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{loan.name}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    {{'overview/loan/amount-remaining' | translate}}: <app-currency [amount]="-(value.amountRemaining)"></app-currency> <ng-container *ngIf="value.interestRemaining != 0">(<app-currency [amount]="-(value.interestRemaining)"></app-currency> {{'overview/loan/interest-remaining' | translate}})</ng-container><br/>
+    {{'overview/loan/amount-paid' | translate}}: <app-currency [amount]="value.loanPaid"></app-currency> (<app-currency [amount]="value.interestPaid"></app-currency> {{'overview/loan/interest-paid' | translate}})
+  </mat-card-content>
+</mat-card>

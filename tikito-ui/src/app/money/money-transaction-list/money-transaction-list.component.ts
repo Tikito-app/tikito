@@ -28,6 +28,7 @@ import {AuthService} from "../../service/auth.service";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {DialogService} from "../../service/dialog.service";
+import {TranslateService} from "../../service/translate.service";
 
 @Component({
   selector: 'app-moneyTransaction-list',
@@ -79,7 +80,7 @@ export class MoneyTransactionListComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private dialogService: DialogService,
-    private translate: TranslatePipe,
+    private translateService: TranslateService,
     private api: MoneyApi) {
   }
 
@@ -133,7 +134,7 @@ export class MoneyTransactionListComponent implements OnInit {
 
   onSetTransactionGroup(transaction: MoneyTransaction) {
     this.dialogService.setTransactionGroup(transaction.groupId).then(group => {
-      if(group != null) {
+      if (group != null) {
         let groupId = group.id == -1 ? null : group.id;
         this.api.setTransactionGroup(transaction.id, groupId).subscribe(() => this.resetTransactions());
       }
@@ -141,17 +142,12 @@ export class MoneyTransactionListComponent implements OnInit {
   }
 
   onDeleteTransaction(transaction: MoneyTransaction) {
-    this.dialogService.okCancel(
-      this.translate.transform('are-you-sure-delete-title'),
-      this.translate.transform('are-you-sure-delete-text'))
-      .then((doDelete) => {
-        if(doDelete) {
-          this.api.deleteMoneyTransaction(transaction.id).subscribe(() => this.dialogService.snackbar(
-            this.translate.transform('security/holding/deleted-message'),
-            this.translate.transform('close')));
-          // todo, refresh table?
-        }
-    })
+    this.dialogService.deleteConfirmation().subscribe(() => {
+      this.api.deleteMoneyTransaction(transaction.id).subscribe(() => this.dialogService.snackbar(
+        this.translateService.translate('security/holding/deleted-message'),
+        this.translateService.translate('close')));
+      // todo, refresh table?
+    });
   }
 
   protected readonly Util = Util;

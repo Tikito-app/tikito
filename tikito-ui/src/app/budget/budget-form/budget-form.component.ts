@@ -12,6 +12,7 @@ import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
 import {TranslatePipe} from "@ngx-translate/core";
 import {BudgetApi} from "../../api/budget-api";
 import {ActivatedRoute, Router} from "@angular/router";
+import {MoneyTransactionGroupType} from "../../dto/money-transaction-group-type";
 
 @Component({
   selector: 'app-budget-form',
@@ -53,7 +54,7 @@ export class BudgetFormComponent implements AfterViewInit {
 
   reset() {
     this.api.getAvailableTransactionGroups(this.budgetId).subscribe(groups => {
-      this.groups = groups;
+      this.groups = groups.filter(group => group.groupTypes.includes(MoneyTransactionGroupType.BUDGET));
 
       let group: any = {
         name: new FormControl(''),

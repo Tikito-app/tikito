@@ -42,6 +42,11 @@ export class AdminApi {
       .withUrl('/api/admin/securities/' + securityId));
   }
 
+  getIsins(securityId: number): Observable<Isin[]> {
+    return this.http.httpGetList(Isin, new HttpRequestData()
+      .withUrl('/api/admin/securities/' + securityId + '/isins'));
+  }
+
   updateSecurity(securityId: number,
                  name: string,
                  securityType: SecurityType,
@@ -109,6 +114,11 @@ export class AdminApi {
   updateAllSecurities() {
     return this.http.httpPost(new HttpRequestData()
       .withUrl('/api/admin/securities/update-all'));
+  }
+
+  updateAllSecurityValues() {
+    return this.http.httpPost(new HttpRequestData()
+      .withUrl('/api/admin/securities/update-all-values'));
   }
 
   recalculateHistoricalMoneyValue(accountId: number) {

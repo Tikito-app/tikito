@@ -30,18 +30,19 @@
     <br/>
     <ng-container *ngIf="moneyImportResult || securityImportResult">
       <p>{{ 'account/import/do-import-no-dry-run-text' | translate }}</p>
-      <button mat-raised-button color="primary"
+      <button mat-raised-button color="primary" *ngIf="!showLoadingText"
               (click)="uploadFileToBackend(false)">{{ 'account/import' | translate }}
       </button>
     </ng-container>
     <br/>
+    <p *ngIf="showLoadingText">{{'loading' | translate}}</p>
     <app-money-import-result *ngIf="moneyImportResult" [transactions]="moneyImportResult"></app-money-import-result>
     <app-security-import-result *ngIf="securityImportResult"
                                 [transactions]="securityImportResult"></app-security-import-result>
 
   </form>
 </div>
-<button mat-button color="primary" *ngIf="showCustomHeaderConfig"
+<button mat-button color="primary" *ngIf="showCustomHeaderConfig && !showLoadingText"
         (click)="uploadFileToBackend(true)">{{ 'account/import/test-custom-import' | translate }}
 </button>
 <app-select-columns *ngIf="showCustomHeaderConfig" [state]="importFileState"></app-select-columns>

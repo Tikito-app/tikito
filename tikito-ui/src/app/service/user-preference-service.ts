@@ -23,9 +23,9 @@ export class UserPreferenceService implements OnInit {
   ngOnInit(): void {
   }
 
-  static get<T>(key: string, defaultValue: T): string {
+  static get<T>(key: string, defaultValue: T): T {
     if (UserPreferenceService.preferences[key] == null) {
-      UserPreferenceService.set(key, defaultValue as string);
+      UserPreferenceService.set(key, defaultValue as T);
     }
     return UserPreferenceService.preferences[key];
   }
@@ -39,8 +39,12 @@ export class UserPreferenceService implements OnInit {
     UserPreferenceService.set<boolean>(key.valueOf(), checked);
   }
 
-  static onSelectChange(key: UserPreference, values: any[]) {
-    UserPreferenceService.set<string>(key.valueOf(), values.join(','));
+  static onSelectChange(key: UserPreference, values: any) {
+    if(Array.isArray(values)) {
+      UserPreferenceService.set<string>(key.valueOf(), values.join(','));
+    } else {
+      UserPreferenceService.set<string>(key.valueOf(), values);
+    }
   }
 
   static onRadioChange(key: UserPreference, value: string) {

@@ -27,6 +27,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import MoneyTransaction from "../../dto/money/money-transaction";
 import {DialogService} from "../../service/dialog.service";
+import {TranslateService} from "../../service/translate.service";
 
 @Component({
   selector: 'app-security-transaction-list',
@@ -75,7 +76,7 @@ export class SecurityTransactionListComponent implements OnInit {
   constructor(
     private router: Router,
     private dialogService: DialogService,
-    private translate: TranslatePipe,
+    private translateService: TranslateService,
     private authService: AuthService,
     private api: SecurityApi) {
   }
@@ -102,13 +103,13 @@ export class SecurityTransactionListComponent implements OnInit {
 
   onDeleteTransaction(transaction: MoneyTransaction) {
     this.dialogService.okCancel(
-      this.translate.transform('are-you-sure-delete-title'),
-      this.translate.transform('are-you-sure-delete-text'))
+      this.translateService.translate('are-you-sure-delete-title'),
+      this.translateService.translate('are-you-sure-delete-text'))
       .then((doDelete) => {
         if (doDelete) {
           this.api.deleteSecurityTransaction(transaction.id).subscribe(() => this.dialogService.snackbar(
-            this.translate.transform('security/holding/deleted-message'),
-            this.translate.transform('close')));
+            this.translateService.translate('security/holding/deleted-message'),
+            this.translateService.translate('close')));
         }
       })
   }

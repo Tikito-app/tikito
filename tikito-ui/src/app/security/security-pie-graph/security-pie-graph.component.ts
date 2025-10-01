@@ -7,6 +7,7 @@ import {SecurityHoldingValue} from "../../dto/security/security-holding-value";
 import {AuthService} from "../../service/auth.service";
 import {CacheService} from "../../service/cache-service";
 import {Util} from "../../util";
+import {TranslateService} from "../../service/translate.service";
 
 @Component({
   selector: 'app-trading-company-pie-graph',
@@ -34,7 +35,8 @@ export class SecurityPieGraphComponent implements OnInit {
   valueType: string;
 
   constructor(private api: SecurityApi,
-              private authService: AuthService,) {
+              private authService: AuthService,
+              private translateService: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -66,7 +68,7 @@ export class SecurityPieGraphComponent implements OnInit {
       },
       series: [
         {
-          name: 'Sector',
+          name: this.translateService.translate('security/' + this.valueType),
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: true,
@@ -114,8 +116,8 @@ export class SecurityPieGraphComponent implements OnInit {
       return holding.security.industry
     } else if(this.valueType == 'currency') {
       return "" + CacheService.getCurrencyById(holding.security.currencyId).name;
-    } else if(this.valueType == 'security-type') {
-      return holding.security.securityType;
+    } else if(this.valueType == 'type') {
+      return this.translateService.translate('security/type/' + holding.security.securityType);
     }
     return 'unknown';
   }

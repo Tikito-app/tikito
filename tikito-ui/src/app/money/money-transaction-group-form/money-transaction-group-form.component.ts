@@ -19,6 +19,10 @@ import {
   MoneyTransactionGroupQualifierFormComponent
 } from "../money-transaction-group-qualifier-form/money-transaction-group-qualifier-form.component";
 import {AuthService} from "../../service/auth.service";
+import {MatOption} from "@angular/material/core";
+import {MatSelect} from "@angular/material/select";
+import {AccountApi} from "../../api/account-api";
+import {Account} from "../../dto/account";
 
 @Component({
   selector: 'app-moneyTransactionGroup-form',
@@ -39,7 +43,9 @@ import {AuthService} from "../../service/auth.service";
     NgForOf,
     MoneyTransactionGroupQualifierListItemComponent,
     MatFabButton,
-    MoneyTransactionGroupQualifierFormComponent
+    MoneyTransactionGroupQualifierFormComponent,
+    MatOption,
+    MatSelect
   ],
   templateUrl: './money-transaction-group-form.component.html',
   styleUrl: './money-transaction-group-form.component.scss'
@@ -50,8 +56,10 @@ export class MoneyTransactionGroupFormComponent implements OnInit {
   moneyTransactionGroupId: number;
   qualifierInEdit: MoneyTransactionGroupQualifier | null;
   nameInEdit: boolean;
+  accounts: Account[];
 
   constructor(private api: MoneyApi,
+              private accountApi: AccountApi,
               private router: Router,
               private authService: AuthService,
               private route: ActivatedRoute) {
@@ -60,7 +68,10 @@ export class MoneyTransactionGroupFormComponent implements OnInit {
   ngOnInit() {
     this.authService.onSystemReady((loggedInUser: any) => {
       this.moneyTransactionGroupId = Util.getIdFromRoute(this.route, 'groupId');
-      this.reset();
+      this.accountApi.getAccounts().subscribe(accounts => {
+        this.accounts = accounts;
+        this.reset();
+      });
     });
   }
 
@@ -69,6 +80,8 @@ export class MoneyTransactionGroupFormComponent implements OnInit {
       name: new FormControl(''),
       dateRange: new FormControl(''),
       groupIds: new FormControl(''),
+      accountIds: new FormControl(''),
+      groupTypes: new FormControl(''),
       amount: new FormControl(''),
     };
     this.form = new FormGroup(group);
@@ -76,6 +89,8 @@ export class MoneyTransactionGroupFormComponent implements OnInit {
       this.api.getMoneyTransactionGroup(this.moneyTransactionGroupId as number).subscribe(group => {
         this.group = group;
         this.form.controls['name'].setValue(group.name);
+        this.form.controls['groupTypes'].setValue(group.groupTypes);
+        this.form.controls['accountIds'].setValue(group.accountIds);
       });
     } else {
       this.group = new MoneyTransactionGroup();
@@ -86,7 +101,9 @@ export class MoneyTransactionGroupFormComponent implements OnInit {
     this.api.createOrUpdateMoneyTransactionGroup(
       this.moneyTransactionGroupId,
       this.form.value.name,
-      this.group == null ? [] : this.group.qualifiers
+      this.form.value.groupTypes,
+      this.group == null ? [] : this.group.qualifiers,
+      this.form.value.accountIds
     ).subscribe(group => {
       window.location.href = '/money/transaction-group/' + group.id;
     })
@@ -123,11 +140,6 @@ export class MoneyTransactionGroupFormComponent implements OnInit {
   }
 
   qualifierCallback(qualifier: MoneyTransactionGroupQualifier | null) {
-    if (qualifier != null && this.qualifierInEdit instanceof MoneyTransactionGroupQualifier) {
-      // this.qualifierInEdit.qualifier = qualifier.qualifier;
-      // this.qualifierInEdit.qualifierType = qualifier.qualifierType;
-      // this.qualifierInEdit.transactionField = qualifier.transactionField;
-    }
     this.onSaveButtonClicked();
     this.qualifierInEdit = null;
   }

@@ -38,6 +38,7 @@ import {DialogService} from "../../service/dialog.service";
 import {UserPreferenceService} from "../../service/user-preference-service";
 import {UserPreference} from "../../dto/user-preference";
 import {AuthService} from "../../service/auth.service";
+import {TranslateService} from "../../service/translate.service";
 
 @Component({
   selector: 'app-security-holding-list',
@@ -88,7 +89,7 @@ export class SecurityHoldingListComponent implements AfterViewInit {
   constructor(
     private router: Router,
     private dialogService: DialogService,
-    private translate: TranslatePipe,
+    private translateService: TranslateService,
     private authService: AuthService,
     private api: SecurityApi) {
   }
@@ -138,25 +139,12 @@ export class SecurityHoldingListComponent implements AfterViewInit {
     this.router.navigate(['/security-holding'], {fragment: 'holdingIds=' + holding.id});
   }
 
-  mapIsin(row: SecurityHolding): string {
-    return row
-      .security
-      .isins
-      .map(i => i.isin)
-      .join(', ');
-  }
-
   onDeleteHolding(holding: SecurityHolding) {
-    this.dialogService.okCancel(
-      this.translate.transform('are-you-sure-delete-title'),
-      this.translate.transform('are-you-sure-delete-text'))
-      .then((doDelete) => {
-        if (doDelete) {
-          this.api.deleteSecurityHolding(holding.id).subscribe(() => this.dialogService.snackbar(
-            this.translate.transform('security/holding/deleted-message'),
-            this.translate.transform('close')));
-        }
-      });
+    this.dialogService.deleteConfirmation().subscribe(() => {
+      this.api.deleteSecurityHolding(holding.id).subscribe(() => this.dialogService.snackbar(
+        this.translateService.translate('security/holding/deleted-message'),
+        this.translateService.translate('close')));
+    });
   }
 
   onShowClosedPositionChanged(event: MatCheckboxChange) {

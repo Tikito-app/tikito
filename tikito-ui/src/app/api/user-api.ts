@@ -12,7 +12,7 @@ export class UserApi {
   }
 
   getPreferences(): Observable<{}> {
-    return this.http.basicHttpRequest(new HttpRequestData()
+    return this.http.basicHttpRequestWithErrorHandling(new HttpRequestData()
       .withUrl('/api/user-preference'))
   }
 

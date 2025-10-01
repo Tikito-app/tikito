@@ -27,6 +27,7 @@ import {CacheService} from "../../../service/cache-service";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {SecurityType} from "../../../dto/security/security-type";
+import {TranslateService} from "../../../service/translate.service";
 
 @Component({
   selector: 'app-admin-security-list',
@@ -68,7 +69,7 @@ export class AdminSecurityListComponent implements AfterViewInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private translate: TranslatePipe,
+    private translateService: TranslateService,
     private dialogService: DialogService,
     private api: AdminApi) {
   }
@@ -119,16 +120,11 @@ export class AdminSecurityListComponent implements AfterViewInit {
   }
 
   onDeleteSecurity(security: Security) {
-    this.dialogService.okCancel(
-      this.translate.transform('are-you-sure-delete-title'),
-      this.translate.transform('are-you-sure-delete-text'))
-      .then((doDelete) => {
-        if (doDelete) {
-          this.api.deleteSecurity(security.id).subscribe(() => this.dialogService.snackbar(
-            this.translate.transform('admin/security/deleted-message'),
-            this.translate.transform('close')));
-        }
-      });
+    this.dialogService.deleteConfirmation().subscribe(() => {
+      this.api.deleteSecurity(security.id).subscribe(() => this.dialogService.snackbar(
+        this.translateService.translate('admin/security/deleted-message'),
+        this.translateService.translate('close')));
+    });
   }
 
   onEditIsin(security: Security) {
@@ -141,31 +137,37 @@ export class AdminSecurityListComponent implements AfterViewInit {
 
   onRecalculateHistoricalSecurityValue(security: Security) {
     this.api.recalculateHistoricalSecurityValue(security.id).subscribe(() => {
-      this.dialogService.snackbar(this.translate.transform('done'), this.translate.transform('done'));
+      this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
     });
   }
 
   onUpdateSecurityPrices(security: Security) {
     this.api.updateSecurityPrices(security.id).subscribe(() => {
-      this.dialogService.snackbar(this.translate.transform('done'), this.translate.transform('done'));
+      this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
     });
   }
 
   onEnrichSecurity(security: Security) {
     this.api.enrichSecurity(security.id).subscribe(() => {
-      this.dialogService.snackbar(this.translate.transform('done'), this.translate.transform('done'));
+      this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
     });
   }
 
   onDeleteSecurityPrices(security: Security) {
     this.api.deleteSecurityPrices(security.id).subscribe(() => {
-      this.dialogService.snackbar(this.translate.transform('done'), this.translate.transform('done'));
+      this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
     });
   }
 
   onUpdateAllClicked() {
     this.api.updateAllSecurities().subscribe(() => {
-      this.dialogService.snackbar(this.translate.transform('done'), this.translate.transform('done'));
+      this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
+    });
+  }
+
+  onUpdateAllValuesClicked() {
+    this.api.updateAllSecurityValues().subscribe(() => {
+      this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
     });
   }
 

@@ -20,6 +20,10 @@ export class AdminComponent {
   constructor(private router: Router) {
   }
 
+  routeToAdminUserPreferences() {
+    this.router.navigate(['admin/user-preferences']);
+  }
+
   routeToAdminUsers() {
     this.router.navigate(['admin/users']);
   }
@@ -30,5 +34,13 @@ export class AdminComponent {
 
   routeToAdminMoney() {
     this.router.navigate(['admin/money']);
+  }
+
+  routeToExport() {
+    this.router.navigate(['admin/export']);
+  }
+
+  routeToImport() {
+    this.router.navigate(['admin/import']);
   }
 }

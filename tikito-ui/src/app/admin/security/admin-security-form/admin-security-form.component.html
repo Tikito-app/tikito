@@ -15,10 +15,10 @@
           </mat-form-field>
           <br/>
           <mat-form-field appearance="fill" class="full-width">
-            <mat-label>{{ 'security/security-type' | translate }}</mat-label>
+            <mat-label>{{ 'security/type' | translate }}</mat-label>
             <mat-select formControlName="securityType" [attr.data-cy]="'security-type'">
               @for (securityType of Util.getSecurityTypes(); track securityType) {
-                <mat-option [value]="securityType">{{ 'security/security-type-' + securityType | translate }}</mat-option>
+                <mat-option [value]="securityType">{{ 'security/type/' + securityType | translate }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -27,7 +27,7 @@
             <mat-label>{{ 'currency' | translate }}</mat-label>
             <mat-select formControlName="currencyId" [attr.data-cy]="'currencyId'">
               @for (currency of CacheService.getCurrencies(); track currency) {
-                <mat-option [value]="currency">{{ 'currency/' + currency.isins[0].isin | translate }}</mat-option>
+                <mat-option [value]="currency">{{ 'currency/' + currency.currentIsin | translate }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -66,4 +66,7 @@
       </form>
     </mat-card-content>
   </mat-card>
+</div>
+<div class="main-side-column main-column">
+  <button mat-button (click)="onEditIsinsClicked()" *ngIf="securityId != 0 && securityId != null">{{'admin/security/edit-isins' | translate}}</button>
 </div>

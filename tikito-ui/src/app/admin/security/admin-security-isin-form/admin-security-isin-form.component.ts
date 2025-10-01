@@ -72,7 +72,7 @@ export class AdminSecurityIsinFormComponent implements OnInit {
       this.form.value.symbol,
       this.form.value.validFrom,
       this.form.value.validTo).subscribe(isin => {
-      this.router.navigate(['/admin/securities/' + this.securityId + '/isin']);
+      this.router.navigate(['/admin/security/' + this.securityId + '/isin']);
     });
   }
 

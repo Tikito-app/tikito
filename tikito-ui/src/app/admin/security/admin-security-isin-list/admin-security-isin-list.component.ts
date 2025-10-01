@@ -3,8 +3,13 @@ import {
   MatCell,
   MatCellDef,
   MatColumnDef,
-  MatHeaderCell, MatHeaderCellDef,
-  MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, MatTable,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
   MatTableDataSource
 } from "@angular/material/table";
 import {Security} from "../../../dto/security/security";
@@ -20,6 +25,7 @@ import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {NgIf} from "@angular/common";
+import {TranslateService} from "../../../service/translate.service";
 
 @Component({
   selector: 'app-admin-security-isin-list',
@@ -59,7 +65,7 @@ export class AdminSecurityIsinListComponent implements AfterViewInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private translate: TranslatePipe,
+    private translateService: TranslateService,
     private dialogService: DialogService,
     private route: ActivatedRoute,
     private api: AdminApi) {
@@ -71,10 +77,12 @@ export class AdminSecurityIsinListComponent implements AfterViewInit {
 
       this.api.getSecurity(securityId).subscribe(security => {
         this.security = security;
+        this.api.getIsins(securityId).subscribe(isins => {
 
-        this.dataSource = new MatTableDataSource<Isin>(security.isins);
-        setTimeout(() => {
-          this.dataSource.paginator = this.paginator.getPaginator();
+          this.dataSource = new MatTableDataSource<Isin>(isins);
+          setTimeout(() => {
+            this.dataSource.paginator = this.paginator.getPaginator();
+          });
         });
       });
     });
@@ -96,16 +104,11 @@ export class AdminSecurityIsinListComponent implements AfterViewInit {
   }
 
   onDeleteIsin(isin: Isin) {
-    this.dialogService.okCancel(
-      this.translate.transform('are-you-sure-delete-title'),
-      this.translate.transform('are-you-sure-delete-text'))
-      .then((doDelete) => {
-        if (doDelete) {
-          this.api.deleteIsin(isin.isin).subscribe(() => this.dialogService.snackbar(
-            this.translate.transform('admin/security/isin/deleted-message'),
-            this.translate.transform('close')));
-        }
-      });
+    this.dialogService.deleteConfirmation().subscribe(() => {
+      this.api.deleteIsin(isin.isin).subscribe(() => this.dialogService.snackbar(
+        this.translateService.translate('admin/security/isin/deleted-message'),
+        this.translateService.translate('close')));
+    });
   }
 
   routeToSecurities() {

@@ -1,0 +1,41 @@
+<div class="main-side-column main-column">
+  <mat-form-field *ngIf="tabIndex == 1">
+    <mat-label>{{ 'money/filter' | translate }}</mat-label>
+    <input matInput (keyup)="applyFilter($event)" #input>
+  </mat-form-field>
+
+  <app-loan-graph-filter *ngIf="tabIndex == 0 || tabIndex == null"></app-loan-graph-filter>
+</div>
+<div class="{{tabIndex == 1 ? 'main-center-column-small' : 'main-center-column'}} main-column" *ngIf="loans.length > 0">
+
+
+  <mat-tab-group (selectedIndexChange)="onTabSelectionChanged($event)">
+    <mat-tab label="{{'loan/graph' | translate}}">
+      <app-loan-graph [loans]="loans" [loanValues]="allValues" *ngIf="loans.length > 0"></app-loan-graph>
+    </mat-tab>
+    <mat-tab label="{{'loan/loans' | translate}}">
+
+      <div class="mat-elevation-z8 full-width" *ngIf="dataSource">
+        <table mat-table [dataSource]="dataSource" class="full-width">
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>{{'loan/name' | translate}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClicked(row)" class="clickable"></tr>
+
+        </table>
+        <app-paginator></app-paginator>
+      </div>
+    </mat-tab>
+    <mat-tab label="{{'loan/transactions' | translate}}">
+      <app-loan-money-transactions-list></app-loan-money-transactions-list>
+    </mat-tab>
+  </mat-tab-group>
+
+</div>
+<div class="main-side-column main-column" *ngIf="tabIndex == 1 || loans.length == 0">
+  <button mat-fab (click)="onAddLoanButtonClicked()" class="fab-button"><mat-icon>add</mat-icon></button>
+</div>

@@ -89,7 +89,7 @@ export class AccountFormComponent implements OnInit {
   }
 
   onDeleteButtonClicked() {
-    if (this.accountId != null) {
+    if (this.accountId != 0) {
       this.api.deleteAccount(this.accountId).subscribe(() => this.onCancelButtonClicked());
     } else {
       this.onCancelButtonClicked();

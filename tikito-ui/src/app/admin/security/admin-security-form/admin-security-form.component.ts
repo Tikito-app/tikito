@@ -95,11 +95,15 @@ export class AdminSecurityFormComponent implements OnInit {
   }
 
   onDeleteButtonClicked() {
-    if (this.securityId != null) {
+    if (this.securityId != 0) {
       this.api.deleteSecurity(this.securityId).subscribe(() => this.onCancelButtonClicked());
     } else {
       this.onCancelButtonClicked();
     }
+  }
+
+  onEditIsinsClicked() {
+    this.router.navigate(['/admin/security/' + this.securityId + '/isin'])
   }
 
   protected readonly Util = Util;

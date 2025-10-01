@@ -8,6 +8,8 @@ import {Util} from "../util";
 import {AuthService} from "./auth.service";
 import {Router} from "@angular/router";
 import {EnvService} from "./env.service";
+import {DialogService} from "./dialog.service";
+import {TranslateService} from "./translate.service";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,9 @@ export class HttpService {
 
   constructor(private http: HttpClient,
               private envService: EnvService,
-              private router: Router) {
+              private router: Router,
+              private translateService: TranslateService,
+              private dialogService: DialogService) {
   }
 
   httpGetSingle<T>(type: { new(): T }, httpRequestData: HttpRequestData): Observable<T> {
@@ -41,7 +45,7 @@ export class HttpService {
 
   httpPost<T>(httpRequestData: HttpRequestData): Observable<T> {
     httpRequestData = httpRequestData.withRequestMethod(HttpRequestMethod.POST);
-    return this.basicHttpRequest<T>(httpRequestData);
+    return this.basicHttpRequestWithErrorHandling<T>(httpRequestData);
   }
 
   httpPostList<T>(type: { new(): T }, httpRequestData: HttpRequestData): Observable<T[]> {
@@ -56,12 +60,12 @@ export class HttpService {
 
   httpDelete(httpRequestData: HttpRequestData): Observable<void> {
     httpRequestData = httpRequestData.withRequestMethod(HttpRequestMethod.DELETE);
-    return this.basicHttpRequest(httpRequestData);
+    return this.basicHttpRequestWithErrorHandling(httpRequestData);
   }
 
   httpPagedRequestList<T>(type: { new(): T }, request: HttpRequestData): Observable<PagedResult<T>> {
     return new Observable<PagedResult<T>>(subscriber => {
-      this.basicHttpRequest(request).subscribe({
+      this.basicHttpRequestWithErrorHandling(request).subscribe({
         next: (result) => {
           if (result == null) {
             return;
@@ -87,7 +91,7 @@ export class HttpService {
 
   httpRequestList<T>(type: { new(): T }, request: HttpRequestData): Observable<T[]> {
     return new Observable<T[]>(subscriber => {
-      this.basicHttpRequest(request).subscribe({
+      this.basicHttpRequestWithErrorHandling(request).subscribe({
         next: (result) => {
           if (result == null) {
             return;
@@ -109,7 +113,7 @@ export class HttpService {
 
   httpRequestObject<T>(type: { new(): T }, request: HttpRequestData): Observable<T> {
     return new Observable<T>(subscriber => {
-      this.basicHttpRequest(request).subscribe({
+      this.basicHttpRequestWithErrorHandling(request).subscribe({
         next: (result) => {
           let t = new type() as {};
           result = Object.assign(t, result);
@@ -121,35 +125,17 @@ export class HttpService {
     });
   }
 
-  httpRequestWithErrorHandling<T>(request: HttpRequestData): Observable<T> {
+  basicHttpRequestWithErrorHandling<T>(request: HttpRequestData): Observable<T> {
+    let _this = this;
     return new Observable(resolve => {
       this.basicHttpRequest<T>(request)
         .subscribe({
           next: (result) => resolve.next(result),
-          error: (e) => resolve.error(e),
+          error: (e) => _this.handleError(e, {}),
           complete: () => resolve.complete()
         });
     });
   }
-
-  // handleError(error: any, errorMessages: Record<string, string>) {
-  //     if (error.error?.error != null) {
-  //         const key = error.error.error;
-  //         if (errorMessages[key] != null) {
-  //             this.dialogService.snackbar(errorMessages[key], 'Close');
-  //             return;
-  //         }
-  //         switch (key) {
-  //             case 'RequestNotAllowedException':
-  //                 this.dialogService.snackbar('The action that you performed was not allowed', 'Close');
-  //                 return;
-  //             case 'ResourceNotFoundException':
-  //                 this.dialogService.snackbar('The resource that you tried to load does not exists', 'Close');
-  //                 return;
-  //         }
-  //     }
-  //     this.dialogService.snackbar(error.message, 'Close');
-  // }
 
   basicHttpRequest<T>(request: HttpRequestData): Observable<T> {
     let headers = new HttpHeaders();
@@ -232,5 +218,17 @@ export class HttpService {
         }
       }
     });
+  }
+
+  handleError(error: any, errorMessages: Record<string, string>) {
+    if (error.error?.error != null) {
+      const key = error.error.error;
+      if (errorMessages[key] != null) {
+          // todo
+        // this.dialogService.snackbar(errorMessages[key], this.translate.transform('close'));
+        return;
+      }
+      this.dialogService.snackbar(this.translateService.translate(key), this.translateService.translate('close'));
+    }
   }
 }

@@ -22,10 +22,10 @@
           </mat-form-field>
           &nbsp;
           <mat-form-field>
-            <mat-label>{{ 'user-account/account-type' | translate }}</mat-label>
+            <mat-label>{{ 'account/type' | translate }}</mat-label>
             <mat-select formControlName="accountType" [attr.data-cy]="'account-type'">
               @for (accountType of Util.getAccountTypes(); track accountType) {
-                <mat-option [value]="accountType">{{ 'user-account/account-type-' + accountType | translate }}</mat-option>
+                <mat-option [value]="accountType">{{ 'account/type/' + accountType | translate }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -34,7 +34,7 @@
             <mat-label>{{ 'currency' | translate }}</mat-label>
             <mat-select formControlName="currencyId" [attr.data-cy]="'currency'">
               @for (currency of CacheService.getCurrencies(); track currency) {
-                <mat-option [value]="currency.id">{{ 'currency/' + currency.isins[0].isin | translate }}</mat-option>
+                <mat-option [value]="currency.id">{{ 'currency/' + currency.currentIsin | translate }}</mat-option>
               }
             </mat-select>
           </mat-form-field>

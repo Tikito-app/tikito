@@ -24,6 +24,7 @@ import {AuthService} from "../../service/auth.service";
 import {CacheService} from "../../service/cache-service";
 import {DialogService} from "../../service/dialog.service";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import {TranslateService} from "../../service/translate.service";
 
 @Component({
   selector: 'app-account-list',
@@ -63,7 +64,7 @@ export class AccountListComponent implements AfterViewInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private translate: TranslatePipe,
+    private translateService: TranslateService,
     private dialogService: DialogService,
     private api: AccountApi) {
   }
@@ -80,7 +81,7 @@ export class AccountListComponent implements AfterViewInit {
 
       this.dataSource = new MatTableDataSource<Account>(accounts);
       setTimeout(() => {
-        if(this.paginator) {
+        if (this.paginator) {
           this.dataSource.paginator = this.paginator.getPaginator();
         }
       });
@@ -115,19 +116,14 @@ export class AccountListComponent implements AfterViewInit {
   }
 
   onDeleteAccount(account: Account) {
-    this.dialogService.okCancel(
-      this.translate.transform('are-you-sure-delete-title'),
-      this.translate.transform('are-you-sure-delete-text'))
-      .then((doDelete) => {
-        if (doDelete) {
-          this.api.deleteAccount(account.id).subscribe(() => {
-            this.dialogService.snackbar(
-              this.translate.transform('account/deleted-message'),
-              this.translate.transform('close'));
-            this.reset();
-          });
-        }
-      })
+    this.dialogService.deleteConfirmation().subscribe(() => {
+      this.api.deleteAccount(account.id).subscribe(() => {
+        this.dialogService.snackbar(
+          this.translateService.translate('account/deleted-message'),
+          this.translateService.translate('close'));
+        this.reset();
+      });
+    });
   }
 
   protected readonly CacheService = CacheService;

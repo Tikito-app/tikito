@@ -26,6 +26,7 @@ import {FileType} from "../../dto/file-type";
 import {Observable, Observer} from "rxjs";
 import {CsvService} from "../../service/csv.service";
 import {ExcelService} from "../../service/excel.service";
+import {TranslateService} from "../../service/translate.service";
 
 @Component({
   selector: 'app-import',
@@ -56,6 +57,7 @@ export class ImportComponent implements OnInit {
   importFileState: ImportFileProcessState;
   showCsvImportOptions: boolean;
   showCustomHeaderConfig: boolean;
+  showLoadingText: boolean;
 
   @ViewChild(SelectColumnsComponent)
   selectColumnsComponent: SelectColumnsComponent;
@@ -68,7 +70,7 @@ export class ImportComponent implements OnInit {
               private dialogService: DialogService,
               private csvService: CsvService,
               private excelService: ExcelService,
-              private translate: TranslatePipe) {
+              private translateService: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -101,7 +103,7 @@ export class ImportComponent implements OnInit {
     if (this.importFileState.file) {
       this.fileImportService.setFileTypeAndContent(this.importFileState).subscribe(() => {
         if (this.importFileState.fileType == null) {
-          this.dialogService.snackbar(this.translate.transform('account/import/unknown-file-type'), this.translate.transform('account/import/unknown-file-type'));
+          this.dialogService.snackbar(this.translateService.translate('account/import/unknown-file-type'), this.translateService.translate('account/import/unknown-file-type'));
           return;
         }
 
@@ -125,7 +127,7 @@ export class ImportComponent implements OnInit {
           this.importFileState.accountType = this.form.value.account.accountType;
           this.showCustomHeaderConfig = true;
         } else if (this.importFileState.accountType != this.form.value.account.accountType) {
-          this.dialogService.snackbar(this.translate.transform('account/import/wrong-account-type'), this.translate.transform('account/import/wrong-account-type'));
+          this.dialogService.snackbar(this.translateService.translate('account/import/wrong-account-type'), this.translateService.translate('account/import/wrong-account-type'));
         } else {
           this.uploadFileToBackend(true);
         }
@@ -144,7 +146,7 @@ export class ImportComponent implements OnInit {
     } else if (this.importFileState.fileType == FileType.EXCEL) {
       return this.excelService.parseExcelFile(this.importFileState);
     } else {
-      this.dialogService.snackbar(this.translate.transform('account/import/unknown-file-type'), this.translate.transform('account/import/unknown-file-type'));
+      this.dialogService.snackbar(this.translateService.translate('account/import/unknown-file-type'), this.translateService.translate('account/import/unknown-file-type'));
       return new Observable((observer: Observer<void>) => {
       })
     }
@@ -153,6 +155,7 @@ export class ImportComponent implements OnInit {
   uploadFileToBackend(dryRun: boolean) {
     this.securityImportResult = null;
     this.moneyImportResult = null;
+    this.showLoadingText = true;
 
     let headers = this.selectColumnsComponent == null ? null : this.selectColumnsComponent.getHeaderConfig();
     let buyValue = this.selectColumnsComponent == null ? null : this.selectColumnsComponent.getBuyValue();
@@ -165,12 +168,14 @@ export class ImportComponent implements OnInit {
     if (this.importFileState.accountType == AccountType.SECURITY) {
       this.securityApi.importFile(this.form.value.account.id, this.importFileState.file, dryRun, headers, buyValue, timestampFormat, dateFormat, timeFormat, csvSeparator).subscribe(transactions => {
         this.securityImportResult = transactions;
-        this.dialogService.snackbar(this.translate.transform('account/import/file-import-success'));
+        this.showLoadingText = false;
+        this.dialogService.snackbar(this.translateService.translate('account/import/file-import-success'));
       });
     } else if (this.importFileState.accountType == AccountType.DEBIT) {
       this.moneyApi.importFile(this.form.value.account.id, this.importFileState.file, dryRun, headers, debitCreditValue, timestampFormat, dateFormat, timeFormat, csvSeparator).subscribe(transactions => {
         this.moneyImportResult = transactions;
-        this.dialogService.snackbar(this.translate.transform('account/import/file-import-success'));
+        this.showLoadingText = false;
+        this.dialogService.snackbar(this.translateService.translate('account/import/file-import-success'));
       });
     }
   }

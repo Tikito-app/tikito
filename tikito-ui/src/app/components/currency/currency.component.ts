@@ -30,10 +30,10 @@ export class CurrencyComponent {
 
   getCurrencySymbol(): string {
     let currency = CacheService.getCurrencyById(this.currencyId as number);
-    if(currency == null || currency.isins == null) {
+    if(currency == null) {
       return null as unknown as string;
     }
-    return currency.isins[0].isin;
+    return currency.currentIsin;
   }
 
   protected readonly CacheService = CacheService;

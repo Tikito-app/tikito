@@ -95,7 +95,7 @@ export class AuthService {
 
   assertNotInitialInstallation(): Observable<void> {
     return new Observable(subscriber => {
-      this.http.basicHttpRequest(new HttpRequestData()
+      this.http.basicHttpRequestWithErrorHandling(new HttpRequestData()
         .withSecurityCheck(false)
         .withUrl('/api/user/initial-installation')
         .withRequestMethod(HttpRequestMethod.GET))

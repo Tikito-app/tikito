@@ -31,7 +31,7 @@ export class CacheService implements OnInit {
         CacheService.currenciesById = [];
 
         currencies.forEach(currency => {
-          CacheService.currenciesByIsin[currency.isins[0].isin] = currency;
+          CacheService.currenciesByIsin[currency.currentIsin] = currency;
           CacheService.currenciesById[currency.id] = currency;
         });
 
@@ -39,15 +39,15 @@ export class CacheService implements OnInit {
           accounts.forEach(account => CacheService.accounts[account.id] = account);
           CacheService.currencies = currencies
             .sort((a, b) => {
-              let isinA = a.isins[0].isin;
-              let isinB = b.isins[0].isin;
+              let isinA = a.currentIsin;
+              let isinB = b.currentIsin;
 
               if (isinB == 'EUR') {
                 return 1;
               } else if(isinB == 'USD' && isinA != 'EUR') {
                 return 1;
               }
-              return isinA.localeCompare(b.isins[0].isin);
+              return isinA.localeCompare(b.currentIsin);
             });
           observer.next();
         });

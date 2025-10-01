@@ -18,8 +18,8 @@
       </ng-container>
 
       <ng-container matColumnDef="account-type">
-        <th mat-header-cell *matHeaderCellDef>{{'user-account/account-type' | translate}}</th>
-        <td mat-cell *matCellDef="let element"> {{element.accountType}} </td>
+        <th mat-header-cell *matHeaderCellDef>{{'account/type' | translate}}</th>
+        <td mat-cell *matCellDef="let element"> {{'account/type/' + element.accountType | translate}} </td>
       </ng-container>
 
       <ng-container matColumnDef="currency">

@@ -4,6 +4,12 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Overpass, sans-serif; }
 
 
+.mat-primary .mdc-button__ripple {
+  //background-color: #3494ff !important;
+}
+a .mdc-button__label {
+  //color: #fc5b4b !important;
+}
 
 .mat-card-content {
   font-family: Overpass, sans-serif;

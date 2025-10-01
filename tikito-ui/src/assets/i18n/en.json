@@ -5,20 +5,13 @@
   "login": "Login",
   "register": "Register",
   "logout": "Logout",
-  "display-name": "Display name",
-  "invitees": "Invitees",
-  "search": "Search",
-  "status": "Status",
-  "invite": "Invite",
-  "create-event": "New event",
   "home": "Home",
-  "who-pays-what": "Who pays what",
   "add": "Add",
-  "ART_CULTURE": "Art & Culture",
   "search-filter": "Search filter",
   "initial-installation": "Initial installation",
-  "start-date": "Start date",
-  "end-date": "End date",
+  "loading": "Loading...",
+
+  "AccountNumberAlreadyExistsException": "The account number already exists on a different account",
 
   "------------ REGISTER USER -----------":"",
   "register/first-ever-user-text": "Welcome to a fresh installation of Tikito. After filling in your details, we will setup the system and you can login. Your password must be more than 10 characters long",
@@ -34,6 +27,8 @@
   "save": "Save",
   "cancel": "Cancel",
   "delete": "Delete",
+  "start-date": "Start date",
+  "end-date": "End date",
 
   "success": "Success",
 
@@ -42,10 +37,17 @@
 
 
   "overview/extended-overview-message": "Welcome to Tikito. Here you will see an overview of all your assets. If you need any help, see the <a href=\"http://tikito.org/documentation\" target=\"_blank\">documentation</a>.",
+  "overview/loan/amount-remaining": "Remaining",
+  "overview/loan/amount-paid": "Paid",
+  "overview/loan/interest-paid": "interest",
+  "overview/loan/interest-remaining": "interest",
 
   "--------------- ACCOUNT ---------------------": "",
 
   "account": "Account",
+  "account/type": "Account type",
+  "account/type/DEBIT": "Debit/credit",
+  "account/type/SECURITY": "Security",
   "account/introduction-text": "Here you can create accounts such as a debit account, or an account that holds your stock portfolio. Click on the plus button right to add an account.",
   "account/import": "Import",
   "import/introduction-text": "You need to create an account first, before you can import anything. Click on accounts in the top menu to create an account.",
@@ -88,12 +90,6 @@
   "user-account/create-account": "Create account",
   "user-account/select-account": "Select account",
 
-  "user-account/account-type-SECURITY": "Security (e.g. stocks)",
-  "user-account/account-type-CREDIT": "Credit",
-  "user-account/account-type-DEBIT": "Debit (e.g. normal money account)",
-  "user-account/account-type-SAVING": "Saving",
-
-
 
   "--------------- SECURITIES ---------------------": "",
   "security": "Security",
@@ -101,10 +97,11 @@
   "security/sector": "Sector",
   "security/industry": "Industry",
   "security/exchange": "Exchange",
-  "security/security-type": "Security type",
-  "security/security-type-ETF": "ETF",
-  "security/security-type-STOCK": "Stock",
-  "security/security-type-CURRENCY": "Currency",
+  "security/type": "Security type",
+  "security/currency": "Currency",
+  "security/type/ETF": "ETF",
+  "security/type/STOCK": "Stock",
+  "security/type/CURRENCY": "Currency",
   "security/security-holdings": "Security holdings",
   "security/show-closed-positions": "Show closed positions",
   "security/graph": "Graph",
@@ -165,7 +162,7 @@
   "money/transaction/group": "Group",
   "money/transaction/amount": "Amount",
   "money/transaction/description": "Description",
-  "money/transaction/date": "Description",
+  "money/transaction/date": "Date",
   "money/transaction/set-transaction-group": "Set group",
   "money/transaction/exchange-rate": "Exchange rate",
 
@@ -183,6 +180,7 @@
   "money/transaction-group/field": "Field in transaction",
   "money/transaction-group/qualifier": "Qualifier",
   "money/transaction-group/qualifier-type": "Type",
+  "money/transaction-group/group-type": "Group types",
 
   "--------------- IMPORT ---------------------": "",
   "import": "Import",
@@ -212,7 +210,9 @@
 
   "admin/security": "Securities",
   "admin/security/update-all": "Update all",
+  "admin/security/update-all-values": "Update all values",
   "admin/security/name": "Name",
+  "admin/security/edit-isins": "Edit isins",
   "admin/security/edit-security-title": "Edit security",
   "admin/security/edit-isin-title": "Edit isin",
   "admin/security/edit-isin": "Edit isin",
@@ -223,6 +223,37 @@
   "admin/security/update-price": "Update price",
   "admin/security/enrich": "Enrich",
   "admin/security/delete-price": "Delete prices",
+
+  "admin/user-preferences": "Your preferences",
+  "admin/user-preferences/start-date-minus-amount": "Overview start date at",
+  "admin/user-preferences/overview-start-date-minus-unit": "Unit",
+  "admin/user-preferences/start-date-ago": "ago",
+  "admin/user-preferences/values-are-automatically-saved": "Values are automatically saved",
+  "admin/user-preferences/default-currency": "Default currency",
+  "admin/user-preferences/finnhub-token": "Finnhub token",
+
+  "admin/import": "Import",
+  "admin/export": "Export",
+
+
+  "--------------- LOAN ---------------------": "",
+  "loan/loan": "Loan",
+  "loan/loans": "Loans",
+  "loan/name": "Name",
+  "loan/graph": "Graph",
+  "loan/edit": "Edit loan",
+  "loan/transactions": "Transactions",
+  "loan/parts": "Loan parts",
+  "loan/part": "Loan part",
+  "loan/part/back-to-loan": "Back to loan",
+  "loan/part/interests": "Loan interests",
+  "loan/part/name": "Part name",
+  "loan/part/loan-type": "Loan type",
+  "loan/part/amount": "Amount",
+  "loan/part/remaining-amount": "Remaining amount",
+  "loan/part/interest/amount": "Interest %",
+  "loan/part/create": "Create loan part",
+  "loan/part/money-transaction-groups": "Money groups",
 
 
 

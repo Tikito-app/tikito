@@ -27,6 +27,7 @@ import {MatInput} from "@angular/material/input";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {NgIf} from "@angular/common";
 import {Account} from "../../../dto/account";
+import {TranslateService} from "../../../service/translate.service";
 
 @Component({
   selector: 'app-admin-money-list',
@@ -68,7 +69,7 @@ export class AdminMoneyListComponent implements AfterViewInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private translate: TranslatePipe,
+    private translateService: TranslateService,
     private dialogService: DialogService,
     private api: AdminApi) {
   }
@@ -109,13 +110,13 @@ export class AdminMoneyListComponent implements AfterViewInit {
 
   onRecalculateHistoricalMoneyValue(account: Account) {
     this.api.recalculateHistoricalMoneyValue(account.id).subscribe(() => {
-      this.dialogService.snackbar(this.translate.transform('done'), this.translate.transform('done'));
+      this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
     });
   }
 
   onGroupMoneyTransactions() {
     this.api.groupMoneyTransactions().subscribe(() => {
-      this.dialogService.snackbar(this.translate.transform('done'), this.translate.transform('done'));
+      this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
     });
   }
 }

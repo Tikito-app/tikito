@@ -231,11 +231,11 @@ export class AggregatedSecurityHoldingsGraphComponent implements OnInit {
 
         return `${date}<br/>` +
           `${getMarker(params, SecurityHoldingGraphDisplayField.HOLDING_VALUE)} Current holding value <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holdingValue.positionValue)};">${Util.currencyFormat(holdingValue.positionValue)}</span><br/>` +
-          `${getMarker(params, SecurityHoldingGraphDisplayField.ADMIN_COST)} Admin costs <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holdingValue.totalAdministrativeCosts)};">${Util.currencyFormat(holdingValue.totalAdministrativeCosts)}</span><br/>` +
-          `${getMarker(params, SecurityHoldingGraphDisplayField.TAX)} Taxes <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holdingValue.totalTaxes)};">${Util.currencyFormat(holdingValue.totalTaxes)}</span><br/>` +
+          (holdingValue.totalAdministrativeCosts == 0 ? '' : `${getMarker(params, SecurityHoldingGraphDisplayField.ADMIN_COST)} Admin costs <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holdingValue.totalAdministrativeCosts)};">${Util.currencyFormat(holdingValue.totalAdministrativeCosts)}</span><br/>`) +
+          (holdingValue.totalTaxes == 0 ? '' : `${getMarker(params, SecurityHoldingGraphDisplayField.TAX)} Taxes <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holdingValue.totalTaxes)};">${Util.currencyFormat(holdingValue.totalTaxes)}</span><br/>`) +
           `${getMarker(params, SecurityHoldingGraphDisplayField.MAX_CASH_INVESTED)} Invested <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holdingValue.maxCashInvested)};">${Util.currencyFormat(holdingValue.maxCashInvested)}</span><br/>` +
           `<hr style="color: grey;">` +
-          `${getMarker(params, SecurityHoldingGraphDisplayField.DIVIDEND)} Dividend <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holdingValue.totalDividend)};">${Util.currencyFormat(holdingValue.totalDividend)}</span><br/>` +
+            (holdingValue.totalDividend == 0 ? '' : `${getMarker(params, SecurityHoldingGraphDisplayField.DIVIDEND)} Dividend <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holdingValue.totalDividend)};">${Util.currencyFormat(holdingValue.totalDividend)}</span><br/>`) +
           `${getMarker(params, SecurityHoldingGraphDisplayField.CASH_ON_HAND)} Cash on hand <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(holdingValue.cashOnHand)};">${Util.currencyFormat(holdingValue.cashOnHand)}</span><br/>` +
           `${getMarker(params, SecurityHoldingGraphDisplayField.PERFORMANCE)} Performance <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(performance)};">${Util.percentageFormat(performance)}</span><br/>`;
 

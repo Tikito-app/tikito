@@ -64,7 +64,7 @@ export class InitialInstallationComponent implements OnInit {
     });
 
     this.authService.onSystemReady((loggedInUser: any) => {
-      this.http.basicHttpRequest(new HttpRequestData()
+      this.http.basicHttpRequestWithErrorHandling(new HttpRequestData()
         .withSecurityCheck(false)
         .withUrl('/api/user/initial-installation')
         .withRequestMethod(HttpRequestMethod.GET))

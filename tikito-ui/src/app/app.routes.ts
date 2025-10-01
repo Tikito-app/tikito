@@ -7,7 +7,9 @@ import {
 import {
   MoneyTransactionGroupFormComponent
 } from "./money/money-transaction-group-form/money-transaction-group-form.component";
-import {MoneyTransactionOverviewComponent} from "./money/money-transaction-overview/money-transaction-overview.component";
+import {
+  MoneyTransactionOverviewComponent
+} from "./money/money-transaction-overview/money-transaction-overview.component";
 import {AccountListComponent} from "./account/account-list/account-list.component";
 import {AccountFormComponent} from "./account/account-form/account-form.component";
 import {
@@ -31,6 +33,12 @@ import {
   AdminSecurityIsinFormComponent
 } from "./admin/security/admin-security-isin-form/admin-security-isin-form.component";
 import {AdminMoneyListComponent} from "./admin/money/admin-money-list/admin-money-list.component";
+import {LoanPartFormComponent} from "./loan/loan-part-form/loan-part-form.component";
+import {LoanFormComponent} from "./loan/loan-form/loan-form.component";
+import {LoanListComponent} from "./loan/loan-list/loan-list.component";
+import {AdminUserPreferencesComponent} from "./admin/admin-user-preferences/admin-user-preferences.component";
+import {AdminExportComponent} from "./admin/admin-export/admin-export.component";
+import {AdminImportComponent} from "./admin/admin-import/admin-import.component";
 
 export const routes: Routes = [
   {path: '', component: OverviewComponent},
@@ -57,9 +65,17 @@ export const routes: Routes = [
   {path: 'money/transaction-group', component: MoneyTransactionGroupListComponent},
   {path: 'money/transaction-group/:groupId', component: MoneyTransactionGroupFormComponent},
 
+  {path: 'loan', component: LoanListComponent},
+  {path: 'loan/:loanId', component: LoanFormComponent},
+  {path: 'loan/:loanId/part', component: LoanPartFormComponent},
+  {path: 'loan/:loanId/part/:loanPartId', component: LoanPartFormComponent},
+
   {path: 'admin', component: AdminComponent},
+  {path: 'admin/user-preferences', component: AdminUserPreferencesComponent},
   {path: 'admin/users', component: AdminUsersComponent},
   {path: 'admin/money', component: AdminMoneyListComponent},
+  {path: 'admin/export', component: AdminExportComponent},
+  {path: 'admin/import', component: AdminImportComponent},
 
   {path: 'admin/security', component: AdminSecurityListComponent},
   {path: 'admin/security/:securityId', component: AdminSecurityFormComponent},

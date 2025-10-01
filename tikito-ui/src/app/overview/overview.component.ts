@@ -3,7 +3,6 @@ import {OverviewApi} from "../api/overview-api";
 import {SecurityApi} from "../api/security-api";
 import {AuthService} from "../service/auth.service";
 import {Overview} from "../dto/overview";
-import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import AggregatedHistoricalHoldingsValue from "../dto/security/aggregated-historical-holdings-value";
 import {NgxEchartsDirective, provideEchartsCore} from "ngx-echarts";
 import {Util} from "../util";
@@ -13,20 +12,26 @@ import {MoneyApi} from "../api/money-api";
 import {AggregatedHistoricalMoneyHoldingValue} from "../dto/money/aggregated-historical-money-holding-value";
 import moment from "moment/moment";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {NgIf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {TranslatePipe} from "@ngx-translate/core";
+import {UserPreferenceService} from "../service/user-preference-service";
+import {UserPreference} from "../dto/user-preference";
+import {DurationInputArg2} from "moment";
+import {LoanApi} from "../api/loan-api";
+import {OverviewLoanComponent} from "./overview-loan/overview-loan.component";
+import {LoanValue} from "../dto/loan-value";
 
 @Component({
   selector: 'app-overview',
   standalone: true,
   imports: [
-    MatGridList,
-    MatGridTile,
     NgxEchartsDirective,
     FormsModule,
     NgIf,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    NgForOf,
+    OverviewLoanComponent
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss',
@@ -42,10 +47,13 @@ export class OverviewComponent implements OnInit {
   chartOption: any;
   initOptions: any = {};
   heightCss: string;
+  loansById: any = {};
+  loanValuesPerLoanId: any = {};
 
   constructor(private api: OverviewApi,
               private securityApi: SecurityApi,
               private moneyApi: MoneyApi,
+              private loanApi: LoanApi,
               private authService: AuthService) {
   }
 
@@ -60,14 +68,32 @@ export class OverviewComponent implements OnInit {
       this.aggregatedHistoricalSecurityValues = historicalSecurityValues;
       this.moneyApi.getAggregatedHistoricalMoneyHoldingValues().subscribe(historicalMoneyHoldings => {
         this.aggregatedHistoricalMoneyHoldingValues = historicalMoneyHoldings;
-        if (historicalMoneyHoldings.length > 0) {
-          this.interpolateHistoricalSecurityOrMoneyValues();
-          this.generateGraph();
-        }
+        this.interpolateHistoricalSecurityOrMoneyValues();
+        this.generateGraph();
+      });
+    });
+
+    this.loanApi.getLoans().subscribe(loans => {
+      loans.forEach(loan => this.loansById[loan.id] = loan);
+      this.loanApi.getLoanValuesForCurrentDate().subscribe(values => {
+        this.processLoanValues(values);
       });
     });
 
     this.api.getOverview().subscribe(overview => this.overview = overview);
+  }
+
+  processLoanValues(values: LoanValue[]) {
+    values.forEach(value => {
+      if (this.loanValuesPerLoanId[value.loanId] == null) {
+        this.loanValuesPerLoanId[value.loanId] = value;
+      } else {
+        this.loanValuesPerLoanId[value.loanId].amountRemaining += value.amountRemaining;
+        this.loanValuesPerLoanId[value.loanId].interestRemaining += value.interestRemaining;
+        this.loanValuesPerLoanId[value.loanId].loanPaid += value.loanPaid;
+        this.loanValuesPerLoanId[value.loanId].interestPaid += value.interestPaid;
+      }
+    });
   }
 
   interpolateHistoricalSecurityOrMoneyValues() {
@@ -100,12 +126,12 @@ export class OverviewComponent implements OnInit {
   }
 
   interpolateValuesEndOf(endDate: moment.Moment, values: any[], dto: any): any[] {
-    let startDate = moment(values.slice(-1)[0].date);
-    while (startDate.isBefore(endDate)) {
+    let currentDate = moment(values.slice(-1)[0].date);
+    while (currentDate.isBefore(endDate)) {
       let newDto = dto;
-      newDto.date = startDate.format('YYYY-MM-DD');
+      newDto.date = currentDate.format('YYYY-MM-DD');
       values.push(newDto);
-      startDate = startDate.add(1, 'day');
+      currentDate = currentDate.add(1, 'day');
     }
     return values;
   }
@@ -116,34 +142,37 @@ export class OverviewComponent implements OnInit {
     let securityHoldingValuePerDate: any = {};
     let positionValues: number[] = [];
     let moneyPositionValues: number[] = [];
+    let amountToSubtract: number = UserPreferenceService.get<number>(UserPreference.OVERVIEW_START_DATE_MINUS_AMOUNT, 1);
+    let unitToSubtract = UserPreferenceService.get<string>(UserPreference.OVERVIEW_START_DATE_MINUS_UNIT, 'YEAR');
+    let atStartOf = UserPreferenceService.get<boolean>(UserPreference.OVERVIEW_START_DATE_AT_BEGINNING_OF_RANGE, true);
+
+    let momentPeriod: DurationInputArg2 = unitToSubtract.toLowerCase() as DurationInputArg2;
+    let startDate = moment().subtract(amountToSubtract, momentPeriod);
+
+    if (atStartOf) {
+      startDate = startDate.startOf(momentPeriod);
+    }
 
     for (let holdingValue of this.aggregatedHistoricalSecurityValues) {
-      let formattedDate = Util.formatDate(new Date(holdingValue.date), Util.DATE_FORMAT);
-      // dates.push(formattedDate);
-      securityHoldingValuePerDate[formattedDate] = holdingValue;
-      positionValues.push(holdingValue.positionValue);
+      let currentDate = new Date(holdingValue.date);
+      let formattedDate = Util.formatDate(currentDate, Util.DATE_FORMAT);
+      if (moment(currentDate).isAfter(startDate)) {
+        securityHoldingValuePerDate[formattedDate] = holdingValue;
+        positionValues.push(holdingValue.positionValue);
+      }
     }
 
     for (let holdingValue of this.aggregatedHistoricalMoneyHoldingValues) {
-      let formattedDate = Util.formatDate(new Date(holdingValue.date), Util.DATE_FORMAT);
-      dates.push(formattedDate);
-      moneyHoldingValuePerDate[formattedDate] = holdingValue;
-      moneyPositionValues.push(holdingValue.amount);
+      let currentDate = new Date(holdingValue.date);
+      if (moment(currentDate).isAfter(startDate)) {
+        let formattedDate = Util.formatDate(currentDate, Util.DATE_FORMAT);
+        dates.push(formattedDate);
+        moneyHoldingValuePerDate[formattedDate] = holdingValue;
+        moneyPositionValues.push(holdingValue.amount);
+      }
     }
 
     let series = [];
-
-    series.push({
-      data: positionValues,
-      stack: 'y',
-      name: SecurityHoldingGraphDisplayField.HOLDING_VALUE,
-      areaStyle: {},
-      type: 'line',
-      showSymbol: false,
-      color: Util.getColor(0),
-      lineStyle: {color: Util.getColor(0)}
-
-    });
 
     series.push({
       data: moneyPositionValues,
@@ -156,10 +185,18 @@ export class OverviewComponent implements OnInit {
       lineStyle: {color: Util.getColor(1)}
     });
 
+    series.push({
+      data: positionValues,
+      stack: 'y',
+      name: SecurityHoldingGraphDisplayField.HOLDING_VALUE,
+      areaStyle: {},
+      type: 'line',
+      showSymbol: false,
+      color: Util.getColor(0),
+      lineStyle: {color: Util.getColor(0)}
+    });
+
     let options: any = {
-      title: {
-        text: 'All assets'
-      },
       xAxis: {
         type: 'category',
         data: dates
@@ -219,4 +256,6 @@ export class OverviewComponent implements OnInit {
       },
     }
   }
+
+  protected readonly Object = Object;
 }

@@ -7,6 +7,8 @@ import {CurrencyPipe, DatePipe, PercentPipe} from "@angular/common";
 import {AccountType} from "./dto/account-type";
 import {SecurityHoldingGraphDisplayField} from "./dto/security/security-holding-graph-display-field";
 import {SecurityType} from "./dto/security/security-type";
+import {MoneyTransactionGroupType} from "./dto/money-transaction-group-type";
+import {LoanType} from "./dto/loan-type";
 import {CacheService} from "./service/cache-service";
 
 export class Util {
@@ -149,6 +151,18 @@ export class Util {
       .filter((v) => isNaN(Number(v)));
   }
 
+  static getMoneyTransactionGroupTypes(): string[] {
+    return Object
+      .keys(MoneyTransactionGroupType)
+      .filter((v) => isNaN(Number(v)));
+  }
+
+  static getLoanTypes(): string[] {
+    return Object
+      .keys(LoanType)
+      .filter((v) => isNaN(Number(v)));
+  }
+
   static getIdFromRoute(route: ActivatedRoute, key: string): number {
     let value = route.snapshot.paramMap.get(key) as string;
     if (value == null) {
@@ -198,7 +212,8 @@ export class Util {
   }
 
   static currencyFormatWithSymbol(value: number, currencyId: number): string {
-    return new CurrencyPipe('en-EN', CacheService.getCurrencyById(currencyId).isins[0].isin).transform(value) as string;
+    let currency = CacheService.getCurrencyById(currencyId);
+    return new CurrencyPipe('en-EN', currency == null ? 'EUR' : currency.currentIsin).transform(value) as string;
   }
 
   static percentageFormat(value: number): string {
@@ -216,5 +231,21 @@ export class Util {
 
   static getColor(colorIndex: number) {
     return this.COLORS[(colorIndex) % this.COLORS.length];
+  }
+
+  static toLocalDate(date: any) :string {
+    if(date == null || date == '') {
+      return null as unknown as string;
+    } else if(typeof(date) == 'string') {
+      return date;
+    }
+    return date.getFullYear() + '-' + Util.zeroPad(date.getMonth() + 1) + '-' + Util.zeroPad(date.getDate());
+  }
+
+  static zeroPad(num: number): string {
+    if(num < 10) {
+      return '0' + num;
+    }
+    return '' + num;
   }
 }

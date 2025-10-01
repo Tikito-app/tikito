@@ -7,6 +7,8 @@ import {
   SetTransactionGroupDialogComponent
 } from "../money/set-transaction-group-dialog/set-transaction-group-dialog.component";
 import MoneyTransactionGroup from "../dto/money/money-transaction-group";
+import {TranslateService} from "./translate.service";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,8 @@ export class DialogService {
   defaultSnackbareTimeout = 5000;
 
   constructor(private dialog: MatDialog,
-              private _snackbar: MatSnackBar) {
+              private _snackbar: MatSnackBar,
+              private translateService: TranslateService) {
   }
 
   okCancel(title: string, message: string): Promise<boolean> {
@@ -66,5 +69,18 @@ export class DialogService {
         resolve();
       });
     })
+  }
+
+  deleteConfirmation(): Observable<void> {
+    return new Observable(subscriber => {
+      this.okCancel(
+        this.translateService.translate('are-you-sure-delete-title'),
+        this.translateService.translate('are-you-sure-delete-text'))
+        .then((doDelete) => {
+          if (doDelete) {
+            subscriber.next();
+          }
+        });
+    });
   }
 }

@@ -20,6 +20,22 @@
             <input type="text" [attr.data-cy]="'name'" matInput formControlName="name" >
             <mat-icon matSuffix>name</mat-icon>
           </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label>{{'money/accounts' | translate}}</mat-label>
+            <mat-select [attr.data-cy]="'accountIds'" multiple formControlName="accountIds">
+              @for (account of accounts; track accounts) {
+                <mat-option [value]="account.id">{{account.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'money/transaction-group/group-type' | translate }}</mat-label>
+            <mat-select formControlName="groupTypes" [attr.data-cy]="'groupType'" multiple>
+              @for (group of Util.getMoneyTransactionGroupTypes(); track group) {
+                <mat-option [value]="group">{{ group }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
         </ng-container>
 
         <div *ngIf="nameInEdit">
