@@ -1,4 +1,4 @@
-import {BudgetDateRange} from "./budget-date-range";
+import {BudgetDateRange} from "./budget/budget-date-range";
 
 export default class Budget {
     id: number;

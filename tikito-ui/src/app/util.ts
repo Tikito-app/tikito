@@ -1,5 +1,5 @@
 import {Observable, Subject} from "rxjs";
-import {BudgetDateRange} from "./dto/budget-date-range";
+import {BudgetDateRange} from "./dto/budget/budget-date-range";
 import {ActivatedRoute} from "@angular/router";
 import {MoneyTransactionGroupQualifierType} from "./dto/money/money-transaction-group-qualifier-type";
 import {MoneyTransactionField} from "./dto/money/money-transaction-field";
@@ -10,6 +10,7 @@ import {SecurityType} from "./dto/security/security-type";
 import {MoneyTransactionGroupType} from "./dto/money-transaction-group-type";
 import {LoanType} from "./dto/loan-type";
 import {CacheService} from "./service/cache-service";
+import {TransactionDateRange} from "./dto/money/money-transactions-filter";
 
 export class Util {
   public static DATE_FORMAT: string = 'dd-MM-YYYY';
@@ -205,6 +206,18 @@ export class Util {
   static formatDate(date: Date, format: string): string {
     const datepipe: DatePipe = new DatePipe('en-US')
     return datepipe.transform(date, format) as string;
+  }
+
+  static getDateRangeFormat(dateRange: BudgetDateRange) {
+      switch (dateRange) {
+          case BudgetDateRange.YEAR:
+              return 'YYYY';
+          case BudgetDateRange.MONTH:
+              return 'YYYY-MM';
+          case BudgetDateRange.WEEK:
+              return 'YYYY-WW';
+      }
+      return 'YYY-MM-dd';
   }
 
   static currencyFormat(value: number): string {

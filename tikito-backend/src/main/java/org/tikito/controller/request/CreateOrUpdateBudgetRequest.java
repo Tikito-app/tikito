@@ -3,7 +3,7 @@ package org.tikito.controller.request;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tikito.dto.budget.BudgetDateRange;
+import org.tikito.dto.DateRange;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -17,7 +17,8 @@ public class CreateOrUpdateBudgetRequest {
     private String name;
     private LocalDate startDate;
     private LocalDate endDate;
-    private BudgetDateRange dateRange;
+    private DateRange dateRange;
+    private int dateRangeAmount;
     private double amount;
     private Set<Long> accountIds;
     private Set<Long> groupIds = new HashSet<>();

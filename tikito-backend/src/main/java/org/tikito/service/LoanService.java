@@ -95,10 +95,7 @@ public class LoanService {
     @Transactional(propagation = Propagation.MANDATORY)
     public LoanDto createOrUpdateLoan(final long userId, final CreateOrUpdateLoanRequest request) {
         final Loan loan = request.isNew() ? new Loan(userId) : loanRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
-        final List<MoneyTransactionGroup> groups = moneyTransactionGroupRepository.findAllById(request.getGroupIds());
-        if (groups.size() != request.getGroupIds().size()) {
-            throw new NoSuchElementException();
-        }
+        final List<MoneyTransactionGroup> groups = moneyTransactionGroupRepository.findAllByIdsOrLoanId(request.getGroupIds(), request.getLoanId());
         loan.setName(request.getName());
         loan.setDateRange(request.getDateRange());
         loan.setGroups(groups);
