@@ -1,6 +1,6 @@
 package org.tikito.entity.budget;
 
-import org.tikito.dto.budget.HistoricalBudgetDto;
+import org.tikito.dto.budget.HistoricalBudgetValueDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class HistoricalBudget {
+public class HistoricalBudgetValue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,8 +25,14 @@ public class HistoricalBudget {
     private double budgeted;
     private double spent;
 
-    public HistoricalBudgetDto toDto() {
-        return new HistoricalBudgetDto(
+    public HistoricalBudgetValue(final long userId, final Long budgetId, final LocalDate date) {
+        this.userId = userId;
+        this.budgetId = budgetId;
+        this.date = date;
+    }
+
+    public HistoricalBudgetValueDto toDto() {
+        return new HistoricalBudgetValueDto(
                 id,
                 userId,
                 budgetId,

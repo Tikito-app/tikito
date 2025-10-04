@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @AllArgsConstructor
-public class HistoricalBudgetDto {
+public class HistoricalBudgetValueDto {
     private Long id;
     private long userId;
     private long budgetId;

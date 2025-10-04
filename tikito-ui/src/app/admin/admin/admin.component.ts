@@ -36,6 +36,10 @@ export class AdminComponent {
     this.router.navigate(['admin/money']);
   }
 
+  routeToAdminBudget() {
+    this.router.navigate(['admin/budget']);
+  }
+
   routeToExport() {
     this.router.navigate(['admin/export']);
   }

@@ -1,17 +1,15 @@
 package org.tikito.controller;
 
-import org.tikito.auth.AuthUser;
-import org.tikito.controller.request.CreateOrUpdateBudgetRequest;
-import org.tikito.dto.money.MoneyTransactionGroupDto;
-import org.tikito.dto.budget.BudgetDto;
-import org.tikito.dto.budget.HistoricalBudgetDto;
-import org.tikito.service.BudgetService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.tikito.auth.AuthUser;
+import org.tikito.controller.request.CreateOrUpdateBudgetRequest;
+import org.tikito.dto.budget.BudgetDto;
+import org.tikito.dto.budget.HistoricalBudgetValueDto;
+import org.tikito.service.BudgetService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/budget")
@@ -33,16 +31,6 @@ public class BudgetController {
         return ResponseEntity.ok(budgetService.getBudget(authUser.getId(), budgetId));
     }
 
-    @GetMapping("/available-transaction-groups")
-    public ResponseEntity<List<MoneyTransactionGroupDto>> getAvailableMoneyTransactionGroups(final AuthUser authUser) {
-        return ResponseEntity.ok(budgetService.getAvailableMoneyTransactionGroups(authUser.getId()));
-    }
-
-    @GetMapping("/available-transaction-groups/{budgetId}")
-    public ResponseEntity<List<MoneyTransactionGroupDto>> getAvailableMoneyTransactionGroups(final AuthUser authUser, @PathVariable("budgetId") final Long budgetId) {
-        return ResponseEntity.ok(budgetService.getAvailableMoneyTransactionGroups(authUser.getId(), Optional.of(budgetId)));
-    }
-
     @PostMapping
     public ResponseEntity<BudgetDto> createOrUpdateBudget(final AuthUser authUser, @RequestBody final CreateOrUpdateBudgetRequest request) {
         return ResponseEntity.ok(budgetService.createOrUpdateBudget(authUser.getId(), request));
@@ -54,8 +42,8 @@ public class BudgetController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/historical-budget")
-    public ResponseEntity<List<HistoricalBudgetDto>> getHistoricalBudgets(final AuthUser authUser) {
+    @GetMapping("/historical-values")
+    public ResponseEntity<List<HistoricalBudgetValueDto>> getHistoricalBudgets(final AuthUser authUser) {
         return ResponseEntity.ok(budgetService.getHistoricalBudgets(authUser.getId()));
     }
 

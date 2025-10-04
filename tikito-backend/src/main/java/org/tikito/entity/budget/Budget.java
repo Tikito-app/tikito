@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tikito.dto.budget.BudgetDateRange;
+import org.tikito.dto.DateRange;
 import org.tikito.dto.budget.BudgetDto;
 import org.tikito.entity.money.MoneyTransactionGroup;
 
@@ -26,7 +26,8 @@ public class Budget {
     private String name;
     private LocalDate startDate;
     private LocalDate endDate;
-    private BudgetDateRange dateRange;
+    private DateRange dateRange;
+    private int dateRangeAmount; // -1 for infinite
     private double amount;
 
     @ElementCollection(fetch = FetchType.LAZY)
@@ -51,6 +52,7 @@ public class Budget {
                 startDate,
                 endDate,
                 dateRange,
+                dateRangeAmount,
                 amount,
                 accountIds,
                 groups

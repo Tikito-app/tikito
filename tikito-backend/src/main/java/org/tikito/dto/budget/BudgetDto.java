@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.dto.DateRange;
 import org.tikito.dto.money.MoneyTransactionGroupDto;
 
 import java.time.LocalDate;
@@ -20,7 +21,8 @@ public class BudgetDto {
     private String name;
     private LocalDate startDate;
     private LocalDate endDate;
-    private BudgetDateRange dateRange;
+    private DateRange dateRange;
+    private int dateRangeAmount;
     private double amount;
     private Set<Long> accountIds;
     private List<MoneyTransactionGroupDto> groups;

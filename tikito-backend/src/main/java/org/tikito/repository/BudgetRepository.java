@@ -1,5 +1,6 @@
 package org.tikito.repository;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.tikito.entity.budget.Budget;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,4 +11,7 @@ public interface BudgetRepository extends JpaRepository<Budget, Long> {
     List<Budget> findByUserId(long userId);
 
     Optional<Budget> findByUserIdAndId(long userId, long budgetId);
+
+    @Modifying
+    void deleteByUserIdAndId(long userId, long budgetId);
 }
