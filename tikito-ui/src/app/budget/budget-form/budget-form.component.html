@@ -3,7 +3,7 @@
 <div class="main-center-column main-column">
   <mat-card class="full-width" *ngIf="form" style="max-width: 100%; width: 100%;">
     <mat-card-header>
-      <mat-card-title>{{ 'create-budget' | translate }}</mat-card-title>
+      <mat-card-title>{{ 'budget/create-budget' | translate }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="form">
@@ -20,6 +20,15 @@
             <mat-icon matSuffix>amount</mat-icon>
           </mat-form-field>
 
+            <mat-form-field class="half-width">
+                <mat-label>{{'start-date' | translate}}</mat-label>
+                <input matInput [matDatepicker]="pickerStartDate" formControlName="startDate">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-icon *ngIf="form.value['startDate']" matIconSuffix (click)="form.controls['startDate'].setValue(null);" class="clickable">close</mat-icon>
+                <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
+                <mat-datepicker #pickerStartDate></mat-datepicker>
+            </mat-form-field>
+
           <mat-form-field class="full-width">
             <mat-label>{{ 'budget/date-range' | translate }}</mat-label>
             <mat-select formControlName="dateRange" [attr.data-cy]="'date-range'">
@@ -28,6 +37,12 @@
               }
             </mat-select>
           </mat-form-field>
+
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>{{ 'budget/date-range-amount' | translate }}</mat-label>
+                <input type="number" matInput formControlName="dateRangeAmount">
+                <mat-icon matSuffix>amount</mat-icon>
+            </mat-form-field>
 
           <mat-form-field class="full-width">
             <mat-label>{{ 'budget/money-transaction-groups' | translate }}</mat-label>
