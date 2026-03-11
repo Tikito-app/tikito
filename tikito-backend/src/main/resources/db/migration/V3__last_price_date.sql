@@ -1,0 +1,1 @@
+alter table security add last_price_date timestamp null;

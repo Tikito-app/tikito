@@ -11,4 +11,5 @@ export class Security {
     industry: string;
     exchange: string;
     currentIsin: string;
+    lastPriceDate: string;
 }
