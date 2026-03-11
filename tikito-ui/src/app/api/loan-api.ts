@@ -6,6 +6,7 @@ import {Loan} from "../dto/loan";
 import {LoanType} from "../dto/loan-type";
 import {LoanInterest} from "../dto/loan-interest";
 import {LoanValue} from "../dto/loan-value";
+import {BudgetDateRange} from "../dto/budget-date-range";
 
 @Injectable({
   providedIn: 'root'
@@ -20,12 +21,14 @@ export class LoanApi {
 
   createOrUpdateLoan(loanId: number,
                      name: string,
+                     dateRange: BudgetDateRange,
                      groupIds: number[]) {
     return this.http.httpPost<Loan>(new HttpRequestData()
       .withUrl('/api/loan')
       .withBody({
         id: loanId,
         name: name,
+        dateRange: dateRange,
         groupIds: groupIds
       }));
   }
@@ -38,7 +41,8 @@ export class LoanApi {
                          amount: number,
                          currencyId: number,
                          loanType: LoanType,
-                         interests: LoanInterest[]): Observable<Loan> {
+                         interests: LoanInterest[],
+                         repaymentAmount: number): Observable<Loan> {
     return this.http.httpPost<Loan>(new HttpRequestData()
       .withUrl('/api/loan/part')
       .withBody({
@@ -50,7 +54,8 @@ export class LoanApi {
         amount: amount,
         currencyId: currencyId,
         loanType: loanType,
-        interests: interests
+        interests: interests,
+        repaymentAmount: repaymentAmount
       }));
   }
 

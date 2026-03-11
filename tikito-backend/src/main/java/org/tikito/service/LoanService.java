@@ -16,6 +16,7 @@ import org.tikito.entity.loan.LoanValue;
 import org.tikito.entity.money.MoneyTransactionGroup;
 import org.tikito.repository.*;
 import org.tikito.service.job.JobType;
+import org.tikito.util.Util;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -85,7 +86,7 @@ public class LoanService {
                 .stream()
                 .map(LoanValue::toDto)
                 .forEach(value -> {
-                    if(!values.containsKey(value.getLoanPartId())) {
+                    if (!values.containsKey(value.getLoanPartId())) {
                         values.put(value.getLoanPartId(), value);
                     }
                 });
@@ -125,6 +126,7 @@ public class LoanService {
         loanPart.setLoanType(request.getLoanType());
         loanPart.setCurrencyId(request.getCurrencyId());
         loanPart.getInterests().clear();
+        loanPart.setPeriodicPayment(request.getAmount() / Util.getChronoUnit(loan.getDateRange()).between(loanPart.getStartDate(), loanPart.getEndDate()));
 
         if (request.getInterests() != null) {
             request

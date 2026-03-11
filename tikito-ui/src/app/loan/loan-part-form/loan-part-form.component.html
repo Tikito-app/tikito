@@ -1,29 +1,35 @@
 <div class="main-side-column main-column">
-  <button mat-button (click)="onCancelButtonClicked();" *ngIf="!nameInEdit && !interestInEdit"><mat-icon>arrow_back</mat-icon> {{'loan/part/back-to-loan' | translate}}</button>
+  <button mat-button (click)="onCancelButtonClicked();" *ngIf="!nameInEdit && !interestInEdit">
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'loan/part/back-to-loan' | translate }}
+  </button>
 </div>
 
 <div class="main-center-column-small main-column">
   <mat-card class="full-width" *ngIf="form && loanPart" style="max-width: 100%; width: 100%;">
     <mat-card-header>
-      <mat-card-title *ngIf="loanPart.id">{{'loan/part' | translate}}</mat-card-title>
-      <mat-card-title *ngIf="!loanPart.id">{{'loan/part/create' | translate}}</mat-card-title>
+      <mat-card-title *ngIf="loanPart.id">{{ 'loan/part' | translate }}</mat-card-title>
+      <mat-card-title *ngIf="!loanPart.id">{{ 'loan/part/create' | translate }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="form">
         <ng-container *ngIf="!nameInEdit">
-          {{loanPart.name}} <button mat-button (click)="nameInEdit = true" *ngIf="!interestInEdit"><mat-icon>edit</mat-icon></button>
+          {{ loanPart.name }}
+          <button mat-button (click)="nameInEdit = true" *ngIf="!interestInEdit">
+            <mat-icon>edit</mat-icon>
+          </button>
           <br/><br/>
         </ng-container>
         <ng-container *ngIf="nameInEdit">
           <mat-form-field appearance="fill" class="full-width">
-            <mat-label>{{'loan/part/name' | translate}}</mat-label>
-            <input type="text" [attr.data-cy]="'name'" matInput formControlName="name" >
+            <mat-label>{{ 'loan/part/name' | translate }}</mat-label>
+            <input type="text" [attr.data-cy]="'name'" matInput formControlName="name">
             <mat-icon matSuffix>name</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="full-width">
-            <mat-label>{{'loan/part/amount' | translate}}</mat-label>
-            <input type="text" [attr.data-cy]="'amount'" matInput formControlName="amount" >
+            <mat-label>{{ 'loan/part/amount' | translate }}</mat-label>
+            <input type="text" [attr.data-cy]="'amount'" matInput formControlName="amount">
             <mat-icon matSuffix>amount</mat-icon>
           </mat-form-field>
 
@@ -36,20 +42,30 @@
             </mat-select>
           </mat-form-field>
 
+          <mat-form-field appearance="fill" class="full-width" *ngIf="form.value.loanType == LoanType.MORTGAGE_LINEAR">
+            <mat-label>{{ 'loan/part/repayment-amount' | translate }}</mat-label>
+            <input type="text" [attr.data-cy]="'repaymentAmount'" matInput formControlName="repaymentAmount">
+            <mat-icon matSuffix>amount</mat-icon>
+          </mat-form-field>
+
           <mat-form-field class="half-width">
-            <mat-label>{{'start-date' | translate}}</mat-label>
+            <mat-label>{{ 'start-date' | translate }}</mat-label>
             <input matInput [matDatepicker]="pickerStartDate" formControlName="startDate">
             <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-icon *ngIf="form.value['startDate']" matIconSuffix (click)="form.controls['startDate'].setValue(null);" class="clickable">close</mat-icon>
+            <mat-icon *ngIf="form.value['startDate']" matIconSuffix (click)="form.controls['startDate'].setValue(null);"
+                      class="clickable">close
+            </mat-icon>
             <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
             <mat-datepicker #pickerStartDate></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field class="half-width">
-            <mat-label>{{'end-date' | translate}}</mat-label>
+            <mat-label>{{ 'end-date' | translate }}</mat-label>
             <input matInput [matDatepicker]="pickerEndDate" formControlName="endDate">
             <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-icon *ngIf="form.value['endDate']" matIconSuffix (click)="form.controls['endDate'].setValue(null);" class="clickable">close</mat-icon>
+            <mat-icon *ngIf="form.value['endDate']" matIconSuffix (click)="form.controls['endDate'].setValue(null);"
+                      class="clickable">close
+            </mat-icon>
             <mat-datepicker-toggle matIconSuffix [for]="pickerEndDate"></mat-datepicker-toggle>
             <mat-datepicker #pickerEndDate></mat-datepicker>
           </mat-form-field>
@@ -65,20 +81,32 @@
         </ng-container>
 
 
-
         <div *ngIf="nameInEdit">
-          <button [attr.data-cy]="'save-button'"  mat-raised-button color="primary" (click)="onSaveButtonClicked(); nameInEdit = false">{{'save' | translate}}</button>&nbsp;
-          <button [attr.data-cy]="'cancel-button'"  mat-raised-button color="secundary" (click)="nameInEdit = false">{{'cancel' | translate}}</button>
-          <button [attr.data-cy]="'delete-button'" style="float: right" mat-button color="warn" (click)="onDeleteButtonClicked();">{{'delete' | translate}}</button>
+          <button [attr.data-cy]="'save-button'" mat-raised-button color="primary"
+                  (click)="onSaveButtonClicked(); nameInEdit = false">{{ 'save' | translate }}
+          </button>&nbsp;
+          <button [attr.data-cy]="'cancel-button'" mat-raised-button color="secundary"
+                  (click)="nameInEdit = false">{{ 'cancel' | translate }}
+          </button>
+          <button [attr.data-cy]="'delete-button'" style="float: right" mat-button color="warn"
+                  (click)="onDeleteButtonClicked();">{{ 'delete' | translate }}
+          </button>
         </div>
 
 
         <ng-container *ngIf="loanPart">
-          <h4>{{'loan/part/interests' | translate}}</h4>
+          <h4>{{ 'loan/part/interests' | translate }}</h4>
           <ng-container *ngFor="let interest of loanPart.interests">
-            <app-loan-interest-list-item *ngIf="!isInterestInEdit(interest)" [interest]="interest" (onEditCallback)="editInterestCallback(interest)"></app-loan-interest-list-item>
-            <ng-container *ngIf="!isInterestInEdit(interest)"><button mat-button (click)="onEditInterestButtonClicked(interest)" *ngIf="!nameInEdit"><mat-icon>edit</mat-icon></button></ng-container>
-            <app-loan-interest-form *ngIf="isInterestInEdit(interest)" [interest]="interest" (callback)="interestCallback($event)" (deleteCallback)="interestDeleteCallback()"></app-loan-interest-form>
+            <app-loan-interest-list-item *ngIf="!isInterestInEdit(interest)" [interest]="interest"
+                                         (onEditCallback)="editInterestCallback(interest)"></app-loan-interest-list-item>
+            <ng-container *ngIf="!isInterestInEdit(interest)">
+              <button mat-button (click)="onEditInterestButtonClicked(interest)" *ngIf="!nameInEdit">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </ng-container>
+            <app-loan-interest-form *ngIf="isInterestInEdit(interest)" [interest]="interest"
+                                    (callback)="interestCallback($event)"
+                                    (deleteCallback)="interestDeleteCallback()"></app-loan-interest-form>
             <br/>
           </ng-container>
         </ng-container>
@@ -90,6 +118,9 @@
 </div>
 <div class="main-side-column main-column">
   <br/><br/><br/><br/><br/>
-  <button *ngIf="!nameInEdit && !interestInEdit" mat-fab aria-label="Add Interest" (click)="onAddInterestButtonClicked()" class="fab-button"><mat-icon>add</mat-icon></button>
+  <button *ngIf="!nameInEdit && !interestInEdit" mat-fab aria-label="Add Interest"
+          (click)="onAddInterestButtonClicked()" class="fab-button">
+    <mat-icon>add</mat-icon>
+  </button>
 
 </div>

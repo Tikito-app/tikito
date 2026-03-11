@@ -8,7 +8,7 @@ import org.tikito.service.BaseTest;
 
 import java.time.LocalDate;
 
-class AnnuiteitMortgageCalculatorTest extends BaseTest {
+class MortgageCalculatorTest extends BaseTest {
 
     @Test
     void calculate_given_zeroInterest() {
@@ -24,7 +24,7 @@ class AnnuiteitMortgageCalculatorTest extends BaseTest {
         interest.setStartDate(loanPart.getStartDate());
         interest.setEndDate(loanPart.getEndDate());
 
-        final AnnuiteitMortgageCalculator.RangedPayment payment = AnnuiteitMortgageCalculator.calculateMonthlyTotalPaymentAmount(DateRange.DAY, loanPart, interest, 0);
+        final MortgageCalculator.RangedPayment payment = MortgageCalculator.calculateMonthlyTotalPaymentAmount(DateRange.DAY, loanPart, interest, 0);
         assertDoubleEquals(200, payment.getTotal(), 0);
         assertDoubleEquals(200, payment.getRepayment(), 0);
         assertDoubleEquals(0, payment.getInterest(), 0);
@@ -45,7 +45,7 @@ class AnnuiteitMortgageCalculatorTest extends BaseTest {
         interest.setEndDate(loanPart.getEndDate());
         interest.setAmount(50);
 
-        final AnnuiteitMortgageCalculator.RangedPayment payment = AnnuiteitMortgageCalculator.calculateMonthlyTotalPaymentAmount(DateRange.MONTH, loanPart, interest, 0);
+        final MortgageCalculator.RangedPayment payment = MortgageCalculator.calculateMonthlyTotalPaymentAmount(DateRange.MONTH, loanPart, interest, 0);
         assertDoubleEquals(11.93, payment.getTotal(), 2);
         assertDoubleEquals(10.55, payment.getRepayment(), 2);
         assertDoubleEquals(1.375, payment.getInterest(), 3);
@@ -70,7 +70,7 @@ class AnnuiteitMortgageCalculatorTest extends BaseTest {
 //        interest2.setStartDate(startDate.plusYears(5));
 //        interest2.setEndDate(startDate.plusYears(10));
 
-        final AnnuiteitMortgageCalculator.RangedPayment payment1 = AnnuiteitMortgageCalculator.calculateMonthlyTotalPaymentAmount(DateRange.MONTH, loanPart, interest1, 0);
+        final MortgageCalculator.RangedPayment payment1 = MortgageCalculator.calculateMonthlyTotalPaymentAmount(DateRange.MONTH, loanPart, interest1, 0);
         assertDoubleEquals(1848, payment1.getTotal(), 0);
         assertDoubleEquals(1015, payment1.getRepayment(), 0);
         assertDoubleEquals(833, payment1.getInterest(), 0);

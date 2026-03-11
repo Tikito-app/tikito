@@ -4,9 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.tikito.dto.DateRange;
-import org.tikito.dto.loan.AnnuiteitMortgageCalculator;
+import org.tikito.dto.loan.MortgageCalculator;
 import org.tikito.dto.money.MoneyTransactionGroupType;
 import org.tikito.entity.Job;
 import org.tikito.entity.loan.Loan;
@@ -49,7 +50,7 @@ public class LoanValueService implements JobProcessor {
         this.moneyTransactionGroupRepository = moneyTransactionGroupRepository;
     }
 
-    @Transactional//(propagation = Propagation.MANDATORY)
+    @Transactional(propagation = Propagation.MANDATORY)
     public void generateLoanValues(final long userId, final long loanId) {
         final Loan loan = loanRepository.findByUserIdAndId(userId, loanId).orElseThrow();
 
@@ -68,7 +69,7 @@ public class LoanValueService implements JobProcessor {
         return moneyTransactionRepository
                 .findByGroupIdIn(moneyGroupIds)
                 .stream()
-                .sorted((Comparator<MoneyTransaction>) (transaction, t1) -> transaction.getTimestamp().compareTo(t1.getTimestamp()))
+                .sorted(Comparator.comparing(MoneyTransaction::getTimestamp))
                 .toList();
     }
 
@@ -121,7 +122,7 @@ public class LoanValueService implements JobProcessor {
             for (final LoanPart loanPart : currentLinkedValue.getLoanParts()) {
                 final LoanInterest interest = getInterestOrDefault(currentLinkedValue.getDate(), loanPart);
                 final LoanValue value = new LoanValue(previousValuesPerLoanPartId.get(loanPart.getId()), currentLinkedValue.getDate());
-                final AnnuiteitMortgageCalculator.RangedPayment monthlyPayment = AnnuiteitMortgageCalculator.calculateMonthlyTotalPaymentAmount(dateRange, loanPart, interest, totalRepaymentShouldBeDonePerPart.get(loanPart.getId()) - value.getLoanPaid());
+                final MortgageCalculator.RangedPayment monthlyPayment = MortgageCalculator.calculateMonthlyTotalPaymentAmount(dateRange, loanPart, interest, totalRepaymentShouldBeDonePerPart.get(loanPart.getId()) - value.getLoanPaid());
 
                 // already paid everything?
                 if (value.getAmountRemaining() <= 0) {

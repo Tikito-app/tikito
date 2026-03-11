@@ -17,16 +17,12 @@ import org.tikito.entity.Job;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.exception.CannotReadFileException;
 import org.tikito.repository.AccountRepository;
-import org.tikito.repository.MoneyTransactionGroupRepository;
 import org.tikito.repository.MoneyTransactionRepository;
 import org.tikito.service.CacheService;
 import org.tikito.service.JobService;
 import org.tikito.service.MT940.MT940Parser;
 import org.tikito.service.importer.FileReader;
-import org.tikito.service.importer.money.CustomMoneyFileParser;
-import org.tikito.service.importer.money.MoneyTransactionFileParser;
-import org.tikito.service.importer.money.MoneyTransactionImportSettings;
-import org.tikito.service.importer.money.MoneyTransactionImporter;
+import org.tikito.service.importer.money.*;
 import org.tikito.service.job.JobType;
 import org.tikito.util.Util;
 
@@ -51,14 +47,21 @@ public class MoneyImportService {
     private final JobService jobService;
 
     public MoneyImportService(final MoneyTransactionRepository moneyTransactionRepository,
+                              final ABNFileParser abnFileParser,
+//                              final CustomMoneyFileParser customMoneyFileParser,
+                              final INGFileParser ingFileParser,
+                              final ABNExcelImporter abnExcelImporter,
+                              final ABNMT940Importer abnmt940Importer,
+                              final CustomHeaderListImporter customHeaderListImporter,
+                              final INGExcelImporter ingExcelImporter,
                               final List<MoneyTransactionFileParser> fileParsers,
                               final List<MoneyTransactionImporter> importers,
                               final AccountRepository accountRepository,
                               final CacheService cacheService,
                               final JobService jobService) {
         this.moneyTransactionRepository = moneyTransactionRepository;
-        this.fileParsers = fileParsers;
-        this.importers = importers;
+        this.fileParsers = List.of(abnFileParser, ingFileParser);
+        this.importers = List.of(abnExcelImporter, abnmt940Importer, customHeaderListImporter, ingExcelImporter);
         this.accountRepository = accountRepository;
         this.cacheService = cacheService;
         this.jobService = jobService;

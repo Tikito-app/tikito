@@ -1,5 +1,9 @@
 package org.tikito.util;
 
+import org.tikito.dto.DateRange;
+
+import java.time.temporal.ChronoUnit;
+
 public final class Util {
     private Util() {
 
@@ -26,5 +30,14 @@ public final class Util {
             return filename.substring(dotIndex + 1);
         }
         return "";
+    }
+
+    public static ChronoUnit getChronoUnit(final DateRange dateRange) {
+        return switch (dateRange) {
+            case YEAR -> ChronoUnit.YEARS;
+            case MONTH -> ChronoUnit.MONTHS;
+            case WEEK -> ChronoUnit.WEEKS;
+            case DAY, ALL -> ChronoUnit.DAYS;
+        };
     }
 }

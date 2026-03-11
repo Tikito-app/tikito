@@ -2,7 +2,6 @@ package org.tikito.service.importer.security;
 
 import org.tikito.dto.security.SecurityPriceDto;
 import org.tikito.dto.security.SecurityType;
-import org.tikito.entity.security.Isin;
 import org.tikito.entity.security.Security;
 import org.tikito.exception.ResourceNotFoundException;
 import org.tikito.util.HttpUtil;
@@ -42,6 +41,11 @@ public final class YahooImporter {
             final JsonNode timestampNode = innerNode.get("timestamp");
             final JsonNode adjclose = innerNode.get("indicators").get("quote").get(0).get("close");
 
+            if(timestampNode == null) {
+                log.error("Could not fetch historical security price for {} and symbol {}", securityId, symbol);
+                return rates;
+            }
+
             for (int i = 0; i < timestampNode.size(); i++) {
                 try {
                     final long epoch = timestampNode.get(i).asLong();
@@ -56,6 +60,7 @@ public final class YahooImporter {
                     }
                 } catch (final Exception e) {
                     log.error("Could not get value", e);
+                    log.error(json);
                 }
             }
             return rates

@@ -8,7 +8,6 @@ export class LoanValue {
   interestPaidThisPeriod: number;
   interestRemaining: number;
   repaymentRemaining: number;
-  periodicPayment: number;
   loanPaid: number;
   loanPaidThisPeriod: number;
   simulated: boolean;

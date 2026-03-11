@@ -141,6 +141,9 @@ public class SecurityService implements JobProcessor {
         }
 
         fillInTheGaps(exchangeRateHistory);
+        if(!exchangeRateHistory.isEmpty()) {
+            securityRepository.setLastPriceDate(security.getId(), exchangeRateHistory.getLast().getDate());
+        }
 
         securityPriceRepository.saveAllAndFlush(
                 exchangeRateHistory

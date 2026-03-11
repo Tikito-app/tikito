@@ -1,5 +1,6 @@
 package org.tikito.service.importer.money;
 
+import org.springframework.stereotype.Component;
 import org.tikito.dto.money.MoneyTransactionImportResultDto;
 import org.tikito.service.money.enricher.MoneyTransactionDateEnricher;
 import org.tikito.service.money.enricher.MoneyTransactionEnricher;
@@ -7,6 +8,7 @@ import org.tikito.service.money.enricher.MoneyTransactionKeyValueEnricher;
 
 import java.util.List;
 
+@Component
 public class INGExcelImporter extends MoneyTransactionImporter {
 
     @Override

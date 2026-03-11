@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,6 +21,7 @@ public class SecurityDto {
     private String exchange;
     private String imageUrl;
     private String currentIsin;
+    private LocalDate lastPriceDate;
 
     public SecurityDto(final SecurityType securityType, final Long currencyId, final String name) {
         this.securityType = securityType;

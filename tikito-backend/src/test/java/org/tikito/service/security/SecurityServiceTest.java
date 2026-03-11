@@ -2,6 +2,7 @@ package org.tikito.service.security;
 
 import org.tikito.dto.security.SecurityPriceDto;
 import org.tikito.entity.security.Isin;
+import org.tikito.entity.security.Security;
 import org.tikito.entity.security.SecurityPrice;
 import org.tikito.service.BaseIntegrationTest;
 import org.tikito.service.importer.security.YahooImporter;
@@ -76,12 +77,14 @@ class SecurityServiceTest extends BaseIntegrationTest {
             securityService.updateSecurityPrices(WOLTER_KLUWER.getId());
 
             final List<SecurityPrice> prices = securityPriceRepository.findAllBySecurityId(WOLTER_KLUWER.getId());
-
             assertEquals(4, prices.size());
             assertEquals(isinValidTo.minusDays(1), prices.get(0).getDate());
             assertEquals(isinValidTo, prices.get(1).getDate());
             assertEquals(isinValidTo.plusDays(1), prices.get(2).getDate());
             assertEquals(isinValidTo.plusDays(2), prices.get(3).getDate());
+
+            final Security security = securityRepository.findById(WOLTER_KLUWER.getId()).orElseThrow();
+            assertEquals(secondList.getFirst().getDate(), security.getLastPriceDate());
         }
     }
 

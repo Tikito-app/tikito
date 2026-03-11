@@ -13,4 +13,5 @@ export class LoanPart {
   currencyId: number;
   loanType: LoanType;
   interests: LoanInterest[];
+  periodicPayment: number;
 }
