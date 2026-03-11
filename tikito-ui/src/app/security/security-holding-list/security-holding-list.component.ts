@@ -15,7 +15,7 @@ import {
 import {MatIcon} from "@angular/material/icon";
 import {Router} from "@angular/router";
 import {TranslatePipe} from "@ngx-translate/core";
-import {NgIf} from "@angular/common";
+import {JsonPipe, NgIf} from "@angular/common";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
 import SecurityHolding from "../../dto/security/security-holding";
 import {SecurityApi} from "../../api/security-api";
@@ -69,7 +69,8 @@ import {TranslateService} from "../../service/translate.service";
     MatButton,
     MatMenu,
     MatMenuItem,
-    MatMenuTrigger
+    MatMenuTrigger,
+    JsonPipe
   ],
   providers: [TranslatePipe],
   templateUrl: './security-holding-list.component.html',

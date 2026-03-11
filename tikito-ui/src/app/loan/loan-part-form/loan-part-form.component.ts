@@ -28,6 +28,7 @@ import {MoneyTransactionGroupType} from "../../dto/money-transaction-group-type"
 import {MoneyApi} from "../../api/money-api";
 import {LoanPart} from "../../dto/loan-part";
 import {DialogService} from "../../service/dialog.service";
+import {LoanType} from "../../dto/loan-type";
 
 @Component({
   selector: 'app-loan-part-form',
@@ -103,6 +104,7 @@ export class LoanPartFormComponent implements OnInit {
       amount: new FormControl(''),
       loanType: new FormControl(''),
       groupIds: new FormControl(''),
+      repaymentAmount: new FormControl(''),
     };
     this.form = new FormGroup(group);
     this.form.controls['currencyId'].setValue(UserPreferenceService.get<string>(UserPreference.DEFAULT_CURRENCY, 'EUR'));
@@ -120,11 +122,11 @@ export class LoanPartFormComponent implements OnInit {
             this.form.controls['currencyId'].setValue(this.loanPart.currencyId);
             this.form.controls['amount'].setValue(this.loanPart.amount);
             this.form.controls['loanType'].setValue(this.loanPart.loanType);
+            this.form.controls['repaymentAmount'].setValue(this.loanPart.periodicPayment);
           }
         } else {
           this.loanPart = new LoanPart();
         }
-
       });
     });
   }
@@ -139,7 +141,8 @@ export class LoanPartFormComponent implements OnInit {
       this.form.value.amount,
       this.form.value.currencyId,
       this.form.value.loanType,
-      this.loanPart.interests
+      this.loanPart.interests,
+      this.form.value.repaymentAmount,
     ).subscribe(loanPart => {
       window.location.href = '/loan/' + this.loan.id + '/part/' + loanPart.id;
     })
@@ -195,4 +198,5 @@ export class LoanPartFormComponent implements OnInit {
   protected readonly UserPreference = UserPreference;
   protected readonly UserPreferenceService = UserPreferenceService;
   protected readonly CacheService = CacheService;
+  protected readonly LoanType = LoanType;
 }

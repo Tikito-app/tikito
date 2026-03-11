@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.tikito.dto.security.SecurityDto;
 import org.tikito.dto.security.SecurityType;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -24,6 +26,7 @@ public class Security {
     private String exchange;
     private String imageUrl;
     private String currentIsin;
+    private LocalDate lastPriceDate;
 
     public Security(final SecurityDto dto) {
         this.id = dto.getId();
@@ -35,6 +38,7 @@ public class Security {
         this.exchange = dto.getExchange();
         this.imageUrl = dto.getImageUrl();
         this.currentIsin = dto.getCurrentIsin();
+        this.lastPriceDate = dto.getLastPriceDate();
     }
 
     public SecurityDto toDto() {
@@ -47,6 +51,7 @@ public class Security {
                 industry,
                 exchange,
                 imageUrl,
-                currentIsin);
+                currentIsin,
+                lastPriceDate);
     }
 }

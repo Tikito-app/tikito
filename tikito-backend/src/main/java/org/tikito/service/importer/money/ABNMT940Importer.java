@@ -1,10 +1,12 @@
 package org.tikito.service.importer.money;
 
+import org.springframework.stereotype.Component;
 import org.tikito.dto.money.MoneyTransactionImportResultDto;
 import org.tikito.service.money.enricher.MoneyTransactionEnricher;
 
 import java.util.List;
 
+@Component
 public class ABNMT940Importer extends MoneyTransactionImporter {
 
     @Override

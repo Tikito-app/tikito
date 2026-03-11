@@ -42,7 +42,9 @@
 
       <ng-container matColumnDef="security-name">
         <th mat-header-cell *matHeaderCellDef>{{ 'security' | translate }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.security.name }}</td>
+        <td mat-cell *matCellDef="let element">
+          {{ element.security.name }} ({{element.security.lastPriceDate}})
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="security-type">

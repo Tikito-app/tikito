@@ -1,7 +1,10 @@
 package org.tikito.service.importer.money;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
 public class INGFileParser extends MoneyTransactionFileParser {
     private static final List<String> HEADERS = List.of(
             "Date",

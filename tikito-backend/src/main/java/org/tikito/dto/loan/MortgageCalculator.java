@@ -4,10 +4,9 @@ import lombok.Getter;
 import org.tikito.dto.DateRange;
 import org.tikito.entity.loan.LoanInterest;
 import org.tikito.entity.loan.LoanPart;
+import org.tikito.util.Util;
 
-import java.time.temporal.ChronoUnit;
-
-public class AnnuiteitMortgageCalculator extends LoanValueCalculator {
+public class MortgageCalculator extends LoanValueCalculator {
 
     public static double calculateAnnuiteit(final double totalAmount, final double interestPerMonthMultiplier, final long amountOfPeriodsInDateRange) {
         if(interestPerMonthMultiplier == 0) {
@@ -27,32 +26,41 @@ public class AnnuiteitMortgageCalculator extends LoanValueCalculator {
      * remaining amount not yet paid to the repayment. So the final annuiteit = repayment + interest + remaining_not_yet_paid_repayment.
      */
     public static RangedPayment calculateMonthlyTotalPaymentAmount(final DateRange dateRange, final LoanPart loanPart, final LoanInterest interest, final double remainingAmountNotYetPaid) {
+        return switch (loanPart.getLoanType()) {
+            case GENERIC -> null;
+            case MORTGAGE_ANNUITEIT -> calculateMonthlyTotalPaymentAmountAnnuity(dateRange, loanPart, interest, remainingAmountNotYetPaid);
+            case MORTGAGE_LINEAR -> calculateMonthlyTotalPaymentAmountLinear(dateRange, loanPart, interest);
+            case STUDENT -> null;
+        };
+    }
+
+    public static RangedPayment calculateMonthlyTotalPaymentAmountLinear(final DateRange dateRange, final LoanPart loanPart, final LoanInterest interest) {
+        final int dateRangeAmountPerPeriod = getDateRangeAmountPerPeriod(dateRange);
+        final long amountOfPeriodsInDateRange = Util.getChronoUnit(dateRange).between(interest.getStartDate(), loanPart.getEndDate());
+        final double repayment = loanPart.getAmount() / amountOfPeriodsInDateRange;
+        final double interestPerDateRangeMultiplier = interest.getAmount() / 100 / dateRangeAmountPerPeriod;
+        final double interestPaid = loanPart.getRemainingAmount() * interestPerDateRangeMultiplier;
+        return new RangedPayment(repayment, interestPaid);
+    }
+
+    public static RangedPayment calculateMonthlyTotalPaymentAmountAnnuity(final DateRange dateRange, final LoanPart loanPart, final LoanInterest interest, final double remainingAmountNotYetPaid) {
         // todo: what if the interest changes over time. Does the annuiteit also changes?
         // duration is from the start of the interest, until to end of the loan
-        final int dateRangeAmountPerYear = getDateRangeAmountPerYear(dateRange);
-        final long amountOfPeriodsInDateRange = getChronoUnit(dateRange).between(interest.getStartDate(), loanPart.getEndDate());
-        final double interestPerDateRangeMultiplier = interest.getAmount() / 100 / dateRangeAmountPerYear;
+        final int dateRangeAmountPerPeriod = getDateRangeAmountPerPeriod(dateRange);
+        final long amountOfPeriodsInDateRange = Util.getChronoUnit(dateRange).between(interest.getStartDate(), loanPart.getEndDate());
+        final double interestPerDateRangeMultiplier = interest.getAmount() / 100 / dateRangeAmountPerPeriod;
         final double annuiteit = calculateAnnuiteit(loanPart.getAmount(), interestPerDateRangeMultiplier, amountOfPeriodsInDateRange);
         final double interestPaid = loanPart.getRemainingAmount() * interestPerDateRangeMultiplier;
         final double repayment = annuiteit - interestPaid + remainingAmountNotYetPaid;
         return new RangedPayment(repayment, interestPaid);
     }
 
-    private static int getDateRangeAmountPerYear(final DateRange dateRange) {
+    public static int getDateRangeAmountPerPeriod(final DateRange dateRange) {
         return switch (dateRange) {
             case YEAR -> 1;
             case MONTH -> 12;
             case WEEK -> 52; // todo, not always 52
             case DAY, ALL -> 365; // todo, not always 365
-        };
-    }
-
-    private static ChronoUnit getChronoUnit(final DateRange dateRange) {
-        return switch (dateRange) {
-            case YEAR -> ChronoUnit.YEARS;
-            case MONTH -> ChronoUnit.MONTHS;
-            case WEEK -> ChronoUnit.WEEKS;
-            case DAY, ALL -> ChronoUnit.DAYS;
         };
     }
 

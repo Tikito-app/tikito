@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tikito.dto.budget.BudgetDateRange;
 import org.tikito.dto.loan.LoanInterestDto;
 import org.tikito.dto.loan.LoanType;
 
@@ -24,12 +23,12 @@ public class CreateOrUpdateLoanPartRequest {
     @NotNull
     private LocalDate startDate;
     private LocalDate endDate;
-    private BudgetDateRange dateRange;
     private double amount;
     @NotNull
     private LoanType loanType;
     private long currencyId;
     private List<LoanInterestDto> interests = new ArrayList<>();
+    private double repaymentAmount;
 
     public boolean isNew() {
         return id == null || id == 0;
