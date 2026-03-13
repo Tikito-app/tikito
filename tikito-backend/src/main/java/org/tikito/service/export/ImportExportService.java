@@ -206,7 +206,7 @@ public class ImportExportService {
                                 .stream()
                                 .map(SecurityTransactionExportDto::toImportLine)
                                 .toList());
-                securityImportService.importTransactions(account.toDto(), resultDto, true);
+                securityImportService.importTransactions(account.toDto(), resultDto, false);
             }
         });
     }
@@ -263,8 +263,15 @@ public class ImportExportService {
             return ;
         }
         log.info("Importing {} loans", dto.getLoans().size());
+
+        final Set<String> existingLoanNames = loanRepository.findByUserId(userId)
+                .stream()
+                .map(Loan::getName)
+                .collect(Collectors.toSet());
+
         loanRepository.saveAllAndFlush(dto.getLoans()
                 .stream()
+                .filter(loan -> !existingLoanNames.contains(loan.getName()))
                 .map(loan -> new Loan(userId, loan, moneyTransactionGroupsByName, currenciesByIsin))
                 .toList());
     }

@@ -47,8 +47,11 @@ export class AdminImportComponent {
       return this.http.httpPost<SecurityTransactionImportLine[]>(new HttpRequestData()
         .withUrl('/api/admin/import')
         .withBody({
-          data: e.target.result,
-          settings: this.settingsComponent.getSettings()
+          data: JSON.parse(e.target.result),
+          settings: {
+            ...this.settingsComponent.getSettings(),
+            accounts: true
+          }
         }))
         .subscribe(() => this.dialogService.snackbar('Done'));
     };

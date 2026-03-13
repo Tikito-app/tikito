@@ -41,8 +41,7 @@ public class MoneyTransactionController {
         return ResponseEntity.ok(moneyTransactionService.getTransactionsForLoans(authUser.getId()));
     }
 
-    @PostMapping
-    @RequestMapping("/set-group-id")
+    @PostMapping("/set-group-id")
     public ResponseEntity<MoneyTransaction> setTransactionGroupId(final AuthUser authUser, @Validated @RequestBody final SetMoneyTransactionGroupIdRequest request) {
         return ResponseEntity.ok(moneyTransactionService.setTransactionGroupId(authUser.getId(), request.getTransactionId(), request.getGroupId()));
     }
