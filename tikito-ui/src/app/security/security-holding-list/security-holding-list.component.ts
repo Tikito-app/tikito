@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -15,7 +15,7 @@ import {
 import {MatIcon} from "@angular/material/icon";
 import {Router} from "@angular/router";
 import {TranslatePipe} from "@ngx-translate/core";
-import {JsonPipe, NgIf} from "@angular/common";
+import {NgIf} from "@angular/common";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
 import SecurityHolding from "../../dto/security/security-holding";
 import {SecurityApi} from "../../api/security-api";
@@ -39,6 +39,8 @@ import {UserPreferenceService} from "../../service/user-preference-service";
 import {UserPreference} from "../../dto/user-preference";
 import {AuthService} from "../../service/auth.service";
 import {TranslateService} from "../../service/translate.service";
+import {SecurityTransactionListComponent} from "../security-transaction-list/security-transaction-list.component";
+import {SecurityHoldingFilter} from "../../dto/security/security-holding-filter";
 
 @Component({
   selector: 'app-security-holding-list',
@@ -70,7 +72,7 @@ import {TranslateService} from "../../service/translate.service";
     MatMenu,
     MatMenuItem,
     MatMenuTrigger,
-    JsonPipe
+    SecurityTransactionListComponent
   ],
   providers: [TranslatePipe],
   templateUrl: './security-holding-list.component.html',
@@ -81,6 +83,10 @@ export class SecurityHoldingListComponent implements AfterViewInit {
   dataSource: MatTableDataSource<SecurityHolding>;
   allHoldings: SecurityHolding[];
   selectedHolding: SecurityHolding | null;
+  securityHoldingFilter = new SecurityHoldingFilter()
+
+  @Output()
+  onFilterUpdateCallback: EventEmitter<SecurityHoldingFilter> = new EventEmitter();
 
   form: FormGroup;
 
@@ -108,6 +114,7 @@ export class SecurityHoldingListComponent implements AfterViewInit {
   }
 
   reset(): void {
+    this.onFilterUpdateCallback.next(this.securityHoldingFilter);
     this.api.getSecurityHoldings().subscribe(holdings => {
       this.allHoldings = holdings;
 

@@ -13,9 +13,13 @@ import java.util.Set;
 public interface SecurityTransactionRepository extends JpaRepository<SecurityTransaction, Long> {
     List<SecurityTransaction> findBySecurityId(Long securityId);
 
-    @Query("select t from SecurityTransaction t where t.securityId in :securityIds " +
-            "and (:timestamp is null or t.timestamp >= :timestamp)")
-    List<SecurityTransaction> findBySecurityIdIn(Set<Long> securityIds, final Instant timestamp);
+    @Query(value = """
+            select t from SecurityTransaction t where
+                        t.userId = :userId and
+                        (t.securityId in :securityIds or (:amountOfSecurityId = 0 or t.securityId is not null)) and
+                        (:timestamp is null or t.timestamp >= :timestamp)
+            """)
+    List<SecurityTransaction> findBySecurityIdIn(final long userId, Set<Long> securityIds, Instant timestamp, int amountOfSecurityId);
 
     List<SecurityTransaction> findByAccountId(long accountId);
 
