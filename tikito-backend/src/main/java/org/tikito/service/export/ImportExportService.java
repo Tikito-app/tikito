@@ -14,6 +14,7 @@ import org.tikito.repository.*;
 import org.tikito.service.money.MoneyImportService;
 import org.tikito.service.security.SecurityImportService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -50,16 +51,17 @@ public class ImportExportService {
         this.loanRepository = loanRepository;
     }
 
-    public TikitoExportDto export(final long userId, final ImportExportSettings settings) {
+    public TikitoExportDto export(final long userId, final Set<Long> accountIds, final ImportExportSettings settings) {
         final TikitoExportDto export = new TikitoExportDto();
-
-        final Map<Long, Account> accountsById = getAccountsById(userId);
+        final Map<Long, Account> accountsById = getAccountsById(userId, accountIds);
         final Map<String, Account> accountsByName = getAccountsByName(userId);
         final Map<Long, Security> currenciesById = getCurrenciesById();
 
-        if(settings.isAccounts()) {
-            exportAccounts(userId, export, currenciesById);
-        }
+        export.setAccounts(new ArrayList<>(
+                accountsById.values()
+                        .stream()
+                        .map(account -> account.toExportDto(currenciesById))
+                        .toList()));
 
         export.getAccounts().forEach(account -> {
             if(settings.isSecurityTransactions()) {
@@ -87,9 +89,9 @@ public class ImportExportService {
                 .toList());
     }
 
-    private Map<Long, Account> getAccountsById(final long userId) {
+    private Map<Long, Account> getAccountsById(final long userId, final Set<Long> accountIds) {
         return accountRepository
-                .findByUserId(userId)
+                .findByUserIdAndIdIn(userId, accountIds)
                 .stream()
                 .collect(Collectors.toMap(Account::getId, Function.identity()));
     }
@@ -120,14 +122,6 @@ public class ImportExportService {
                 .findBySecurityType(SecurityType.CURRENCY)
                 .stream()
                 .collect(Collectors.toMap(Security::getCurrentIsin, Function.identity()));
-    }
-
-    public void exportAccounts(final long userId, final TikitoExportDto export, final Map<Long, Security> currenciesById) {
-        export.setAccounts(accountRepository
-                .findByUserId(userId)
-                .stream()
-                .map(account -> account.toExportDto(currenciesById))
-                .toList());
     }
 
     public void exportMoneyGroups(final long userId, final TikitoExportDto export, final Map<Long, Account> accountsById) {

@@ -5,9 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.tikito.auth.AuthUser;
-import org.tikito.controller.request.AdminEditSecurityRequest;
-import org.tikito.controller.request.AdminEditUserRequest;
-import org.tikito.controller.request.UpdateIsinRequest;
+import org.tikito.controller.request.*;
 import org.tikito.dto.UserAccountDto;
 import org.tikito.dto.export.TikitoExportDto;
 import org.tikito.dto.security.IsinDto;
@@ -136,14 +134,14 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/export")
-    public ResponseEntity<TikitoExportDto> export(final AuthUser authUser) {
-        return ResponseEntity.ok(importExportService.export(authUser.getId()));
+    @PostMapping("/export")
+    public ResponseEntity<TikitoExportDto> export(final AuthUser authUser, @Validated @RequestBody final ExportRequest request) {
+        return ResponseEntity.ok(importExportService.export(authUser.getId(), request.getAccountIds(), request.getSettings()));
     }
 
     @PostMapping("/import")
-    public ResponseEntity<Void> doImport(final AuthUser authUser, @Validated @RequestBody final TikitoExportDto dto) {
-        importExportService.importFrom(authUser.getId(), dto);
+    public ResponseEntity<Void> doImport(final AuthUser authUser, @Validated @RequestBody final ImportRequest request) {
+        importExportService.importFrom(authUser.getId(), request.getData(), request.getSettings());
         return ResponseEntity.ok().build();
     }
 }
