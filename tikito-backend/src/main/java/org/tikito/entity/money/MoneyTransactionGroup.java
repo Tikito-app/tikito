@@ -91,7 +91,12 @@ public class MoneyTransactionGroup {
         return new MoneyTransactionGroupExportDto(
                 name,
                 groupTypes,
-                qualifiers.stream().map(MoneyTransactionGroupQualifier::toExportDto).toList(),
-                accountIds.stream().map(id -> accountsById.get(id).getName()).collect(Collectors.toSet()));
+                qualifiers.stream()
+                        .map(MoneyTransactionGroupQualifier::toExportDto)
+                        .toList(),
+                accountIds.stream()
+                        .filter(accountsById::containsKey)
+                        .map(id -> accountsById.get(id).getName())
+                        .collect(Collectors.toSet()));
     }
 }

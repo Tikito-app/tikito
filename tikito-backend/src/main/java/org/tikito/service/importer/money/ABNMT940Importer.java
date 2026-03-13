@@ -11,7 +11,9 @@ public class ABNMT940Importer extends MoneyTransactionImporter {
 
     @Override
     public boolean applies(final MoneyTransactionImportResultDto result) {
-        return result.getImporter() == null && result.getFilename().toLowerCase().endsWith(".sta");
+        return result.getImporter() == null &&
+                result.getFilename() != null &&
+                result.getFilename().toLowerCase().endsWith(".sta");
     }
 
     @Override
