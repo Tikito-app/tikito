@@ -13,7 +13,7 @@
 
     <ng-container matColumnDef="trading-company">
       <th mat-header-cell *matHeaderCellDef>{{'security' | translate}}</th>
-      <td mat-cell *matCellDef="let element"> {{element.security.name}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.security?.name}} </td>
     </ng-container>
 
     <ng-container matColumnDef="amount">

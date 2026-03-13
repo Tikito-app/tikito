@@ -11,7 +11,6 @@ import org.tikito.entity.security.SecurityTransaction;
 import org.tikito.repository.*;
 import org.tikito.service.CacheService;
 import org.tikito.service.JobService;
-import org.tikito.service.importer.security.SecurityTransactionImporter;
 import org.tikito.service.job.JobType;
 
 import java.util.List;
@@ -47,7 +46,7 @@ public class SecurityTransactionService {
         final Set<Long> securityIds = holdingList.stream().map(SecurityHolding::getSecurityId).collect(Collectors.toSet());
 
         return enrichTransactions(securityTransactionRepository
-                .findBySecurityIdIn(securityIds, filter.getStartDateAsInstant())
+                .findBySecurityIdIn(userId, securityIds, filter.getStartDateAsInstant(), securityIds.size())
                 .stream()
                 .sorted((o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp())));
     }
@@ -59,7 +58,9 @@ public class SecurityTransactionService {
         return transactions
                 .map(SecurityTransaction::toDto)
                 .map(transaction -> {
-                    transaction.setSecurity(cacheService.getSecurity(transaction.getSecurityId()));
+                    if(transaction.getSecurityId() != null) {
+                        transaction.setSecurity(cacheService.getSecurity(transaction.getSecurityId()));
+                    }
                     return transaction;
                 })
                 .toList();
