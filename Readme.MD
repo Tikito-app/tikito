@@ -21,7 +21,7 @@
 
 - ⚠️ The project is under **very active** development.
 - ⚠️ Expect bugs and breaking changes.
-- ⚠️ Always follow [3-2-1](https://www.backblaze.com/blog/the-3-2-1-backup-strategy/) backup plan for your precious photos and videos!
+- ⚠️ Always follow [3-2-1](https://www.backblaze.com/blog/the-3-2-1-backup-strategy/) backup plan for your data!
 
 >
 > You can find the main documentation, including installation guides, at [tikito.org](https://tikito.org).
@@ -38,7 +38,7 @@
 | Import of debit transactions            | Yes         |
 | Retrieve security prices from Yahoo     | Yes         |
 | Group your money transactions           | Yes         |
-| Visualise your stock and money growth   | Yes         |
+| Visualize your stock and money growth   | Yes         |
 | Loans, such as mortgages (only annuity) | Yes         |
 | Budgeting                               | Comnig soon |
 | Backup and restore                      | Comnig soon |
