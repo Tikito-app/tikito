@@ -31,10 +31,10 @@ public class SecurityTransactionExportDto {
                 .isin(isin)
                 .currency(currency)
                 .amount(amount)
-                .price(price)
+                .price(price / exchangeRate)
                 .description(description)
                 .timestamp(timestamp)
-                .cash(cash)
+                .cash(cash != null ? cash / exchangeRate : null)
                 .exchangeRate(exchangeRate)
                 .transactionType(transactionType)
                 .build();

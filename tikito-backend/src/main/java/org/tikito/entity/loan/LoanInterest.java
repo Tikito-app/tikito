@@ -36,6 +36,7 @@ public class LoanInterest {
     public LoanInterest(final LoanInterestExportDto dto, final LoanPart loanPart) {
         this.startDate = dto.getStartDate();
         this.endDate = dto.getEndDate();
+        this.amount = dto.getAmount();
         this.loanPart = loanPart;
     }
 

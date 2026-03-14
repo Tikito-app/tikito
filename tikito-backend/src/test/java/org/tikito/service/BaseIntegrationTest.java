@@ -20,6 +20,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tikito.repository.*;
+import org.tikito.service.export.ImportExportService;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -86,6 +87,9 @@ public class BaseIntegrationTest extends BaseTest {
 
     @Autowired
     protected UserAccountRepository userAccountRepository;
+
+    @Autowired
+    protected ImportExportService importExportService;
 
     @AfterEach
     @BeforeEach
