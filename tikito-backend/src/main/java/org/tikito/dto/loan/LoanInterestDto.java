@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoanInterestDto {
-    private long id;
+    private Long id;
     private LocalDate startDate;
     private LocalDate endDate;
     private double amount;
