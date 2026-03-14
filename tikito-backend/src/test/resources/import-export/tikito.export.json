@@ -1,0 +1,199 @@
+{
+  "accounts": [
+    {
+      "name": "DeGiro",
+      "accountType": "SECURITY",
+      "accountNumber": "123",
+      "currency": "EUR",
+      "securityTransactions": [
+        {
+          "isin": "",
+          "accountName": "DeGiro",
+          "currency": "USD",
+          "amount": 0,
+          "price": 50,
+          "description": "iDEAL amount",
+          "timestamp": "2023-04-12T16:31:00Z",
+          "cash": 50,
+          "exchangeRate": 0.967,
+          "transactionType": "IDEAL_DEPOSIT"
+        },
+        {
+          "isin": "GB00B03MLX29",
+          "accountName": "DeGiro",
+          "currency": "EUR",
+          "amount": 1,
+          "price": -11.68,
+          "description": "Koop 1 @ 11,68 EUR",
+          "timestamp": "2023-04-12T16:34:00Z",
+          "cash": 38.32,
+          "exchangeRate": 1,
+          "transactionType": "BUY"
+        }
+      ],
+      "moneyTransactions": []
+    },
+    {
+      "name": "Other",
+      "accountType": "SECURITY",
+      "accountNumber": "other",
+      "currency": "EUR",
+      "securityTransactions": [
+        {
+          "isin": "US02079K3059",
+          "accountName": "Other",
+          "currency": "USD",
+          "amount": 0,
+          "price": 2.36411,
+          "description": null,
+          "timestamp": "2024-03-25T12:00:00Z",
+          "cash": null,
+          "exchangeRate": 0.95696,
+          "transactionType": "ADMIN_COSTS"
+        },
+        {
+          "isin": "US02079K3059",
+          "accountName": "Other",
+          "currency": "USD",
+          "amount": 15,
+          "price": 162.3362,
+          "description": null,
+          "timestamp": "2025-01-23T01:00:00Z",
+          "cash": null,
+          "exchangeRate": 0.9623,
+          "transactionType": "SELL"
+        }
+      ],
+      "moneyTransactions": []
+    },
+    {
+      "name": "ING",
+      "accountType": "DEBIT",
+      "accountNumber": "sfsdf",
+      "currency": "EUR",
+      "securityTransactions": [],
+      "moneyTransactions": [
+        {
+          "accountName": "ING",
+          "counterpartAccountName": "Counter part name",
+          "counterpartAccountNumber": "NL12SOMETHING",
+          "timestamp": "2024-03-18T13:18:00Z",
+          "amount": -200,
+          "finalBalance": 40.37,
+          "description": "Name: Counter part name IBAN: NL12SOMETHING ",
+          "currency": "EUR"
+        },
+        {
+          "accountName": "ING",
+          "counterpartAccountName": "Someone via Tikkie",
+          "counterpartAccountNumber": "SOMEThING",
+          "timestamp": "2024-04-18T13:18:00Z",
+          "amount": -20,
+          "finalBalance": 250.31,
+          "description": "Hello, I hope you are doing good",
+          "currency": "EUR"
+        }
+      ]
+    }
+  ],
+  "moneyGroups": [
+    {
+      "name": "Groceries",
+      "groupTypes": [
+        "MONEY",
+        "BUDGET"
+      ],
+      "qualifiers": [
+        {
+          "groupName": "Groceries",
+          "qualifierType": "INCLUDES",
+          "qualifier": "shopname",
+          "transactionField": "DESCRIPTION"
+        },
+        {
+          "groupName": "Groceries",
+          "qualifierType": "REGEX",
+          "qualifier": "(SHOP) ([0-9]+) (.*)",
+          "transactionField": "COUNTERPARTY_NAME"
+        }
+      ],
+      "accountNames": [
+        "ING"
+      ]
+    },
+    {
+      "name": "Mortgage",
+      "groupTypes": [
+        "LOAN",
+        "MONEY"
+      ],
+      "qualifiers": [
+        {
+          "groupName": "Mortgage",
+          "qualifierType": "INCLUDES",
+          "qualifier": "Some-value",
+          "transactionField": "DESCRIPTION"
+        },
+        {
+          "groupName": "Mortgage",
+          "qualifierType": "INCLUDES",
+          "qualifier": "Some-other-value",
+          "transactionField": "DESCRIPTION"
+        }
+      ],
+      "accountNames": [
+        "ING"
+      ]
+    },
+    {
+      "name": "Insurance",
+      "groupTypes": [
+        "MONEY",
+        "BUDGET"
+      ],
+      "qualifiers": [
+        {
+          "groupName": "Insurance",
+          "qualifierType": "INCLUDES",
+          "qualifier": "Insurance231",
+          "transactionField": "COUNTERPARTY_NAME"
+        },
+        {
+          "groupName": "Insurance",
+          "qualifierType": "INCLUDES",
+          "qualifier": "Insurance341",
+          "transactionField": "DESCRIPTION"
+        }
+      ],
+      "accountNames": [
+        "ING"
+      ]
+    }
+  ],
+  "loans": [
+    {
+      "dateRange": "MONTH",
+      "name": "Linear",
+      "groups": [
+        "Mortgage"
+      ],
+      "loanParts": [
+        {
+          "name": "Part 1",
+          "startDate": "2023-10-12",
+          "endDate": "2053-10-12",
+          "amount": 512345,
+          "currency": "EUR",
+          "loanType": "MORTGAGE_LINEAR",
+          "interests": [
+            {
+              "startDate": "2023-10-12",
+              "endDate": "2053-10-12",
+              "amount": 4
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

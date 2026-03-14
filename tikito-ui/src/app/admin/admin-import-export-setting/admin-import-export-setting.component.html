@@ -1,0 +1,9 @@
+<form [formGroup]="form">
+  @if (showAccounts) {
+    <mat-checkbox formControlName="accounts" [disabled]="accountsDisabled">{{ 'admin/import-export-accounts' | translate}}</mat-checkbox><br/>
+  }
+  <mat-checkbox formControlName="moneyTransactionGroups" (change)="form.controls['moneyTransactionGroups'].setValue($event.checked);">{{ 'admin/import-export-money-transaction-groups' | translate}}</mat-checkbox><br/>
+  <mat-checkbox formControlName="moneyTransactions" (change)="form.controls['moneyTransactions'].setValue($event.checked);">{{ 'admin/import-export-money-transactions' | translate}}</mat-checkbox><br/>
+  <mat-checkbox formControlName="securityTransactions" (change)="form.controls['securityTransactions'].setValue($event.checked);">{{ 'admin/import-export-security-transactions' | translate}}</mat-checkbox><br/>
+  <mat-checkbox formControlName="loans" (change)="form.controls['loans'].setValue($event.checked);">{{ 'admin/import-export-loans' | translate}}</mat-checkbox><br/>
+</form>

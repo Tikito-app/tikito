@@ -56,4 +56,11 @@ public class MoneyTransactionImportResultDto {
                 .map(t -> new MoneyTransactionImportLine(account, t, count.getAndIncrement()))
                 .toList();
     }
+
+    public MoneyTransactionImportResultDto(final List<MoneyTransactionImportLine> lines) {
+        this.lines = new ArrayList<>(lines);
+        this.settings = null;
+        this.importer = null;
+        this.filename = null;
+    }
 }
