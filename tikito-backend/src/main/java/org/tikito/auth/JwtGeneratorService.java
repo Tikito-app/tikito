@@ -35,8 +35,8 @@ public final class JwtGeneratorService {
 
     public static Jwt<Header, Claims> unsafeParseJwt(final String jwtString) {
         final String withoutSignature = jwtString.substring(0, jwtString.lastIndexOf('.') + 1);
-        return Jwts.parserBuilder()
+        return Jwts.parser()
                 .build()
-                .parseClaimsJwt(withoutSignature);
+                .parseUnsecuredClaims(withoutSignature);
     }
 }

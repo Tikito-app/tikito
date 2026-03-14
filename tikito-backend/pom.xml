@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.5</version>
+		<version>4.0.3</version>
 		<relativePath/>
 	</parent>
 	<groupId>org.tikito</groupId>
@@ -16,6 +16,14 @@
 
 	<properties>
 		<java.version>21</java.version>
+		<apache.poi.version>5.5.1</apache.poi.version>
+		<apache.commons.version>1.13.1</apache.commons.version>
+		<jackson.version>2.17.2</jackson.version>
+		<jsonwebtoken.version>0.13.0</jsonwebtoken.version>
+		<testcontainers.version>1.21.4</testcontainers.version>
+		<opencsv.version>5.12.0</opencsv.version>
+		<apache.httpcomoponents.version>4.5.13</apache.httpcomoponents.version>
+		<prowidesoftware.version>SRU2024-10.2.6</prowidesoftware.version>
 	</properties>
 
 	<dependencies>
@@ -56,18 +64,18 @@
 		<dependency>
 			<groupId>com.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
-			<version>5.12.0</version>
+			<version>${opencsv.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.5.13</version>
+			<version>${apache.httpcomoponents.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.prowidesoftware</groupId>
 			<artifactId>pw-swift-core</artifactId>
-			<version>SRU2024-10.2.6</version>
+			<version>${prowidesoftware.version}</version>
 		</dependency>
 
 		<dependency>
@@ -88,48 +96,46 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
-			<version>5.4.1</version>
+			<version>${apache.poi.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>5.4.1</version>
+			<version>${apache.poi.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-text</artifactId>
-			<version>1.13.1</version>
+			<version>${apache.commons.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.17.2</version>
+			<version>${jackson.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
-			<version>0.11.5</version>
+			<version>${jsonwebtoken.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
-			<version>0.11.5</version>
+			<version>${jsonwebtoken.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-gson</artifactId>
-			<version>0.11.5</version>
+			<version>${jsonwebtoken.version}</version>
 		</dependency>
 
-
-		<!-- support for "Java 8 date time api" -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-jsr310</artifactId>
-			<version>2.17.2</version>
-		</dependency>
 <!--		<dependency>-->
 <!--			<groupId>org.springframework.boot</groupId>-->
 <!--			<artifactId>spring-boot-testcontainers</artifactId>-->
@@ -144,6 +150,7 @@
 			<groupId>org.testcontainers</groupId>
 			<artifactId>mariadb</artifactId>
 			<scope>test</scope>
+			<version>${testcontainers.version}</version>
 		</dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
