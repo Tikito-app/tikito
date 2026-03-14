@@ -107,8 +107,6 @@ public class UserAccountService {
         if (firstEverUser) {
             userAccount.setActivated(true);
             generateCurrencies();
-        } else {
-            throw new IllegalStateException();
         }
         final UserAccountDto dto = userAccountRepository.saveAndFlush(userAccount).toDto();
 

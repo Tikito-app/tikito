@@ -41,7 +41,6 @@ public class BaseIntegrationTest extends BaseTest {
     protected static MoneyTransactionGroup TRANSACTION_GROUP_REGEX = null;
     protected static MoneyTransactionGroup TRANSACTION_GROUP_CLUSTER = null;
 
-
     @Autowired
     protected AccountRepository accountRepository;
 
@@ -102,6 +101,9 @@ public class BaseIntegrationTest extends BaseTest {
         historicalMoneyHoldingValueRepository.deleteAll();
         userAccountRepository.deleteAll();
         loanRepository.deleteAll();
+        cacheService.refreshSecurities();
+        cacheService.refreshCurrencies();
+        cacheService.refreshFirstEverUser();
     }
 
     protected void withDefaultData() {

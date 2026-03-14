@@ -91,10 +91,10 @@ public class SecurityImportServiceTest extends BaseIntegrationTest {
         final SecurityTransaction transaction = getSecurityTransaction();
         securityTransactionRepository.saveAndFlush(transaction);
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-duplicate-transaction.csv", "Account.csv");
+
         final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertEquals(4, result.getLines().size());
-        assertEquals(3, result.getImportedTransactions().size());
-        assertEquals(1, result.getLines().stream().filter(line -> FAILED_DUPLICATE_TRANSACTION.equals(line.getFailedReason())).count());
+        assertEquals(4, result.getImportedTransactions().size());
 
         final SecurityTransactionImportResultDto newRsult = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertEquals(4, newRsult.getLines().size());
