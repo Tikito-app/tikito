@@ -27,7 +27,7 @@
             <mat-label>{{ 'currency' | translate }}</mat-label>
             <mat-select formControlName="currencyId" [attr.data-cy]="'currencyId'">
               @for (currency of CacheService.getCurrencies(); track currency) {
-                <mat-option [value]="currency">{{ 'currency/' + currency.currentIsin | translate }}</mat-option>
+                <mat-option [value]="currency.id">{{ 'currency/' + currency.currentIsin | translate }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
