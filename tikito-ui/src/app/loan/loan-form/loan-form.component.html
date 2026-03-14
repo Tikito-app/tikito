@@ -30,18 +30,16 @@
               }
             </mat-select>
           </mat-form-field>
-        </ng-container>
 
           <mat-form-field class="full-width">
-              <mat-label>{{ 'loan/date-range' | translate }}</mat-label>
-              <mat-select formControlName="dateRange" [attr.data-cy]="'date-range'">
-                  @for (dateRange of Util.getBudgetDateRanges(); track dateRange) {
-                      <mat-option [value]="dateRange">{{ dateRange }}</mat-option>
-                  }
-              </mat-select>
+            <mat-label>{{ 'loan/date-range' | translate }}</mat-label>
+            <mat-select formControlName="dateRange" [attr.data-cy]="'date-range'">
+              @for (dateRange of Util.getBudgetDateRanges(); track dateRange) {
+                <mat-option [value]="dateRange">{{ dateRange }}</mat-option>
+              }
+            </mat-select>
           </mat-form-field>
-
-
+        </ng-container>
 
         <div *ngIf="nameInEdit">
           <button [attr.data-cy]="'save-button'"  mat-raised-button color="primary" (click)="onSaveButtonClicked(); nameInEdit = false">{{'save' | translate}}</button>&nbsp;

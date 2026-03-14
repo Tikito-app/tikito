@@ -28,7 +28,7 @@ public class CreateOrUpdateLoanPartRequest {
     private LoanType loanType;
     private long currencyId;
     private List<LoanInterestDto> interests = new ArrayList<>();
-    private double repaymentAmount;
+    private Double repaymentAmount;
 
     public boolean isNew() {
         return id == null || id == 0;
