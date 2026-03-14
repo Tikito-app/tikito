@@ -159,15 +159,15 @@ public class SecurityHoldingService implements JobProcessor {
     public void recalculateHistoricalValue(final long userId, final long securityId) {
         securityHoldingRepository
                 .findByUserIdAndSecurityId(userId, securityId)
-                .forEach(holding -> recalculateHistoricalHoldingValue(userId, holding.getId()));
+                .forEach(holding -> recalculateHistoricalHoldingValue(userId, holding.getId(), holding.getSecurityId()));
     }
 
     /**
      * This method deletes the previous holding values, generates a completely new list of historical values for that
      * holding and then persists it in the database,
      */
-    private void recalculateHistoricalHoldingValue(final long userId, final Long securityHoldingId) {
-        log.info("Recalculating historical security holding values for {}", securityHoldingId);
+    private void recalculateHistoricalHoldingValue(final long userId, final Long securityHoldingId, final long securityId) {
+        log.info("Recalculating historical security holding values for holding #{} of {}", securityHoldingId, cacheService.getSecurityName(securityId));
 
         final SecurityHolding holding = securityHoldingRepository.findByUserIdAndId(userId, securityHoldingId).orElseThrow();
         final Security security = securityRepository.findById(holding.getSecurityId()).orElseThrow();
@@ -203,7 +203,7 @@ public class SecurityHoldingService implements JobProcessor {
         log.info("Deleting previous values");
         historicalSecurityHoldingValueRepository.deleteAllBySecurityHoldingId(securityHoldingId);
 
-        log.info("Storing {} historical security holding values for {}", historicalSecurityHoldingValues.size(), securityHoldingId);
+        log.info("Storing {} historical security holding values for holding #{} of {}", historicalSecurityHoldingValues.size(), securityHoldingId, cacheService.getSecurityName(securityId));
         historicalSecurityHoldingValueRepository.saveAllAndFlush(historicalSecurityHoldingValues);
         securityHoldingRepository.saveAndFlush(holding);
 

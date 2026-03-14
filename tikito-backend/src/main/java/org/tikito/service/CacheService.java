@@ -116,4 +116,12 @@ public class CacheService {
     public void firstEverUserRegistered() {
         firstEverUser = false;
     }
+
+    public String getSecurityName(final long securityId) {
+        final SecurityDto security = getSecurity(securityId);
+        if(security != null) {
+            return security.getName();
+        }
+        return null;
+    }
 }
