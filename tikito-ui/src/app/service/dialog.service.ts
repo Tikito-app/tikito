@@ -52,7 +52,7 @@ export class DialogService {
   }
 
   snackbar(message: string, close?: string, timeoutToClose?: number) {
-    let snackbar = this._snackbar.open(message, close);
+    let snackbar = this._snackbar.open(message, close == null ? this.translateService.translate('snackbar/close') : close);
 
     setTimeout(() => {
       snackbar.dismissWithAction();

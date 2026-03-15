@@ -131,7 +131,7 @@ export class HttpService {
       this.basicHttpRequest<T>(request)
         .subscribe({
           next: (result) => resolve.next(result),
-          error: (e) => _this.handleError(e, {}),
+          error: (e) => _this.handleError(e),
           complete: () => resolve.complete()
         });
     });
@@ -220,15 +220,16 @@ export class HttpService {
     });
   }
 
-  handleError(error: any, errorMessages: Record<string, string>) {
+  handleError(error: any) {
     if (error.error?.error != null) {
       const key = error.error.error;
-      if (errorMessages[key] != null) {
-          // todo
-        // this.dialogService.snackbar(errorMessages[key], this.translate.transform('close'));
+      let errorMessage = this.translateService.translate('exception.' + key);
+
+      if (errorMessage != null) {
+        this.dialogService.snackbar(errorMessage);
         return;
       }
-      this.dialogService.snackbar(this.translateService.translate(key), this.translateService.translate('close'));
+      this.dialogService.snackbar(key);
     }
   }
 }
