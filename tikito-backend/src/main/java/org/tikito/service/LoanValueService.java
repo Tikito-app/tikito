@@ -381,6 +381,7 @@ public class LoanValueService implements JobProcessor {
             case WEEK -> currentDate.getYear() + "-" + currentDate.get(WeekFields.of(Locale.getDefault()).weekOfYear());
             case DAY, ALL ->
                     currentDate.getYear() + "-" + currentDate.getMonthValue() + "-" + currentDate.getDayOfMonth();
+            case ONCE -> "";
         };
     }
 

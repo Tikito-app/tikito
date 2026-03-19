@@ -79,6 +79,7 @@ public class BudgetValueService {
             case MONTH -> date.plusMonths(amount);
             case WEEK -> date.plusWeeks(amount);
             case DAY -> date.plusDays(amount);
+            case ONCE -> date.minusYears(9999); // once implies to deal with once, todo: check if this works
         };
     }
 
@@ -88,7 +89,7 @@ public class BudgetValueService {
             case MONTH -> date.getMonthValue() + "-" + date.getYear();
             case WEEK -> date.get(WeekFields.of(Locale.getDefault()).weekOfYear()) + "-" + date.getYear();
             case DAY -> date.getDayOfMonth() + "-" + date.getMonthValue() + "-" + date.getYear();
-            case ALL -> "";
+            case ALL, ONCE -> "";
         };
     }
 }

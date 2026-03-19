@@ -6,6 +6,7 @@ import Budget from "../dto/budget/budget";
 import {Injectable} from "@angular/core";
 import {HistoricalBudgetValue} from "../dto/budget/historical-budget-value";
 import {HttpRequestMethod} from "../dto/http-request-method";
+import {MoneyTransactionsFilter} from "../dto/money/money-transactions-filter";
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +17,12 @@ export class BudgetApi {
 
     getBudgets(): Observable<Budget[]> {
         return this.http.httpGetList<Budget>(Budget, new HttpRequestData().withUrl('/api/budget'));
+    }
+
+    getBudgetsByFilter(filter: MoneyTransactionsFilter): Observable<Budget[]> {
+        return this.http.httpPostList<Budget>(Budget, new HttpRequestData()
+          .withBody(filter)
+          .withUrl('/api/budget/filter'));
     }
 
     createOrUpdateBudget(id: number | null,

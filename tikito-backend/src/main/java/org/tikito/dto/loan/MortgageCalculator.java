@@ -61,6 +61,7 @@ public class MortgageCalculator extends LoanValueCalculator {
             case MONTH -> 12;
             case WEEK -> 52; // todo, not always 52
             case DAY, ALL -> 365; // todo, not always 365
+            case ONCE -> -1; // todo
         };
     }
 

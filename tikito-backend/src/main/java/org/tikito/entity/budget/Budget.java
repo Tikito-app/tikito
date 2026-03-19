@@ -26,6 +26,7 @@ public class Budget {
     private String name;
     private LocalDate startDate;
     private LocalDate endDate;
+    @Enumerated(EnumType.STRING)
     private DateRange dateRange;
     private int dateRangeAmount; // -1 for infinite
     private double amount;

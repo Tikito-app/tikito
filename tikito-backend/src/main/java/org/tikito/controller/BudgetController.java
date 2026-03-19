@@ -2,11 +2,13 @@ package org.tikito.controller;
 
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.CreateOrUpdateBudgetRequest;
 import org.tikito.dto.budget.BudgetDto;
 import org.tikito.dto.budget.HistoricalBudgetValueDto;
+import org.tikito.dto.money.MoneyTransactionFilter;
 import org.tikito.service.BudgetService;
 
 import java.util.List;
@@ -24,6 +26,11 @@ public class BudgetController {
     @GetMapping
     public ResponseEntity<List<BudgetDto>> getBudgets(final AuthUser authUser) {
         return ResponseEntity.ok(budgetService.getBudgets(authUser.getId()));
+    }
+
+    @PostMapping("/filter")
+    public ResponseEntity<List<BudgetDto>> getTransactions(final AuthUser authUser, @Validated @RequestBody final MoneyTransactionFilter filter) {
+        return ResponseEntity.ok(budgetService.getBudgets(authUser.getId(), filter));
     }
 
     @GetMapping("/{budgetId}")

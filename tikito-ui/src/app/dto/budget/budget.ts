@@ -10,4 +10,7 @@ export default class Budget {
     dateRangeAmount: number;
     amount: number;
     groups: MoneyTransactionGroup[];
+
+    // ui only
+    spent: number;
 }

@@ -12,7 +12,7 @@ import lombok.Setter;
 public class MoneyTransactionGroupQualifierDto {
     private long id;
 
-    private long groupId;
+    private Long groupId;
 
     @NotNull
     private MoneyTransactionGroupQualifierType qualifierType;

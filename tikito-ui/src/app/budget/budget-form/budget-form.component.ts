@@ -98,7 +98,7 @@ export class BudgetFormComponent implements AfterViewInit {
             this.form.value.startDate,
             this.form.value.dateRange,
             this.form.value.dateRangeAmount,
-            this.form.value.groupIds).subscribe(budget => {
+            this.form.value.groupIds == '' ? [] : this.form.value.groupIds).subscribe(budget => {
             this.router.navigate(['/budget']);
         })
     }

@@ -243,7 +243,7 @@ public class DataGenerator {
         final CreateOrUpdateMoneyTransactionGroupRequest request = new CreateOrUpdateMoneyTransactionGroupRequest();
         request.setName("Groceries");
         request.setQualifiers(new ArrayList<>(List.of(
-                new MoneyTransactionGroupQualifierDto(0, 0, MoneyTransactionGroupQualifierType.INCLUDES, "Supermarket", MoneyTransactionField.DESCRIPTION)
+                new MoneyTransactionGroupQualifierDto(0, 0L, MoneyTransactionGroupQualifierType.INCLUDES, "Supermarket", MoneyTransactionField.DESCRIPTION)
         )));
         moneyTransactionGroupService.createOrUpdateGroup(USER_ID, request);
     }

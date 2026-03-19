@@ -11,6 +11,7 @@ import {MoneyTransactionGroupType} from "./dto/money-transaction-group-type";
 import {LoanType} from "./dto/loan-type";
 import {CacheService} from "./service/cache-service";
 import {TransactionDateRange} from "./dto/money/money-transactions-filter";
+import {Month} from "./dto/month";
 
 export class Util {
   public static DATE_FORMAT: string = 'dd-MM-YYYY';
@@ -161,6 +162,12 @@ export class Util {
   static getLoanTypes(): string[] {
     return Object
       .keys(LoanType)
+      .filter((v) => isNaN(Number(v)));
+  }
+
+  static getMonths(): string[] {
+    return Object
+      .keys(Month)
       .filter((v) => isNaN(Number(v)));
   }
 
