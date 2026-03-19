@@ -6,7 +6,7 @@ import {Loan} from "../dto/loan";
 import {LoanType} from "../dto/loan-type";
 import {LoanInterest} from "../dto/loan-interest";
 import {LoanValue} from "../dto/loan-value";
-import {BudgetDateRange} from "../dto/budget-date-range";
+import {BudgetDateRange} from "../dto/budget/budget-date-range";
 
 @Injectable({
   providedIn: 'root'

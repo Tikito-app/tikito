@@ -3,6 +3,7 @@ package org.tikito.service;
 import org.tikito.controller.request.CreateOrUpdateBudgetRequest;
 import org.tikito.dto.budget.BudgetDto;
 import org.tikito.dto.budget.HistoricalBudgetValueDto;
+import org.tikito.dto.money.MoneyTransactionFilter;
 import org.tikito.entity.money.MoneyTransactionGroup;
 import org.tikito.entity.budget.Budget;
 import org.tikito.entity.budget.HistoricalBudgetValue;
@@ -39,6 +40,13 @@ public class BudgetService {
     public List<BudgetDto> getBudgets(final long userId) {
         return budgetRepository
                 .findByUserId(userId)
+                .stream()
+                .map(Budget::toDto)
+                .toList();
+    }
+
+    public List<BudgetDto> getBudgets(final long userId, final MoneyTransactionFilter filter) {
+        return budgetRepository.findByUserIdAndDateBetween(userId, filter.getStartDate(), filter.getEndDate())
                 .stream()
                 .map(Budget::toDto)
                 .toList();

@@ -38,6 +38,7 @@ public final class Util {
             case MONTH -> ChronoUnit.MONTHS;
             case WEEK -> ChronoUnit.WEEKS;
             case DAY, ALL -> ChronoUnit.DAYS;
+            case ONCE -> throw new RuntimeException("todo");
         };
     }
 }
