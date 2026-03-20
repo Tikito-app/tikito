@@ -10,6 +10,7 @@ import AggregatedHistoricalHoldingsValue from "../dto/security/aggregated-histor
 import {Security} from "../dto/security/security";
 import {SecurityType} from "../dto/security/security-type";
 import {SecurityTransactionImportLine} from "../dto/security/security-transaction-import-line";
+import {SecurityTransactionType} from "../dto/security/security-transaction-type";
 
 @Injectable({
   providedIn: 'root'
@@ -70,6 +71,38 @@ export class SecurityApi {
   deleteSecurityHolding(securityHoldingId: number) {
     return this.http.httpDelete(new HttpRequestData()
       .withUrl('/api/security/holding/' + securityHoldingId));
+  }
+
+  createOrUpdateTransaction(transactionId: number | null,
+                            accountId: number,
+                            isin: string,
+                            currencyId: number,
+                            amount: number,
+                            price: number,
+                            description: string,
+                            timestamp: string,
+                            cash: number,
+                            exchangeRate: number,
+                            transactionType: SecurityTransactionType
+                            ): Observable<SecurityTransaction> {
+    let body: any = {};
+    if (transactionId != null) {
+      body.id = transactionId;
+    }
+    body.accountId = accountId;
+    body.isin = isin;
+    body.currencyId = currencyId;
+    body.amount = amount;
+    body.price = price;
+    body.description = description;
+    body.timestamp = timestamp;
+    body.amount = amount;
+    body.cash = cash;
+    body.exchangeRate = exchangeRate;
+    body.transactionType = transactionType;
+    return this.http.httpPostSingle(SecurityTransaction, new HttpRequestData()
+      .withBody(body)
+      .withUrl('/api/security/transaction'));
   }
 
   deleteSecurityTransaction(transactionId: number) {

@@ -1,6 +1,7 @@
 package org.tikito.controller;
 
 import org.tikito.auth.AuthUser;
+import org.tikito.controller.request.CreateOrUpdateSecurityTransactionRequest;
 import org.tikito.dto.security.SecurityTransactionDto;
 import org.tikito.dto.security.SecurityTransactionImportLine;
 import org.tikito.dto.security.SecurityTransactionImportResultDto;
@@ -27,6 +28,11 @@ public class SecurityTransactionController {
                                          final SecurityTransactionService securityTransactionService) {
         this.securityImportService = securityImportService;
         this.securityTransactionService = securityTransactionService;
+    }
+
+    @PostMapping
+    public ResponseEntity<SecurityTransactionDto> createOrDeleteTransaction(final AuthUser authUser, @RequestBody final CreateOrUpdateSecurityTransactionRequest request) {
+        return ResponseEntity.ok(securityTransactionService.createOrUpdate(authUser.getId(), request));
     }
 
     @DeleteMapping("/{transactionId}")

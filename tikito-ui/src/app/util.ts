@@ -10,6 +10,7 @@ import {SecurityType} from "./dto/security/security-type";
 import {MoneyTransactionGroupType} from "./dto/money-transaction-group-type";
 import {LoanType} from "./dto/loan-type";
 import {CacheService} from "./service/cache-service";
+import {SecurityTransactionType} from "./dto/security/security-transaction-type";
 
 export class Util {
   public static DATE_FORMAT: string = 'dd-MM-YYYY';
@@ -142,6 +143,12 @@ export class Util {
   static getSecurityTypes(): string[] {
     return Object
       .keys(SecurityType)
+      .filter((v) => isNaN(Number(v)));
+  }
+
+  static getSecurityTransactionTypes(): string[] {
+    return Object
+      .keys(SecurityTransactionType)
       .filter((v) => isNaN(Number(v)));
   }
 

@@ -24,6 +24,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     List<Account> findByUserIdAndAccountType(long userId, AccountType accountType);
 
+    Optional<Account> findByUserIdAndIdAndAccountType(long userId, long id, AccountType accountType);
+
     @Query("select a from Account a where a.userId = :userId AND a.name in :names")
     List<Account> findByUserIdAndName(long userId, Set<String> names);
 

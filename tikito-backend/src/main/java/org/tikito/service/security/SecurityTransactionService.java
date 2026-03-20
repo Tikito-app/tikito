@@ -3,9 +3,12 @@ package org.tikito.service.security;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.tikito.controller.request.CreateOrUpdateSecurityTransactionRequest;
+import org.tikito.dto.AccountType;
 import org.tikito.dto.security.SecurityHoldingFilter;
 import org.tikito.dto.security.SecurityTransactionDto;
 import org.tikito.entity.Job;
+import org.tikito.entity.security.Isin;
 import org.tikito.entity.security.SecurityHolding;
 import org.tikito.entity.security.SecurityTransaction;
 import org.tikito.repository.*;
@@ -25,12 +28,21 @@ public class SecurityTransactionService {
     private final SecurityHoldingRepository securityHoldingRepository;
     private final JobService jobService;
     private final CacheService cacheService;
+    private final AccountRepository accountRepository;
+    private final IsinRepository isinRepository;
 
-    public SecurityTransactionService(final SecurityTransactionRepository securityTransactionRepository, final SecurityHoldingRepository securityHoldingRepository, final JobService jobService, final CacheService cacheService) {
+    public SecurityTransactionService(final SecurityTransactionRepository securityTransactionRepository,
+                                      final SecurityHoldingRepository securityHoldingRepository,
+                                      final JobService jobService,
+                                      final CacheService cacheService,
+                                      final AccountRepository accountRepository,
+                                      final IsinRepository isinRepository) {
         this.securityTransactionRepository = securityTransactionRepository;
         this.securityHoldingRepository = securityHoldingRepository;
         this.jobService = jobService;
         this.cacheService = cacheService;
+        this.accountRepository = accountRepository;
+        this.isinRepository = isinRepository;
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -58,11 +70,25 @@ public class SecurityTransactionService {
         return transactions
                 .map(SecurityTransaction::toDto)
                 .map(transaction -> {
-                    if(transaction.getSecurityId() != null) {
+                    if (transaction.getSecurityId() != null) {
                         transaction.setSecurity(cacheService.getSecurity(transaction.getSecurityId()));
                     }
                     return transaction;
                 })
                 .toList();
+    }
+
+    public SecurityTransactionDto createOrUpdate(final long userId, final CreateOrUpdateSecurityTransactionRequest request) {
+        accountRepository.findByUserIdAndIdAndAccountType(userId, request.getAccountId(), AccountType.SECURITY).orElseThrow();
+        final Isin isin = isinRepository.findById(request.getIsin()).orElseThrow();
+        final SecurityTransaction transaction;
+        if(request.hasId()) {
+            transaction = securityTransactionRepository.findById(request.getId()).orElseThrow();
+        } else {
+            transaction = new SecurityTransaction();
+            transaction.setUserId(userId);
+        }
+        transaction.updateFrom(request, isin.getSecurityId());
+        return securityTransactionRepository.saveAndFlush(transaction).toDto();
     }
 }

@@ -43,6 +43,10 @@
             <mat-icon>delete</mat-icon>
             <span>{{ 'delete' | translate }}</span>
           </button>
+          <button mat-menu-item (click)="onEditTransaction(element)">
+            <mat-icon>edit</mat-icon>
+            <span>{{ 'edit' | translate }}</span>
+          </button>
         </mat-menu>
       </td>
     </ng-container>
