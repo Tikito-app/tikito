@@ -68,12 +68,9 @@ public class AccountService {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public AccountDto createOrUpdate(final long userId, final CreateOrUpdateAccountRequest request) throws ResourceNotFoundException {
-        Account account = new Account(userId);
+        final Account account = request.isNew() ? new Account(userId) : accountRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
         if (!securityRepository.existsById(request.getCurrencyId())) {
             throw new ResourceNotFoundException(request.getCurrencyId());
-        }
-        if (request.getId() != 0) {
-            account = accountRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
         }
         if(accountRepository.countByAccountNumberAndNotMyId(userId, request.getAccountNumber(), account.getId()) > 0) {
             throw new AccountNumberAlreadyExistsException();

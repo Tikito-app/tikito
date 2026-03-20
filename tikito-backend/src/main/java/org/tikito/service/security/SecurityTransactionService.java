@@ -79,15 +79,10 @@ public class SecurityTransactionService {
     }
 
     public SecurityTransactionDto createOrUpdate(final long userId, final CreateOrUpdateSecurityTransactionRequest request) {
-        accountRepository.findByUserIdAndIdAndAccountType(userId, request.getAccountId(), AccountType.SECURITY).orElseThrow();
         final Isin isin = isinRepository.findById(request.getIsin()).orElseThrow();
-        final SecurityTransaction transaction;
-        if(request.hasId()) {
-            transaction = securityTransactionRepository.findById(request.getId()).orElseThrow();
-        } else {
-            transaction = new SecurityTransaction();
-            transaction.setUserId(userId);
-        }
+        final SecurityTransaction transaction = request.isNew() ? new SecurityTransaction(userId) :  securityTransactionRepository.findById(request.getId()).orElseThrow();
+        accountRepository.findByUserIdAndIdAndAccountType(userId, request.getAccountId(), AccountType.SECURITY).orElseThrow();
+
         transaction.updateFrom(request, isin.getSecurityId());
         return securityTransactionRepository.saveAndFlush(transaction).toDto();
     }

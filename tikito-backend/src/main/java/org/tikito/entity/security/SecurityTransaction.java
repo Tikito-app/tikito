@@ -52,6 +52,10 @@ public class SecurityTransaction {
         this.exchangeRate = line.getExchangeRate();
     }
 
+    public SecurityTransaction(final long userId) {
+        this.userId = userId;
+    }
+
     public void updateFrom(final CreateOrUpdateSecurityTransactionRequest request, final long securityId) {
         this.accountId = request.getAccountId();
         this.isin = request.getIsin();

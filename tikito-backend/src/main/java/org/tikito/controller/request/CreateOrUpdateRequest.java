@@ -8,7 +8,7 @@ import lombok.Setter;
 public abstract class CreateOrUpdateRequest {
     protected Long id;
 
-    public boolean hasId() {
-        return id != null && id > 0;
+    public boolean isNew() {
+        return id == null || id < 1;
     }
 }

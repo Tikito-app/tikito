@@ -3,7 +3,6 @@ package org.tikito.controller.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.tikito.dto.DateRange;
 
@@ -12,8 +11,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor
-public class CreateOrUpdateLoanRequest {
+public class CreateOrUpdateLoanRequest extends CreateOrUpdateRequest {
     private Long id;
     private long loanId;
     @NotNull

@@ -74,6 +74,10 @@ public class MoneyTransactionGroup {
         this.accountIds = new HashSet<>(accountIds);
     }
 
+    public MoneyTransactionGroup(final long userId) {
+        this.userId = userId;
+    }
+
     public MoneyTransactionGroupDto toDto() {
         return new MoneyTransactionGroupDto(
                 id,
