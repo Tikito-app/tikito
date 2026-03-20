@@ -3,7 +3,6 @@ package org.tikito.controller.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.tikito.dto.loan.LoanInterestDto;
 import org.tikito.dto.loan.LoanType;
@@ -14,9 +13,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
-public class CreateOrUpdateLoanPartRequest {
-    private Long id;
+public class CreateOrUpdateLoanPartRequest extends CreateOrUpdateRequest {
     private long loanId;
     @NotBlank
     private String name;
@@ -29,8 +26,4 @@ public class CreateOrUpdateLoanPartRequest {
     private long currencyId;
     private List<LoanInterestDto> interests = new ArrayList<>();
     private Double repaymentAmount;
-
-    public boolean isNew() {
-        return id == null || id == 0;
-    }
 }

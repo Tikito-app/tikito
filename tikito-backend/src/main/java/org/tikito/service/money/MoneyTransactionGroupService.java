@@ -61,15 +61,7 @@ public class MoneyTransactionGroupService implements JobProcessor {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public MoneyTransactionGroupDto createOrUpdateGroup(final long userId, final @Valid @NotNull CreateOrUpdateMoneyTransactionGroupRequest request) {
-        final MoneyTransactionGroup group;
-
-        if (request.getId() != 0) {
-            group = groupRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
-        } else {
-            group = new MoneyTransactionGroup();
-            group.setUserId(userId);
-            group.setQualifiers(new ArrayList<>());
-        }
+        final MoneyTransactionGroup group = request.isNew() ? new MoneyTransactionGroup(userId) : groupRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
         final Map<Long, MoneyTransactionGroupQualifier> existingQualifiersMap = group.getQualifiers().stream().collect(Collectors.toMap(MoneyTransactionGroupQualifier::getId, Function.identity()));
         group.setName(request.getName());
         group.getQualifiers().clear();
