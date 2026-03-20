@@ -10,8 +10,12 @@
   "search-filter": "Search filter",
   "initial-installation": "Initial installation",
   "loading": "Loading...",
+  "snackbar/close": "close",
 
-  "AccountNumberAlreadyExistsException": "The account number already exists on a different account",
+  "exception.AccountNumberAlreadyExistsException": "The account number already exists on a different account",
+  "exception.InvalidCredentialsException": "The supplied credentials are invalid",
+  "exception.PasswordNotLongEnoughException": "The password is not long enough, it must be at least 10 characters long",
+  "exception.UnsupportedImportFormatException": "The imported file is not supported",
 
   "------------ REGISTER USER -----------":"",
   "register/first-ever-user-text": "Welcome to a fresh installation of Tikito. After filling in your details, we will setup the system and you can login. Your password must be more than 10 characters long",
@@ -192,7 +196,15 @@
 
 
   "--------------- BUDGET ---------------------": "",
-  "budget": "Budget",
+  "budget/budget": "Budget",
+  "budget/overview": "Overview",
+  "budget/list": "List",
+  "budget/create-budget": "Create",
+  "budget/name": "Name",
+  "budget/amount": "Amount",
+  "budget/date-range": "Date range",
+  "budget/date-range-amount": "Date range amount",
+  "budget/money-transaction-groups": "Money transaction groups",
 
 
   "--------------- ADMIN ---------------------": "",

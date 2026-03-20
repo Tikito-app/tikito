@@ -52,14 +52,13 @@ public class UserAccountService {
         this.userPreferenceRepository = userPreferenceRepository;
     }
 
-
     public LoggedInUserDto login(final LoginRequest request) throws InvalidCredentialsException {
         log.info("Logging in {}", request.getEmail());
-        final UserAccount userAccount = userAccountRepository.findByEmail(request.getEmail()).orElseThrow(() -> new InvalidCredentialsException("invalid"));
+        final UserAccount userAccount = userAccountRepository.findByEmail(request.getEmail()).orElseThrow(InvalidCredentialsException::new);
         if (!PasswordUtil.checkBcryptHash(request.getPassword().toCharArray(), userAccount.getPassword())) {
-            throw new InvalidCredentialsException("Invalid");
+            throw new InvalidCredentialsException();
         } else if (!userAccount.isActivated()) {
-            throw new InvalidCredentialsException("invalid");
+            throw new InvalidCredentialsException();
         }
         final String jwt = JwtGeneratorService.generateJwt(userAccount.toAuthUser(), Arrays.asList(Scope.values()));
 
@@ -69,7 +68,7 @@ public class UserAccountService {
     }
 
     public LoggedInUserDto getLoggedInUser(final AuthUser authUser) {
-        final UserAccount userAccount = userAccountRepository.findById(authUser.getId()).orElseThrow(() -> new InvalidCredentialsException("invalid"));
+        final UserAccount userAccount = userAccountRepository.findById(authUser.getId()).orElseThrow(InvalidCredentialsException::new);
 
         return new LoggedInUserDto(
                 userAccount,
