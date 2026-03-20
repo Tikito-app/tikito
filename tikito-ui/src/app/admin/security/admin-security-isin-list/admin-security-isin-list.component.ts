@@ -16,7 +16,6 @@ import {Security} from "../../../dto/security/security";
 import {PaginatorComponent} from "../../../components/paginator/paginator.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../../service/auth.service";
-import {TranslatePipe} from "@ngx-translate/core";
 import {DialogService} from "../../../service/dialog.service";
 import {AdminApi} from "../../../api/admin-api";
 import {Isin} from "../../../dto/isin";
@@ -26,7 +25,8 @@ import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {NgIf} from "@angular/common";
 import {TranslateService} from "../../../service/translate.service";
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {TranslatePipe} from "../../../service/translate-pipe.pipe";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-admin-security-isin-list',
@@ -47,13 +47,13 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatTable,
     NgIf,
     PaginatorComponent,
-    TranslatePipe,
     MatMenuTrigger,
     MatHeaderCellDef,
+    TranslatePipe,
+    TranslatePipe,
     MatCard,
-    MatCardContent
+    MatCardHeader
   ],
-  providers: [TranslatePipe],
   templateUrl: './admin-security-isin-list.component.html',
   styleUrl: './admin-security-isin-list.component.scss'
 })

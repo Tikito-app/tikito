@@ -1,6 +1,6 @@
 import {Component, computed, EventEmitter, inject, model, OnInit, Output, signal} from '@angular/core';
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {MoneyTransactionListComponent} from "../money-transaction-list/money-transaction-list.component";
 import {MoneyTransactionGraphComponent} from "../money-transaction-graph/money-transaction-graph.component";
 import {ActivatedRoute} from "@angular/router";
@@ -44,7 +44,6 @@ import {AuthService} from "../../service/auth.service";
   imports: [
     MatTabGroup,
     MatTab,
-    TranslatePipe,
     MoneyTransactionListComponent,
     MoneyTransactionGraphComponent,
     MatCard,
@@ -72,7 +71,8 @@ import {AuthService} from "../../service/auth.service";
     MatChipsModule,
     PopoverComponent,
     NgIf,
-    FormsModule
+    FormsModule,
+    TranslatePipe
   ],
   templateUrl: './money-transaction-overview.component.html',
   styleUrl: './money-transaction-overview.component.scss',

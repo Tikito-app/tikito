@@ -1,20 +1,21 @@
 <div class="main-side-column main-column">
   <mat-form-field>
-    <mat-label>{{ 'money/filter' | translate }}</mat-label>
+    <mat-label>{{ 'money/filter' | translatePipe }}</mat-label>
     <input matInput (keyup)="applyFilter($event)" #input>
   </mat-form-field>
 </div>
 <div class="main-center-column-small main-column" *ngIf="moneyTransactionGroups.length == 0">
-  {{'money/group/introduction-text' | translate}}
+  {{'money/group/introduction-text' | translatePipe}}
 </div>
 <div class="main-center-column-small main-column" *ngIf="moneyTransactionGroups.length > 0">
+
   @if(dataSource) {
     <mat-card>
-      <mat-card-content>
+      <mat-card-header>
         <table mat-table [dataSource]="dataSource" class="full-width">
 
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>{{'money/transaction-group/name' | translate}}</th>
+            <th mat-header-cell *matHeaderCellDef>{{'money/transaction-group/name' | translatePipe}}</th>
             <td mat-cell *matCellDef="let element"> {{element.name}} </td>
           </ng-container>
 
@@ -26,7 +27,7 @@
           </tr>
         </table>
         <app-paginator></app-paginator>
-      </mat-card-content>
+      </mat-card-header>
     </mat-card>
   }
 </div>

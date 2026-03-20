@@ -13,7 +13,7 @@ import {
   MatTableDataSource
 } from "@angular/material/table";
 import {Router} from "@angular/router";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {DatePipe, NgIf} from "@angular/common";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
 import {SecurityApi} from "../../api/security-api";
@@ -25,11 +25,10 @@ import {AuthService} from "../../service/auth.service";
 import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
-import MoneyTransaction from "../../dto/money/money-transaction";
 import {DialogService} from "../../service/dialog.service";
 import {TranslateService} from "../../service/translate.service";
-import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatSort} from "@angular/material/sort";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-security-transaction-list',
@@ -45,7 +44,7 @@ import {MatSort} from "@angular/material/sort";
     MatHeaderCellDef,
     MatCellDef,
     MatRowDef,
-    TranslatePipe,
+    NgIf,
     PaginatorComponent,
     DatePipe,
     CurrencyComponent,
@@ -54,11 +53,11 @@ import {MatSort} from "@angular/material/sort";
     MatMenu,
     MatMenuItem,
     MatMenuTrigger,
+    TranslatePipe,
+    MatSort,
     MatCard,
-    MatCardContent,
-    MatSort
+    MatCardHeader
   ],
-  providers: [TranslatePipe],
   templateUrl: './security-transaction-list.component.html',
   styleUrl: './security-transaction-list.component.scss'
 })

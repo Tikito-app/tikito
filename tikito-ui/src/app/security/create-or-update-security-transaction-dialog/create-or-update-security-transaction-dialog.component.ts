@@ -8,7 +8,6 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import {MatFormField, MatHint, MatInput, MatLabel, MatSuffix} from "@angular/material/input";
-import {TranslatePipe} from "@ngx-translate/core";
 import {SecurityTransaction} from "../../dto/security/security-transaction";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
@@ -20,11 +19,11 @@ import {UserPreferenceService} from "../../service/user-preference-service";
 import {UserPreference} from "../../dto/user-preference";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {NgIf} from "@angular/common";
-import {TranslatePipePipe} from "../../service/translate-pipe.pipe";
 import {SecurityApi} from "../../api/security-api";
 import {AccountApi} from "../../api/account-api";
 import {Account} from "../../dto/account";
 import {AccountType} from "../../dto/account-type";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 
 export interface MyData {
   transaction: SecurityTransaction;
@@ -39,7 +38,6 @@ export interface MyData {
     MatDialogContent,
     MatDialogTitle,
     MatLabel,
-    TranslatePipe,
     FormsModule,
     MatFormField,
     MatIcon,
@@ -53,9 +51,9 @@ export interface MyData {
     MatHint,
     MatSuffix,
     NgIf,
-    TranslatePipePipe
+    TranslatePipe,
   ],
-  providers: [provideNativeDateAdapter(), TranslatePipe],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './create-or-update-security-transaction-dialog.component.html',
   styleUrl: './create-or-update-security-transaction-dialog.component.scss'
 })

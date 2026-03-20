@@ -14,7 +14,7 @@ import {
   MatTableDataSource
 } from "@angular/material/table";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {UserAccount} from "../../dto/user-account";
 import {AuthService} from "../../service/auth.service";
 import {AdminApi} from "../../api/admin-api";
@@ -36,7 +36,6 @@ import {Router} from "@angular/router";
   imports: [
     MatCell,
     MatCellDef,
-    TranslatePipe,
     MatColumnDef,
     MatHeaderCell,
     MatHeaderRow,
@@ -46,7 +45,6 @@ import {Router} from "@angular/router";
     MatTable,
     NgIf,
     PaginatorComponent,
-    TranslatePipe,
     MatHeaderCellDef,
     MatIcon,
     MatButton,
@@ -59,9 +57,9 @@ import {Router} from "@angular/router";
     MatInput,
     MatLabel,
     MatSuffix,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslatePipe
   ],
-  providers: [TranslatePipe],
   templateUrl: './admin-users.component.html',
   styleUrl: './admin-users.component.scss'
 })

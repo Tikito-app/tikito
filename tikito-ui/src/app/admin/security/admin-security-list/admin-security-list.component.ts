@@ -17,7 +17,6 @@ import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {NgIf} from "@angular/common";
 import {PaginatorComponent} from "../../../components/paginator/paginator.component";
-import {TranslatePipe} from "@ngx-translate/core";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../service/auth.service";
 import {DialogService} from "../../../service/dialog.service";
@@ -28,7 +27,8 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {SecurityType} from "../../../dto/security/security-type";
 import {TranslateService} from "../../../service/translate.service";
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {TranslatePipe} from "../../../service/translate-pipe.pipe";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-admin-security-list',
@@ -49,16 +49,16 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatTable,
     NgIf,
     PaginatorComponent,
-    TranslatePipe,
     MatMenuTrigger,
     MatHeaderCellDef,
     MatFormField,
     MatInput,
     MatLabel,
+    TranslatePipe,
+    TranslatePipe,
     MatCard,
-    MatCardContent
+    MatCardHeader
   ],
-  providers: [TranslatePipe],
   templateUrl: './admin-security-list.component.html',
   styleUrl: './admin-security-list.component.scss'
 })

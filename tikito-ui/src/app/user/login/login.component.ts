@@ -1,17 +1,13 @@
-import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
-import { CommonModule } from '@angular/common'
-import {FormControl, FormGroup} from "@angular/forms";
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
-import {DOCUMENT} from "@angular/common";
-import {TranslateService} from "@ngx-translate/core";
+import {Component, Inject, OnInit} from '@angular/core';
+import {CommonModule, DOCUMENT} from '@angular/common'
+import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {ActivatedRoute, Router} from "@angular/router";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../environments/environment";
 import {HttpRequestData} from "../../dto/http-request-data";
 import {HttpService} from "../../service/http.service";
 import {Util} from "../../util";
 import {MatCardModule} from "@angular/material/card";
-import {TranslateModule} from "@ngx-translate/core";
-import {ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
 import {I18nModule} from "../../i18n/i18n.module";
@@ -25,6 +21,7 @@ import {AuthService} from "../../service/auth.service";
 import {LoggedInUser} from "../../dto/logged-in-user";
 import {ServerResponse} from "../../dto/server-response";
 import {EnvService} from "../../service/env.service";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 
 @Component({
   selector: 'app-login',
@@ -43,7 +40,7 @@ import {EnvService} from "../../service/env.service";
     MatOptionModule,
     MatSelectModule,
     MatSidenavModule,
-    MatToolbarModule, RouterLink]
+    MatToolbarModule, TranslatePipe]
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
@@ -76,14 +73,14 @@ export class LoginComponent implements OnInit {
 
     // let jwt = localStorage.getItem('jwt');
     let jwt: string | null = this.authService.getJwtFromStorage();
-    if(!Util.isJwtValid(jwt)) {
+    if (!Util.isJwtValid(jwt)) {
       jwt = null;
       AuthService.deleteAllCookies();
       // localStorage.clear();
     }
-    if(Util.hasText(jwt) && this.redirectUrl != '' && this.redirectUrl != null) {
+    if (Util.hasText(jwt) && this.redirectUrl != '' && this.redirectUrl != null) {
       window.location.href = this.redirectUrl + jwt;
-    } else if(Util.hasText(jwt)) {
+    } else if (Util.hasText(jwt)) {
       this.authenticated = true;
     }
   }
@@ -107,7 +104,7 @@ export class LoginComponent implements OnInit {
           // localStorage.setItem('jwt', jwt.jwt);
           // this.authService.setCookie('jwt', jwt.jwt, 7);
 
-          if(this.redirectUrl != null) {
+          if (this.redirectUrl != null) {
             window.location.href = this.redirectUrl;// + jwt.jwt;
           } else {
             this.router.navigate(['/']);

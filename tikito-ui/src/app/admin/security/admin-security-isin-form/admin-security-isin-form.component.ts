@@ -9,7 +9,7 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/mat
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {NgIf} from "@angular/common";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../../service/translate-pipe.pipe";
 
 @Component({
   selector: 'app-admin-security-isin-form',
@@ -25,9 +25,9 @@ import {TranslatePipe} from "@ngx-translate/core";
     MatLabel,
     NgIf,
     ReactiveFormsModule,
+    TranslatePipe,
     TranslatePipe
   ],
-  providers: [TranslatePipe],
   templateUrl: './admin-security-isin-form.component.html',
   styleUrl: './admin-security-isin-form.component.scss'
 })

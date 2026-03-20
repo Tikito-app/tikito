@@ -3,7 +3,7 @@ import {NgIf} from "@angular/common";
 import {MatOption} from "@angular/material/core";
 import {MatFormField, MatLabel, MatSelect} from "@angular/material/select";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../../service/translate-pipe.pipe";
 import {Util} from "../../../util";
 import {
   MatCell,
@@ -23,7 +23,7 @@ import {ImportFileProcessState} from "../../../dto/import-file-process-state";
 import {AccountType} from "../../../dto/account-type";
 import {UserPreferenceService} from "../../../service/user-preference-service";
 import {UserPreference} from "../../../dto/user-preference";
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-select-columns',
@@ -32,7 +32,6 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatOption,
     MatSelect,
     ReactiveFormsModule,
-    TranslatePipe,
     MatFormField,
     MatLabel,
     MatCell,
@@ -47,8 +46,9 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     NgIf,
     MatHeaderCellDef,
     MatInput,
+    TranslatePipe,
     MatCard,
-    MatCardContent
+    MatCardHeader
   ],
   templateUrl: './select-columns.component.html',
   styleUrl: './select-columns.component.scss'

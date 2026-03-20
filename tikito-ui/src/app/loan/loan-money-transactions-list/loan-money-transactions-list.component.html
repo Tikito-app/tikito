@@ -2,35 +2,36 @@
   <mat-label>Filter</mat-label>
   <input matInput (keyup)="applyFilter($event)" #input>
 </mat-form-field>
+
 @if(dataSource) {
   <mat-card>
-    <mat-card-content>
+    <mat-card-header>
       <table mat-table [dataSource]="dataSource">
 
         <ng-container matColumnDef="timestamp">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/date' | translate }}</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/date' | translatePipe }}</th>
           <td mat-cell *matCellDef="let element"> {{ element.timestamp | date : Util.DATE_FORMAT }}</td>
         </ng-container>
 
         <ng-container matColumnDef="counterpart-account-name">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/counterparty-account-name' | translate }}</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/counterparty-account-name' | translatePipe }}</th>
           <td mat-cell *matCellDef="let element"> {{ element.counterpartAccountName }}</td>
         </ng-container>
 
         <ng-container matColumnDef="counterpart-account-number">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/counterparty-account-number' | translate }}</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/counterparty-account-number' | translatePipe }}</th>
           <td mat-cell *matCellDef="let element"> {{ element.counterpartAccountNumber }}</td>
         </ng-container>
 
         <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/amount' | translate }}</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/amount' | translatePipe }}</th>
           <td mat-cell *matCellDef="let element">
             <app-currency [amount]="element.amount" [currencyId]="element.currencyId"></app-currency>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/description' | translate }}</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/description' | translatePipe }}</th>
           <td mat-cell *matCellDef="let element"> {{ element.description }}</td>
         </ng-container>
 
@@ -38,7 +39,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
 
-     <app-paginator></app-paginator>
-    </mat-card-content>
+      <app-paginator></app-paginator>
+    </mat-card-header>
   </mat-card>
 }

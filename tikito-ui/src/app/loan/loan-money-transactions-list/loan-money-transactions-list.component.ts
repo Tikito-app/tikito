@@ -17,7 +17,7 @@ import {
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import MoneyTransaction from "../../dto/money/money-transaction";
 import {MatSort} from "@angular/material/sort";
 import {AuthService} from "../../service/auth.service";
@@ -25,7 +25,7 @@ import {DialogService} from "../../service/dialog.service";
 import {TranslateService} from "../../service/translate.service";
 import {MoneyApi} from "../../api/money-api";
 import {Util} from "../../util";
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-loan-money-transactions-list',
@@ -46,10 +46,10 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatRowDef,
     MatTable,
     PaginatorComponent,
-    TranslatePipe,
     MatHeaderCellDef,
+    TranslatePipe,
     MatCard,
-    MatCardContent
+    MatCardHeader
   ],
   templateUrl: './loan-money-transactions-list.component.html',
   styleUrl: './loan-money-transactions-list.component.scss'

@@ -1,38 +1,38 @@
 <form [formGroup]="form">
   @if(dataSource) {
     <mat-card>
-      <mat-card-content>
+      <mat-card-header>
         <table mat-table [dataSource]="dataSource">
 
           @for (columnInFile of state.parsedContent[0]; track columnInFile; let i = $index) {
             <ng-container matColumnDef="column-{{i}}">
               <th mat-header-cell *matHeaderCellDef>
-                {{ columnInFile | translate }}
+                {{ columnInFile | translatePipe }}
                 <mat-form-field>
                   <mat-select formControlName="column-{{i}}" [attr.data-cy]="'transaction-field'" (selectionChange)="onColumnChanged()">
                     @for (requiredColumn of requiredColumns; track requiredColumns) {
-                      <mat-option [value]="requiredColumn">{{'account/import/required-column-' + requiredColumn | translate}}</mat-option>
+                      <mat-option [value]="requiredColumn">{{'account/import/required-column-' + requiredColumn | translatePipe}}</mat-option>
                     }
                   </mat-select>
                 </mat-form-field>
 
                 <mat-form-field appearance="fill" *ngIf="displayBuySellValueFieldOnColumn == i">
-                  <mat-label>{{ 'account/import/buy-value' | translate }}</mat-label>
+                  <mat-label>{{ 'account/import/buy-value' | translatePipe }}</mat-label>
                   <input type="text" [attr.data-cy]="'buy-value'" matInput formControlName="buy-value">
                 </mat-form-field>
 
                 <mat-form-field appearance="fill" *ngIf="displayTimestampFormatFieldOnColumn == i">
-                  <mat-label>{{ 'account/import/timestamp-format' | translate }}</mat-label>
+                  <mat-label>{{ 'account/import/timestamp-format' | translatePipe }}</mat-label>
                   <input type="text" [attr.data-cy]="'timestamp-format'" matInput formControlName="timestamp-format">
                 </mat-form-field>
 
                 <mat-form-field appearance="fill" *ngIf="displayDateFormatFieldOnColumn == i">
-                  <mat-label>{{ 'account/import/date-format' | translate }}</mat-label>
+                  <mat-label>{{ 'account/import/date-format' | translatePipe }}</mat-label>
                   <input type="text" [attr.data-cy]="'date-format'" matInput formControlName="date-format" (change)="UserPreferenceService.onInputChange(UserPreference.IMPORT_DATE_FORMAT, $event)">
                 </mat-form-field>
 
                 <mat-form-field appearance="fill" *ngIf="displayTimeFormatFieldOnColumn == i">
-                  <mat-label>{{ 'account/import/time-format' | translate }}</mat-label>
+                  <mat-label>{{ 'account/import/time-format' | translatePipe }}</mat-label>
                   <input type="text" [attr.data-cy]="'time-format'" matInput formControlName="time-format">
                 </mat-form-field>
 
@@ -43,7 +43,7 @@
           <tr mat-header-row *matHeaderRowDef="columns"></tr>
           <tr mat-row *matRowDef="let row; columns: columns;"></tr>
         </table>
-      </mat-card-content>
+      </mat-card-header>
     </mat-card>
   }
 </form>

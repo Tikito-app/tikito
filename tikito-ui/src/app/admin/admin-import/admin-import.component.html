@@ -1,8 +1,8 @@
 <div class="main-side-column main-column">
-  <button mat-button (click)="routeToAdmin();"><mat-icon>arrow_back</mat-icon> {{'admin/back-to-admin' | translate}}</button>
+  <button mat-button (click)="routeToAdmin();"><mat-icon>arrow_back</mat-icon> {{'admin/back-to-admin' | translatePipe}}</button>
 </div>
 <div class="main-center-column-small main-column">
-    {{'admin/export-text' | translate}}
+    {{'admin/export-text' | translatePipe}}
     <app-admin-import-export-setting></app-admin-import-export-setting>
 
     <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload/>
@@ -10,7 +10,7 @@
   <button mat-raised-button
           color="primary"
           *ngIf="file"
-          (click)="onImportClicked()">{{ 'admin/export' | translate }}
+          (click)="onImportClicked()">{{ 'admin/export' | translatePipe }}
   </button>
 </div>
 <div class="main-side-column main-column">

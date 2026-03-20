@@ -18,10 +18,10 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {LoanApi} from "../../api/loan-api";
 import {Loan} from "../../dto/loan";
 import {NgIf} from "@angular/common";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {AuthService} from "../../service/auth.service";
 import {LoanPart} from "../../dto/loan-part";
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-loan-part-list',
@@ -38,10 +38,10 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatTable,
     NgIf,
     PaginatorComponent,
-    TranslatePipe,
     MatHeaderCellDef,
+    TranslatePipe,
     MatCard,
-    MatCardContent
+    MatCardHeader
   ],
   templateUrl: './loan-part-list.component.html',
   styleUrl: './loan-part-list.component.scss'

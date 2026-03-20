@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {SecurityHoldingGraphComponent} from "../security-holding-graph/security-holding-graph.component";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {Util} from "../../util";
 import {SecurityTransactionListComponent} from "../security-transaction-list/security-transaction-list.component";
@@ -33,7 +33,6 @@ import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
     MatTab,
     MatTabGroup,
     SecurityHoldingGraphComponent,
-    TranslatePipe,
     SecurityTransactionListComponent,
     NgIf,
     MatButton,
@@ -55,11 +54,12 @@ import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
     MatCheckbox,
     PopoverComponent,
     MatRadioButton,
-    MatRadioGroup
+    MatRadioGroup,
+    TranslatePipe
   ],
   templateUrl: './security-holding-overview.component.html',
   styleUrl: './security-holding-overview.component.scss',
-  providers: [provideNativeDateAdapter(), TranslatePipe],
+  providers: [provideNativeDateAdapter()],
 })
 export class SecurityHoldingOverviewComponent implements OnInit {
   holdingIds: string = '';

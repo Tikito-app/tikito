@@ -1,36 +1,36 @@
 @if(dataSource) {
   <mat-card>
-    <mat-card-content>
+    <mat-card-header>
       <table mat-table [dataSource]="dataSource" matSort  >
 
         <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef>{{'security/transaction/date' | translate}}</th>
+          <th mat-header-cell *matHeaderCellDef>{{'security/transaction/date' | translatePipe}}</th>
           <td mat-cell *matCellDef="let element"> {{element.timestamp | date : Util.TIMESTAMP_FORMAT}} </td>
         </ng-container>
 
         <ng-container matColumnDef="transaction-type">
-          <th mat-header-cell *matHeaderCellDef>{{'security/transaction/transaction-type' | translate}}</th>
+          <th mat-header-cell *matHeaderCellDef>{{'security/transaction/transaction-type' | translatePipe}}</th>
           <td mat-cell *matCellDef="let element"> {{element.transactionType}} </td>
         </ng-container>
 
         <ng-container matColumnDef="trading-company">
-          <th mat-header-cell *matHeaderCellDef>{{'security' | translate}}</th>
+          <th mat-header-cell *matHeaderCellDef>{{'security' | translatePipe}}</th>
           <td mat-cell *matCellDef="let element"> {{element.security?.name}} </td>
         </ng-container>
 
         <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef>{{'security/transaction/amount' | translate}}</th>
+          <th mat-header-cell *matHeaderCellDef>{{'security/transaction/amount' | translatePipe}}</th>
           <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
         </ng-container>
 
         <ng-container matColumnDef="price">
-          <th mat-header-cell *matHeaderCellDef>{{'security/transaction/price' | translate}}</th>
+          <th mat-header-cell *matHeaderCellDef>{{'security/transaction/price' | translatePipe}}</th>
           <td mat-cell *matCellDef="let element"><app-currency [amount]="element.price" [currencyId]="element.currencyId"></app-currency></td>
         </ng-container>
 
 
         <ng-container matColumnDef="currency">
-          <th mat-header-cell *matHeaderCellDef>{{'currency' | translate}}</th>
+          <th mat-header-cell *matHeaderCellDef>{{'currency' | translatePipe}}</th>
           <td mat-cell *matCellDef="let element"> {{element.currency}} </td>
         </ng-container>
 
@@ -43,11 +43,11 @@
             <mat-menu #menu="matMenu">
               <button mat-menu-item (click)="onDeleteTransaction(element)">
                 <mat-icon>delete</mat-icon>
-                <span>{{ 'delete' | translate }}</span>
+                <span>{{ 'delete' | translatePipe }}</span>
               </button>
               <button mat-menu-item (click)="onEditTransaction(element)">
                 <mat-icon>edit</mat-icon>
-                <span>{{ 'edit' | translate }}</span>
+                <span>{{ 'edit' | translatePipe }}</span>
               </button>
             </mat-menu>
           </td>
@@ -58,6 +58,6 @@
       </table>
 
       <app-paginator></app-paginator>
-    </mat-card-content>
+    </mat-card-header>
   </mat-card>
 }

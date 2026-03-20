@@ -2,7 +2,7 @@
 
 <div class="main-center-column-small main-column">
   <div *ngIf="accounts.length == 0">
-<!--    {{'account/introduction-text' | translate}}-->
+<!--    {{'account/introduction-text' | translatePipePipePipe}}-->
   </div>
   @if(accounts.length > 0) {
     <mat-card>
@@ -10,22 +10,22 @@
         <table mat-table [dataSource]="dataSource">
 
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>{{'user-account/name' | translate}}</th>
+            <th mat-header-cell *matHeaderCellDef>{{'user-account/name' | translatePipe}}</th>
             <td mat-cell *matCellDef="let element"> {{element.name}} </td>
           </ng-container>
 
           <ng-container matColumnDef="account-number">
-            <th mat-header-cell *matHeaderCellDef>{{'user-account/account-number' | translate}}</th>
+            <th mat-header-cell *matHeaderCellDef>{{'user-account/account-number' | translatePipe}}</th>
             <td mat-cell *matCellDef="let element"> {{element.accountNumber}} </td>
           </ng-container>
 
           <ng-container matColumnDef="account-type">
-            <th mat-header-cell *matHeaderCellDef>{{'account/type' | translate}}</th>
-            <td mat-cell *matCellDef="let element"> {{'account/type/' + element.accountType | translate}} </td>
+            <th mat-header-cell *matHeaderCellDef>{{'account/type' | translatePipe}}</th>
+            <td mat-cell *matCellDef="let element"> {{'account/type/' + element.accountType | translatePipe}} </td>
           </ng-container>
 
           <ng-container matColumnDef="currency">
-            <th mat-header-cell *matHeaderCellDef>{{'currency' | translate}}</th>
+            <th mat-header-cell *matHeaderCellDef>{{'currency' | translatePipe}}</th>
             <td mat-cell *matCellDef="let element"> {{getCurrencyName(element)}} </td>
           </ng-container>
 
@@ -38,7 +38,7 @@
               <mat-menu #menu="matMenu">
                 <button mat-menu-item (click)="onDeleteAccount(element)">
                   <mat-icon>delete</mat-icon>
-                  <span>{{ 'delete' | translate }}</span>
+                  <span>{{ 'delete' | translatePipe }}</span>
                 </button>
               </mat-menu>
             </td>

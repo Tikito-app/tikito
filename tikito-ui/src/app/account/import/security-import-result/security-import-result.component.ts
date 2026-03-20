@@ -17,11 +17,11 @@ import {MatSort} from "@angular/material/sort";
 import {Util} from "../../../util";
 import {CurrencyComponent} from "../../../components/currency/currency.component";
 import {DatePipe, NgIf} from "@angular/common";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../../service/translate-pipe.pipe";
 import {SecurityTransactionImportLine} from "../../../dto/security/security-transaction-import-line";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-security-import-result',
@@ -40,13 +40,13 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatTable,
     NgIf,
     PaginatorComponent,
-    TranslatePipe,
     MatHeaderCellDef,
     MatFormField,
     MatInput,
     MatLabel,
+    TranslatePipe,
     MatCard,
-    MatCardContent
+    MatCardHeader
   ],
   templateUrl: './security-import-result.component.html',
   styleUrl: './security-import-result.component.scss'

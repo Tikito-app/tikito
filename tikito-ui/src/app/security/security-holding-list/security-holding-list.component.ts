@@ -14,7 +14,6 @@ import {
 } from "@angular/material/table";
 import {MatIcon} from "@angular/material/icon";
 import {Router} from "@angular/router";
-import {TranslatePipe} from "@ngx-translate/core";
 import {NgIf} from "@angular/common";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
 import SecurityHolding from "../../dto/security/security-holding";
@@ -41,7 +40,8 @@ import {AuthService} from "../../service/auth.service";
 import {TranslateService} from "../../service/translate.service";
 import {SecurityTransactionListComponent} from "../security-transaction-list/security-transaction-list.component";
 import {SecurityHoldingFilter} from "../../dto/security/security-holding-filter";
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-security-holding-list',
@@ -58,7 +58,6 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatCellDef,
     MatRowDef,
     MatIcon,
-    TranslatePipe,
     NgIf,
     PaginatorComponent,
     SecurityHoldingListDetailsComponent,
@@ -74,10 +73,10 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatMenuItem,
     MatMenuTrigger,
     SecurityTransactionListComponent,
+    TranslatePipe,
     MatCard,
-    MatCardContent
+    MatCardHeader
   ],
-  providers: [TranslatePipe],
   templateUrl: './security-holding-list.component.html',
   styleUrl: './security-holding-list.component.scss'
 })

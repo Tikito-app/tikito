@@ -9,7 +9,7 @@ import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {Util} from "../../util";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {BudgetApi} from "../../api/budget-api";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MoneyTransactionGroupType} from "../../dto/money-transaction-group-type";

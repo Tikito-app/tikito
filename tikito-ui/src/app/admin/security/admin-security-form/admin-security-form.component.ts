@@ -8,12 +8,12 @@ import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
 import {NgIf} from "@angular/common";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {TranslatePipe} from "@ngx-translate/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../../service/auth.service";
 import {Util} from "../../../util";
 import {AdminApi} from "../../../api/admin-api";
 import {CacheService} from "../../../service/cache-service";
+import {TranslatePipe} from "../../../service/translate-pipe.pipe";
 
 @Component({
   selector: 'app-admin-security-form',

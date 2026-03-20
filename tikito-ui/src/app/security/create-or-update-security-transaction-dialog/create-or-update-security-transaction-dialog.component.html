@@ -3,7 +3,7 @@
   <form [formGroup]="form">
 
     <mat-form-field class="full-width">
-      <mat-label>{{'security/account' | translate}}</mat-label>
+      <mat-label>{{'security/account' | translatePipe}}</mat-label>
       <mat-select [attr.data-cy]="'accountId'" formControlName="accountId">
         @for (account of accounts; track accounts) {
           <mat-option [value]="account.id">{{account.name}}</mat-option>

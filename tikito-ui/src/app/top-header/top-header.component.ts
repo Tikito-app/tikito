@@ -1,18 +1,18 @@
 import {Component, OnInit} from '@angular/core';
 import {HeaderItemComponent} from "../header-item/header-item.component";
 import {NgIf} from "@angular/common";
-import {TranslatePipe} from "@ngx-translate/core";
 import {Util} from "../util";
 import {AccountType} from "../dto/account-type";
 import {AuthService} from "../service/auth.service";
+import {TranslatePipe} from "../service/translate-pipe.pipe";
 
 @Component({
   selector: 'app-top-header',
   standalone: true,
   imports: [
     HeaderItemComponent,
-    TranslatePipe,
     NgIf,
+    TranslatePipe,
   ],
   templateUrl: './top-header.component.html',
   styleUrl: './top-header.component.scss'

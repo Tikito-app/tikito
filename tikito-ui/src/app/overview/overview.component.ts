@@ -13,13 +13,13 @@ import {AggregatedHistoricalMoneyHoldingValue} from "../dto/money/aggregated-his
 import moment from "moment/moment";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
-import {TranslatePipe} from "@ngx-translate/core";
 import {UserPreferenceService} from "../service/user-preference-service";
 import {UserPreference} from "../dto/user-preference";
 import {DurationInputArg2} from "moment";
 import {LoanApi} from "../api/loan-api";
 import {OverviewLoanComponent} from "./overview-loan/overview-loan.component";
 import {LoanValue} from "../dto/loan-value";
+import {TranslatePipe} from "../service/translate-pipe.pipe";
 
 @Component({
   selector: 'app-overview',
@@ -29,9 +29,9 @@ import {LoanValue} from "../dto/loan-value";
     FormsModule,
     NgIf,
     ReactiveFormsModule,
-    TranslatePipe,
     NgForOf,
-    OverviewLoanComponent
+    OverviewLoanComponent,
+    TranslatePipe
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss',

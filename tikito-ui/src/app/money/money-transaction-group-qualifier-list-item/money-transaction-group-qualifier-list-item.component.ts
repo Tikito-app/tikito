@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import MoneyTransactionGroupQualifier from "../../dto/money/money-transaction-group-qualifier";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 
 @Component({
   selector: 'app-money-transaction-group-qualifier-list-item',

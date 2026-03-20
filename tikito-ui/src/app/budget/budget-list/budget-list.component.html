@@ -2,33 +2,34 @@
 </div>
 <div class="main-center-column main-column">
   <mat-tab-group>
-    <mat-tab [label]="'budget/overview' | translate">
+    <mat-tab [label]="'budget/overview' | translatePipe ">
       overview
     </mat-tab>
-    <mat-tab [label]="'budget/list' | translate">
+    <mat-tab [label]="'budget/list' | translatePipe">
       <button mat-fab aria-label="Add budget" (click)="onAddBudgetButtonClicked()" class="fab-button"><mat-icon>add</mat-icon></button>
+
       @if(dataSource) {
         <mat-card>
-          <mat-card-content>
+          <mat-card-header>
             <table mat-table [dataSource]="dataSource">
 
               <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef>{{'name' | translate}}</th>
+                <th mat-header-cell *matHeaderCellDef>{{'name' | translatePipe}}</th>
                 <td mat-cell *matCellDef="let element"> {{element.name}} </td>
               </ng-container>
 
               <ng-container matColumnDef="amount">
-                <th mat-header-cell *matHeaderCellDef>{{'amount' | translate}}</th>
+                <th mat-header-cell *matHeaderCellDef>{{'amount' | translatePipe}}</th>
                 <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
               </ng-container>
 
               <ng-container matColumnDef="date-range">
-                <th mat-header-cell *matHeaderCellDef>{{'date-range' | translate}}</th>
+                <th mat-header-cell *matHeaderCellDef>{{'date-range' | translatePipe}}</th>
                 <td mat-cell *matCellDef="let element"> {{element.dateRange}} </td>
               </ng-container>
 
               <ng-container matColumnDef="groups">
-                <th mat-header-cell *matHeaderCellDef>{{'groups' | translate}}</th>
+                <th mat-header-cell *matHeaderCellDef>{{'groups' | translatePipe}}</th>
                 <td mat-cell *matCellDef="let element"> {{mapGroups(element.groups)}} </td>
               </ng-container>
 
@@ -40,7 +41,7 @@
                            showFirstLastButtons
                            aria-label="Select page">
             </mat-paginator>
-          </mat-card-content>
+          </mat-card-header>
         </mat-card>
       }
     </mat-tab>

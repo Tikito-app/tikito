@@ -8,7 +8,7 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {MoneyApi} from "../../api/money-api";
 import {AuthService} from "../../service/auth.service";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
@@ -29,11 +29,11 @@ export interface MyData {
     MatDialogContent,
     MatDialogTitle,
     MatLabel,
-    TranslatePipe,
     MatFormField,
     MatOption,
     MatSelect,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslatePipe
   ],
   templateUrl: './set-transaction-group-dialog.component.html',
   styleUrl: './set-transaction-group-dialog.component.scss'

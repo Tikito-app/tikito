@@ -1,8 +1,8 @@
-import { TranslatePipePipe } from './translate-pipe.pipe';
+import { TranslatePipe } from './translate-pipe.pipe';
 
-describe('TranslatePipePipe', () => {
+describe('TranslatePipe', () => {
   it('create an instance', () => {
-    const pipe = new TranslatePipePipe();
+    const pipe = new TranslatePipe();
     expect(pipe).toBeTruthy();
   });
 });

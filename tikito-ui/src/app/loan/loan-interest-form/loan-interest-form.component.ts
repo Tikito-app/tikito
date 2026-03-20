@@ -1,15 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../service/auth.service";
 import {LoanInterest} from "../../dto/loan-interest";
-import {LoanApi} from "../../api/loan-api";
 import {MatButton} from "@angular/material/button";
 import {MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {provideNativeDateAdapter} from "@angular/material/core";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {Util} from "../../util";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {NgIf} from "@angular/common";
@@ -26,13 +24,13 @@ import {DialogService} from "../../service/dialog.service";
     MatInput,
     MatLabel,
     ReactiveFormsModule,
-    TranslatePipe,
     MatDatepicker,
     MatDatepickerInput,
     MatDatepickerToggle,
     MatHint,
     MatSuffix,
-    NgIf
+    NgIf,
+    TranslatePipe
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './loan-interest-form.component.html',

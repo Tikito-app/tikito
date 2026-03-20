@@ -7,7 +7,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
 import {NgIf} from "@angular/common";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {Loan} from "../../dto/loan";
 import {LoanInterest} from "../../dto/loan-interest";
 import {Account} from "../../dto/account";
@@ -44,10 +44,10 @@ import {DialogService} from "../../service/dialog.service";
     MatSuffix,
     NgIf,
     ReactiveFormsModule,
-    TranslatePipe,
     LoanPartListComponent,
     MatOption,
-    MatSelect
+    MatSelect,
+    TranslatePipe
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './loan-form.component.html',

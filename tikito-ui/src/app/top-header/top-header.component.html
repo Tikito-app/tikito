@@ -2,17 +2,17 @@
   <div class="top-menu">
     <div class="top-menu-links" id="top-menu-links" style="float: left;">
       <app-header-item icon="home" [attr.data-cy]="'top-menu-home-button'" *ngIf="!initialInstallation" displayValue="Home" routerLink="/"></app-header-item>
-      <app-header-item routerLink="/account" icon="location_city" *ngIf="loggedIn" [displayValue]="'user-account' | translate"></app-header-item>
-      <app-header-item icon="account_balance" routerLink="/money-transaction" *ngIf="loggedIn" [displayValue]="'money/money' | translate"></app-header-item>
-      <app-header-item icon="group_work" routerLink="/money/transaction-group" *ngIf="loggedIn" [displayValue]="'money/transaction-group' | translate"></app-header-item>
-      <app-header-item icon="bar_chart" routerLink="/security" *ngIf="loggedIn" [displayValue]="'security/securities' | translate"></app-header-item>
+      <app-header-item routerLink="/account" icon="location_city" *ngIf="loggedIn" [displayValue]="'user-account' | translatePipe"></app-header-item>
+      <app-header-item icon="account_balance" routerLink="/money-transaction" *ngIf="loggedIn" [displayValue]="'money/money' | translatePipe"></app-header-item>
+      <app-header-item icon="group_work" routerLink="/money/transaction-group" *ngIf="loggedIn" [displayValue]="'money/transaction-group' | translatePipe"></app-header-item>
+      <app-header-item icon="bar_chart" routerLink="/security" *ngIf="loggedIn" [displayValue]="'security/securities' | translatePipe"></app-header-item>
 <!--      <app-header-item icon="bar_chart" routerLink="/budget" *ngIf="loggedIn" [displayValue]="'budget/budget' | translate"></app-header-item>-->
-      <app-header-item icon="bar_chart" routerLink="/loan" *ngIf="loggedIn" [displayValue]="'loan/loans' | translate"></app-header-item>
-      <app-header-item icon="cloud_download" routerLink="/account/import" *ngIf="loggedIn" [displayValue]="'import' | translate"></app-header-item>
-      <app-header-item icon="build" routerLink="/admin" *ngIf="loggedIn" [displayValue]="'admin' | translate"></app-header-item>
-      <app-header-item icon="person" routerLink="/login" *ngIf="!loggedIn && !initialInstallation" [displayValue]="'login' | translate"></app-header-item>
+      <app-header-item icon="bar_chart" routerLink="/loan" *ngIf="loggedIn" [displayValue]="'loan/loans' | translatePipe"></app-header-item>
+      <app-header-item icon="cloud_download" routerLink="/account/import" *ngIf="loggedIn" [displayValue]="'import' | translatePipe"></app-header-item>
+      <app-header-item icon="build" routerLink="/admin" *ngIf="loggedIn" [displayValue]="'admin' | translatePipe"></app-header-item>
+      <app-header-item icon="person" routerLink="/login" *ngIf="!loggedIn && !initialInstallation" [displayValue]="'login' | translatePipe"></app-header-item>
 <!--      <app-header-item icon="person" routerLink="/register" *ngIf="!loggedIn" [displayValue]="'register' | translate"></app-header-item>-->
-      <app-header-item icon="exit_to_app" routerLink="/logout" *ngIf="loggedIn" [displayValue]="'logout' | translate"></app-header-item>
+      <app-header-item icon="exit_to_app" routerLink="/logout" *ngIf="loggedIn" [displayValue]="'logout' | translatePipe"></app-header-item>
     </div>
     <div style="float: right"><img src="/assets/images/logo.png" style="width: 75px; height: 75px; padding-right: 50px; padding-top: 10px"/></div>
   </div>

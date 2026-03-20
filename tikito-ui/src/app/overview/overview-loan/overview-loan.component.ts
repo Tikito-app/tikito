@@ -1,10 +1,10 @@
 import {Component, Input} from '@angular/core';
 import {Loan} from "../../dto/loan";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
-import {TranslatePipe} from "@ngx-translate/core";
 import {LoanValue} from "../../dto/loan-value";
 import {CurrencyComponent} from "../../components/currency/currency.component";
 import {NgIf} from "@angular/common";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 
 @Component({
   selector: 'app-overview-loan',
@@ -14,9 +14,9 @@ import {NgIf} from "@angular/common";
     MatCardContent,
     MatCardHeader,
     MatCardTitle,
-    TranslatePipe,
     CurrencyComponent,
-    NgIf
+    NgIf,
+    TranslatePipe
   ],
   templateUrl: './overview-loan.component.html',
   styleUrl: './overview-loan.component.scss'

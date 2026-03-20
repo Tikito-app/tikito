@@ -1,31 +1,31 @@
 <div class="main-side-column main-column">
-  <button mat-button (click)="routeToSecurities();"><mat-icon>arrow_back</mat-icon> {{'admin/security/isin/back-to-securities-list' | translate}}</button>
+  <button mat-button (click)="routeToSecurities();"><mat-icon>arrow_back</mat-icon> {{'admin/security/isin/back-to-securities-list' | translatePipe}}</button>
 </div>
 
 <div class="main-center-column-small main-column">
   <h2 *ngIf="security">{{security.name}}</h2>
   @if(dataSource) {
     <mat-card>
-      <mat-card-content>
+      <mat-card-header>
         <table mat-table [dataSource]="dataSource">
 
           <ng-container matColumnDef="isin">
-            <th mat-header-cell *matHeaderCellDef>{{'security/isin' | translate}}</th>
+            <th mat-header-cell *matHeaderCellDef>{{'security/isin' | translatePipe}}</th>
             <td mat-cell *matCellDef="let element"> {{element.isin}} </td>
           </ng-container>
 
           <ng-container matColumnDef="symbol">
-            <th mat-header-cell *matHeaderCellDef>{{'security/isin/symbol' | translate}}</th>
+            <th mat-header-cell *matHeaderCellDef>{{'security/isin/symbol' | translatePipe}}</th>
             <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
           </ng-container>
 
           <ng-container matColumnDef="valid-from">
-            <th mat-header-cell *matHeaderCellDef>{{'validFrom' | translate}}</th>
+            <th mat-header-cell *matHeaderCellDef>{{'validFrom' | translatePipe}}</th>
             <td mat-cell *matCellDef="let element"> {{element.validFrom}} </td>
           </ng-container>
 
           <ng-container matColumnDef="valid-to">
-            <th mat-header-cell *matHeaderCellDef>{{'validTo' | translate}}</th>
+            <th mat-header-cell *matHeaderCellDef>{{'validTo' | translatePipe}}</th>
             <td mat-cell *matCellDef="let element"> {{element.validTo}} </td>
           </ng-container>
 
@@ -38,7 +38,7 @@
               <mat-menu #menu="matMenu">
                 <button mat-menu-item (click)="onDeleteIsin(element)">
                   <mat-icon>delete</mat-icon>
-                  <span>{{ 'delete' | translate }}</span>
+                  <span>{{ 'delete' | translatePipe }}</span>
                 </button>
               </mat-menu>
             </td>
@@ -49,9 +49,9 @@
         </table>
 
         <app-paginator></app-paginator>
-      </mat-card-content>
+      </mat-card-header>
     </mat-card>
   }
-  </div>
+</div>
 <div class="main-side-column main-column">
 </div>

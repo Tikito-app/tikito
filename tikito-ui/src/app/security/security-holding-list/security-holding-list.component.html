@@ -9,55 +9,55 @@
     <br/>
     <br/>
     <br/>
-    <mat-checkbox formControlName="showClosedPositions" (change)="onShowClosedPositionChanged($event)">{{ 'security/show-closed-positions' | translate }}
+    <mat-checkbox formControlName="showClosedPositions" (change)="onShowClosedPositionChanged($event)">{{ 'security/show-closed-positions' | translatePipe }}
     </mat-checkbox>
   </form>
 </div>
 <div class="main-center-column main-column">
 
   <mat-tab-group>
-    <mat-tab label="{{'security/holding/performance' | translate}}">
+    <mat-tab label="{{'security/holding/performance' | translatePipe}}">
       <app-aggregated-security-holdings-graph
         [showTooltip]="true"
         [showLegend]="true"
         [height]="300"></app-aggregated-security-holdings-graph>
     </mat-tab>
-    <mat-tab label="{{'security/sector' | translate}}">
+    <mat-tab label="{{'security/sector' | translatePipe}}">
       <app-trading-company-pie-graph [height]="300" [valueType]="'sector'"></app-trading-company-pie-graph>
     </mat-tab>
-    <mat-tab label="{{'security/industry' | translate}}">
+    <mat-tab label="{{'security/industry' | translatePipe}}">
       <app-trading-company-pie-graph [height]="300" [valueType]="'industry'"></app-trading-company-pie-graph>
     </mat-tab>
-    <mat-tab label="{{'currency' | translate}}">
+    <mat-tab label="{{'currency' | translatePipe}}">
       <app-trading-company-pie-graph [height]="300" [valueType]="'currency'"></app-trading-company-pie-graph>
     </mat-tab>
-    <mat-tab label="{{'security/type' | translate}}">
+    <mat-tab label="{{'security/type' | translatePipe}}">
       <app-trading-company-pie-graph [height]="300" [valueType]="'type'"></app-trading-company-pie-graph>
     </mat-tab>
   </mat-tab-group>
 
 
   <mat-tab-group>
-    <mat-tab label="{{'security/holdings' | translate}}">
+    <mat-tab label="{{'security/holdings' | translatePipe}}">
       @if(dataSource) {
         <mat-card>
-          <mat-card-content>
+          <mat-card-header>
             <table mat-table [dataSource]="dataSource">
 
               <ng-container matColumnDef="security-name">
-                <th mat-header-cell *matHeaderCellDef>{{ 'security' | translate }}</th>
+                <th mat-header-cell *matHeaderCellDef>{{ 'security' | translatePipe }}</th>
                 <td mat-cell *matCellDef="let element">
                   {{ element.security.name }} ({{element.security.lastPriceDate}})
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="security-type">
-                <th mat-header-cell *matHeaderCellDef>{{ 'security/type' | translate }}</th>
+                <th mat-header-cell *matHeaderCellDef>{{ 'security/type' | translatePipe }}</th>
                 <td mat-cell *matCellDef="let element"> {{ element.securityType }}</td>
               </ng-container>
 
               <ng-container matColumnDef="position-value">
-                <th mat-header-cell *matHeaderCellDef>{{ 'security/holding/position-value' | translate }}</th>
+                <th mat-header-cell *matHeaderCellDef>{{ 'security/holding/position-value' | translatePipe }}</th>
                 <td mat-cell *matCellDef="let element">
                   <app-currency [amount]="SecurityUtil.getPositionValue(element)"
                                 [currencyId]="element.currencyId"></app-currency>
@@ -65,12 +65,12 @@
               </ng-container>
 
               <ng-container matColumnDef="isin">
-                <th mat-header-cell *matHeaderCellDef>{{ 'security/isin' | translate }}</th>
+                <th mat-header-cell *matHeaderCellDef>{{ 'security/isin' | translatePipe }}</th>
                 <td mat-cell *matCellDef="let element"> {{ element.currentIsin }}</td>
               </ng-container>
 
               <ng-container matColumnDef="profit-loss">
-                <th mat-header-cell *matHeaderCellDef>{{ 'security/holding/profit-loss' | translate }}</th>
+                <th mat-header-cell *matHeaderCellDef>{{ 'security/holding/profit-loss' | translatePipe }}</th>
                 <td mat-cell *matCellDef="let element">
                   <app-currency [amount]="SecurityUtil.getTotalValue(element)" [currencyId]="element.currencyId"></app-currency>
                 </td>
@@ -78,7 +78,7 @@
               </ng-container>
 
               <ng-container matColumnDef="performance">
-                <th mat-header-cell *matHeaderCellDef>{{ 'security/holding/performance' | translate }}</th>
+                <th mat-header-cell *matHeaderCellDef>{{ 'security/holding/performance' | translatePipe }}</th>
                 <td mat-cell *matCellDef="let element">
                   <ng-container *ngIf="SecurityUtil.getPerformance(element) >= 0">
                     <div style="color: green">
@@ -104,7 +104,7 @@
                   <mat-menu #menu="matMenu">
                     <button mat-menu-item (click)="onDeleteHolding(element)">
                       <mat-icon>delete</mat-icon>
-                      <span>{{ 'delete' | translate }}</span>
+                      <span>{{ 'delete' | translatePipe }}</span>
                     </button>
                   </mat-menu>
                 </td>
@@ -116,11 +116,11 @@
             </table>
 
             <app-paginator></app-paginator>
-          </mat-card-content>
+          </mat-card-header>
         </mat-card>
       }
     </mat-tab>
-    <mat-tab label="{{'security/holding/transactions' | translate}}">
+    <mat-tab label="{{'security/holding/transactions' | translatePipe}}">
       <app-security-transaction-list [securityHoldingFilter]="securityHoldingFilter" [onFilterUpdateCallback]="onFilterUpdateCallback"></app-security-transaction-list>
     </mat-tab>
   </mat-tab-group>

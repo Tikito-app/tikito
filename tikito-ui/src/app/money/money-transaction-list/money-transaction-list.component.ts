@@ -13,7 +13,7 @@ import {
   MatTableDataSource
 } from "@angular/material/table";
 import {MatButton} from "@angular/material/button";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {DatePipe, NgIf} from "@angular/common";
 import {MoneyApi} from "../../api/money-api";
 import MoneyTransaction from "../../dto/money/money-transaction";
@@ -29,7 +29,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {DialogService} from "../../service/dialog.service";
 import {TranslateService} from "../../service/translate.service";
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-moneyTransaction-list',
@@ -45,7 +45,6 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatHeaderCellDef,
     MatCellDef,
     MatRowDef,
-    TranslatePipe,
     MatInput,
     MatLabel,
     MatFormField,
@@ -57,10 +56,10 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatMenu,
     MatMenuItem,
     MatMenuTrigger,
+    TranslatePipe,
     MatCard,
-    MatCardContent
+    MatCardHeader
   ],
-  providers: [TranslatePipe],
   templateUrl: './money-transaction-list.component.html',
   styleUrl: './money-transaction-list.component.scss'
 })

@@ -18,6 +18,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {HttpRequestMethod} from "../../dto/http-request-method";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 
 @Component({
   selector: 'app-register',
@@ -35,7 +36,7 @@ import {HttpRequestMethod} from "../../dto/http-request-method";
     MatOptionModule,
     MatSelectModule,
     MatSidenavModule,
-    MatToolbarModule]
+    MatToolbarModule, TranslatePipe]
 })
 export class RegisterComponent implements OnInit {
   showPasswordFlag = false;

@@ -1,5 +1,5 @@
 <div class="main-side-column main-column">
-  <button mat-button (click)="routeToAdmin();"><mat-icon>arrow_back</mat-icon> {{'admin/back-to-admin' | translate}}</button>
+  <button mat-button (click)="routeToAdmin();"><mat-icon>arrow_back</mat-icon> {{'admin/back-to-admin' | translatePipe}}</button>
 </div>
 
 <div class="main-center-column-small main-column">
@@ -7,19 +7,19 @@
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" #input>
   </mat-form-field>
-  <button mat-button color="secondary" (click)="onGroupMoneyTransactions()">{{'admin/money/group-transactions' | translate}}</button>
+  <button mat-button color="secondary" (click)="onGroupMoneyTransactions()">{{'admin/money/group-transactions' | translatePipe}}</button>
   @if(dataSource) {
     <mat-card>
-      <mat-card-content>
+      <mat-card-header>
         <table mat-table [dataSource]="dataSource">
 
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>{{'account' | translate}}</th>
+            <th mat-header-cell *matHeaderCellDef>{{'account' | translatePipe}}</th>
             <td mat-cell *matCellDef="let element"> {{element.name}} </td>
           </ng-container>
 
           <ng-container matColumnDef="currency">
-            <th mat-header-cell *matHeaderCellDef>{{'currency' | translate}}</th>
+            <th mat-header-cell *matHeaderCellDef>{{'currency' | translatePipe}}</th>
             <td mat-cell *matCellDef="let element"> {{getCurrencyName(element)}} </td>
           </ng-container>
 
@@ -33,7 +33,7 @@
               <mat-menu #menu="matMenu">
                 <button mat-menu-item (click)="onRecalculateHistoricalMoneyValue(element)">
                   <mat-icon>isin</mat-icon>
-                  <span>{{ 'admin/money/recalculate-historical-value' | translate }}</span>
+                  <span>{{ 'admin/money/recalculate-historical-value' | translatePipe }}</span>
                 </button>
               </mat-menu>
             </td>
@@ -44,7 +44,7 @@
         </table>
 
         <app-paginator></app-paginator>
-      </mat-card-content>
+      </mat-card-header>
     </mat-card>
   }
 </div>

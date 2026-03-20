@@ -8,7 +8,7 @@ import {MatInput} from "@angular/material/input";
 import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
 import {NgForOf, NgIf} from "@angular/common";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {Account} from "../../dto/account";
 import {AccountApi} from "../../api/account-api";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -50,14 +50,14 @@ import {LoanType} from "../../dto/loan-type";
     NgForOf,
     NgIf,
     ReactiveFormsModule,
-    TranslatePipe,
     LoanInterestListItemComponent,
     LoanInterestFormComponent,
     MatDatepicker,
     MatDatepickerInput,
     MatDatepickerToggle,
     MatHint,
-    MatSuffix
+    MatSuffix,
+    TranslatePipe
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './loan-part-form.component.html',

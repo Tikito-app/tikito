@@ -5,14 +5,12 @@ import {BudgetApi} from "../../api/budget-api";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
-import {TranslatePipe} from "@ngx-translate/core";
 import {Util} from "../../util";
-import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {MatIcon} from "@angular/material/icon";
-import {NgIf} from "@angular/common";
 import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {AuthService} from "../../service/auth.service";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 
 @Component({
   selector: 'app-money-transaction-group-qualifier-form',
@@ -20,18 +18,13 @@ import {AuthService} from "../../service/auth.service";
   imports: [
     MatFormField,
     MatSelect,
-    TranslatePipe,
     MatOption,
-    MatCard,
-    MatCardHeader,
-    MatCardContent,
     MatIcon,
     ReactiveFormsModule,
     MatLabel,
-    MatCardTitle,
-    NgIf,
     MatInput,
-    MatButton
+    MatButton,
+    TranslatePipe
   ],
   templateUrl: './money-transaction-group-qualifier-form.component.html',
   styleUrl: './money-transaction-group-qualifier-form.component.scss'
