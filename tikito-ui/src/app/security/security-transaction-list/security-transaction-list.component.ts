@@ -115,7 +115,7 @@ export class SecurityTransactionListComponent implements OnInit {
   }
 
   onEditTransaction(transaction: SecurityTransaction) {
-    this.dialogService.editOrCreateSecurityTransaction(transaction).then(updatedTransaction => {
+    this.dialogService.createOrUpdateSecurityTransaction(transaction).then(updatedTransaction => {
       this.resetTable();
     });
   }

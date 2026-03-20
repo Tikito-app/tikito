@@ -26,6 +26,7 @@ public class MoneyTransactionDto {
     private Long groupId;
     private Long budgetId;
     private Long loanId;
+    private double exchangeRate;
 
     public static String getUniqueKey(final MoneyTransaction transaction) {
         return transaction.getCounterpartAccountNumber() + "#" +

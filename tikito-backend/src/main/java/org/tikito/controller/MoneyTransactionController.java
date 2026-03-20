@@ -2,6 +2,7 @@ package org.tikito.controller;
 
 import org.springframework.validation.annotation.Validated;
 import org.tikito.auth.AuthUser;
+import org.tikito.controller.request.CreateOrUpdateMoneyTransactionRequest;
 import org.tikito.controller.request.SetMoneyTransactionGroupIdRequest;
 import org.tikito.dto.money.MoneyTransactionDto;
 import org.tikito.dto.money.MoneyTransactionFilter;
@@ -34,6 +35,11 @@ public class MoneyTransactionController {
     @PostMapping
     public ResponseEntity<List<MoneyTransactionDto>> getTransactions(final AuthUser authUser, @Validated @RequestBody final MoneyTransactionFilter filter) {
         return ResponseEntity.ok(moneyTransactionService.getTransactions(authUser.getId(), filter));
+    }
+
+    @PostMapping("/create-or-update")
+    public ResponseEntity<MoneyTransactionDto> createOrUpdate(final AuthUser authUser, @Validated @RequestBody final CreateOrUpdateMoneyTransactionRequest request) {
+        return ResponseEntity.ok(moneyTransactionService.createOrUpdate(authUser.getId(), request));
     }
 
     @GetMapping("/loan")

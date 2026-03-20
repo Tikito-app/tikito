@@ -56,15 +56,15 @@ export interface MyData {
     TranslatePipePipe
   ],
   providers: [provideNativeDateAdapter(), TranslatePipe],
-  templateUrl: './create-or-edit-security-transaction-dialog.component.html',
-  styleUrl: './create-or-edit-security-transaction-dialog.component.scss'
+  templateUrl: './create-or-update-security-transaction-dialog.component.html',
+  styleUrl: './create-or-update-security-transaction-dialog.component.scss'
 })
-export class CreateOrEditSecurityTransactionDialogComponent implements OnInit {
+export class CreateOrUpdateSecurityTransactionDialogComponent implements OnInit {
   form: FormGroup;
   accounts: Account[] = [];
 
   constructor(
-    public dialogRef: MatDialogRef<CreateOrEditSecurityTransactionDialogComponent>,
+    public dialogRef: MatDialogRef<CreateOrUpdateSecurityTransactionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: MyData,
     private api: SecurityApi,
     private accountApi : AccountApi) {

@@ -11,8 +11,12 @@ import {TranslateService} from "./translate.service";
 import {Observable} from "rxjs";
 import {SecurityTransaction} from "../dto/security/security-transaction";
 import {
-  CreateOrEditSecurityTransactionDialogComponent
-} from "../security/create-or-edit-security-transaction-dialog/create-or-edit-security-transaction-dialog.component";
+  CreateOrUpdateSecurityTransactionDialogComponent
+} from "../security/create-or-update-security-transaction-dialog/create-or-update-security-transaction-dialog.component";
+import MoneyTransaction from "../dto/money/money-transaction";
+import {
+  CreateOrUpdateMoneyTransactionDialogComponent
+} from "../money/money-transaction-dialog/create-or-update-money-transaction-dialog.component";
 
 @Injectable({
   providedIn: 'root'
@@ -40,9 +44,24 @@ export class DialogService {
     });
   }
 
-  editOrCreateSecurityTransaction(transaction: SecurityTransaction): Promise<SecurityTransaction | null> {
+  createOrUpdateSecurityTransaction(transaction: SecurityTransaction): Promise<SecurityTransaction | null> {
     return new Promise<SecurityTransaction | null>(resolve => {
-      const dialogRef = this.dialog.open(CreateOrEditSecurityTransactionDialogComponent, {
+      const dialogRef = this.dialog.open(CreateOrUpdateSecurityTransactionDialogComponent, {
+        width: '550px',
+        data: {transaction: transaction},
+      });
+      dialogRef.afterClosed().subscribe(value => {
+        if (value == null) {
+          resolve(null);
+        }
+        resolve(transaction);
+      });
+    });
+  }
+
+  createOrUpdateMoneyTransaction(transaction: MoneyTransaction): Promise<MoneyTransaction | null> {
+    return new Promise<MoneyTransaction | null>(resolve => {
+      const dialogRef = this.dialog.open(CreateOrUpdateMoneyTransactionDialogComponent, {
         width: '550px',
         data: {transaction: transaction},
       });
