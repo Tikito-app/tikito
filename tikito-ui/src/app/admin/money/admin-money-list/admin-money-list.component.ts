@@ -28,6 +28,7 @@ import {NgIf} from "@angular/common";
 import {Account} from "../../../dto/account";
 import {TranslateService} from "../../../service/translate.service";
 import {TranslatePipe} from "../../../service/translate-pipe.pipe";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-admin-money-list',
@@ -49,11 +50,12 @@ import {TranslatePipe} from "../../../service/translate-pipe.pipe";
     MatRow,
     MatRowDef,
     MatTable,
-    NgIf,
     PaginatorComponent,
     MatMenuTrigger,
     MatHeaderCellDef,
-    TranslatePipe
+    TranslatePipe,
+    MatCard,
+    MatCardHeader
   ],
   templateUrl: './admin-money-list.component.html',
   styleUrl: './admin-money-list.component.scss'

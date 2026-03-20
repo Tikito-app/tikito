@@ -29,7 +29,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {DialogService} from "../../service/dialog.service";
 import {TranslateService} from "../../service/translate.service";
-import {SecurityTransaction} from "../../dto/security/security-transaction";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-moneyTransaction-list',
@@ -45,7 +45,6 @@ import {SecurityTransaction} from "../../dto/security/security-transaction";
     MatHeaderCellDef,
     MatCellDef,
     MatRowDef,
-    NgIf,
     MatInput,
     MatLabel,
     MatFormField,
@@ -57,7 +56,9 @@ import {SecurityTransaction} from "../../dto/security/security-transaction";
     MatMenu,
     MatMenuItem,
     MatMenuTrigger,
-    TranslatePipe
+    TranslatePipe,
+    MatCard,
+    MatCardHeader
   ],
   templateUrl: './money-transaction-list.component.html',
   styleUrl: './money-transaction-list.component.scss'

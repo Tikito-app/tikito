@@ -21,6 +21,7 @@ import {NgIf} from "@angular/common";
 import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {AuthService} from "../../service/auth.service";
 import {LoanPart} from "../../dto/loan-part";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-loan-part-list',
@@ -38,7 +39,9 @@ import {LoanPart} from "../../dto/loan-part";
     NgIf,
     PaginatorComponent,
     MatHeaderCellDef,
-    TranslatePipe
+    TranslatePipe,
+    MatCard,
+    MatCardHeader
   ],
   templateUrl: './loan-part-list.component.html',
   styleUrl: './loan-part-list.component.scss'

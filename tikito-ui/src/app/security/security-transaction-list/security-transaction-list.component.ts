@@ -28,6 +28,7 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {DialogService} from "../../service/dialog.service";
 import {TranslateService} from "../../service/translate.service";
 import {MatSort} from "@angular/material/sort";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-security-transaction-list',
@@ -53,7 +54,9 @@ import {MatSort} from "@angular/material/sort";
     MatMenuItem,
     MatMenuTrigger,
     TranslatePipe,
-    MatSort
+    MatSort,
+    MatCard,
+    MatCardHeader
   ],
   templateUrl: './security-transaction-list.component.html',
   styleUrl: './security-transaction-list.component.scss'

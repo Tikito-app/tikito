@@ -26,6 +26,7 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {NgIf} from "@angular/common";
 import {TranslateService} from "../../../service/translate.service";
 import {TranslatePipe} from "../../../service/translate-pipe.pipe";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-admin-security-isin-list',
@@ -49,7 +50,9 @@ import {TranslatePipe} from "../../../service/translate-pipe.pipe";
     MatMenuTrigger,
     MatHeaderCellDef,
     TranslatePipe,
-    TranslatePipe
+    TranslatePipe,
+    MatCard,
+    MatCardHeader
   ],
   templateUrl: './admin-security-isin-list.component.html',
   styleUrl: './admin-security-isin-list.component.scss'

@@ -28,6 +28,7 @@ import {MatInput} from "@angular/material/input";
 import {SecurityType} from "../../../dto/security/security-type";
 import {TranslateService} from "../../../service/translate.service";
 import {TranslatePipe} from "../../../service/translate-pipe.pipe";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-admin-security-list',
@@ -54,7 +55,9 @@ import {TranslatePipe} from "../../../service/translate-pipe.pipe";
     MatInput,
     MatLabel,
     TranslatePipe,
-    TranslatePipe
+    TranslatePipe,
+    MatCard,
+    MatCardHeader
   ],
   templateUrl: './admin-security-list.component.html',
   styleUrl: './admin-security-list.component.scss'

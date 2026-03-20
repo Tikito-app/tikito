@@ -41,6 +41,7 @@ import {TranslateService} from "../../service/translate.service";
 import {SecurityTransactionListComponent} from "../security-transaction-list/security-transaction-list.component";
 import {SecurityHoldingFilter} from "../../dto/security/security-holding-filter";
 import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-security-holding-list',
@@ -72,7 +73,9 @@ import {TranslatePipe} from "../../service/translate-pipe.pipe";
     MatMenuItem,
     MatMenuTrigger,
     SecurityTransactionListComponent,
-    TranslatePipe
+    TranslatePipe,
+    MatCard,
+    MatCardHeader
   ],
   templateUrl: './security-holding-list.component.html',
   styleUrl: './security-holding-list.component.scss'

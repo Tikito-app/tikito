@@ -21,6 +21,7 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MoneyTransactionImportLine} from "../../../dto/money/money-transaction-import-line";
 import {TranslatePipe} from "../../../service/translate-pipe.pipe";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-money-import-result',
@@ -35,7 +36,6 @@ import {TranslatePipe} from "../../../service/translate-pipe.pipe";
     MatRow,
     MatRowDef,
     MatTable,
-    NgIf,
     PaginatorComponent,
     MatHeaderCellDef,
     CurrencyComponent,
@@ -43,7 +43,9 @@ import {TranslatePipe} from "../../../service/translate-pipe.pipe";
     MatFormField,
     MatInput,
     MatLabel,
-    TranslatePipe
+    TranslatePipe,
+    MatCard,
+    MatCardHeader
   ],
   templateUrl: './money-import-result.component.html',
   styleUrl: './money-import-result.component.scss'

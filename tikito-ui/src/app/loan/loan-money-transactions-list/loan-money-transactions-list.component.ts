@@ -25,6 +25,7 @@ import {DialogService} from "../../service/dialog.service";
 import {TranslateService} from "../../service/translate.service";
 import {MoneyApi} from "../../api/money-api";
 import {Util} from "../../util";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
   selector: 'app-loan-money-transactions-list',
@@ -44,10 +45,11 @@ import {Util} from "../../util";
     MatRow,
     MatRowDef,
     MatTable,
-    NgIf,
     PaginatorComponent,
     MatHeaderCellDef,
-    TranslatePipe
+    TranslatePipe,
+    MatCard,
+    MatCardHeader
   ],
   templateUrl: './loan-money-transactions-list.component.html',
   styleUrl: './loan-money-transactions-list.component.scss'

@@ -25,7 +25,7 @@ import {CacheService} from "../../service/cache-service";
 import {DialogService} from "../../service/dialog.service";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {TranslateService} from "../../service/translate.service";
-import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
+import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
   selector: 'app-account-list',
@@ -51,8 +51,7 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/mat
     MatMenuTrigger,
     MatCard,
     MatCardContent,
-    MatCardHeader,
-    MatCardTitle
+    TranslatePipe
   ],
   templateUrl: './account-list.component.html',
   styleUrl: './account-list.component.scss'
