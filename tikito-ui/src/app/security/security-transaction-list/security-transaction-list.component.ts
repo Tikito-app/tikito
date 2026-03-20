@@ -101,7 +101,7 @@ export class SecurityTransactionListComponent implements OnInit {
     });
   }
 
-  onDeleteTransaction(transaction: MoneyTransaction) {
+  onDeleteTransaction(transaction: SecurityTransaction) {
     this.dialogService.okCancel(
       this.translateService.translate('are-you-sure-delete-title'),
       this.translateService.translate('are-you-sure-delete-text'))
@@ -112,6 +112,12 @@ export class SecurityTransactionListComponent implements OnInit {
             this.translateService.translate('close')));
         }
       })
+  }
+
+  onEditTransaction(transaction: SecurityTransaction) {
+    this.dialogService.editOrCreateSecurityTransaction(transaction).then(updatedTransaction => {
+      this.resetTable();
+    });
   }
 
   protected readonly Util = Util;

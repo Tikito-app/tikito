@@ -9,6 +9,10 @@ import {
 import MoneyTransactionGroup from "../dto/money/money-transaction-group";
 import {TranslateService} from "./translate.service";
 import {Observable} from "rxjs";
+import {SecurityTransaction} from "../dto/security/security-transaction";
+import {
+  CreateOrEditSecurityTransactionDialogComponent
+} from "../security/create-or-edit-security-transaction-dialog/create-or-edit-security-transaction-dialog.component";
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +36,21 @@ export class DialogService {
           resolve(false);
         }
         resolve(true);
+      });
+    });
+  }
+
+  editOrCreateSecurityTransaction(transaction: SecurityTransaction): Promise<SecurityTransaction | null> {
+    return new Promise<SecurityTransaction | null>(resolve => {
+      const dialogRef = this.dialog.open(CreateOrEditSecurityTransactionDialogComponent, {
+        width: '550px',
+        data: {transaction: transaction},
+      });
+      dialogRef.afterClosed().subscribe(value => {
+        if (value == null) {
+          resolve(null);
+        }
+        resolve(transaction);
       });
     });
   }

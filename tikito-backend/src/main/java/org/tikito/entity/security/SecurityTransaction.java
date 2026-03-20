@@ -1,5 +1,6 @@
 package org.tikito.entity.security;
 
+import org.tikito.controller.request.CreateOrUpdateSecurityTransactionRequest;
 import org.tikito.dto.export.SecurityTransactionExportDto;
 import org.tikito.dto.security.SecurityTransactionDto;
 import org.tikito.dto.security.SecurityTransactionImportLine;
@@ -51,18 +52,18 @@ public class SecurityTransaction {
         this.exchangeRate = line.getExchangeRate();
     }
 
-    public SecurityTransaction(final long userId, final long accountId, final Long securityId, final long currencyId, final SecurityTransactionExportDto dto) {
-        this.userId = userId;
+    public void updateFrom(final CreateOrUpdateSecurityTransactionRequest request, final long securityId) {
+        this.accountId = request.getAccountId();
+        this.isin = request.getIsin();
+        this.currencyId = request.getCurrencyId();
+        this.amount = request.getAmount();
+        this.price = request.getPrice(); // here we don't multiply it by exchange rate, because it's a manual modification
+        this.description = request.getDescription();
+        this.timestamp = request.getTimestamp();
+        this.transactionType = request.getTransactionType();
+        this.cash = request.getCash(); // here we don't multiply it by exchange rate, because it's a manual modification
+        this.exchangeRate = request.getExchangeRate();
         this.securityId = securityId;
-        this.accountId = accountId;
-        this.currencyId = currencyId;
-        this.amount = dto.getAmount();
-        this.price = dto.getPrice();
-        this.description = dto.getDescription();
-        this.timestamp = dto.getTimestamp();
-        this.cash = dto.getCash();
-        this.exchangeRate = dto.getExchangeRate();
-        this.transactionType = dto.getTransactionType();
     }
 
     public SecurityTransactionDto toDto() {
@@ -75,6 +76,7 @@ public class SecurityTransaction {
                 currencyId,
                 amount,
                 price,
+                exchangeRate,
                 description,
                 timestamp,
                 transactionType,

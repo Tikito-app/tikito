@@ -1,0 +1,87 @@
+<h1 mat-dialog-title>{{data.transaction == null ? 'security/create-transaction' : 'security/edit-transaction' | translatePipe}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+
+    <mat-form-field class="full-width">
+      <mat-label>{{'security/account' | translate}}</mat-label>
+      <mat-select [attr.data-cy]="'accountId'" formControlName="accountId">
+        @for (account of accounts; track accounts) {
+          <mat-option [value]="account.id">{{account.name}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'security/isin' | translatePipe }}</mat-label>
+      <input type="text" [attr.data-cy]="'isin'" matInput formControlName="isin">
+      <mat-icon matSuffix>isin</mat-icon>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'security/transaction/amount' | translatePipe }}</mat-label>
+      <input type="number" [attr.data-cy]="'amount'" matInput formControlName="amount">
+      <mat-icon matSuffix>amount</mat-icon>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field class="full-width">
+      <mat-label>{{ 'currency' | translatePipe }}</mat-label>
+      <mat-select formControlName="currencyId">
+        @for (currency of CacheService.getCurrencies(); track currency) {
+          <mat-option [value]="currency.id">{{ 'currency/' + currency.currentIsin | translatePipe }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'security/transaction/price' | translatePipe }}</mat-label>
+      <input type="number" [attr.data-cy]="'price'" matInput formControlName="price">
+      <mat-icon matSuffix>price</mat-icon>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'security/transaction/description' | translatePipe }}</mat-label>
+      <input type="text" [attr.data-cy]="'description'" matInput formControlName="description">
+      <mat-icon matSuffix>description</mat-icon>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field class="full-width">
+      <mat-label>{{'security/transaction/timestamp' | translatePipe}}</mat-label>
+      <input matInput [matDatepicker]="pickerTimestamp" formControlName="timestamp">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-icon *ngIf="form.value['timestamp']" matIconSuffix (click)="form.controls['timestamp'].setValue(null);" class="clickable">close</mat-icon>
+      <mat-datepicker-toggle matIconSuffix [for]="pickerTimestamp"></mat-datepicker-toggle>
+      <mat-datepicker #pickerTimestamp></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'security/transaction/cash' | translatePipe }}</mat-label>
+      <input type="number" [attr.data-cy]="'cash'" matInput formControlName="cash">
+      <mat-icon matSuffix>cash</mat-icon>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'security/transaction/exchange-rate' | translatePipe }}</mat-label>
+      <input type="number" [attr.data-cy]="'exchangeRate'" matInput formControlName="exchangeRate">
+      <mat-icon matSuffix>exchangeRate</mat-icon>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'security/transaction/type' | translatePipe }}</mat-label>
+      <mat-select formControlName="transactionType" [attr.data-cy]="'transaction-type'">
+        @for (transactionType of Util.getSecurityTransactionTypes(); track transactionType) {
+          <mat-option [value]="transactionType">{{ 'security/transaction/type/' + transactionType | translatePipe }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button [attr.data-cy]="'cancel'" mat-raised-button (click)="onCancel()">{{'cancel' | translatePipe}}</button>
+  <button [attr.data-cy]="'ok'" mat-raised-button color="primary" cdkFocusInitial (click)="onSave()">{{'save' | translatePipe}}</button>
+</div>

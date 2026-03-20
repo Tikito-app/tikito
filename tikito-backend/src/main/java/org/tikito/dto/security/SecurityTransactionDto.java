@@ -22,6 +22,7 @@ public class SecurityTransactionDto {
     protected long currencyId;
     protected int amount;
     protected double price;
+    protected double exchangeRate;
     protected String description;
     protected Instant timestamp;
     protected SecurityTransactionType transactionType;

@@ -117,7 +117,7 @@ export class SecurityPieGraphComponent implements OnInit {
     } else if(this.valueType == 'currency') {
       return "" + CacheService.getCurrencyById(holding.security.currencyId).name;
     } else if(this.valueType == 'type') {
-      return this.translateService.translate('security/type/' + holding.security.securityType);
+      return this.translateService.translate('security/transaction/type/' + holding.security.securityType);
     }
     return 'unknown';
   }
