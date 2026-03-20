@@ -15,20 +15,24 @@
     </mat-tab>
     <mat-tab label="{{'loan/loans' | translate}}">
 
-      <div class="mat-elevation-z8 full-width" *ngIf="dataSource">
-        <table mat-table [dataSource]="dataSource" class="full-width">
+      @if(dataSource) {
+        <mat-card>
+          <mat-card-content>
+            <table mat-table [dataSource]="dataSource" class="full-width">
 
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>{{'loan/name' | translate}}</th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-          </ng-container>
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>{{'loan/name' | translate}}</th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+              </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClicked(row)" class="clickable"></tr>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClicked(row)" class="clickable"></tr>
 
-        </table>
-        <app-paginator></app-paginator>
-      </div>
+            </table>
+            <app-paginator></app-paginator>
+          </mat-card-content>
+        </mat-card>
+      }
     </mat-tab>
     <mat-tab label="{{'loan/transactions' | translate}}">
       <app-loan-money-transactions-list></app-loan-money-transactions-list>

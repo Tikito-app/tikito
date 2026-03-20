@@ -21,6 +21,7 @@ import {TranslatePipe} from "@ngx-translate/core";
 import {SecurityTransactionImportLine} from "../../../dto/security/security-transaction-import-line";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
+import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
   selector: 'app-security-import-result',
@@ -43,7 +44,9 @@ import {MatInput} from "@angular/material/input";
     MatHeaderCellDef,
     MatFormField,
     MatInput,
-    MatLabel
+    MatLabel,
+    MatCard,
+    MatCardContent
   ],
   templateUrl: './security-import-result.component.html',
   styleUrl: './security-import-result.component.scss'

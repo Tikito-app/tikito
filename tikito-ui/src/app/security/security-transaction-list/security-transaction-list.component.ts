@@ -28,6 +28,8 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import MoneyTransaction from "../../dto/money/money-transaction";
 import {DialogService} from "../../service/dialog.service";
 import {TranslateService} from "../../service/translate.service";
+import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatSort} from "@angular/material/sort";
 
 @Component({
   selector: 'app-security-transaction-list',
@@ -44,7 +46,6 @@ import {TranslateService} from "../../service/translate.service";
     MatCellDef,
     MatRowDef,
     TranslatePipe,
-    NgIf,
     PaginatorComponent,
     DatePipe,
     CurrencyComponent,
@@ -52,7 +53,10 @@ import {TranslateService} from "../../service/translate.service";
     MatIcon,
     MatMenu,
     MatMenuItem,
-    MatMenuTrigger
+    MatMenuTrigger,
+    MatCard,
+    MatCardContent,
+    MatSort
   ],
   providers: [TranslatePipe],
   templateUrl: './security-transaction-list.component.html',

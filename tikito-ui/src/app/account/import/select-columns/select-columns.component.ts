@@ -23,6 +23,7 @@ import {ImportFileProcessState} from "../../../dto/import-file-process-state";
 import {AccountType} from "../../../dto/account-type";
 import {UserPreferenceService} from "../../../service/user-preference-service";
 import {UserPreference} from "../../../dto/user-preference";
+import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
   selector: 'app-select-columns',
@@ -45,7 +46,9 @@ import {UserPreference} from "../../../dto/user-preference";
     MatTable,
     NgIf,
     MatHeaderCellDef,
-    MatInput
+    MatInput,
+    MatCard,
+    MatCardContent
   ],
   templateUrl: './select-columns.component.html',
   styleUrl: './select-columns.component.scss'

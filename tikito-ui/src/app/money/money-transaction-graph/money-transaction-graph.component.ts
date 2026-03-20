@@ -423,7 +423,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
         params.forEach((param: any) => {
           if (param.value != 0) {
-            html += `${param.marker} ${param.seriesName} <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(param.value)};">${Util.currencyFormat(param.value)}</span><br/>`;
+            html += `${param.marker} ${Util.maxDisplayString(param.seriesName, 25)} <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(param.value)};">${Util.currencyFormat(param.value)}</span><br/>`;
           }
         });
 
