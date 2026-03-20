@@ -7,6 +7,7 @@ import org.tikito.controller.request.CreateOrUpdateSecurityTransactionRequest;
 import org.tikito.dto.AccountType;
 import org.tikito.dto.security.SecurityHoldingFilter;
 import org.tikito.dto.security.SecurityTransactionDto;
+import org.tikito.dto.security.SecurityType;
 import org.tikito.entity.Job;
 import org.tikito.entity.security.Isin;
 import org.tikito.entity.security.SecurityHolding;
@@ -30,19 +31,34 @@ public class SecurityTransactionService {
     private final CacheService cacheService;
     private final AccountRepository accountRepository;
     private final IsinRepository isinRepository;
+    private final SecurityRepository securityRepository;
 
     public SecurityTransactionService(final SecurityTransactionRepository securityTransactionRepository,
                                       final SecurityHoldingRepository securityHoldingRepository,
                                       final JobService jobService,
                                       final CacheService cacheService,
                                       final AccountRepository accountRepository,
-                                      final IsinRepository isinRepository) {
+                                      final IsinRepository isinRepository,
+                                      final SecurityRepository securityRepository) {
         this.securityTransactionRepository = securityTransactionRepository;
         this.securityHoldingRepository = securityHoldingRepository;
         this.jobService = jobService;
         this.cacheService = cacheService;
         this.accountRepository = accountRepository;
         this.isinRepository = isinRepository;
+        this.securityRepository = securityRepository;
+    }
+
+    @Transactional(propagation = Propagation.MANDATORY)
+    public SecurityTransactionDto createOrUpdate(final long userId, final CreateOrUpdateSecurityTransactionRequest request) {
+        final Isin isin = isinRepository.findById(request.getIsin()).orElseThrow();
+        final SecurityTransaction transaction = request.isNew() ? new SecurityTransaction(userId) :  securityTransactionRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
+
+        accountRepository.findByUserIdAndIdAndAccountType(userId, request.getAccountId(), AccountType.SECURITY).orElseThrow();
+        securityRepository.findByIdAndSecurityType(request.getCurrencyId(), SecurityType.CURRENCY).orElseThrow();
+
+        transaction.updateFrom(request, isin.getSecurityId());
+        return securityTransactionRepository.saveAndFlush(transaction).toDto();
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -76,14 +92,5 @@ public class SecurityTransactionService {
                     return transaction;
                 })
                 .toList();
-    }
-
-    public SecurityTransactionDto createOrUpdate(final long userId, final CreateOrUpdateSecurityTransactionRequest request) {
-        final Isin isin = isinRepository.findById(request.getIsin()).orElseThrow();
-        final SecurityTransaction transaction = request.isNew() ? new SecurityTransaction(userId) :  securityTransactionRepository.findById(request.getId()).orElseThrow();
-        accountRepository.findByUserIdAndIdAndAccountType(userId, request.getAccountId(), AccountType.SECURITY).orElseThrow();
-
-        transaction.updateFrom(request, isin.getSecurityId());
-        return securityTransactionRepository.saveAndFlush(transaction).toDto();
     }
 }

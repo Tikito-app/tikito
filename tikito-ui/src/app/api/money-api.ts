@@ -9,6 +9,7 @@ import {MoneyTransactionsFilter} from "../dto/money/money-transactions-filter";
 import {AggregatedHistoricalMoneyHoldingValue} from "../dto/money/aggregated-historical-money-holding-value";
 import {MoneyTransactionImportLine} from "../dto/money/money-transaction-import-line";
 import {MoneyTransactionGroupType} from "../dto/money-transaction-group-type";
+import {SecurityTransaction} from "../dto/security/security-transaction";
 
 @Injectable({
   providedIn: 'root'
@@ -93,5 +94,39 @@ export class MoneyApi {
     return this.http.httpPostSingle(MoneyTransaction, new HttpRequestData()
       .withUrl('/api/money/transaction/set-group-id')
       .withBody(body));
+  }
+
+  createOrUpdateTransaction(transactionId: number,
+                            accountId: number,
+                            counterpartAccountName: string,
+                            counterpartAccountNumber: string,
+                            timestamp: string,
+                            amount: number,
+                            finalBalance: number,
+                            description: string,
+                            currencyId: number,
+                            groupId: number,
+                            budgetId: number,
+                            loanId: number,
+                            exchangeRate: number): Observable<MoneyTransaction> {
+    let body: any = {};
+    if (transactionId != null) {
+      body.id = transactionId;
+    }
+    body.accountId = accountId;
+    body.counterpartAccountName = counterpartAccountName;
+    body.counterpartAccountNumber = counterpartAccountNumber;
+    body.timestamp = timestamp;
+    body.amount = amount;
+    body.finalBalance = finalBalance;
+    body.description = description;
+    body.currencyId = currencyId;
+    body.groupId = groupId;
+    body.budgetId = budgetId;
+    body.loanId = loanId;
+    body.exchangeRate = exchangeRate;
+    return this.http.httpPostSingle(MoneyTransaction, new HttpRequestData()
+      .withBody(body)
+      .withUrl('/api/money/transaction/create-or-update'));
   }
 }

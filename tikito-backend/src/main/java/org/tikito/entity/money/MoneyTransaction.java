@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.tikito.dto.export.MoneyTransactionExportDto;
-import org.tikito.dto.export.TikitoExportDto;
 import org.tikito.dto.money.MoneyTransactionDto;
 import org.tikito.dto.money.MoneyTransactionImportLine;
 
@@ -64,6 +63,10 @@ public class MoneyTransaction {
         // todo: groupID, etc
     }
 
+    public MoneyTransaction(final long userId) {
+        this.userId = userId;
+    }
+
     public MoneyTransactionDto toDto() {
         return new MoneyTransactionDto(
                 id,
@@ -78,7 +81,8 @@ public class MoneyTransaction {
                 currencyId,
                 groupId,
                 budgetId,
-                loanId);
+                loanId,
+                exchangeRate);
     }
 
     public MoneyTransactionExportDto toExportDto(final String accountName, final String currency) {

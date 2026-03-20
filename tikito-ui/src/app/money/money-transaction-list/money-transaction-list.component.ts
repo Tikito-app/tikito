@@ -29,6 +29,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {DialogService} from "../../service/dialog.service";
 import {TranslateService} from "../../service/translate.service";
+import {SecurityTransaction} from "../../dto/security/security-transaction";
 
 @Component({
   selector: 'app-moneyTransaction-list',
@@ -141,12 +142,18 @@ export class MoneyTransactionListComponent implements OnInit {
     })
   }
 
+  onEditTransaction(transaction: MoneyTransaction) {
+    this.dialogService.createOrUpdateMoneyTransaction(transaction).then(updatedTransaction => {
+      this.resetTransactions();
+    });
+  }
+
   onDeleteTransaction(transaction: MoneyTransaction) {
     this.dialogService.deleteConfirmation().subscribe(() => {
       this.api.deleteMoneyTransaction(transaction.id).subscribe(() => this.dialogService.snackbar(
         this.translateService.translate('security/holding/deleted-message'),
         this.translateService.translate('close')));
-      // todo, refresh table?
+      this.resetTransactions();
     });
   }
 

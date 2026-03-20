@@ -1,0 +1,114 @@
+<h1 mat-dialog-title>{{data.transaction == null ? 'money/create-transaction' : 'money/edit-transaction' | translatePipe}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+
+    <mat-form-field class="full-width">
+      <mat-label>{{'money/account' | translate}}</mat-label>
+      <mat-select [attr.data-cy]="'accountId'" formControlName="accountId">
+        @for (account of accounts; track accounts) {
+          <mat-option [value]="account.id">{{account.name}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'money/transaction/counterpart-account-name' | translatePipe }}</mat-label>
+      <input type="text" [attr.data-cy]="'counterpartAccountName'" matInput formControlName="counterpartAccountName">
+      <mat-icon matSuffix>counterpartAccountName</mat-icon>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'money/transaction/counterpart-account-number' | translatePipe }}</mat-label>
+      <input type="text" [attr.data-cy]="'counterpartAccountNumber'" matInput formControlName="counterpartAccountNumber">
+      <mat-icon matSuffix>counterpartAccountNumber</mat-icon>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field class="full-width">
+      <mat-label>{{ 'currency' | translatePipe }}</mat-label>
+      <mat-select formControlName="currencyId">
+        @for (currency of CacheService.getCurrencies(); track currency) {
+          <mat-option [value]="currency.id">{{ 'currency/' + currency.currentIsin | translatePipe }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'money/transaction/amount' | translatePipe }}</mat-label>
+      <input type="number" [attr.data-cy]="'amount'" matInput formControlName="amount">
+      <mat-icon matSuffix>amount</mat-icon>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'money/transaction/final-balance' | translatePipe }}</mat-label>
+      <input type="number" [attr.data-cy]="'finalBalance'" matInput formControlName="finalBalance">
+      <mat-icon matSuffix>finalBalance</mat-icon>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'money/transaction/description' | translatePipe }}</mat-label>
+      <input type="text" [attr.data-cy]="'description'" matInput formControlName="description">
+      <mat-icon matSuffix>description</mat-icon>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field class="full-width">
+      <mat-label>{{'money/transaction/timestamp' | translatePipe}}</mat-label>
+      <input matInput [matDatepicker]="pickerTimestamp" formControlName="timestamp">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-icon *ngIf="form.value['timestamp']" matIconSuffix (click)="form.controls['timestamp'].setValue(null);" class="clickable">close</mat-icon>
+      <mat-datepicker-toggle matIconSuffix [for]="pickerTimestamp"></mat-datepicker-toggle>
+      <mat-datepicker #pickerTimestamp></mat-datepicker>
+    </mat-form-field>
+
+<!--    <mat-form-field appearance="fill" class="full-width">-->
+<!--      <mat-label>{{ 'money/transaction/cash' | translatePipe }}</mat-label>-->
+<!--      <input type="number" [attr.data-cy]="'cash'" matInput formControlName="cash">-->
+<!--      <mat-icon matSuffix>cash</mat-icon>-->
+<!--    </mat-form-field>-->
+<!--    <br/>-->
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'money/transaction/exchange-rate' | translatePipe }}</mat-label>
+      <input type="number" [attr.data-cy]="'exchangeRate'" matInput formControlName="exchangeRate">
+      <mat-icon matSuffix>exchangeRate</mat-icon>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'money/transaction/group' | translatePipe }}</mat-label>
+      <mat-select formControlName="groupId" [attr.data-cy]="'transaction-type'">
+        @for (group of groups; track group) {
+          <mat-option [value]="group.id">{{ group.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'loan' | translatePipe }}</mat-label>
+      <mat-select formControlName="loanId" [attr.data-cy]="'transaction-type'">
+        @for (loan of loans; track loan) {
+          <mat-option [value]="loan.id">{{ loan.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>{{ 'budget' | translatePipe }}</mat-label>
+      <mat-select formControlName="budgetId" [attr.data-cy]="'transaction-type'">
+        @for (budget of budgets; track budget) {
+          <mat-option [value]="budget.id">{{ budget.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button [attr.data-cy]="'cancel'" mat-raised-button (click)="onCancel()">{{'cancel' | translatePipe}}</button>
+  <button [attr.data-cy]="'ok'" mat-raised-button color="primary" cdkFocusInitial (click)="onSave()">{{'save' | translatePipe}}</button>
+</div>

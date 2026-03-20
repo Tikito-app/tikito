@@ -54,6 +54,10 @@
             <mat-icon>group_work</mat-icon>
             <span>{{ 'money/transaction/set-transaction-group' | translate }}</span>
           </button>
+          <button mat-menu-item (click)="onEditTransaction(element)">
+            <mat-icon>edit</mat-icon>
+            <span>{{ 'edit' | translate }}</span>
+          </button>
           <button mat-menu-item (click)="onDeleteTransaction(element)">
             <mat-icon>delete</mat-icon>
             <span>{{ 'delete' | translate }}</span>
