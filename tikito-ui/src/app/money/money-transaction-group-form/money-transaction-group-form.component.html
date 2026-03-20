@@ -1,12 +1,12 @@
 <div class="main-side-column main-column">
-  <button mat-button (click)="onCancelButtonClicked();" *ngIf="!nameInEdit && !qualifierInEdit"><mat-icon>arrow_back</mat-icon> {{'money/transaction-group/back-to-list' | translate}}</button>
+  <button mat-button (click)="onCancelButtonClicked();" *ngIf="!nameInEdit && !qualifierInEdit"><mat-icon>arrow_back</mat-icon> {{'money/transaction-group/back-to-list' | translatePipe}}</button>
 </div>
 
 <div class="main-center-column-small main-column">
   <mat-card class="full-width" *ngIf="form && group" style="max-width: 100%; width: 100%;">
     <mat-card-header>
-      <mat-card-title *ngIf="group.id">{{'money/transaction-group/edit-group' | translate}}</mat-card-title>
-      <mat-card-title *ngIf="!group.id">{{'money/transaction-group/create-group' | translate}}</mat-card-title>
+      <mat-card-title *ngIf="group.id">{{'money/transaction-group/edit-group' | translatePipe}}</mat-card-title>
+      <mat-card-title *ngIf="!group.id">{{'money/transaction-group/create-group' | translatePipe}}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="form">
@@ -16,12 +16,12 @@
         </ng-container>
         <ng-container *ngIf="nameInEdit">
           <mat-form-field appearance="fill" class="full-width">
-            <mat-label>{{'money/transaction-group/name' | translate}}</mat-label>
+            <mat-label>{{'money/transaction-group/name' | translatePipe}}</mat-label>
             <input type="text" [attr.data-cy]="'name'" matInput formControlName="name" >
             <mat-icon matSuffix>name</mat-icon>
           </mat-form-field>
           <mat-form-field class="full-width">
-            <mat-label>{{'money/accounts' | translate}}</mat-label>
+            <mat-label>{{'money/accounts' | translatePipe}}</mat-label>
             <mat-select [attr.data-cy]="'accountIds'" multiple formControlName="accountIds">
               @for (account of accounts; track accounts) {
                 <mat-option [value]="account.id">{{account.name}}</mat-option>
@@ -29,7 +29,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field class="full-width">
-            <mat-label>{{ 'money/transaction-group/group-type' | translate }}</mat-label>
+            <mat-label>{{ 'money/transaction-group/group-type' | translatePipe }}</mat-label>
             <mat-select formControlName="groupTypes" [attr.data-cy]="'groupType'" multiple>
               @for (group of Util.getMoneyTransactionGroupTypes(); track group) {
                 <mat-option [value]="group">{{ group }}</mat-option>
@@ -39,14 +39,14 @@
         </ng-container>
 
         <div *ngIf="nameInEdit">
-          <button [attr.data-cy]="'save-button'"  mat-raised-button color="primary" (click)="onSaveButtonClicked(); nameInEdit = false">{{'save' | translate}}</button>&nbsp;
-          <button [attr.data-cy]="'cancel-button'"  mat-raised-button color="secundary" (click)="nameInEdit = false">{{'cancel' | translate}}</button>
-          <button [attr.data-cy]="'delete-button'" style="float: right" mat-button color="warn" (click)="onDeleteButtonClicked();">{{'delete' | translate}}</button>
+          <button [attr.data-cy]="'save-button'"  mat-raised-button color="primary" (click)="onSaveButtonClicked(); nameInEdit = false">{{'save' | translatePipe}}</button>&nbsp;
+          <button [attr.data-cy]="'cancel-button'"  mat-raised-button color="secundary" (click)="nameInEdit = false">{{'cancel' | translatePipe}}</button>
+          <button [attr.data-cy]="'delete-button'" style="float: right" mat-button color="warn" (click)="onDeleteButtonClicked();">{{'delete' | translatePipe}}</button>
         </div>
 
 
         <ng-container *ngIf="group">
-          <h4>{{'money/transaction-group/subtitle' | translate}}</h4>
+          <h4>{{'money/transaction-group/subtitle' | translatePipe}}</h4>
           <ng-container *ngFor="let qualifier of group.qualifiers">
             <app-money-transaction-group-qualifier-list-item *ngIf="!isQualifierInEdit(qualifier)" [qualifier]="qualifier" (onEditCallback)="editQualifierCallback(qualifier)"></app-money-transaction-group-qualifier-list-item>
             <ng-container *ngIf="!isQualifierInEdit(qualifier)"><button mat-button (click)="onEditQualifierButtonClicked(qualifier)" *ngIf="!nameInEdit"><mat-icon>edit</mat-icon></button></ng-container>

@@ -18,11 +18,10 @@ import {MatFabButton} from "@angular/material/button";
 import {Router} from "@angular/router";
 import {BudgetApi} from "../../api/budget-api";
 import Budget from "../../dto/budget";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {NgIf} from "@angular/common";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
-import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
   selector: 'app-budget-list',
@@ -41,11 +40,10 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatRowDef,
     MatIcon,
     MatFabButton,
-    TranslatePipe,
+    NgIf,
     MatTab,
     MatTabGroup,
-    MatCard,
-    MatCardContent
+    TranslatePipe
   ],
   templateUrl: './budget-list.component.html',
   styleUrl: './budget-list.component.scss'

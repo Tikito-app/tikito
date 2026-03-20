@@ -1,16 +1,16 @@
 import {Component} from '@angular/core';
-import {TranslatePipe} from "@ngx-translate/core";
 import {MatAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Router} from "@angular/router";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 
 @Component({
   selector: 'app-admin',
   standalone: true,
   imports: [
-    TranslatePipe,
     MatAnchor,
-    MatIcon
+    MatIcon,
+    TranslatePipe
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss'

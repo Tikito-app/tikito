@@ -14,14 +14,13 @@ import {
 } from "@angular/material/table";
 import {DatePipe, NgIf} from "@angular/common";
 import {PaginatorComponent} from "../../../components/paginator/paginator.component";
-import {TranslatePipe} from "@ngx-translate/core";
 import {CurrencyComponent} from "../../../components/currency/currency.component";
 import {Util} from "../../../util";
 import {MatSort} from "@angular/material/sort";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MoneyTransactionImportLine} from "../../../dto/money/money-transaction-import-line";
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {TranslatePipe} from "../../../service/translate-pipe.pipe";
 
 @Component({
   selector: 'app-money-import-result',
@@ -36,16 +35,15 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatRow,
     MatRowDef,
     MatTable,
+    NgIf,
     PaginatorComponent,
-    TranslatePipe,
     MatHeaderCellDef,
     CurrencyComponent,
     DatePipe,
     MatFormField,
     MatInput,
     MatLabel,
-    MatCard,
-    MatCardContent
+    TranslatePipe
   ],
   templateUrl: './money-import-result.component.html',
   styleUrl: './money-import-result.component.scss'

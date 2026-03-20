@@ -1,7 +1,7 @@
-<h1 mat-dialog-title>{{data.title | translate}}</h1>
+<h1 mat-dialog-title>{{data.title | translatePipe}}</h1>
 <div mat-dialog-content>
-    <mat-label>{{data.message | translate}}</mat-label>
+    <mat-label>{{data.message | translatePipe}}</mat-label>
 </div>
 <div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="'ok'" cdkFocusInitial>{{'ok' | translate}}</button>
+    <button mat-button [mat-dialog-close]="'ok'" cdkFocusInitial>{{'ok' | translatePipe}}</button>
 </div>

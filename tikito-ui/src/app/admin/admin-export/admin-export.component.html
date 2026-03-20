@@ -1,19 +1,19 @@
 <div class="main-side-column main-column">
-  <button mat-button (click)="routeToAdmin();"><mat-icon>arrow_back</mat-icon> {{'admin/back-to-admin' | translate}}</button>
+  <button mat-button (click)="routeToAdmin();"><mat-icon>arrow_back</mat-icon> {{'admin/back-to-admin' | translatePipe}}</button>
 </div>
 <div class="main-center-column-small main-column">
-    {{'admin/export-accounts' | translate}}
+    {{'admin/export-accounts' | translatePipe}}
   <form [formGroup]="form">
     @for (account of accounts; track account.id) {
       <mat-checkbox formControlName="account{{account.id}}">{{account.name}}</mat-checkbox><br/>
     }
   </form>
   <br/>
-  {{'admin/export-text' | translate}}
+  {{'admin/export-text' | translatePipe}}
   <app-admin-import-export-setting [showAccounts]="false"></app-admin-import-export-setting>
   <button mat-raised-button
           color="primary"
-          (click)="onExportClicked()">{{ 'admin/export' | translate }}
+          (click)="onExportClicked()">{{ 'admin/export' | translatePipe }}
   </button>
 </div>
 <div class="main-side-column main-column">

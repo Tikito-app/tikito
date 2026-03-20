@@ -3,47 +3,45 @@
   <input matInput (keyup)="applyFilter($event)" #input>
 </mat-form-field>
 
-@if(dataSource) {
-  <mat-card>
-    <mat-card-content>
-      <table mat-table [dataSource]="dataSource">
+<div class="mat-elevation-z8" *ngIf="dataSource">
+  <table mat-table [dataSource]="dataSource">
 
-        <ng-container matColumnDef="timestamp">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/date' | translate }}</th>
-          <td mat-cell *matCellDef="let element"> {{ element.timestamp | date : Util.DATE_FORMAT }}</td>
-        </ng-container>
+    <ng-container matColumnDef="timestamp">
+      <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/date' | translatePipe }}</th>
+      <td mat-cell *matCellDef="let element"> {{ element.timestamp | date : Util.DATE_FORMAT }}</td>
+    </ng-container>
 
-        <ng-container matColumnDef="debit-credit">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/debit-credit' | translate }}</th>
-          <td mat-cell *matCellDef="let element"> {{ element.debitCredit }}</td>
-        </ng-container>
+    <ng-container matColumnDef="debit-credit">
+      <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/debit-credit' | translatePipe }}</th>
+      <td mat-cell *matCellDef="let element"> {{ element.debitCredit }}</td>
+    </ng-container>
 
-        <ng-container matColumnDef="counterpart-account-name">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/counterparty-account-name' | translate }}</th>
-          <td mat-cell *matCellDef="let element"> {{ element.counterpartAccountName }}</td>
-        </ng-container>
+    <ng-container matColumnDef="counterpart-account-name">
+      <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/counterparty-account-name' | translatePipe }}</th>
+      <td mat-cell *matCellDef="let element"> {{ element.counterpartAccountName }}</td>
+    </ng-container>
 
-        <ng-container matColumnDef="counterpart-account-number">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/counterparty-account-number' | translate }}</th>
-          <td mat-cell *matCellDef="let element"> {{ element.counterpartAccountNumber }}</td>
-        </ng-container>
+    <ng-container matColumnDef="counterpart-account-number">
+      <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/counterparty-account-number' | translatePipe }}</th>
+      <td mat-cell *matCellDef="let element"> {{ element.counterpartAccountNumber }}</td>
+    </ng-container>
 
-        <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/amount' | translate }}</th>
-          <td mat-cell *matCellDef="let element">
-            <app-currency [amount]="element.amount" [currencyId]="element.currencyId"></app-currency>
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/amount' | translatePipe }}</th>
+      <td mat-cell *matCellDef="let element">
+        <app-currency [amount]="element.amount" [currencyId]="element.currencyId"></app-currency>
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="group">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/group' | translate }}</th>
-          <td mat-cell *matCellDef="let element"> {{ element.groupName }}</td>
-        </ng-container>
+    <ng-container matColumnDef="group">
+      <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/group' | translatePipe }}</th>
+      <td mat-cell *matCellDef="let element"> {{ element.groupName }}</td>
+    </ng-container>
 
-        <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/description' | translate }}</th>
-          <td mat-cell *matCellDef="let element"> {{ element.description }}</td>
-        </ng-container>
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/description' | translatePipe }}</th>
+      <td mat-cell *matCellDef="let element"> {{ element.description }}</td>
+    </ng-container>
 
     <ng-container matColumnDef="options">
       <th mat-header-cell *matHeaderCellDef></th>
@@ -54,25 +52,23 @@
         <mat-menu #menu="matMenu">
           <button mat-menu-item (click)="onSetTransactionGroup(element)">
             <mat-icon>group_work</mat-icon>
-            <span>{{ 'money/transaction/set-transaction-group' | translate }}</span>
+            <span>{{ 'money/transaction/set-transaction-group' | translatePipe }}</span>
           </button>
           <button mat-menu-item (click)="onEditTransaction(element)">
             <mat-icon>edit</mat-icon>
-            <span>{{ 'edit' | translate }}</span>
+            <span>{{ 'edit' | translatePipe }}</span>
           </button>
           <button mat-menu-item (click)="onDeleteTransaction(element)">
             <mat-icon>delete</mat-icon>
-            <span>{{ 'delete' | translate }}</span>
+            <span>{{ 'delete' | translatePipe }}</span>
           </button>
         </mat-menu>
       </td>
     </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
 
-      <app-paginator></app-paginator>
-    </mat-card-content>
-  </mat-card>
-}
+  <app-paginator></app-paginator>
+</div>

@@ -7,7 +7,6 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/mat
 import {MatError, MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {TranslatePipe} from "@ngx-translate/core";
 import {MatButton} from "@angular/material/button";
 import {NgIf} from "@angular/common";
 import {UserAccount} from "../dto/user-account";
@@ -15,6 +14,7 @@ import {HttpRequestData} from "../dto/http-request-data";
 import {HttpService} from "../service/http.service";
 import {HttpRequestMethod} from "../dto/http-request-method";
 import {CacheService} from "../service/cache-service";
+import {TranslatePipe} from "../service/translate-pipe.pipe";
 
 @Component({
   selector: 'app-initial-installation',
@@ -27,16 +27,15 @@ import {CacheService} from "../service/cache-service";
     MatInput,
     MatLabel,
     ReactiveFormsModule,
-    TranslatePipe,
     MatButton,
     MatCard,
     MatCardHeader,
     MatCardTitle,
     MatError,
     MatSuffix,
-    NgIf
+    NgIf,
+    TranslatePipe
   ],
-  providers: [TranslatePipe],
   templateUrl: './initial-installation.component.html',
   styleUrl: './initial-installation.component.scss'
 })

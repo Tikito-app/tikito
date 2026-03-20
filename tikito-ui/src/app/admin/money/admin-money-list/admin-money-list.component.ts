@@ -16,7 +16,6 @@ import {Security} from "../../../dto/security/security";
 import {PaginatorComponent} from "../../../components/paginator/paginator.component";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../service/auth.service";
-import {TranslatePipe} from "@ngx-translate/core";
 import {DialogService} from "../../../service/dialog.service";
 import {AdminApi} from "../../../api/admin-api";
 import {CacheService} from "../../../service/cache-service";
@@ -28,7 +27,7 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {NgIf} from "@angular/common";
 import {Account} from "../../../dto/account";
 import {TranslateService} from "../../../service/translate.service";
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {TranslatePipe} from "../../../service/translate-pipe.pipe";
 
 @Component({
   selector: 'app-admin-money-list',
@@ -50,14 +49,12 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatRow,
     MatRowDef,
     MatTable,
+    NgIf,
     PaginatorComponent,
-    TranslatePipe,
     MatMenuTrigger,
     MatHeaderCellDef,
-    MatCard,
-    MatCardContent
+    TranslatePipe
   ],
-  providers: [TranslatePipe],
   templateUrl: './admin-money-list.component.html',
   styleUrl: './admin-money-list.component.scss'
 })

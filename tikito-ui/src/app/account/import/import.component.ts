@@ -7,7 +7,7 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {NgIf} from "@angular/common";
 import {FileImportService} from "../../service/file-import-service";
 import {AccountType} from "../../dto/account-type";
@@ -37,15 +37,14 @@ import {TranslateService} from "../../service/translate.service";
     MatOption,
     MatSelect,
     ReactiveFormsModule,
-    TranslatePipe,
     NgIf,
     MoneyImportResultComponent,
     SecurityImportResultComponent,
     MatButton,
     SelectColumnsComponent,
-    MatInput
+    MatInput,
+    TranslatePipe
   ],
-  providers: [TranslatePipe],
   templateUrl: './import.component.html',
   styleUrl: './import.component.scss'
 })

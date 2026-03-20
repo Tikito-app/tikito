@@ -8,7 +8,7 @@ import {MatInput} from "@angular/material/input";
 import {MatButton, MatFabButton} from "@angular/material/button";
 import {Util} from "../../util";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MoneyApi} from "../../api/money-api";
 import MoneyTransactionGroupQualifier from "../../dto/money/money-transaction-group-qualifier";
@@ -39,13 +39,13 @@ import {Account} from "../../dto/account";
     NgIf,
     MatInput,
     MatButton,
-    TranslatePipe,
     NgForOf,
     MoneyTransactionGroupQualifierListItemComponent,
     MatFabButton,
     MoneyTransactionGroupQualifierFormComponent,
     MatOption,
-    MatSelect
+    MatSelect,
+    TranslatePipe
   ],
   templateUrl: './money-transaction-group-form.component.html',
   styleUrl: './money-transaction-group-form.component.scss'

@@ -8,7 +8,7 @@ import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
 import {NgIf} from "@angular/common";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {AuthService} from "../../service/auth.service";
 import {CacheService} from "../../service/cache-service";
 import {UserPreferenceService} from "../../service/user-preference-service";
@@ -34,12 +34,12 @@ import {Router} from "@angular/router";
     MatSelect,
     NgIf,
     ReactiveFormsModule,
-    TranslatePipe,
-    MatIcon
+    MatIcon,
+    TranslatePipe
   ],
   templateUrl: './admin-user-preferences.component.html',
   styleUrl: './admin-user-preferences.component.scss',
-  providers: [provideNativeDateAdapter(), TranslatePipe]
+  providers: [provideNativeDateAdapter()]
 })
 export class AdminUserPreferencesComponent {
   form: FormGroup;

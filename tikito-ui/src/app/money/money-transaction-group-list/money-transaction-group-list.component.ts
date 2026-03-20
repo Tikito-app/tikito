@@ -16,7 +16,7 @@ import {
 import {MatIcon} from "@angular/material/icon";
 import {MatFabButton} from "@angular/material/button";
 import {ActivatedRoute, Router} from "@angular/router";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {NgIf} from "@angular/common";
 import {MoneyApi} from "../../api/money-api";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
@@ -25,7 +25,6 @@ import {MatInput} from "@angular/material/input";
 import {MatSort} from "@angular/material/sort";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
 import {AuthService} from "../../service/auth.service";
-import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
   selector: 'app-moneyTransactionGroup-list',
@@ -43,15 +42,13 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatRowDef,
     MatIcon,
     MatFabButton,
-    TranslatePipe,
     NgIf,
     MatFormField,
     MatInput,
     MatNoDataRow,
     MatLabel,
     PaginatorComponent,
-    MatCard,
-    MatCardContent
+    TranslatePipe
   ],
   templateUrl: './money-transaction-group-list.component.html',
   styleUrl: './money-transaction-group-list.component.scss'

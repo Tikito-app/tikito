@@ -3,7 +3,7 @@
 <div class="main-center-column-small main-column">
   <h2>Assets</h2>
   <ng-container *ngIf="aggregatedHistoricalMoneyHoldingValues.length == 0">
-    <div [innerHTML]="'overview/extended-overview-message' | translate"></div>
+    <div [innerHTML]="'overview/extended-overview-message' | translatePipe"></div>
   </ng-container>
   <div echarts [options]="chartOption" [initOpts]="initOptions" class="full-width"></div>
 </div>

@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, Output, ViewChild} from '@ang
 import SecurityHolding from "../../dto/security/security-holding";
 import {SecurityUtil} from "../../security-util";
 import {MatIcon} from "@angular/material/icon";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {MatDivider} from "@angular/material/divider";
 import {MatList, MatListItem} from "@angular/material/list";
 import {MatButton} from "@angular/material/button";
@@ -20,14 +20,14 @@ import {PercentageComponent} from "../../components/percentage/percentage.compon
   standalone: true,
   imports: [
     MatIcon,
-    TranslatePipe,
     MatDivider,
     MatList,
     MatListItem,
     MatButton,
     SecurityHoldingGraphComponent,
     CurrencyComponent,
-    PercentageComponent
+    PercentageComponent,
+    TranslatePipe
   ],
   templateUrl: './security-holding-list-details.component.html',
   styleUrl: './security-holding-list-details.component.scss'

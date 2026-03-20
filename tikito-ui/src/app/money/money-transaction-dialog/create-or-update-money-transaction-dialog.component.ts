@@ -8,7 +8,6 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import {MatFormField, MatHint, MatInput, MatLabel, MatSuffix} from "@angular/material/input";
-import {TranslatePipe} from "@ngx-translate/core";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
 import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
@@ -19,7 +18,6 @@ import {UserPreferenceService} from "../../service/user-preference-service";
 import {UserPreference} from "../../dto/user-preference";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {NgIf} from "@angular/common";
-import {TranslatePipePipe} from "../../service/translate-pipe.pipe";
 import {MoneyApi} from "../../api/money-api";
 import {AccountApi} from "../../api/account-api";
 import {Account} from "../../dto/account";
@@ -30,6 +28,7 @@ import {Loan} from "../../dto/loan";
 import Budget from "../../dto/budget";
 import {LoanApi} from "../../api/loan-api";
 import {BudgetApi} from "../../api/budget-api";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 
 export interface MyData {
   transaction: MoneyTransaction;
@@ -44,7 +43,6 @@ export interface MyData {
     MatDialogContent,
     MatDialogTitle,
     MatLabel,
-    TranslatePipe,
     FormsModule,
     MatFormField,
     MatIcon,
@@ -58,9 +56,9 @@ export interface MyData {
     MatHint,
     MatSuffix,
     NgIf,
-    TranslatePipePipe
+    TranslatePipe,
   ],
-  providers: [provideNativeDateAdapter(), TranslatePipe],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './create-or-update-money-transaction-dialog.component.html',
   styleUrl: './create-or-update-money-transaction-dialog.component.scss'
 })

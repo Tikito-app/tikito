@@ -18,7 +18,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {NgIf} from "@angular/common";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {Loan} from "../../dto/loan";
 import {MatSort} from "@angular/material/sort";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -30,7 +30,6 @@ import {LoanValue} from "../../dto/loan-value";
 import {
   LoanMoneyTransactionsListComponent
 } from "../loan-money-transactions-list/loan-money-transactions-list.component";
-import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
   selector: 'app-loan-list',
@@ -52,15 +51,13 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatTable,
     NgIf,
     PaginatorComponent,
-    TranslatePipe,
     MatHeaderCellDef,
     MatTab,
     MatTabGroup,
     LoanGraphComponent,
     LoanGraphFilterComponent,
     LoanMoneyTransactionsListComponent,
-    MatCard,
-    MatCardContent
+    TranslatePipe
   ],
   templateUrl: './loan-list.component.html',
   styleUrl: './loan-list.component.scss'

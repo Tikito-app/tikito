@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatCheckbox} from "@angular/material/checkbox";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {ImportExportSettings} from "../../dto/import-export-settings";
 
 @Component({

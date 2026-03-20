@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {MatButton} from "@angular/material/button";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {NgIf} from "@angular/common";
 import {SecurityTransactionImportLine} from "../../dto/security/security-transaction-import-line";
 import {HttpRequestData} from "../../dto/http-request-data";
@@ -15,10 +15,10 @@ import {AdminImportExportSettingComponent} from "../admin-import-export-setting/
   standalone: true,
   imports: [
     MatButton,
-    TranslatePipe,
     NgIf,
     MatIcon,
-    AdminImportExportSettingComponent
+    AdminImportExportSettingComponent,
+    TranslatePipe
   ],
   templateUrl: './admin-import.component.html',
   styleUrl: './admin-import.component.scss'

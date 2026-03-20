@@ -5,7 +5,7 @@ import {TranslateService} from "./translate.service";
   name: 'translatePipe',
   standalone: true
 })
-export class TranslatePipePipe implements PipeTransform {
+export class TranslatePipe implements PipeTransform {
   constructor(private translateService: TranslateService) {
   }
 

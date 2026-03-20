@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {HttpService} from "../../service/http.service";
 import {HttpRequestData} from "../../dto/http-request-data";
 import {MatIcon} from "@angular/material/icon";
@@ -19,10 +19,10 @@ import {MatCheckbox} from "@angular/material/checkbox";
   imports: [
     MatButton,
     ReactiveFormsModule,
-    TranslatePipe,
     MatIcon,
     AdminImportExportSettingComponent,
-    MatCheckbox
+    MatCheckbox,
+    TranslatePipe
   ],
   templateUrl: './admin-export.component.html',
   styleUrl: './admin-export.component.scss'

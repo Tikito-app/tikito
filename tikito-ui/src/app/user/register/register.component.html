@@ -3,7 +3,7 @@
 <div class="main-center-column-small main-column">
   <mat-card class="full-width">
     <mat-card-header>
-      <mat-card-title>{{ 'register' | translate }}</mat-card-title>
+      <mat-card-title>{{ 'register' | translatePipe }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <ng-container *ngIf="registered">
@@ -11,13 +11,13 @@
       </ng-container>
       <form [formGroup]="form" *ngIf="!registered">
         <mat-form-field appearance="fill" class="full-width">
-          <mat-label>{{ 'email' | translate }}</mat-label>
+          <mat-label>{{ 'email' | translatePipe }}</mat-label>
           <input [attr.data-cy]="'email'" matInput type="text" formControlName="email">
           <mat-icon matSuffix>email</mat-icon>
         </mat-form-field>
         <br/>
         <mat-form-field appearance="fill" class="full-width">
-          <mat-label>{{ 'register/enter-your-password' | translate }}</mat-label>
+          <mat-label>{{ 'register/enter-your-password' | translatePipe }}</mat-label>
           <input [attr.data-cy]="'password'" [type]="showPasswordFlag ? 'text' : 'password'" matInput
                  placeholder="Password" formControlName="password">
           <mat-icon class="clickable" (click)="showPasswordFlag=!showPasswordFlag"
@@ -26,7 +26,7 @@
         </mat-form-field>
         <br/>
         <mat-form-field appearance="fill" class="full-width">
-          <mat-label>{{ 'register/enter-your-password-again' | translate }}</mat-label>
+          <mat-label>{{ 'register/enter-your-password-again' | translatePipe }}</mat-label>
           <input [attr.data-cy]="'password-again'" [type]="showPasswordFlag ? 'text' : 'password'" matInput
                  placeholder="Password" formControlName="passwordAgain">
           <mat-icon class="clickable" (click)="showPasswordFlag=!showPasswordFlag"
@@ -34,12 +34,12 @@
           </mat-icon>
         </mat-form-field>
         <br/>
-        <mat-error *ngIf="errorMessage" [attr.data-cy]="'error-message'">{{ errorMessage | translate }}</mat-error>
+        <mat-error *ngIf="errorMessage" [attr.data-cy]="'error-message'">{{ errorMessage | translatePipe }}</mat-error>
 
         <button [attr.data-cy]="'register-button'" (click)="onSubmit()" mat-raised-button
-                color="primary">{{ 'register' | translate }}
+                color="primary">{{ 'register' | translatePipe }}
         </button>
-       <button [attr.data-cy]="'login-button'" style="float: right;" mat-button color="secundary" (click)="routeToLogin()">{{'login' | translate}}</button>
+       <button [attr.data-cy]="'login-button'" style="float: right;" mat-button color="secundary" (click)="routeToLogin()">{{'login' | translatePipe}}</button>
       </form>
     </mat-card-content>
   </mat-card>
