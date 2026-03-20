@@ -28,6 +28,7 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {SecurityType} from "../../../dto/security/security-type";
 import {TranslateService} from "../../../service/translate.service";
+import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
   selector: 'app-admin-security-list',
@@ -53,7 +54,9 @@ import {TranslateService} from "../../../service/translate.service";
     MatHeaderCellDef,
     MatFormField,
     MatInput,
-    MatLabel
+    MatLabel,
+    MatCard,
+    MatCardContent
   ],
   providers: [TranslatePipe],
   templateUrl: './admin-security-list.component.html',

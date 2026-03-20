@@ -22,6 +22,7 @@ import {TranslatePipe} from "@ngx-translate/core";
 import {NgIf} from "@angular/common";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
+import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
   selector: 'app-budget-list',
@@ -41,9 +42,10 @@ import {MatTab, MatTabGroup} from "@angular/material/tabs";
     MatIcon,
     MatFabButton,
     TranslatePipe,
-    NgIf,
     MatTab,
-    MatTabGroup
+    MatTabGroup,
+    MatCard,
+    MatCardContent
   ],
   templateUrl: './budget-list.component.html',
   styleUrl: './budget-list.component.scss'

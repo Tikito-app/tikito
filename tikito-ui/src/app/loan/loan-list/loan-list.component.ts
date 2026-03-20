@@ -30,6 +30,7 @@ import {LoanValue} from "../../dto/loan-value";
 import {
   LoanMoneyTransactionsListComponent
 } from "../loan-money-transactions-list/loan-money-transactions-list.component";
+import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
   selector: 'app-loan-list',
@@ -57,7 +58,9 @@ import {
     MatTabGroup,
     LoanGraphComponent,
     LoanGraphFilterComponent,
-    LoanMoneyTransactionsListComponent
+    LoanMoneyTransactionsListComponent,
+    MatCard,
+    MatCardContent
   ],
   templateUrl: './loan-list.component.html',
   styleUrl: './loan-list.component.scss'

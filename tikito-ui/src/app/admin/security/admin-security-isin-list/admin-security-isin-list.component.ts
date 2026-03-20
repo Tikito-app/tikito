@@ -26,6 +26,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {NgIf} from "@angular/common";
 import {TranslateService} from "../../../service/translate.service";
+import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
   selector: 'app-admin-security-isin-list',
@@ -48,7 +49,9 @@ import {TranslateService} from "../../../service/translate.service";
     PaginatorComponent,
     TranslatePipe,
     MatMenuTrigger,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    MatCard,
+    MatCardContent
   ],
   providers: [TranslatePipe],
   templateUrl: './admin-security-isin-list.component.html',

@@ -25,6 +25,7 @@ import {MatInput} from "@angular/material/input";
 import {MatSort} from "@angular/material/sort";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
 import {AuthService} from "../../service/auth.service";
+import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
   selector: 'app-moneyTransactionGroup-list',
@@ -48,7 +49,9 @@ import {AuthService} from "../../service/auth.service";
     MatInput,
     MatNoDataRow,
     MatLabel,
-    PaginatorComponent
+    PaginatorComponent,
+    MatCard,
+    MatCardContent
   ],
   templateUrl: './money-transaction-group-list.component.html',
   styleUrl: './money-transaction-group-list.component.scss'

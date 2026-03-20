@@ -255,4 +255,11 @@ export class Util {
     }
     return '' + num;
   }
+
+  static maxDisplayString(value: string, maxLength: number) {
+    if(value != null && value.length > maxLength) {
+      return value.substring(0, maxLength) + '...';
+    }
+    return value;
+  }
 }
