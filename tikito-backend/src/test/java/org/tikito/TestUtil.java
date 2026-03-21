@@ -5,6 +5,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 import java.util.Random;
 
 public final class TestUtil {
+    public static String randomString(final int length) {
+        return randomString(length, length);
+    }
+
     public static String randomString(final int min, final int max) {
         return RandomStringUtils.secure().nextAlphanumeric(min, max);
     }

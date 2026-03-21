@@ -14,6 +14,8 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.tikito.TestUtil.randomDouble;
+import static org.tikito.TestUtil.randomInt;
 
 class SecurityTransactionDtoTest extends BaseTest {
 

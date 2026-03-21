@@ -19,6 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.tikito.TestUtil.randomInt;
 
 @ExtendWith(MockitoExtension.class)
 class SecurityHoldingServiceTest extends BaseTest {
@@ -64,7 +65,7 @@ class SecurityHoldingServiceTest extends BaseTest {
         final HistoricalSecurityHoldingValue value3 = new HistoricalSecurityHoldingValue(DEFAULT_USER_ACCOUNT.getId(), randomHistoricalHoldingValueDto(CURRENCY_DOLLAR_ID));
 
         value1.setDate(LocalDate.now());
-        value2.setDate(LocalDate.now().minusDays(BaseTest.randomInt(1, 10)));
+        value2.setDate(LocalDate.now().minusDays(randomInt(1, 10)));
         value3.setDate(value1.getDate());
 
         final ArgumentCaptor<List<AggregatedHistoricalSecurityHoldingValue>> captor = ArgumentCaptor.forClass(List.class);

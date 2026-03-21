@@ -32,6 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static org.tikito.TestUtil.randomDouble;
+import static org.tikito.TestUtil.randomString;
+
 public class BaseIntegrationTest extends BaseTest {
 
     protected static Account DEFAULT_DEBIT_ACCOUNT = null;

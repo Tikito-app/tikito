@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.tikito.TestUtil.randomString;
 
 @SpringBootTest
 @Transactional

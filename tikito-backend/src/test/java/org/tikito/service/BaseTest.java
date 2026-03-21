@@ -30,8 +30,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
+
+import static org.tikito.TestUtil.*;
 
 @ActiveProfiles("test")
 public class BaseTest {
@@ -90,28 +90,6 @@ public class BaseTest {
         final AuthUser authUser = new AuthUser();
         authUser.setId(userId);
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(authUser, null, new ArrayList<>()));
-    }
-
-    protected static int randomInt(final int min, final int max) {
-        final Random random = new Random();
-        return random.nextInt(max - min) + min;
-    }
-
-    protected static double randomDouble(final double min, final double max) {
-        final Random random = new Random();
-        return random.nextDouble(max - min) + min;
-    }
-
-    protected static String randomString(final int length) {
-        final int leftLimit = 48; // numeral '0'
-        final int rightLimit = 122; // letter 'z'
-        final Random random = new Random();
-
-        return random.ints(leftLimit, rightLimit + 1)
-                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                .limit(length)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
     }
 
     protected static String randomEmail() {
