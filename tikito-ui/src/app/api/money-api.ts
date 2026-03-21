@@ -10,6 +10,7 @@ import {AggregatedHistoricalMoneyHoldingValue} from "../dto/money/aggregated-his
 import {MoneyTransactionImportLine} from "../dto/money/money-transaction-import-line";
 import {MoneyTransactionGroupType} from "../dto/money-transaction-group-type";
 import {SecurityTransaction} from "../dto/security/security-transaction";
+import {MoneyHolding} from "../dto/money-holding";
 
 @Injectable({
   providedIn: 'root'
@@ -128,5 +129,10 @@ export class MoneyApi {
     return this.http.httpPostSingle(MoneyTransaction, new HttpRequestData()
       .withBody(body)
       .withUrl('/api/money/transaction/create-or-update'));
+  }
+
+  getHoldings(): Observable<MoneyHolding[]> {
+    return this.http.httpGetList<MoneyHolding>(MoneyHolding, new HttpRequestData()
+      .withUrl('/api/money/holding'));
   }
 }

@@ -20,6 +20,8 @@ import {LoanApi} from "../api/loan-api";
 import {OverviewLoanComponent} from "./overview-loan/overview-loan.component";
 import {LoanValue} from "../dto/loan-value";
 import {TranslatePipe} from "../service/translate-pipe.pipe";
+import {MoneyHolding} from "../dto/money-holding";
+import {CurrencyComponent} from "../components/currency/currency.component";
 
 @Component({
   selector: 'app-overview',
@@ -31,7 +33,8 @@ import {TranslatePipe} from "../service/translate-pipe.pipe";
     ReactiveFormsModule,
     NgForOf,
     OverviewLoanComponent,
-    TranslatePipe
+    TranslatePipe,
+    CurrencyComponent
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss',
@@ -49,6 +52,7 @@ export class OverviewComponent implements OnInit {
   heightCss: string;
   loansById: any = {};
   loanValuesPerLoanId: any = {};
+  holdings: MoneyHolding[];
 
   constructor(private api: OverviewApi,
               private securityApi: SecurityApi,
@@ -79,6 +83,8 @@ export class OverviewComponent implements OnInit {
         this.processLoanValues(values);
       });
     });
+
+    this.moneyApi.getHoldings().subscribe(holdings => this.holdings = holdings);
 
     this.api.getOverview().subscribe(overview => this.overview = overview);
   }
