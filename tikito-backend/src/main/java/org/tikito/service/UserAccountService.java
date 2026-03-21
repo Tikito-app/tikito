@@ -127,7 +127,8 @@ public class UserAccountService {
                 new UserPreference(userAccountId, UserPreferenceKey.START_AT_ZERO_FROM_BEGINNING, "true"),
                 new UserPreference(userAccountId, UserPreferenceKey.SECURITY_START_AT_ZERO_FROM_BEGINNING, "true"),
                 new UserPreference(userAccountId, UserPreferenceKey.START_AT_ZERO_AFTER_DATE_RANGE, "true"),
-                new UserPreference(userAccountId, UserPreferenceKey.SECURITY_START_AT_ZERO_AFTER_DATE_RANGE, "true")));
+                new UserPreference(userAccountId, UserPreferenceKey.SECURITY_START_AT_ZERO_AFTER_DATE_RANGE, "true"),
+                new UserPreference(userAccountId, UserPreferenceKey.LANGUAGE, "en")));
     }
 
     private void generateCurrencies() throws IOException {

@@ -10,7 +10,6 @@ import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.CreateOrUpdateAccountRequest;
 import org.tikito.dto.AccountDto;
 import org.tikito.dto.AccountType;
-import org.tikito.exception.ResourceNotFoundException;
 import org.tikito.service.AccountService;
 import org.tikito.service.importer.money.ABNFileParser;
 import org.tikito.service.importer.money.INGFileParser;
@@ -41,7 +40,7 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<AccountDto> createOrUpdateAccount(final AuthUser authUser, @Validated @RequestBody final CreateOrUpdateAccountRequest request) throws ResourceNotFoundException {
+    public ResponseEntity<AccountDto> createOrUpdateAccount(final AuthUser authUser, @Validated @RequestBody final CreateOrUpdateAccountRequest request) {
         return ResponseEntity.ok(accountService.createOrUpdate(authUser.getId(), request));
     }
 

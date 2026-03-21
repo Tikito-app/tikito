@@ -1,4 +1,8 @@
 <div class="main-side-column main-column">
+  <h2>Debit/Credit overview</h2>
+  @for (holding of holdings; track holding.id) {
+    {{holding.account.name}}: <app-currency [currencyId]="holding.currencyId" [amount]="holding.amount"></app-currency><br/>
+  }
 </div>
 <div class="main-center-column-small main-column">
   <h2>Assets</h2>

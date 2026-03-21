@@ -17,9 +17,9 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClicked(row)" class="clickable"></tr>
         </table>
 
-        <app-paginator></app-paginator>
       </mat-card-header>
     </mat-card>
+    <app-paginator></app-paginator>
   }
 
   <mat-card class="full-width" *ngIf="userSelected">

@@ -14,7 +14,7 @@ public class CreateOrUpdateMoneyTransactionRequest extends CreateOrUpdateRequest
     private String counterpartAccountNumber;
     private Instant timestamp;
     private double amount;
-    private double finalBalance;
+    private Double finalBalance;
     private String description;
     private long currencyId;
     private Long groupId;

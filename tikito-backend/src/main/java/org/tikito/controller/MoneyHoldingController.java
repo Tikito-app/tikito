@@ -2,6 +2,7 @@ package org.tikito.controller;
 
 import org.tikito.auth.AuthUser;
 import org.tikito.dto.money.AggregatedHistoricalMoneyHoldingValueDto;
+import org.tikito.dto.money.MoneyHoldingDto;
 import org.tikito.service.money.MoneyHoldingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,11 @@ public class MoneyHoldingController {
 
     public MoneyHoldingController(final MoneyHoldingService moneyHoldingService) {
         this.moneyHoldingService = moneyHoldingService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<MoneyHoldingDto>> getHoldings(final AuthUser user) {
+        return ResponseEntity.ok(moneyHoldingService.getMoneyHoldings(user.getId()));
     }
 
     @GetMapping("/aggregated-historical-values")

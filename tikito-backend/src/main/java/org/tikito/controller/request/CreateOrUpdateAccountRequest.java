@@ -9,7 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateOrUpdateAccountRequest extends CreateOrUpdateRequest {
-    private Long id;
     @NotBlank
     private String name;
     @NotBlank

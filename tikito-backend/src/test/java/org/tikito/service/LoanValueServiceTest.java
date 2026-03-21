@@ -43,7 +43,7 @@ class LoanValueServiceTest extends BaseIntegrationTest {
         withDefaultAccounts();
         withDefaultMoneyTransactionGroups();
         loginWithDefaultUser();
-        transactionGroup = withExistingTransactionGroup(DEFAULT_ACCOUNT.getId(), "Mortgage", MoneyTransactionGroupQualifierType.INCLUDES, "Mortgage", Set.of(MoneyTransactionGroupType.LOAN));
+        transactionGroup = withExistingTransactionGroup(DEFAULT_SECURITY_ACCOUNT.getId(), "Mortgage", MoneyTransactionGroupQualifierType.INCLUDES, "Mortgage", Set.of(MoneyTransactionGroupType.LOAN));
     }
 
     @Test

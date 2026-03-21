@@ -1,6 +1,5 @@
 package org.tikito.dto.security;
 
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +10,6 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 public class SecurityHoldingDto {
-    @Id
     private Long id;
     private long userId;
     private Set<Long> accountIds;

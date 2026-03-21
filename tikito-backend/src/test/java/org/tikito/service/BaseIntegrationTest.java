@@ -1,5 +1,6 @@
 package org.tikito.service;
 
+import org.tikito.controller.request.CreateOrUpdateAccountRequest;
 import org.tikito.dto.AccountDto;
 import org.tikito.dto.AccountType;
 import org.tikito.dto.DateRange;
@@ -11,6 +12,7 @@ import org.tikito.entity.Account;
 import org.tikito.entity.UserAccount;
 import org.tikito.entity.loan.Loan;
 import org.tikito.entity.loan.LoanPart;
+import org.tikito.entity.money.MoneyHolding;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.entity.money.MoneyTransactionGroup;
 import org.tikito.entity.security.Isin;
@@ -32,10 +34,12 @@ import java.util.Set;
 
 public class BaseIntegrationTest extends BaseTest {
 
-    protected static Account DEFAULT_ACCOUNT = null;
-    protected static Account DOLLAR_ACCOUNT = null;
-    protected static AccountDto DEFAULT_ACCOUNT_DTO = null;
-    protected static AccountDto DOLLAR_ACCOUNT_DTO = null;
+    protected static Account DEFAULT_DEBIT_ACCOUNT = null;
+    protected static Account DEFAULT_SECURITY_ACCOUNT = null;
+    protected static Account DEBIT_DOLLAR_ACCOUNT = null;
+    protected static AccountDto DEFAULT_DEBIT_ACCOUNT_DTO = null;
+    protected static AccountDto DEFAULT_SECURITY_ACCOUNT_DTO = null;
+    protected static AccountDto DEBIT_DOLLAR_ACCOUNT_DTO = null;
     protected static Security WOLTER_KLUWER = null;
     protected static Security ALPHABET = null;
     protected static Security AMAZON = null;
@@ -90,6 +94,12 @@ public class BaseIntegrationTest extends BaseTest {
     @Autowired
     protected ImportExportService importExportService;
 
+    @Autowired
+    protected MoneyHoldingRepository moneyHoldingRepository;
+
+    @Autowired
+    protected AccountService accountService;
+
     @AfterEach
     @BeforeEach
     public void tearDown() {
@@ -105,6 +115,8 @@ public class BaseIntegrationTest extends BaseTest {
         historicalMoneyHoldingValueRepository.deleteAll();
         userAccountRepository.deleteAll();
         loanRepository.deleteAll();
+        moneyHoldingRepository.deleteAll();
+
         cacheService.refreshSecurities();
         cacheService.refreshCurrencies();
         cacheService.refreshFirstEverUser();
@@ -160,20 +172,27 @@ public class BaseIntegrationTest extends BaseTest {
     }
 
     protected void withDefaultAccounts() {
-        DEFAULT_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, ACCOUNT_NUMBER_ONE, AccountType.SECURITY, CURRENCY_EURO_ID);
-        DOLLAR_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_TWO, ACCOUNT_NUMBER_TWO, AccountType.SECURITY, CURRENCY_DOLLAR_ID);
-        DEFAULT_ACCOUNT_DTO = DEFAULT_ACCOUNT.toDto();
-        DOLLAR_ACCOUNT_DTO = DOLLAR_ACCOUNT.toDto();
+        DEFAULT_DEBIT_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_THREE, ACCOUNT_NUMBER_THREE, AccountType.DEBIT, CURRENCY_EURO_ID);
+        DEFAULT_SECURITY_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, ACCOUNT_NUMBER_ONE, AccountType.SECURITY, CURRENCY_EURO_ID);
+        DEBIT_DOLLAR_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_TWO, ACCOUNT_NUMBER_TWO, AccountType.DEBIT, CURRENCY_DOLLAR_ID);
+
+        DEFAULT_DEBIT_ACCOUNT_DTO = DEFAULT_DEBIT_ACCOUNT.toDto();
+        DEFAULT_SECURITY_ACCOUNT_DTO = DEFAULT_SECURITY_ACCOUNT.toDto();
+        DEBIT_DOLLAR_ACCOUNT_DTO = DEBIT_DOLLAR_ACCOUNT.toDto();
+
+        final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT_DTO.getId()).orElseThrow();
+        moneyHolding.setAmountOffset(randomDouble(200, 500));
+        moneyHoldingRepository.saveAndFlush(moneyHolding);
     }
 
     protected void withDefaultMoneyTransactionGroups() {
         TRANSACTION_GROUP_REGEX = withExistingTransactionGroup(
-                DEFAULT_ACCOUNT.getId(),
+                DEFAULT_SECURITY_ACCOUNT.getId(),
                 "My Regex Group",
                 MoneyTransactionGroupQualifierType.REGEX, "AH ([0-9]+) (.*)",
                 Set.of(MoneyTransactionGroupType.MONEY, MoneyTransactionGroupType.BUDGET, MoneyTransactionGroupType.LOAN));
         TRANSACTION_GROUP_CLUSTER = withExistingTransactionGroup(
-                DEFAULT_ACCOUNT.getId(),
+                DEFAULT_SECURITY_ACCOUNT.getId(),
                 "My Cluster Group",
                 MoneyTransactionGroupQualifierType.SIMILAR, "AH 134 test",
                 Set.of(MoneyTransactionGroupType.MONEY, MoneyTransactionGroupType.BUDGET, MoneyTransactionGroupType.LOAN));
@@ -192,18 +211,18 @@ public class BaseIntegrationTest extends BaseTest {
         return transactionGroupRepository.saveAndFlush(group);
     }
 
-    protected List<MoneyTransaction> withDefaultMoneyTransactions(final AccountDto account) {
+    protected List<MoneyTransaction> withDefaultMoneyTransactions(final AccountDto account, final boolean setFinalBalance) {
         final double v1 = randomDouble(200, 300);
         final double v2 = randomDouble(50, 100);
         final double v3 = randomDouble(-150, -100);
         return List.of(
-                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME.minus(35, ChronoUnit.DAYS), account.getCurrencyId(), v1, v1, COUNTERPART_ACCOUNT_NUMBER, COUNTERPART_ACCOUNT_NAME),
-                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME.minus(15, ChronoUnit.DAYS), account.getCurrencyId(), v2, v1 + v2, COUNTERPART_ACCOUNT_NUMBER, COUNTERPART_ACCOUNT_NAME),
-                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME, account.getCurrencyId(), v3, v1 + v2 + v3, COUNTERPART_ACCOUNT_NUMBER, COUNTERPART_ACCOUNT_NAME));
+                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME.minus(35, ChronoUnit.DAYS), account.getCurrencyId(), v1, setFinalBalance ? v1 : null, COUNTERPART_ACCOUNT_NUMBER, COUNTERPART_ACCOUNT_NAME),
+                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME.minus(15, ChronoUnit.DAYS), account.getCurrencyId(), v2, setFinalBalance ? v1 + v2 : null, COUNTERPART_ACCOUNT_NUMBER, COUNTERPART_ACCOUNT_NAME),
+                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME, account.getCurrencyId(), v3, setFinalBalance ? v1 + v2 + v3 : null, COUNTERPART_ACCOUNT_NUMBER, COUNTERPART_ACCOUNT_NAME));
     }
 
     protected MoneyTransaction withExistingMortgageTransaction(final long loanId, final long groupId, final LocalDate date, final double amount) {
-        final MoneyTransaction transaction = moneyTransactionRepository.saveAndFlush(moneyTransaction(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_ACCOUNT.getId(), date.atStartOfDay().plusHours(5).toInstant(ZoneOffset.UTC), CURRENCY_EURO_ID, amount, 0, "", "", "Mortgage"));
+        final MoneyTransaction transaction = moneyTransactionRepository.saveAndFlush(moneyTransaction(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId(), date.atStartOfDay().plusHours(5).toInstant(ZoneOffset.UTC), CURRENCY_EURO_ID, amount, 0.0, "", "", "Mortgage"));
         transaction.setGroupId(groupId);
         transaction.setLoanId(loanId);
         return moneyTransactionRepository.saveAndFlush(transaction);
@@ -215,7 +234,7 @@ public class BaseIntegrationTest extends BaseTest {
                                                            final Instant timestamp,
                                                            final long currencyId,
                                                            final double amount,
-                                                           final double finalBalance,
+                                                           final Double finalBalance,
                                                            final String counterpartAccountNumber,
                                                            final String counterpartAccountName) {
         return moneyTransactionRepository.saveAndFlush(moneyTransaction(userId, accountId, timestamp, currencyId, amount, finalBalance, counterpartAccountNumber, counterpartAccountName, ""));
@@ -248,13 +267,16 @@ public class BaseIntegrationTest extends BaseTest {
     }
 
     protected Account withExistingAccounts(final long userId, final String name, final String accountNumber, final AccountType accountType, final long currencyId) {
-        final Account account = new Account();
-        account.setName(name);
-        account.setAccountNumber(accountNumber);
-        account.setAccountType(accountType);
-        account.setCurrencyId(currencyId);
-        account.setUserId(userId);
-        return accountRepository.saveAndFlush(account);
+        final CreateOrUpdateAccountRequest request = new CreateOrUpdateAccountRequest();
+
+        request.setName(name);
+        request.setAccountNumber(accountNumber);
+        request.setAccountType(accountType);
+        request.setCurrencyId(currencyId);
+
+        final AccountDto dto = accountService.createOrUpdate(userId, request);
+
+        return accountRepository.findById(dto.getId()).orElseThrow();
     }
 
     protected void withDefaultSecurities() {

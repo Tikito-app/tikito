@@ -19,6 +19,11 @@ public final class TestUtil {
         return random.nextFloat(max - min) + min;
     }
 
+    public static double randomDouble(final double min, final double max) {
+        final Random random = new Random();
+        return random.nextDouble(max - min) + min;
+    }
+
     public static boolean randomBool() {
         return randomInt(0, 1) == 1;
     }

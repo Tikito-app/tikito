@@ -50,7 +50,7 @@ class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
     void testCreateOrUpdateGroup() {
         final CreateOrUpdateMoneyTransactionGroupRequest request = new CreateOrUpdateMoneyTransactionGroupRequest();
         request.setName("My group");
-        request.setAccountIds(Set.of(DEFAULT_ACCOUNT.getId()));
+        request.setAccountIds(Set.of(DEFAULT_SECURITY_ACCOUNT.getId()));
         request.setQualifiers(List.of(
                 qualifier(REGEX, "Some value"),
                 qualifier(SIMILAR, "Other value")
@@ -74,7 +74,7 @@ class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
         request.setId(TRANSACTION_GROUP_REGEX.getId());
         request.setName("My group");
         request.setQualifiers(List.of());
-        request.setAccountIds(Set.of(DEFAULT_ACCOUNT.getId()));
+        request.setAccountIds(Set.of(DEFAULT_SECURITY_ACCOUNT.getId()));
         final MoneyTransactionGroupDto dto = groupService.createOrUpdateGroup(DEFAULT_USER_ACCOUNT.getId(), request);
 
         assertEquals(0, dto.getQualifiers().size());
@@ -89,7 +89,7 @@ class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
         final MoneyTransaction transaction1 = createTransaction("this is really company\n A that I bought something from");
         final MoneyTransaction transaction2 = createTransaction("this is really company B that I bought something from");
 
-        groupService.groupTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_ACCOUNT.getId());
+        groupService.groupTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId());
 
         final MoneyTransaction updatedTransaction1 = moneyTransactionRepository.findById(transaction1.getId()).get();
         final MoneyTransaction updatedTransaction2 = moneyTransactionRepository.findById(transaction2.getId()).get();
@@ -105,7 +105,7 @@ class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
         final MoneyTransaction transaction1 = createTransaction("this is really company\n AH that I bought something from");
         final MoneyTransaction transaction2 = createTransaction("this is really company AB that I bought something from");
 
-        groupService.groupTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_ACCOUNT.getId());
+        groupService.groupTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId());
 
         final MoneyTransaction updatedTransaction1 = moneyTransactionRepository.findById(transaction1.getId()).get();
         final MoneyTransaction updatedTransaction2 = moneyTransactionRepository.findById(transaction2.getId()).get();
@@ -121,7 +121,7 @@ class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
         final MoneyTransaction transaction1 = createTransaction("this is really company AH that I bought something from");
         final MoneyTransaction transaction2 = createTransaction("this is really company AB that I bought something from");
 
-        groupService.groupTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_ACCOUNT.getId());
+        groupService.groupTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId());
 
         final MoneyTransaction updatedTransaction1 = moneyTransactionRepository.findById(transaction1.getId()).get();
         final MoneyTransaction updatedTransaction2 = moneyTransactionRepository.findById(transaction2.getId()).get();
@@ -137,7 +137,7 @@ class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
         final MoneyTransaction transaction1 = createTransaction("this is really company AH that I bought something from");
         final MoneyTransaction transaction2 = createTransaction("This is another thing that I don't want to match");
 
-        groupService.groupTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_ACCOUNT.getId());
+        groupService.groupTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId());
 
         final MoneyTransaction updatedTransaction1 = moneyTransactionRepository.findById(transaction1.getId()).get();
         final MoneyTransaction updatedTransaction2 = moneyTransactionRepository.findById(transaction2.getId()).get();
@@ -147,7 +147,7 @@ class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
 
     private MoneyTransaction createTransaction(final String description) {
         final MoneyTransaction transaction = new MoneyTransaction();
-        transaction.setAccountId(DEFAULT_ACCOUNT.getId());
+        transaction.setAccountId(DEFAULT_SECURITY_ACCOUNT.getId());
         transaction.setUserId(DEFAULT_USER_ACCOUNT.getId());
         transaction.setAmount(TestUtil.randomFloat(1, 10));
         transaction.setCurrencyId(CURRENCY_EURO_ID);
@@ -155,7 +155,7 @@ class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
         transaction.setTimestamp(Instant.now());
         transaction.setCounterpartAccountName(TestUtil.randomString(5, 10));
         transaction.setCounterpartAccountNumber(TestUtil.randomIBAN());
-        transaction.setFinalBalance(TestUtil.randomFloat(100, 1000));
+        transaction.setFinalBalance(TestUtil.randomDouble(100, 1000));
         return moneyTransactionRepository.save(transaction);
     }
 
