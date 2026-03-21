@@ -173,7 +173,7 @@ public class BaseTest {
                                                 final Instant timestamp,
                                                 final long currencyId,
                                                 final double amount,
-                                                final double finalBalance,
+                                                final Double finalBalance,
                                                 final String counterpartAccountNumber,
                                                 final String counterpartAccountName,
                                                 final String description) {

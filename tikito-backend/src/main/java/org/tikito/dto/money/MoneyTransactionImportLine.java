@@ -21,7 +21,7 @@ public class MoneyTransactionImportLine {
     private DebitCredit debitCredit;
     private String code;
     private double amount;
-    private double finalBalance;
+    private Double finalBalance;
     private long currencyId;
     private String currency;
     private String transactionType;

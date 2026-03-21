@@ -16,7 +16,7 @@ public class MoneyTransactionExportDto {
     private String counterpartAccountNumber;
     private Instant timestamp;
     private double amount;
-    private double finalBalance;
+    private Double finalBalance;
     private String description;
     private String currency;
 
@@ -25,7 +25,7 @@ public class MoneyTransactionExportDto {
                                      final String counterpartAccountNumber,
                                      final Instant timestamp,
                                      final double amount,
-                                     final double finalBalance,
+                                     final Double finalBalance,
                                      final String description,
                                      final String currency) {
         this.accountName = accountName;

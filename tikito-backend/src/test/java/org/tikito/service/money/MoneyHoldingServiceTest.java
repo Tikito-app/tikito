@@ -17,6 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 @Transactional
@@ -34,12 +35,12 @@ class MoneyHoldingServiceTest extends BaseIntegrationTest {
         withDefaultUserAccount();
         withDefaultAccounts();
         loginWithDefaultUser();
-        defaultTransactions = withDefaultMoneyTransactions(DEFAULT_DEBIT_ACCOUNT_DTO);
-        dollarTransactions = withDefaultMoneyTransactions(DEBIT_DOLLAR_ACCOUNT_DTO);
+        dollarTransactions = withDefaultMoneyTransactions(DEBIT_DOLLAR_ACCOUNT_DTO, true);
     }
 
     @Test
-    void recalculateHistoricalHoldingValues() {
+    void shouldRecalculateHistoricalHoldingValues_given_finalBalanceSet() {
+        defaultTransactions = withDefaultMoneyTransactions(DEFAULT_DEBIT_ACCOUNT_DTO, true);
         service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId());
         final List<HistoricalMoneyHoldingValue> all = historicalMoneyHoldingValueRepository.findAll();
         final MoneyHolding holding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId()).orElseThrow();
@@ -74,9 +75,36 @@ class MoneyHoldingServiceTest extends BaseIntegrationTest {
         assertEquals(holding.getAmount(), all.getLast().getAmount());
     }
 
+    @Test
+    void shouldRecalculateHistoricalHoldingValues_given_noFinalBalanceSet() {
+        defaultTransactions = withDefaultMoneyTransactions(DEFAULT_DEBIT_ACCOUNT_DTO, false);
+        service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId());
+        final List<HistoricalMoneyHoldingValue> all = historicalMoneyHoldingValueRepository.findAll();
+        final MoneyHolding holding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId()).orElseThrow();
+
+        final Double v1 = defaultTransactions.getFirst().getFinalBalance();
+        final Double v2 = defaultTransactions.get(2).getFinalBalance();
+        final Double v3 = defaultTransactions.getLast().getFinalBalance();
+
+        final LocalDate t1 = LocalDate.ofInstant(defaultTransactions.getFirst().getTimestamp(), ZoneOffset.UTC);
+
+        final HistoricalMoneyHoldingValue historicalHolding1 = getByDate(t1, all);
+        final HistoricalMoneyHoldingValue historicalHolding3 = getByDate(LocalDate.ofInstant(defaultTransactions.getLast().getTimestamp(), ZoneOffset.UTC), all);
+
+        assertNull(v1);
+        assertNull(v2);
+        assertNull(v3);
+
+        assertEquals(holding.getAmountOffset() + defaultTransactions.getFirst().getAmount(), historicalHolding1.getAmount());
+        assertEquals(holding.getAmountOffset() + defaultTransactions.stream().mapToDouble(MoneyTransaction::getAmount).sum(), historicalHolding3.getAmount());
+
+        assertEquals(holding.getAmount(), all.getLast().getAmount());
+    }
+
 
     @Test
     void regenerateAggregatedHistoricalHoldingValues() {
+        defaultTransactions = withDefaultMoneyTransactions(DEFAULT_DEBIT_ACCOUNT_DTO, true);
         service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId());
         service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DEBIT_DOLLAR_ACCOUNT_DTO.getId());
         service.recalculateAggregatedHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId());

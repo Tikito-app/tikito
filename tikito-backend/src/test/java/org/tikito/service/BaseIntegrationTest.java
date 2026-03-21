@@ -12,6 +12,7 @@ import org.tikito.entity.Account;
 import org.tikito.entity.UserAccount;
 import org.tikito.entity.loan.Loan;
 import org.tikito.entity.loan.LoanPart;
+import org.tikito.entity.money.MoneyHolding;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.entity.money.MoneyTransactionGroup;
 import org.tikito.entity.security.Isin;
@@ -178,6 +179,10 @@ public class BaseIntegrationTest extends BaseTest {
         DEFAULT_DEBIT_ACCOUNT_DTO = DEFAULT_DEBIT_ACCOUNT.toDto();
         DEFAULT_SECURITY_ACCOUNT_DTO = DEFAULT_SECURITY_ACCOUNT.toDto();
         DEBIT_DOLLAR_ACCOUNT_DTO = DEBIT_DOLLAR_ACCOUNT.toDto();
+
+        final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT_DTO.getId()).orElseThrow();
+        moneyHolding.setAmountOffset(randomDouble(200, 500));
+        moneyHoldingRepository.saveAndFlush(moneyHolding);
     }
 
     protected void withDefaultMoneyTransactionGroups() {
@@ -206,18 +211,18 @@ public class BaseIntegrationTest extends BaseTest {
         return transactionGroupRepository.saveAndFlush(group);
     }
 
-    protected List<MoneyTransaction> withDefaultMoneyTransactions(final AccountDto account) {
+    protected List<MoneyTransaction> withDefaultMoneyTransactions(final AccountDto account, final boolean setFinalBalance) {
         final double v1 = randomDouble(200, 300);
         final double v2 = randomDouble(50, 100);
         final double v3 = randomDouble(-150, -100);
         return List.of(
-                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME.minus(35, ChronoUnit.DAYS), account.getCurrencyId(), v1, v1, COUNTERPART_ACCOUNT_NUMBER, COUNTERPART_ACCOUNT_NAME),
-                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME.minus(15, ChronoUnit.DAYS), account.getCurrencyId(), v2, v1 + v2, COUNTERPART_ACCOUNT_NUMBER, COUNTERPART_ACCOUNT_NAME),
-                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME, account.getCurrencyId(), v3, v1 + v2 + v3, COUNTERPART_ACCOUNT_NUMBER, COUNTERPART_ACCOUNT_NAME));
+                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME.minus(35, ChronoUnit.DAYS), account.getCurrencyId(), v1, setFinalBalance ? v1 : null, COUNTERPART_ACCOUNT_NUMBER, COUNTERPART_ACCOUNT_NAME),
+                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME.minus(15, ChronoUnit.DAYS), account.getCurrencyId(), v2, setFinalBalance ? v1 + v2 : null, COUNTERPART_ACCOUNT_NUMBER, COUNTERPART_ACCOUNT_NAME),
+                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME, account.getCurrencyId(), v3, setFinalBalance ? v1 + v2 + v3 : null, COUNTERPART_ACCOUNT_NUMBER, COUNTERPART_ACCOUNT_NAME));
     }
 
     protected MoneyTransaction withExistingMortgageTransaction(final long loanId, final long groupId, final LocalDate date, final double amount) {
-        final MoneyTransaction transaction = moneyTransactionRepository.saveAndFlush(moneyTransaction(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId(), date.atStartOfDay().plusHours(5).toInstant(ZoneOffset.UTC), CURRENCY_EURO_ID, amount, 0, "", "", "Mortgage"));
+        final MoneyTransaction transaction = moneyTransactionRepository.saveAndFlush(moneyTransaction(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId(), date.atStartOfDay().plusHours(5).toInstant(ZoneOffset.UTC), CURRENCY_EURO_ID, amount, 0.0, "", "", "Mortgage"));
         transaction.setGroupId(groupId);
         transaction.setLoanId(loanId);
         return moneyTransactionRepository.saveAndFlush(transaction);
@@ -229,7 +234,7 @@ public class BaseIntegrationTest extends BaseTest {
                                                            final Instant timestamp,
                                                            final long currencyId,
                                                            final double amount,
-                                                           final double finalBalance,
+                                                           final Double finalBalance,
                                                            final String counterpartAccountNumber,
                                                            final String counterpartAccountName) {
         return moneyTransactionRepository.saveAndFlush(moneyTransaction(userId, accountId, timestamp, currencyId, amount, finalBalance, counterpartAccountNumber, counterpartAccountName, ""));

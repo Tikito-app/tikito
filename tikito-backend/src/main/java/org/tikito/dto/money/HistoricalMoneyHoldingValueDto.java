@@ -26,8 +26,9 @@ public class HistoricalMoneyHoldingValueDto {
         this.currencyMultiplier = previousValue.getCurrencyMultiplier();
     }
 
-    public HistoricalMoneyHoldingValueDto(final long accountId, final long currencyId) {
+    public HistoricalMoneyHoldingValueDto(final long accountId, final long currencyId, final double amountOffset) {
         this.accountId = accountId;
         this.currencyId = currencyId;
+        this.amount = amountOffset;
     }
 }

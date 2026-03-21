@@ -27,7 +27,7 @@ class MoneyTransactionServiceTest extends BaseIntegrationTest {
         withDefaultUserAccount();
         withDefaultAccounts();
         loginWithDefaultUser();
-        transaction = withDefaultMoneyTransactions(DEFAULT_DEBIT_ACCOUNT_DTO).getFirst();
+        transaction = withDefaultMoneyTransactions(DEFAULT_DEBIT_ACCOUNT_DTO, true).getFirst();
         withDefaultMoneyTransactionGroups();
     }
 

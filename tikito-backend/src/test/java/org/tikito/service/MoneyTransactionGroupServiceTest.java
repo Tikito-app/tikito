@@ -155,7 +155,7 @@ class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
         transaction.setTimestamp(Instant.now());
         transaction.setCounterpartAccountName(TestUtil.randomString(5, 10));
         transaction.setCounterpartAccountNumber(TestUtil.randomIBAN());
-        transaction.setFinalBalance(TestUtil.randomFloat(100, 1000));
+        transaction.setFinalBalance(TestUtil.randomDouble(100, 1000));
         return moneyTransactionRepository.save(transaction);
     }
 

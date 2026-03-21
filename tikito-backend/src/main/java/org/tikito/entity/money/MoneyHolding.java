@@ -34,6 +34,6 @@ public class MoneyHolding {
     }
 
     public void mutate(final HistoricalMoneyHoldingValueDto value) {
-        amount = value.getAmount() - amountOffset;
+        amount = value.getAmount();
     }
 }

@@ -12,7 +12,7 @@ public class MoneyImportLineBuilder {
     private String currency;
     private String code;
     private double amount;
-    private double finalBalance;
+    private Double finalBalance;
     private String transactionType;
     private String description;
 
@@ -23,7 +23,7 @@ public class MoneyImportLineBuilder {
         debitCredit = TestUtil.randomBool() ? "Debit" : "Credit";
         currency = "EUR";
         amount = TestUtil.randomFloat(1, 100);
-        finalBalance = TestUtil.randomFloat(1, 100);
+        finalBalance = TestUtil.randomDouble(1, 100);
         transactionType = TestUtil.randomString(5, 10);
         description = TestUtil.randomString(5, 30);
         return this;
@@ -64,7 +64,7 @@ public class MoneyImportLineBuilder {
         return this;
     }
 
-    public MoneyImportLineBuilder setFinalBalance(final double finalBalance) {
+    public MoneyImportLineBuilder setFinalBalance(final Double finalBalance) {
         this.finalBalance = finalBalance;
         return this;
     }

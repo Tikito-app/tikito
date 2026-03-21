@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tikito.dto.AccountDto;
 import org.tikito.dto.money.AggregatedHistoricalMoneyHoldingValueDto;
 import org.tikito.dto.money.HistoricalMoneyHoldingValueDto;
+import org.tikito.dto.money.MoneyHoldingDto;
+import org.tikito.entity.Account;
 import org.tikito.entity.Job;
 import org.tikito.entity.money.AggregatedHistoricalMoneyHoldingValue;
 import org.tikito.entity.money.HistoricalMoneyHoldingValue;
@@ -19,6 +21,8 @@ import org.tikito.service.job.JobProcessor;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.tikito.service.job.JobType.RECALCULATE_AGGREGATED_HISTORICAL_MONEY_VALUES;
 import static org.tikito.service.job.JobType.RECALCULATE_HISTORICAL_MONEY_VALUES;
@@ -80,7 +84,7 @@ public class MoneyHoldingService implements JobProcessor {
         moneyHoldingRepository.saveAndFlush(holding);
 
         // todo: move to async job, but now we have circular dependency :(
-        this.recalculateAggregatedHistoricalHoldingValues(userId);
+        recalculateAggregatedHistoricalHoldingValues(userId);
     }
 
     /**
@@ -107,6 +111,25 @@ public class MoneyHoldingService implements JobProcessor {
         aggregatedHistoricalMoneyHoldingValueRepository.saveAllAndFlush(aggregatedValues);
     }
 
+    public List<MoneyHoldingDto> getMoneyHoldings(final long userId) {
+        final Map<Long, AccountDto> accountMap = accountRepository
+                .findByUserId(userId)
+                .stream()
+                .map(Account::toDto)
+                .collect(Collectors.toMap(AccountDto::getId, Function.identity()));
+
+        return moneyHoldingRepository
+                .findByUserId(userId)
+                .stream()
+                .map(MoneyHolding::toDto)
+                .map(holding -> {
+                    holding.setAccount(accountMap.get(holding.getAccountId()));
+                    return holding;
+                })
+                .sorted(Comparator.comparing(o -> o.getAccount().getName()))
+                .toList();
+    }
+
     private AggregatedHistoricalMoneyHoldingValue aggregateHoldingValues(final long userId, final List<HistoricalMoneyHoldingValue> historicalSecurityHoldingValues) {
         final AggregatedHistoricalMoneyHoldingValue aggregatedValue = new AggregatedHistoricalMoneyHoldingValue(userId);
 
@@ -131,10 +154,9 @@ public class MoneyHoldingService implements JobProcessor {
                                                                               final MoneyHolding holding,
                                                                               final Map<LocalDate, List<MoneyTransaction>> transactionsPerTimestamp) {
         final LocalDate firstTimestamp = getFirstTimestamp(transactionsPerTimestamp);
-
         final List<HistoricalMoneyHoldingValue> historicalHoldingValues = new ArrayList<>();
 
-        HistoricalMoneyHoldingValueDto currentHoldingValue = new HistoricalMoneyHoldingValueDto(accountId, currencyId);
+        HistoricalMoneyHoldingValueDto currentHoldingValue = new HistoricalMoneyHoldingValueDto(accountId, currencyId, holding.getAmountOffset());
 
         for (LocalDate currentTimestamp = firstTimestamp;
              currentTimestamp.isBefore(LocalDate.now().plusDays(1));
@@ -173,7 +195,7 @@ public class MoneyHoldingService implements JobProcessor {
     }
 
     private static void applyTransaction(final HistoricalMoneyHoldingValueDto newHoldingValue, final MoneyTransaction transaction) {
-        if (transaction.getFinalBalance() != 0) {
+        if (transaction.getFinalBalance() != null) {
             newHoldingValue.setAmount(transaction.getFinalBalance());
         } else {
             newHoldingValue.setAmount(newHoldingValue.getAmount() + transaction.getAmount());
