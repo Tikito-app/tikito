@@ -158,7 +158,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
       this.groupsById[group.id] = group;
     });
 
-    // now put all the non-grouped values in it by the counterparty name
+    // now put all the non-grouped values in it by the counterpart name
     this
       .allTransactions
       .filter(value => value.groupId == null)
