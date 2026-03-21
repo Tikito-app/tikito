@@ -68,9 +68,11 @@ export class AdminUserPreferencesComponent {
     this.router.navigate(['/admin']);
   }
 
+  onLanguageChange(language: string) {
+    UserPreferenceService.onSelectChange(UserPreference.LANGUAGE, language);
+  }
+
   protected readonly CacheService = CacheService;
-
-
   protected readonly Util = Util;
   protected readonly UserPreferenceService = UserPreferenceService;
   protected readonly UserPreference = UserPreference;
