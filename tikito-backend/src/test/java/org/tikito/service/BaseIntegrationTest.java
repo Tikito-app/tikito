@@ -90,6 +90,9 @@ public class BaseIntegrationTest extends BaseTest {
     @Autowired
     protected ImportExportService importExportService;
 
+    @Autowired
+    protected MoneyHoldingRepository moneyHoldingRepository;
+
     @AfterEach
     @BeforeEach
     public void tearDown() {
@@ -105,6 +108,8 @@ public class BaseIntegrationTest extends BaseTest {
         historicalMoneyHoldingValueRepository.deleteAll();
         userAccountRepository.deleteAll();
         loanRepository.deleteAll();
+        moneyHoldingRepository.deleteAll();
+
         cacheService.refreshSecurities();
         cacheService.refreshCurrencies();
         cacheService.refreshFirstEverUser();
