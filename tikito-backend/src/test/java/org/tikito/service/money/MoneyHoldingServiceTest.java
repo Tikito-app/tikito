@@ -1,6 +1,7 @@
 package org.tikito.service.money;
 
 import org.tikito.entity.money.AggregatedHistoricalMoneyHoldingValue;
+import org.tikito.entity.money.MoneyHolding;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.entity.money.HistoricalMoneyHoldingValue;
 import org.tikito.service.BaseIntegrationTest;
@@ -33,14 +34,15 @@ class MoneyHoldingServiceTest extends BaseIntegrationTest {
         withDefaultUserAccount();
         withDefaultAccounts();
         loginWithDefaultUser();
-        defaultTransactions = withDefaultMoneyTransactions(DEFAULT_ACCOUNT_DTO);
-        dollarTransactions = withDefaultMoneyTransactions(DOLLAR_ACCOUNT_DTO);
+        defaultTransactions = withDefaultMoneyTransactions(DEFAULT_DEBIT_ACCOUNT_DTO);
+        dollarTransactions = withDefaultMoneyTransactions(DEBIT_DOLLAR_ACCOUNT_DTO);
     }
 
     @Test
     void recalculateHistoricalHoldingValues() {
-        service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_ACCOUNT.getId());
+        service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId());
         final List<HistoricalMoneyHoldingValue> all = historicalMoneyHoldingValueRepository.findAll();
+        final MoneyHolding holding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId()).orElseThrow();
 
         final double v1 = defaultTransactions.getFirst().getFinalBalance();
         final double v2 = defaultTransactions.get(2).getFinalBalance();
@@ -50,31 +52,33 @@ class MoneyHoldingServiceTest extends BaseIntegrationTest {
         final LocalDate t2 = LocalDate.ofInstant(defaultTransactions.get(2).getTimestamp(), ZoneOffset.UTC);
         final LocalDate t3 = LocalDate.ofInstant(defaultTransactions.getLast().getTimestamp(), ZoneOffset.UTC);
 
-        final double c1 = cacheService.getCurrencyMultiplier(DEFAULT_ACCOUNT.getCurrencyId(), t1);
-        final double c2 = cacheService.getCurrencyMultiplier(DEFAULT_ACCOUNT.getCurrencyId(), t2);
-        final double c3 = cacheService.getCurrencyMultiplier(DEFAULT_ACCOUNT.getCurrencyId(), t3);
+        final double c1 = cacheService.getCurrencyMultiplier(DEFAULT_DEBIT_ACCOUNT.getCurrencyId(), t1);
+        final double c2 = cacheService.getCurrencyMultiplier(DEFAULT_DEBIT_ACCOUNT.getCurrencyId(), t2);
+        final double c3 = cacheService.getCurrencyMultiplier(DEFAULT_DEBIT_ACCOUNT.getCurrencyId(), t3);
 
-        final HistoricalMoneyHoldingValue holding1 = getByDate(t1, all);
-        final HistoricalMoneyHoldingValue holding2 = getByDate(LocalDate.ofInstant(defaultTransactions.get(2).getTimestamp(), ZoneOffset.UTC), all);
-        final HistoricalMoneyHoldingValue holding3 = getByDate(LocalDate.ofInstant(defaultTransactions.getLast().getTimestamp(), ZoneOffset.UTC), all);
+        final HistoricalMoneyHoldingValue historicalHolding1 = getByDate(t1, all);
+        final HistoricalMoneyHoldingValue historicalHolding2 = getByDate(LocalDate.ofInstant(defaultTransactions.get(2).getTimestamp(), ZoneOffset.UTC), all);
+        final HistoricalMoneyHoldingValue historicalHolding3 = getByDate(LocalDate.ofInstant(defaultTransactions.getLast().getTimestamp(), ZoneOffset.UTC), all);
 
-        assertEquals(v1, holding1.getAmount());
-        assertEquals(v2, holding2.getAmount());
-        assertEquals(v3, holding3.getAmount());
+        assertEquals(v1, historicalHolding1.getAmount());
+        assertEquals(v2, historicalHolding2.getAmount());
+        assertEquals(v3, historicalHolding3.getAmount());
 
-        assertEquals(c1, holding1.getCurrencyMultiplier());
-        assertEquals(c2, holding2.getCurrencyMultiplier());
-        assertEquals(c3, holding3.getCurrencyMultiplier());
+        assertEquals(c1, historicalHolding1.getCurrencyMultiplier());
+        assertEquals(c2, historicalHolding2.getCurrencyMultiplier());
+        assertEquals(c3, historicalHolding3.getCurrencyMultiplier());
 
         assertEquals(t1, all.getFirst().getDate());
         assertEquals(t3, all.getLast().getDate());
+
+        assertEquals(holding.getAmount(), all.getLast().getAmount());
     }
 
 
     @Test
     void regenerateAggregatedHistoricalHoldingValues() {
-        service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_ACCOUNT.getId());
-        service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DOLLAR_ACCOUNT_DTO.getId());
+        service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId());
+        service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DEBIT_DOLLAR_ACCOUNT_DTO.getId());
         service.recalculateAggregatedHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId());
 
         final List<AggregatedHistoricalMoneyHoldingValue> all = aggregatedHistoricalMoneyHoldingValueRepository.findAllByUserId(DEFAULT_USER_ACCOUNT.getId())
@@ -85,9 +89,9 @@ class MoneyHoldingServiceTest extends BaseIntegrationTest {
         final LocalDate t2 = LocalDate.ofInstant(defaultTransactions.get(2).getTimestamp(), ZoneOffset.UTC);
         final LocalDate t3 = LocalDate.ofInstant(defaultTransactions.getLast().getTimestamp(), ZoneOffset.UTC);
 
-        final double c1 = cacheService.getCurrencyMultiplier(DOLLAR_ACCOUNT.getCurrencyId(), t1);
-        final double c2 = cacheService.getCurrencyMultiplier(DOLLAR_ACCOUNT.getCurrencyId(), t2);
-        final double c3 = cacheService.getCurrencyMultiplier(DOLLAR_ACCOUNT.getCurrencyId(), t3);
+        final double c1 = cacheService.getCurrencyMultiplier(DEBIT_DOLLAR_ACCOUNT.getCurrencyId(), t1);
+        final double c2 = cacheService.getCurrencyMultiplier(DEBIT_DOLLAR_ACCOUNT.getCurrencyId(), t2);
+        final double c3 = cacheService.getCurrencyMultiplier(DEBIT_DOLLAR_ACCOUNT.getCurrencyId(), t3);
 
         final double v1 = defaultTransactions.getFirst().getFinalBalance() + dollarTransactions.getFirst().getFinalBalance() * c1;
         final double v2 = defaultTransactions.get(2).getFinalBalance() + dollarTransactions.get(2).getFinalBalance() * c2;

@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.tikito.dto.security.SecurityTransactionImportResultDto.FAILED_DUPLICATE_TRANSACTION;
+import static org.tikito.dto.money.MoneyTransactionImportResultDto.FAILED_DUPLICATE_TRANSACTION;
 import static org.tikito.service.importer.money.CustomMoneyImportHeaderName.*;
 
 @SpringBootTest
@@ -60,7 +60,7 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
                 builder.getCounterpartAccountName() + ";" +
                 builder.getCounterpartAccountName() + ";";
         try {
-            service.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_ACCOUNT.getId(), new MockMultipartFile("Abn.csv", csv.getBytes()), false,
+            service.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId(), new MockMultipartFile("Abn.csv", csv.getBytes()), false,
                     Map.of(), "debit", "dd-MM-yyyy", "dd-MM-yyyy", null, ";");
         } catch (final CannotReadFileException e) {
             Assertions.fail();
@@ -71,7 +71,7 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
     void testImportTransactionBasicInfo() throws IOException {
         final MockMultipartFile file = getClassPathResourceToImport("bank-transaction/abn.csv", "Abn.csv");
 
-        final MoneyTransactionImportResultDto result = service.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_ACCOUNT.getId(), file, false,
+        final MoneyTransactionImportResultDto result = service.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId(), file, false,
                 Map.of(), "debit", "dd-MM-yyyy", "dd-MM-yyyy", null, ";");
 
         validateResults(result);
@@ -83,13 +83,13 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
         moneyTransactionRepository.save(transaction);
         final MockMultipartFile file = getClassPathResourceToImport("bank-transaction/abn-duplicate.csv", "Abn.csv");
 
-        final MoneyTransactionImportResultDto result = service.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_ACCOUNT.getId(), file, false,
+        final MoneyTransactionImportResultDto result = service.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId(), file, false,
                 Map.of(), "debit", "dd-MM-yyyy", "dd-MM-yyyy", null, ";");
         assertEquals(4, result.getLines().size());
         assertEquals(3, result.getImportedTransactions().size());
         assertEquals(1, result.getLines().stream().filter(line -> FAILED_DUPLICATE_TRANSACTION.equals(line.getFailedReason())).count());
 
-        final MoneyTransactionImportResultDto newResult = service.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_ACCOUNT.getId(), file, false,
+        final MoneyTransactionImportResultDto newResult = service.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId(), file, false,
                 Map.of(), "debit", "dd-MM-yyyy", "dd-MM-yyyy", null, ";");
         assertEquals(4, newResult.getLines().size());
         assertEquals(0, newResult.getImportedTransactions().size());
@@ -99,7 +99,7 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
     void testImportCustomHeaders() throws IOException {
         final MockMultipartFile file = getClassPathResourceToImport("bank-transaction/custom-headers.csv", "Abn.csv");
 
-        final MoneyTransactionImportResultDto result = service.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_ACCOUNT.getId(), file, false,
+        final MoneyTransactionImportResultDto result = service.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId(), file, false,
                 Map.of(CURRENCY, 1,
                         TIMESTAMP, 2,
                         FINAL_BALANCE, 5,
@@ -157,7 +157,7 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
         final MoneyTransaction transaction2 = result.getImportedTransactions().get(1);
         final MoneyTransaction transaction3 = result.getImportedTransactions().get(2);
 
-        assertEquals(DEFAULT_ACCOUNT.getId(), transaction1.getAccountId());
+        assertEquals(DEFAULT_DEBIT_ACCOUNT.getId(), transaction1.getAccountId());
         assertEquals(expectedTimestamp1, transaction1.getTimestamp());
         assertEquals(CURRENCY_EURO_ID, transaction1.getCurrencyId());
         assertEquals(250, transaction1.getAmount());
@@ -177,7 +177,7 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
         assertEquals(3, allInDb.size());
         final MoneyTransaction transaction = allInDb.getFirst();
 
-        assertEquals(DEFAULT_ACCOUNT.getId(), transaction.getAccountId());
+        assertEquals(DEFAULT_DEBIT_ACCOUNT.getId(), transaction.getAccountId());
         assertEquals(expectedTimestamp1, transaction.getTimestamp());
         assertEquals(CURRENCY_EURO_ID, transaction.getCurrencyId());
         assertEquals(250, transaction.getAmount());
@@ -188,7 +188,7 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
 
     private static MoneyTransaction getMoneyTransaction() {
         final MoneyTransaction transaction = new MoneyTransaction();
-        transaction.setAccountId(DEFAULT_ACCOUNT.getId());
+        transaction.setAccountId(DEFAULT_SECURITY_ACCOUNT.getId());
         transaction.setTimestamp(Instant.parse("2023-11-19T11:43:00Z"));
         transaction.setCurrencyId(CURRENCY_EURO_ID);
         transaction.setAmount(-3.14);

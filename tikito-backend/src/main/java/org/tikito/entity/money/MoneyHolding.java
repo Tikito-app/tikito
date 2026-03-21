@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+import org.tikito.dto.money.HistoricalMoneyHoldingValueDto;
 import org.tikito.dto.money.MoneyHoldingDto;
 
 @Getter
@@ -18,8 +19,8 @@ public class MoneyHolding {
     private long userId;
     private long accountId;
     private long currencyId;
-    private double currentBalance;
-    private double startingBalance;
+    private double amount;
+    private double amountOffset;
 
     public MoneyHoldingDto toDto() {
         final MoneyHoldingDto dto = new MoneyHoldingDto();
@@ -27,8 +28,12 @@ public class MoneyHolding {
         dto.setUserId(userId);
         dto.setAccountId(accountId);
         dto.setCurrencyId(currencyId);
-        dto.setCurrentBalance(currentBalance);
-        dto.setStartingBalance(startingBalance);
+        dto.setAmount(amount);
+        dto.setAmountOffset(amountOffset);
         return dto;
+    }
+
+    public void mutate(final HistoricalMoneyHoldingValueDto value) {
+        amount = value.getAmount() - amountOffset;
     }
 }

@@ -1,5 +1,6 @@
 package org.tikito.service;
 
+import org.tikito.controller.request.CreateOrUpdateAccountRequest;
 import org.tikito.dto.AccountDto;
 import org.tikito.dto.AccountType;
 import org.tikito.dto.DateRange;
@@ -32,10 +33,12 @@ import java.util.Set;
 
 public class BaseIntegrationTest extends BaseTest {
 
-    protected static Account DEFAULT_ACCOUNT = null;
-    protected static Account DOLLAR_ACCOUNT = null;
-    protected static AccountDto DEFAULT_ACCOUNT_DTO = null;
-    protected static AccountDto DOLLAR_ACCOUNT_DTO = null;
+    protected static Account DEFAULT_DEBIT_ACCOUNT = null;
+    protected static Account DEFAULT_SECURITY_ACCOUNT = null;
+    protected static Account DEBIT_DOLLAR_ACCOUNT = null;
+    protected static AccountDto DEFAULT_DEBIT_ACCOUNT_DTO = null;
+    protected static AccountDto DEFAULT_SECURITY_ACCOUNT_DTO = null;
+    protected static AccountDto DEBIT_DOLLAR_ACCOUNT_DTO = null;
     protected static Security WOLTER_KLUWER = null;
     protected static Security ALPHABET = null;
     protected static Security AMAZON = null;
@@ -92,6 +95,9 @@ public class BaseIntegrationTest extends BaseTest {
 
     @Autowired
     protected MoneyHoldingRepository moneyHoldingRepository;
+
+    @Autowired
+    protected AccountService accountService;
 
     @AfterEach
     @BeforeEach
@@ -165,20 +171,23 @@ public class BaseIntegrationTest extends BaseTest {
     }
 
     protected void withDefaultAccounts() {
-        DEFAULT_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, ACCOUNT_NUMBER_ONE, AccountType.SECURITY, CURRENCY_EURO_ID);
-        DOLLAR_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_TWO, ACCOUNT_NUMBER_TWO, AccountType.SECURITY, CURRENCY_DOLLAR_ID);
-        DEFAULT_ACCOUNT_DTO = DEFAULT_ACCOUNT.toDto();
-        DOLLAR_ACCOUNT_DTO = DOLLAR_ACCOUNT.toDto();
+        DEFAULT_DEBIT_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_THREE, ACCOUNT_NUMBER_THREE, AccountType.DEBIT, CURRENCY_EURO_ID);
+        DEFAULT_SECURITY_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, ACCOUNT_NUMBER_ONE, AccountType.SECURITY, CURRENCY_EURO_ID);
+        DEBIT_DOLLAR_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_TWO, ACCOUNT_NUMBER_TWO, AccountType.DEBIT, CURRENCY_DOLLAR_ID);
+
+        DEFAULT_DEBIT_ACCOUNT_DTO = DEFAULT_DEBIT_ACCOUNT.toDto();
+        DEFAULT_SECURITY_ACCOUNT_DTO = DEFAULT_SECURITY_ACCOUNT.toDto();
+        DEBIT_DOLLAR_ACCOUNT_DTO = DEBIT_DOLLAR_ACCOUNT.toDto();
     }
 
     protected void withDefaultMoneyTransactionGroups() {
         TRANSACTION_GROUP_REGEX = withExistingTransactionGroup(
-                DEFAULT_ACCOUNT.getId(),
+                DEFAULT_SECURITY_ACCOUNT.getId(),
                 "My Regex Group",
                 MoneyTransactionGroupQualifierType.REGEX, "AH ([0-9]+) (.*)",
                 Set.of(MoneyTransactionGroupType.MONEY, MoneyTransactionGroupType.BUDGET, MoneyTransactionGroupType.LOAN));
         TRANSACTION_GROUP_CLUSTER = withExistingTransactionGroup(
-                DEFAULT_ACCOUNT.getId(),
+                DEFAULT_SECURITY_ACCOUNT.getId(),
                 "My Cluster Group",
                 MoneyTransactionGroupQualifierType.SIMILAR, "AH 134 test",
                 Set.of(MoneyTransactionGroupType.MONEY, MoneyTransactionGroupType.BUDGET, MoneyTransactionGroupType.LOAN));
@@ -208,7 +217,7 @@ public class BaseIntegrationTest extends BaseTest {
     }
 
     protected MoneyTransaction withExistingMortgageTransaction(final long loanId, final long groupId, final LocalDate date, final double amount) {
-        final MoneyTransaction transaction = moneyTransactionRepository.saveAndFlush(moneyTransaction(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_ACCOUNT.getId(), date.atStartOfDay().plusHours(5).toInstant(ZoneOffset.UTC), CURRENCY_EURO_ID, amount, 0, "", "", "Mortgage"));
+        final MoneyTransaction transaction = moneyTransactionRepository.saveAndFlush(moneyTransaction(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId(), date.atStartOfDay().plusHours(5).toInstant(ZoneOffset.UTC), CURRENCY_EURO_ID, amount, 0, "", "", "Mortgage"));
         transaction.setGroupId(groupId);
         transaction.setLoanId(loanId);
         return moneyTransactionRepository.saveAndFlush(transaction);
@@ -253,13 +262,16 @@ public class BaseIntegrationTest extends BaseTest {
     }
 
     protected Account withExistingAccounts(final long userId, final String name, final String accountNumber, final AccountType accountType, final long currencyId) {
-        final Account account = new Account();
-        account.setName(name);
-        account.setAccountNumber(accountNumber);
-        account.setAccountType(accountType);
-        account.setCurrencyId(currencyId);
-        account.setUserId(userId);
-        return accountRepository.saveAndFlush(account);
+        final CreateOrUpdateAccountRequest request = new CreateOrUpdateAccountRequest();
+
+        request.setName(name);
+        request.setAccountNumber(accountNumber);
+        request.setAccountType(accountType);
+        request.setCurrencyId(currencyId);
+
+        final AccountDto dto = accountService.createOrUpdate(userId, request);
+
+        return accountRepository.findById(dto.getId()).orElseThrow();
     }
 
     protected void withDefaultSecurities() {

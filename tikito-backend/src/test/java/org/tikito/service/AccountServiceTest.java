@@ -2,7 +2,6 @@ package org.tikito.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.tikito.controller.request.CreateOrUpdateAccountRequest;
@@ -17,9 +16,6 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest
 @Transactional
 class AccountServiceTest extends BaseIntegrationTest {
-
-    @Autowired
-    private AccountService service;
 
     @BeforeEach
     void setUp() {
@@ -48,11 +44,11 @@ class AccountServiceTest extends BaseIntegrationTest {
     void shouldHaveSingleHolding_givenDeletedAccount() {
         final AccountDto deleted = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, AccountType.CREDIT);
         assertEquals(1, moneyHoldingRepository.count());
-        service.deleteAccount(deleted.getUserId(), deleted.getId());
+        accountService.deleteAccount(deleted.getUserId(), deleted.getId());
 
         final AccountDto securityAccount = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, AccountType.SECURITY);
         assertEquals(0, moneyHoldingRepository.count());
-        service.deleteAccount(securityAccount.getUserId(), securityAccount.getId());
+        accountService.deleteAccount(securityAccount.getUserId(), securityAccount.getId());
 
         final AccountDto newDto = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, AccountType.DEBIT);
         final List<MoneyHolding> all = moneyHoldingRepository.findAll();
@@ -67,12 +63,12 @@ class AccountServiceTest extends BaseIntegrationTest {
         final AccountDto account = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, AccountType.CREDIT);
         final long holdingId = moneyHoldingRepository.findAll().getFirst().getId();
 
-        service.createOrUpdate(account.getUserId(), request("new", AccountType.DEBIT, account.getId()));
+        accountService.createOrUpdate(account.getUserId(), request("new", AccountType.DEBIT, account.getId()));
         final List<MoneyHolding> allHoldings = moneyHoldingRepository.findAll();
         assertEquals(1, allHoldings.size());
         assertEquals(holdingId, allHoldings.getFirst().getId().longValue());
 
-        service.createOrUpdate(account.getUserId(), request("new-new", AccountType.SECURITY, account.getId()));
+        accountService.createOrUpdate(account.getUserId(), request("new-new", AccountType.SECURITY, account.getId()));
         assertEquals(0, moneyHoldingRepository.count());
     }
 
@@ -83,7 +79,7 @@ class AccountServiceTest extends BaseIntegrationTest {
     }
 
     private AccountDto createAccount(final long userId, final String accountName, final AccountType accountType) {
-        final AccountDto dto = service.createOrUpdate(userId, request(accountName, accountType));
+        final AccountDto dto = accountService.createOrUpdate(userId, request(accountName, accountType));
         assertEquals(userId, dto.getUserId());
         assertEquals(accountName, dto.getName());
         assertEquals(accountType, dto.getAccountType());

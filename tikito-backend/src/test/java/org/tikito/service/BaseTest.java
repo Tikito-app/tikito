@@ -44,10 +44,12 @@ public class BaseTest {
     public static long CURRENCY_EURO_ID = 1L;
     public static long CURRENCY_DOLLAR_ID = 2L;
 
-    public static final String ACCOUNT_NAME_ONE = "Test account";
-    public static final String ACCOUNT_NAME_TWO = "Test Dollar account";
+    public static final String ACCOUNT_NAME_ONE = "Test security account";
+    public static final String ACCOUNT_NAME_TWO = "Test Dollar security account";
+    public static final String ACCOUNT_NAME_THREE = "Test money account";
     public static final String ACCOUNT_NUMBER_ONE = "12345";
     public static final String ACCOUNT_NUMBER_TWO = "67890";
+    public static final String ACCOUNT_NUMBER_THREE = "1122";
 
     public static final String COUNTERPART_ACCOUNT_NUMBER = "54321";
     public static final String COUNTERPART_ACCOUNT_NAME = "Other test counterpart account";

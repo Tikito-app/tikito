@@ -1,7 +1,5 @@
 package org.tikito.service.money;
 
-import org.tikito.dto.AccountDto;
-import org.tikito.dto.money.MoneyTransactionImportLine;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.service.BaseIntegrationTest;
 import org.junit.jupiter.api.Assertions;
@@ -11,10 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,7 +27,7 @@ class MoneyTransactionServiceTest extends BaseIntegrationTest {
         withDefaultUserAccount();
         withDefaultAccounts();
         loginWithDefaultUser();
-        transaction = withDefaultMoneyTransactions(DEFAULT_ACCOUNT_DTO).getFirst();
+        transaction = withDefaultMoneyTransactions(DEFAULT_DEBIT_ACCOUNT_DTO).getFirst();
         withDefaultMoneyTransactionGroups();
     }
 

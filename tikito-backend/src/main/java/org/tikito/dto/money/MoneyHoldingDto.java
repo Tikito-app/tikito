@@ -10,6 +10,6 @@ public class MoneyHoldingDto {
     private long userId;
     private long accountId;
     private long currencyId;
-    private double currentBalance;
-    private double startingBalance;
+    private double amount;
+    private double amountOffset;
 }
