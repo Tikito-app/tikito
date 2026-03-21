@@ -23,7 +23,7 @@
 
         <mat-form-field appearance="fill">
           <mat-label>{{ 'admin/user-preferences/start-date-minus-amount' | translatePipe }}</mat-label>
-          <input type="number" [attr.data-cy]="'csv-separator'" matInput formControlName="overviewStartDateMinusAmount"(change)="UserPreferenceService.onInputChange(UserPreference.OVERVIEW_START_DATE_MINUS_AMOUNT, $event)">
+          <input type="number" [attr.data-cy]="'csv-separator'" matInput formControlName="overviewStartDateMinusAmount" (change)="UserPreferenceService.onInputChange(UserPreference.OVERVIEW_START_DATE_MINUS_AMOUNT, $event)">
         </mat-form-field>
 
         <mat-form-field>
@@ -38,6 +38,16 @@
         </mat-form-field>
         {{'admin/user-preferences/start-date-ago' | translatePipe}}
         <mat-checkbox formControlName="overviewStartDateAtBeginningOfRange" (change)="UserPreferenceService.onCheckboxChange(UserPreference.OVERVIEW_START_DATE_AT_BEGINNING_OF_RANGE, $event.checked)">{{ 'money/graph/start-at-zero-from-beginning' | translatePipe}}</mat-checkbox>
+
+        <mat-form-field class="full-width">
+          <mat-label>{{ 'admin/user-preferences/language' | translatePipe }}</mat-label>
+          <mat-select formControlName="language"
+                      (selectionChange)="onLanguageChange($event.value);">
+            <mat-option value="en">{{'language/en' | translatePipe}}</mat-option>
+            <mat-option value="nl">{{'language/nl' | translatePipe}}</mat-option>
+            <mat-option value="tr">{{'language/tr' | translatePipe}}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </form>
     </mat-card-content>
   </mat-card>

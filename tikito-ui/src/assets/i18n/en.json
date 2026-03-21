@@ -274,6 +274,7 @@
   "admin/user-preferences/values-are-automatically-saved": "Values are automatically saved",
   "admin/user-preferences/default-currency": "Default currency",
   "admin/user-preferences/finnhub-token": "Finnhub token",
+  "admin/user-preferences/language": "Language",
 
   "admin/import": "Import",
   "admin/export": "Export",
@@ -285,6 +286,11 @@
   "admin/import-export-money-transactions": "Money transactions",
   "admin/import-export-security-transactions": "Security transactions",
   "admin/import-export-loans": "Loans",
+
+  "---------------- LANGUAGE --------------": "",
+  "language/nl": "Dutch",
+  "language/en": "English",
+  "language/tr": "Turkish",
 
 
   "--------------- LOAN ---------------------": "",
