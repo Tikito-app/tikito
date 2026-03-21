@@ -10,14 +10,14 @@ public final class Util {
     }
 
     // todo, make method without default and replace Double.parseDouble
-    public static double getDoubleOrDefault(final String value) {
+    public static Double getDoubleOrDefault(final String value, final Double defaultValue) {
         try {
             if (value.contains(",") && value.contains(".")) {
                 return Double.parseDouble(value.replaceAll("\\.", "").replace(',', '.'));
             }
             return Double.parseDouble(value.replace(',', '.'));
         } catch (final Exception e) {
-            return 0;
+            return defaultValue;
         }
     }
 

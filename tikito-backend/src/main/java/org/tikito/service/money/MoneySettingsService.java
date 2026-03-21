@@ -53,7 +53,7 @@ public final class MoneySettingsService {
             line.setCurrency(line.getCells().get(settings.getCurrencyColumnIndex()));
         }
         if (settings.getExchangeRateColumnIndex() != -1) {
-            line.setExchangeRate(Util.getDoubleOrDefault(line.getCells().get(settings.getExchangeRateColumnIndex())));
+            line.setExchangeRate(Util.getDoubleOrDefault(line.getCells().get(settings.getExchangeRateColumnIndex()), null));
         }
     }
 
@@ -65,7 +65,7 @@ public final class MoneySettingsService {
 
     private static void applyFinalBalance(final MoneyTransactionImportSettings settings, final MoneyTransactionImportLine line) {
         if (settings.getFinalBalanceColumnIndex() != -1) {
-            line.setFinalBalance(Util.getDoubleOrDefault(line.getCells().get(settings.getFinalBalanceColumnIndex())));
+            line.setFinalBalance(Util.getDoubleOrDefault(line.getCells().get(settings.getFinalBalanceColumnIndex()), null));
         }
     }
 
@@ -107,7 +107,7 @@ public final class MoneySettingsService {
 
     private static void applyAmount(final MoneyTransactionImportSettings settings, final MoneyTransactionImportLine line) {
         if (settings.getAmountColumnIndex() != -1) {
-            double amount = Util.getDoubleOrDefault(line.getCells().get(settings.getAmountColumnIndex()));
+            double amount = Util.getDoubleOrDefault(line.getCells().get(settings.getAmountColumnIndex()), 0d);
             if (amount < 0) {
                 line.setDebitCredit(DebitCredit.DEBIT);
             } else {
