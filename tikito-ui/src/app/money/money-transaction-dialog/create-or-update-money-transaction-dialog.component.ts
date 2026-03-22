@@ -25,10 +25,10 @@ import {AccountType} from "../../dto/account-type";
 import MoneyTransaction from "../../dto/money/money-transaction";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
 import {Loan} from "../../dto/loan";
-import Budget from "../../dto/budget";
 import {LoanApi} from "../../api/loan-api";
 import {BudgetApi} from "../../api/budget-api";
 import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import Budget from "../../dto/budget/budget";
 
 export interface MyData {
   transaction: MoneyTransaction;
@@ -75,7 +75,7 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
     private api: MoneyApi,
     private loanApi: LoanApi,
     private budgetApi: BudgetApi,
-    private accountApi : AccountApi) {
+    private accountApi: AccountApi) {
   }
 
   ngOnInit(): void {

@@ -1,6 +1,6 @@
 import {BudgetDateRange} from "./budget/budget-date-range";
 
-export default class Budget {
+export class HistoricalBudget {
     id: number;
     name: string;
     dateRange: BudgetDateRange;

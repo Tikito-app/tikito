@@ -21,7 +21,7 @@
           </mat-form-field>
 
             <mat-form-field class="half-width">
-                <mat-label>{{'start-date' | translate}}</mat-label>
+                <mat-label>{{'start-date' | translatePipe}}</mat-label>
                 <input matInput [matDatepicker]="pickerStartDate" formControlName="startDate">
                 <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-icon *ngIf="form.value['startDate']" matIconSuffix (click)="form.controls['startDate'].setValue(null);" class="clickable">close</mat-icon>
@@ -39,7 +39,7 @@
           </mat-form-field>
 
             <mat-form-field appearance="fill" class="full-width">
-                <mat-label>{{ 'budget/date-range-amount' | translate }}</mat-label>
+                <mat-label>{{ 'budget/date-range-amount' | translatePipe }}</mat-label>
                 <input type="number" matInput formControlName="dateRangeAmount">
                 <mat-icon matSuffix>amount</mat-icon>
             </mat-form-field>
