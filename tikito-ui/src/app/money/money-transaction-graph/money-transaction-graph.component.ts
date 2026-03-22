@@ -10,16 +10,21 @@ import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
 import MoneyTransaction from "../../dto/money/money-transaction";
 import {Observable} from "rxjs";
 import {AuthService} from "../../service/auth.service";
-
+import {HistoricalBudgetValue} from "../../dto/budget/historical-budget-value";
+import {BudgetApi} from "../../api/budget-api";
+import Budget from "../../dto/budget/budget";
+import {MoneyBudgetTransaction} from "../../dto/money/money-budget-transaction";
 
 class GroupInfo {
   id: number
   name: string;
+  isBudget: boolean;
   normalizedAggregatedValue: number = 0;
 
-  constructor(id: number, name: string) {
+  constructor(id: number, name: string, isBudget: boolean) {
     this.id = id;
     this.name = name;
+    this.isBudget = isBudget;
   }
 }
 
@@ -57,26 +62,31 @@ export class MoneyTransactionGraphComponent implements OnInit {
   @Input()
   height: number;
 
-  allTransactions: MoneyTransaction[];
+  @Input()
+  transactionFilter: MoneyTransactionsFilter;
+
+  @Input()
+  onFilterUpdateCallback: EventEmitter<MoneyTransactionsFilter>;
+
+  moneyTransactions: MoneyTransaction[];
+  allTransactions: MoneyBudgetTransaction[];
+  budgets: Budget[];
+  budgetsById: any;
+  historicalBudgetValues: HistoricalBudgetValue[];
   normalizedValues: NormalizedMoneyValue[];
   aggregatedValuesPerDateRange: NormalizedMoneyValue[];
   groupsByName: any;
   highestValuedGroups: any;
   groupsById: any;
   moneyTransactionGroups: MoneyTransactionGroup[] = [];
-
-  @Input()
-  transactionFilter: MoneyTransactionsFilter;
-
-  @Input() onFilterUpdateCallback: EventEmitter<MoneyTransactionsFilter>;
-
   chartOption: any;
-
   performanceTimes: any = {};
   lastPerformanceName: string;
+  accountsOfTransactions: any;
 
   constructor(private api: MoneyApi,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private budgetApi: BudgetApi) {
   }
 
   perf(name: string) {
@@ -102,21 +112,20 @@ export class MoneyTransactionGraphComponent implements OnInit {
     });
   }
 
-  accountsOfTransactions: any;
-
   assertHasTransactions(): Observable<void> {
     this.perf('getTransactions');
     if(this.accountsOfTransactions != this.transactionFilter.accountIds) {
+      this.moneyTransactions = [];
       this.allTransactions = [];
     }
     this.accountsOfTransactions = this.transactionFilter.accountIds;
     return new Observable(observer => {
-      if (this.allTransactions != null && this.allTransactions.length > 0) {
+      if ((this.allTransactions != null && this.allTransactions.length > 0) || !this.transactionFilter.includeMoney) {
         observer.next();
       } else {
         this.api.getTransactions(this.transactionFilter.withoutStartAndEndDate()).subscribe(transactions => {
-          this.allTransactions = transactions;
-          if (this.allTransactions != null && this.allTransactions.length > 0) {
+          this.moneyTransactions = transactions;
+          if (this.moneyTransactions != null && this.moneyTransactions.length > 0) {
             observer.next();
           }
         });
@@ -124,26 +133,67 @@ export class MoneyTransactionGraphComponent implements OnInit {
     });
   }
 
-  resetGraph() {
-    this.assertHasTransactions().subscribe(() => {
-      this.perf('save');
+  assertHasBudget(): Observable<void> {
+    this.historicalBudgetValues = [];
+    return new Observable(observer => {
+      if(!this.transactionFilter.includeBudget) {
+        observer.next();
+        return;
+      }
 
-      this.perf('generateGroupsByName');
-      this.generateGroupsByName();
-      this.perf('mapHistoricalMoneyValueToNormalizedMoneyValue');
-      this.mapHistoricalMoneyValueToNormalizedMoneyValue();
-      this.perf('calculateNormalizedAggregatedValues');
-      this.calculateNormalizedAggregatedValues();
-      this.perf('splitGroupsAndMapByName');
-      this.splitGroupsAndMapByName();
-      this.perf('aggregateValues');
-      this.aggregateValues();
-      this.perf('generateGraphOptions');
-      this.generateGraph();
-      this.perf('end');
+      this.budgetApi.getBudgets().subscribe(budgets => {
+        this.budgets = budgets;
+        this.budgetsById = {};
+        this.budgets.forEach(budget => {
+          this.budgetsById[budget.id] = budget;
+        });
+
+        this.budgetApi.getHistoricalValues().subscribe(historicalBudgetValues => {
+          this.historicalBudgetValues = historicalBudgetValues;
+          observer.next();
+        })
+      });
     });
   }
 
+  resetGraph() {
+    this.assertHasTransactions().subscribe(() => {
+      this.assertHasBudget().subscribe(() => {
+        this.perf('save');
+        this.generateMoneyBudgetTransactions();
+
+        this.perf('generateGroupsByName');
+        this.generateGroupsByName();
+        this.perf('mapHistoricalMoneyValueToNormalizedMoneyValue');
+        this.mapHistoricalMoneyValueToNormalizedMoneyValue();
+        this.perf('calculateNormalizedAggregatedValues');
+        this.calculateNormalizedAggregatedValues();
+        this.perf('splitGroupsAndMapByName');
+        this.splitGroupsAndMapByName();
+        this.perf('aggregateValues');
+        this.aggregateValues();
+        this.perf('generateGraphOptions');
+        this.generateGraph();
+        this.perf('end');
+      });
+    });
+  }
+
+  generateMoneyBudgetTransactions() {
+    this.allTransactions = [];
+    this.allTransactions = this.allTransactions.concat(this.moneyTransactions.map(transaction => transaction as MoneyBudgetTransaction));
+    this.allTransactions = this.allTransactions.concat(this.historicalBudgetValues.map(budgetValue => this.mapToMoneyBudgetTransaction(budgetValue)));
+    this.allTransactions.sort((a, b) => moment(a.timestamp).unix() - moment(b.timestamp).unix());
+  }
+
+  mapToMoneyBudgetTransaction(budgetValue: HistoricalBudgetValue): MoneyBudgetTransaction {
+    let transaction = budgetValue as unknown as MoneyBudgetTransaction;
+    transaction.amount = -budgetValue.budgeted - budgetValue.spent;
+    transaction.timestamp = budgetValue.date;// + 'T03:00:00.000Z';
+    transaction.counterpartAccountName = this.budgetsById[budgetValue.budgetId].name;
+    // console.log(transaction.timestamp)
+    return transaction;
+  }
 
   /**
    * Generate group names:
@@ -154,7 +204,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
     this.groupsByName = {};
     this.groupsById = {};
     this.moneyTransactionGroups.forEach(group => {
-      this.groupsByName[group.name] = new GroupInfo(group.id, group.name);
+      this.groupsByName[this.getGroupKey(group)] = new GroupInfo(group.id, group.name, false);
       this.groupsById[group.id] = group;
     });
 
@@ -165,7 +215,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
       .forEach(value => {
         const groupName = this.getGroupNameOfHistoricalValue(value);
         if (!this.groupsByName[groupName]) {
-          this.groupsByName[groupName] = new GroupInfo(-1, groupName);
+          this.groupsByName[groupName] = new GroupInfo(-1, groupName, value.budgeted != null);
         }
       });
   }
@@ -379,11 +429,27 @@ export class MoneyTransactionGraphComponent implements OnInit {
           type: 'bar',
           stack: true,
           showSymbol: false,
-          itemStyle: {color: Util.getColor(colorIndex)}
+          itemStyle: this.getItemStyle(colorIndex, false)
         }
         colorIndex++;
         return group;
       })
+  }
+
+  getItemStyle(colorIndex: number, isBudget: boolean) {
+    if(isBudget) {
+      return {
+        color: {
+          image: this.createStripePattern(Util.getColor(colorIndex)),
+          repeat: 'repeat'
+        },
+        opacity: 0.3
+      }
+    }
+
+    return {
+      color: Util.getColor(colorIndex),
+    }
   }
 
   generateGraphOptions(allDates: string[], seriesWithGroups: any) {
@@ -545,5 +611,32 @@ export class MoneyTransactionGraphComponent implements OnInit {
       return 0;
     }
     return offsetPerGroup[groupName];
+  }
+
+  createStripePattern(color: string) {
+    const canvas = document.createElement('canvas');
+    let size = 5;
+    canvas.width = size;
+    canvas.height = size;
+    const ctx: any = canvas.getContext('2d');
+
+    // background transparent
+    ctx.strokeStyle = color; // line color
+    ctx.lineWidth = 2;
+
+    // diagonal line
+    ctx.beginPath();
+    ctx.moveTo(0, size);
+    ctx.lineTo(size, 0);
+    ctx.stroke();
+
+    return canvas;
+  }
+
+  getGroupKey(group: GroupInfo | MoneyTransactionGroup): string {
+    if(group instanceof GroupInfo) {
+      return group.name + '-' + group.isBudget;
+    }
+    return group.name;
   }
 }

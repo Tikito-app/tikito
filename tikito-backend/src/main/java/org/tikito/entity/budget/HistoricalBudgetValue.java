@@ -25,10 +25,11 @@ public class HistoricalBudgetValue {
     private double budgeted;
     private double spent;
 
-    public HistoricalBudgetValue(final long userId, final Long budgetId, final LocalDate date) {
+    public HistoricalBudgetValue(final long userId, final Budget budget, final LocalDate date) {
         this.userId = userId;
-        this.budgetId = budgetId;
+        this.budgetId = budget.getId();
         this.date = date;
+        this.budgeted = budget.getAmount();
     }
 
     public HistoricalBudgetValueDto toDto() {

@@ -13,8 +13,10 @@ import org.tikito.repository.BudgetRepository;
 import org.tikito.repository.HistoricalBudgetValueRepository;
 import org.tikito.repository.MoneyTransactionRepository;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,7 +39,7 @@ public class BudgetValueService {
     @Transactional(propagation = Propagation.MANDATORY)
     void generateValues(final long userId, final long budgetId) {
         final Budget budget = budgetRepository.findByUserIdAndId(userId, budgetId).orElseThrow();
-        final LocalDate endDate = incrementByDateRange(budget.getEndDate() == null ? LocalDate.now() : budget.getEndDate(), budget.getDateRange(), 1);
+        final LocalDate endDate = incrementByDateRange(budget.getEndDate() == null ? LocalDate.now().plusYears(2) : budget.getEndDate(), budget.getDateRange(), 1);
         final Map<String, List<MoneyTransaction>> transactionsPerDateRange = new HashMap<>();
         final List<HistoricalBudgetValue> values = new ArrayList<>();
 
@@ -53,7 +55,7 @@ public class BudgetValueService {
             !currentDate.isAfter(endDate);
             currentDate = incrementByDateRange(currentDate, budget.getDateRange(), 1)) {
             final String dateRangeString = getDateRangeString(currentDate, budget.getDateRange());
-            final HistoricalBudgetValue value = new HistoricalBudgetValue(userId, budget.getId(), currentDate);
+            final HistoricalBudgetValue value = new HistoricalBudgetValue(userId, budget, currentDate);
 
             if(transactionsPerDateRange.containsKey(dateRangeString)) {
                 final List<MoneyTransaction> transactions = transactionsPerDateRange.get(dateRangeString);
@@ -75,9 +77,9 @@ public class BudgetValueService {
 
     private LocalDate incrementByDateRange(final LocalDate date, final DateRange dateRange, final int amount) {
         return switch (dateRange) {
-            case YEAR, ALL -> date.plusYears(amount);
-            case MONTH -> date.plusMonths(amount);
-            case WEEK -> date.plusWeeks(amount);
+            case YEAR, ALL -> date.plusYears(amount).withDayOfYear(1);
+            case MONTH -> date.plusMonths(amount).withDayOfMonth(1);
+            case WEEK -> date.plusWeeks(amount).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
             case DAY -> date.plusDays(amount);
             case ONCE -> date.minusYears(9999); // once implies to deal with once, todo: check if this works
         };

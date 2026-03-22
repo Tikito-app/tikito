@@ -10,6 +10,8 @@ export class MoneyTransactionsFilter {
   endDate: string;
   showOther: boolean;
   amountOfOtherGroups: number;
+  includeBudget: boolean;
+  includeMoney: boolean;
 
   withoutStartAndEndDate(): MoneyTransactionsFilter {
     let filter = new MoneyTransactionsFilter();
@@ -21,6 +23,8 @@ export class MoneyTransactionsFilter {
     filter.nonGrouped = this.nonGrouped;
     filter.showOther = this.showOther;
     filter.amountOfOtherGroups = this.amountOfOtherGroups;
+    filter.includeBudget = this.includeBudget;
+    filter.includeMoney = this.includeMoney;
     return filter;
   }
 }
