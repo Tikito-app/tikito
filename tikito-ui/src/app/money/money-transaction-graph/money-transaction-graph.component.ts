@@ -162,7 +162,12 @@ export class MoneyTransactionGraphComponent implements OnInit {
     this
       .allTransactions
       .filter(value => value.groupId == null)
-      .forEach(value => this.groupsByName[this.getGroupNameOfHistoricalValue(value)] = new GroupInfo(-1, this.getGroupNameOfHistoricalValue(value)));
+      .forEach(value => {
+        const groupName = this.getGroupNameOfHistoricalValue(value);
+        if (!this.groupsByName[groupName]) {
+          this.groupsByName[groupName] = new GroupInfo(-1, groupName);
+        }
+      });
   }
 
   /**
@@ -181,7 +186,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
       .map(value => {
         let date = moment(value.timestamp);
         let dateRangeString = date.format(format); // format
-        let dateRange = moment(dateRangeString, format); // and back to moment for start of the date range
+        let dateRange = this.getDateByDateRange(this.transactionFilter.dateRange, date);
 
         return new NormalizedMoneyValue(
           dateRangeString,
@@ -309,7 +314,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
       moment() :
       moment(this.transactionFilter.endDate);
 
-    let currentDate = firstDate;
+    let currentDate = firstDate.clone();
     let dateRangeFormat = this.getDateRangeFormat();
     let previousSeriesValue: any = {};
     let seriesValuesByName: any = {};
@@ -357,11 +362,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
         lastValueIfNotReset[groupName] = nonResettedValue;
       });
 
-      let nextDateRangeString = currentRangedString;
-      while (nextDateRangeString == currentRangedString) {
-        currentDate = currentDate.add(1, 'day');
-        nextDateRangeString = currentDate.format(dateRangeFormat);
-      }
+      currentDate = this.calculateNextCurrentDate(currentDate);
     }
 
     let seriesWithGroups: any = this.generateSeriesGroups(seriesValuesByName);
@@ -484,6 +485,32 @@ export class MoneyTransactionGraphComponent implements OnInit {
     }
 
     return 'YYYY-MM-DD';
+  }
+
+  calculateNextCurrentDate(currentDate: moment.Moment) {
+    switch(this.transactionFilter.dateRange) {
+      case TransactionDateRange.YEAR:
+        return currentDate.add(1, 'year').startOf('year');
+      case TransactionDateRange.MONTH:
+        return currentDate.add(1, 'month').startOf('month');
+      case TransactionDateRange.WEEK:
+        return currentDate.add(1, 'week').startOf('isoWeek');
+      default:
+        return currentDate.add(1, 'day');
+    }
+  }
+
+  getDateByDateRange(range: TransactionDateRange | null, date: moment.Moment) {
+    switch (range) {
+      case TransactionDateRange.WEEK:
+        return date.clone().startOf('isoWeek');
+      case TransactionDateRange.MONTH:
+        return date.clone().startOf('month');
+      case TransactionDateRange.YEAR:
+        return date.clone().startOf('year');
+      default:
+        return date.clone().startOf('day');
+    }
   }
 
   getStartDate() {
