@@ -12,7 +12,6 @@ import {LoanType} from "./dto/loan-type";
 import {CacheService} from "./service/cache-service";
 import {SecurityTransactionType} from "./dto/security/security-transaction-type";
 import {TransactionDateRange} from "./dto/money/money-transactions-filter";
-import {Month} from "./dto/month";
 
 export class Util {
   public static DATE_FORMAT: string = 'dd-MM-YYYY';
@@ -172,10 +171,8 @@ export class Util {
       .filter((v) => isNaN(Number(v)));
   }
 
-  static getMonths(): string[] {
-    return Object
-      .keys(Month)
-      .filter((v) => isNaN(Number(v)));
+  static getMonths(): number[] {
+    return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   }
 
   static getIdFromRoute(route: ActivatedRoute, key: string): number {

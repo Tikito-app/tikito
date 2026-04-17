@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -89,9 +90,9 @@ public class BudgetService {
         budgetRepository.deleteByUserIdAndId(userId, budgetId);
     }
 
-    public List<HistoricalBudgetValueDto> getHistoricalBudgets(final long userId) {
+    public List<HistoricalBudgetValueDto> getHistoricalBudgets(final long userId, final LocalDate startDate, final LocalDate endDate) {
         return historicalBudgetValueRepository
-                .findByUserId(userId)
+                .findByUserIdDateBetween(userId, startDate, endDate)
                 .stream()
                 .map(HistoricalBudgetValue::toDto)
                 .toList();

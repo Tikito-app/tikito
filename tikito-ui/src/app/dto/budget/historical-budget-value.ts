@@ -3,6 +3,6 @@ export class HistoricalBudgetValue {
     userId: number;
     budgetId: number;
     date: string;
-    budgeted: number;
-    spent: number;
+    budgeted: number = 0;
+    spent: number = 0;
 }

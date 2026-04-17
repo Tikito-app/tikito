@@ -7,6 +7,7 @@ import {Injectable} from "@angular/core";
 import {HistoricalBudgetValue} from "../dto/budget/historical-budget-value";
 import {HttpRequestMethod} from "../dto/http-request-method";
 import {MoneyTransactionsFilter} from "../dto/money/money-transactions-filter";
+import moment from "moment/moment";
 
 @Injectable({
     providedIn: 'root'
@@ -53,8 +54,11 @@ export class BudgetApi {
         return this.http.httpDelete(new HttpRequestData().withUrl('/api/budget/' + budgetId));
     }
 
-    getHistoricalValues(): Observable<HistoricalBudgetValue[]> {
-        return this.http.httpGetList<HistoricalBudgetValue>(HistoricalBudgetValue, new HttpRequestData().withUrl('/api/budget/historical-values'));
+    getHistoricalValues(startDate: moment.Moment, endDate: moment.Moment): Observable<HistoricalBudgetValue[]> {
+      let startDateFormatted = startDate.format('yyyy-MM-DD');
+      let endDateFormatted = (endDate == null ? moment() : endDate).format('yyyy-MM-DD');
+      return this.http.httpGetList<HistoricalBudgetValue>(HistoricalBudgetValue,
+          new HttpRequestData().withUrl('/api/budget/historical-values/' + startDateFormatted + '/' + endDateFormatted));
     }
 
     updateAll() {

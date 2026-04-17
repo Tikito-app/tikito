@@ -11,6 +11,7 @@ import org.tikito.dto.budget.HistoricalBudgetValueDto;
 import org.tikito.dto.money.MoneyTransactionFilter;
 import org.tikito.service.BudgetService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -49,9 +50,9 @@ public class BudgetController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/historical-values")
-    public ResponseEntity<List<HistoricalBudgetValueDto>> getHistoricalBudgets(final AuthUser authUser) {
-        return ResponseEntity.ok(budgetService.getHistoricalBudgets(authUser.getId()));
+    @GetMapping("/historical-values/{startDate}/{endDate}")
+    public ResponseEntity<List<HistoricalBudgetValueDto>> getHistoricalBudgets(final AuthUser authUser, @PathVariable("startDate") final LocalDate startDate, @PathVariable("endDate") final LocalDate endDate) {
+        return ResponseEntity.ok(budgetService.getHistoricalBudgets(authUser.getId(), startDate, endDate));
     }
 
     @GetMapping("/recalculate-historical-budget")

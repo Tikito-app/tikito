@@ -37,6 +37,7 @@ import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {AuthService} from "../../service/auth.service";
+import {MoneyTransactionAggregatedTableComponent} from "../money-transaction-aggregated-table/money-transaction-aggregated-table.component";
 
 @Component({
   selector: 'app-money-transaction-overview',
@@ -46,6 +47,7 @@ import {AuthService} from "../../service/auth.service";
     MatTab,
     MoneyTransactionListComponent,
     MoneyTransactionGraphComponent,
+    MoneyTransactionAggregatedTableComponent,
     MatCard,
     MatCardTitle,
     MatCardContent,

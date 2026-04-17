@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -33,7 +33,6 @@ import {MoneyTransactionsFilter} from "../../dto/money/money-transactions-filter
 import {MatOption} from "@angular/material/core";
 import {MatFormField, MatLabel, MatSelect} from "@angular/material/select";
 import {Observable} from "rxjs";
-import {Month} from "../../dto/month";
 
 @Component({
   selector: 'app-budget-list',
@@ -67,7 +66,7 @@ import {Month} from "../../dto/month";
   templateUrl: './budget-list.component.html',
   styleUrl: './budget-list.component.scss'
 })
-export class BudgetListComponent implements AfterViewInit {
+export class BudgetListComponent implements AfterViewInit, OnInit {
   displayedColumns: string[] = ['name', 'amount', 'spent'];
   dataSource: MatTableDataSource<Budget>;
   budgets: Budget[];
@@ -88,6 +87,8 @@ export class BudgetListComponent implements AfterViewInit {
 
   @Output()
   onTransactionFilterCallback: EventEmitter<MoneyTransactionsFilter> = new EventEmitter();
+  groupedValues: HistoricalBudgetValue[];
+  historicalValues: HistoricalBudgetValue[];
 
   constructor(
     private router: Router,
@@ -97,6 +98,11 @@ export class BudgetListComponent implements AfterViewInit {
     this.currentDateRangeStrings[BudgetDateRange.WEEK] = moment().format(Util.getDateRangeFormat(BudgetDateRange.WEEK));
     this.currentDateRangeStrings[BudgetDateRange.DAY] = moment().format(Util.getDateRangeFormat(BudgetDateRange.DAY));
     this.currentDateRangeStrings[BudgetDateRange.ONCE] = moment().format(Util.getDateRangeFormat(BudgetDateRange.ONCE));
+  }
+
+  ngOnInit(): void {
+    this.budgetForm.controls['year'].setValue(UserPreferenceService.get<number>(UserPreference.BUDGET_LIST_YEAR, moment().year()));
+    this.budgetForm.controls['month'].setValue(UserPreferenceService.get<number>(UserPreference.BUDGET_LIST_MONTH, moment().month()));
   }
 
   ngAfterViewInit() {
@@ -136,64 +142,40 @@ export class BudgetListComponent implements AfterViewInit {
     // });
     // console.log(selectedBudgetIds);
     // if (selectedBudgetIds.length == 1) {
-      this.selectedBudget = this.budgetsPerId[selectedBudgetIds[0]];
-    let month = this.monthToNumberedString(this.budgetForm.value['month'])
+    this.selectedBudget = this.budgetsPerId[selectedBudgetIds[0]];
     let year = this.budgetForm.value['year'];
-    console.log(month.toString());
-      setTimeout(() => {
+    let month = this.budgetForm.value['month'];
 
-        // console.log(this.getTransactionFilter())
-        let filter = this.getTransactionFilter();
-        this.api.getBudgetsByFilter(filter).subscribe(budgets => {
+    UserPreferenceService.set(UserPreference.BUDGET_LIST_YEAR, year);
+    UserPreferenceService.set(UserPreference.BUDGET_LIST_MONTH, month);
 
-          this.fetchHistoricalValues().subscribe(() => {
-            this.budgets = budgets;
-            console.log(this.budgets);
-            console.log(this.historicalValuesPerBudgetId);
-            this.budgets.forEach(budget => {
-              if(this.historicalValuesPerBudgetId[budget.id] != null && this.historicalValuesPerBudgetId[budget.id][year + '-' + month] != null) {
-                let historicalValue = this.historicalValuesPerBudgetId[budget.id][year + '-' + month];
-                budget.spent = historicalValue.spent;
-                console.log(budget.spent);
-              }
-            });
-            this.dataSource = new MatTableDataSource<Budget>(budgets);
-            this.dataSource.paginator = this.paginator;
+    setTimeout(() => {
+      // console.log(this.getTransactionFilter())
+      let filter = this.getTransactionFilter();
+      this.api.getBudgetsByFilter(filter).subscribe(budgets => {
+
+        this.fetchHistoricalValues().subscribe(() => {
+          this.budgets = budgets;
+          console.log(this.budgets);
+          console.log(this.historicalValuesPerBudgetId);
+          this.budgets.forEach(budget => {
+            if (this.historicalValuesPerBudgetId[budget.id] != null && this.historicalValuesPerBudgetId[budget.id][year + '-' + month] != null) {
+              let historicalValue = this.historicalValuesPerBudgetId[budget.id][year + '-' + month];
+              budget.spent = historicalValue.spent;
+              console.log(budget.spent);
+            }
           });
+          this.dataSource = new MatTableDataSource<Budget>(budgets);
+          this.dataSource.paginator = this.paginator;
         });
-        this.onTransactionFilterCallback.next(filter);
-      }, 500);
+      });
+      this.onTransactionFilterCallback.next(filter);
+    }, 500);
     // } else if (selectedBudgetIds.length > 1) {
     //
     // }
   }
 
-  monthToNumberedString(month: Month): string {
-    if(month == Month.JANUARY) {
-      return '1';
-    } else if(month == Month.FEBRUARY) {
-      return '2';
-    } else if(month == Month.MARCH) {
-      return '3';
-    } else if(month == Month.APRIL) {
-      return '4';
-    } else if(month == Month.MAY) {
-      return '5';
-    } else if(month == Month.JUNE) {
-      return '6';
-    } else if(month == Month.JULY) {
-      return '7';
-    } else if(month == Month.AUGUST) {
-      return '8';
-    } else if(month == Month.SEPTEMBER) {
-      return '9';
-    } else if(month == Month.OCTOBER) {
-      return '10';
-    } else if(month == Month.NOVEMBER) {
-      return '11';
-    }
-    return '12';
-  }
 
   getValueForDate(budgetId: number): HistoricalBudgetValue {
     let dateRangeString = moment().format(Util.getDateRangeFormat(this.budgetsPerId[budgetId].dateRange));
@@ -217,7 +199,6 @@ export class BudgetListComponent implements AfterViewInit {
     let filter = new MoneyTransactionsFilter();
     // filter.accountIds = [];
     let month = this.budgetForm.value['month'];
-
     let startDate = this.getStartDate();
     filter.startDate = startDate.toISOString();
     filter.endDate = moment(startDate).add(1, month == null ? 'year' : 'month').toISOString();
@@ -229,10 +210,20 @@ export class BudgetListComponent implements AfterViewInit {
   getStartDate(): moment.Moment {
     let month = this.budgetForm.value['month'];
     let year = this.budgetForm.value['year'];
-    // if(month == null) {
-    //   return moment('1-1-' + year);
-    // }
+    if(month == null) {
+      return moment('1-1-' + year);
+    }
     return moment('1-' + month + '-' + year);
+  }
+
+  getEndDate(): moment.Moment {
+    let month = this.budgetForm.value['month'];
+    let startDate = this.getStartDate();
+
+    if(month == null) {
+      return startDate.add(1, 'year');
+    }
+    return startDate.add(1, 'month');
   }
 
   protected readonly UserPreferenceService = UserPreferenceService;
@@ -240,10 +231,11 @@ export class BudgetListComponent implements AfterViewInit {
   protected readonly Util = Util;
 
   private fetchHistoricalValues(): Observable<void> {
-    let month = this.budgetForm.value['month'];
     return new Observable(subscriber => {
-      this.api.getHistoricalValues().subscribe(values => {
-        values.forEach(value => {
+      this.api.getHistoricalValues(this.getStartDate(), this.getEndDate()).subscribe(values => {
+        this.historicalValues = values;
+        this.groupedValues = this.groupValues(values);
+        this.groupedValues.forEach(value => {
           if (this.historicalValuesPerBudgetId[value.budgetId] == null) {
             this.historicalValuesPerBudgetId[value.budgetId] = {};
             // this.currentValuePerBudgetIdAndDateRange[value.budgetId] = [];
@@ -253,7 +245,7 @@ export class BudgetListComponent implements AfterViewInit {
           // if(month == null) {
           //   this.historicalValuesPerBudgetId[value.budgetId][date.year() + '-1'] = value;
           // } else {
-            this.historicalValuesPerBudgetId[value.budgetId][date.year() + '-' + date.month()] = value;
+          this.historicalValuesPerBudgetId[value.budgetId][date.year() + '-' + date.month()] = value;
           // }
           // this.historicalValuesPerBudgetId[value.budgetId][date.format(Util.getDateRangeFormat(this.budgetsPerId[value.budgetId].dateRange))] = value;
           // if (!this.yearsInBudget.includes(date.year())) {
@@ -263,5 +255,58 @@ export class BudgetListComponent implements AfterViewInit {
         subscriber.next();
       });
     });
+  }
+
+  onPreviousMonth() {
+    this.budgetForm.controls['month'].setValue(parseInt(this.budgetForm.value['month']) - 1);
+
+    this.verifyMonthValue();
+    this.onBudgetSelectedChanged();
+  }
+
+  onNextMonth() {
+    this.budgetForm.controls['month'].setValue(parseInt(this.budgetForm.value['month']) + 1);
+
+    this.verifyMonthValue();
+    this.onBudgetSelectedChanged();
+  }
+
+  onPreviousYear() {
+    this.budgetForm.controls['year'].setValue(parseInt(this.budgetForm.value['year']) - 1);
+    this.onBudgetSelectedChanged();
+  }
+
+  onNextYear() {
+    this.budgetForm.controls['year'].setValue(parseInt(this.budgetForm.value['year']) + 1);
+    this.onBudgetSelectedChanged();
+  }
+
+  verifyMonthValue() {
+    if (this.budgetForm.value['month'] == 0) {
+      this.onPreviousYear();
+      this.budgetForm.controls['month'].setValue(12);
+    } else if (this.budgetForm.value['month'] == 13) {
+      this.onNextYear();
+      this.budgetForm.controls['month'].setValue(1);
+    }
+  }
+
+  groupValues(values: HistoricalBudgetValue[]): HistoricalBudgetValue[] {
+    let valueMap: any = {};
+    let newList: HistoricalBudgetValue[] = [];
+    values.forEach(value => {
+      if(valueMap[value.budgetId] == null) {
+        valueMap[value.budgetId] = new HistoricalBudgetValue();
+        valueMap[value.budgetId].budgetId = valueMap.budgetId;
+        valueMap[value.budgetId].date = valueMap.date;
+      }
+      valueMap[value.budgetId].spent += value.spent;
+      valueMap[value.budgetId].budgeted += value.budgeted;
+    });
+    for(let key of Object.keys(valueMap)) {
+      newList.push(valueMap[key]);
+    }
+    console.log(valueMap);
+    return newList.sort((a, b) => moment(b.date).unix() - moment(a.date).unix());
   }
 }

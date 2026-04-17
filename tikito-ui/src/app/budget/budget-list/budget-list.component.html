@@ -2,7 +2,7 @@
 
     <form [formGroup]="budgetForm" *ngIf="budgetForm">
 
-        <button mat-button><mat-icon>arrow_back</mat-icon></button>
+        <button mat-button (click)="onPreviousYear()"><mat-icon>arrow_back</mat-icon></button>
         <mat-form-field class="half-width">
             <mat-label>{{ 'budget/year' | translate }}</mat-label>
             <mat-select formControlName="year" [attr.data-cy]="'year'">
@@ -15,23 +15,23 @@
                 <!--        }-->
             </mat-select>
         </mat-form-field>
-        <button mat-button><mat-icon>arrow_forward</mat-icon></button>
+        <button mat-button (click)="onNextYear()"><mat-icon>arrow_forward</mat-icon></button>
         <br/>
-        <button mat-button><mat-icon>arrow_back</mat-icon></button>
+        <button mat-button (click)="onPreviousMonth()"><mat-icon>arrow_back</mat-icon></button>
 
         <mat-form-field class="half-width">
             <mat-label>{{ 'budget/month' | translate }}</mat-label>
             <mat-select formControlName="month" [attr.data-cy]="'month'">
                 <mat-option [value]="null">{{'budget/month/all' | translate}}</mat-option>
                 @for (month of Util.getMonths(); track month) {
-                <mat-option [value]="month">{{ month | translate }}</mat-option>
+                  <mat-option [value]="month">{{ 'month_' + month | translate }}</mat-option>
                 }
             </mat-select>
         </mat-form-field>
 
 
 
-        <button mat-button><mat-icon>arrow_forward</mat-icon></button>
+        <button mat-button (click)="onNextMonth()"><mat-icon>arrow_forward</mat-icon></button>
         <!--    <ng-container *ngFor="let budget of budgets">-->
         <!--      <mat-checkbox formControlName="budget-{{budget.id}}">{{ budget.name }}-->
         <!--      </mat-checkbox>-->
