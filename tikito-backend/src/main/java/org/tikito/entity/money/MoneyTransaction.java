@@ -32,7 +32,7 @@ public class MoneyTransaction {
     private String description;
     private long currencyId;
     private Long groupId;
-    private Long budgetId;
+//    private Long budgetId;
     private Long loanId;
     private double exchangeRate;
 
@@ -80,7 +80,7 @@ public class MoneyTransaction {
                 description,
                 currencyId,
                 groupId,
-                budgetId,
+//                budgetId,
                 loanId,
                 exchangeRate);
     }

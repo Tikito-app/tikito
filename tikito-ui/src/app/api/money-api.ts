@@ -11,6 +11,7 @@ import {MoneyTransactionImportLine} from "../dto/money/money-transaction-import-
 import {MoneyTransactionGroupType} from "../dto/money-transaction-group-type";
 import {SecurityTransaction} from "../dto/security/security-transaction";
 import {MoneyHolding} from "../dto/money-holding";
+import {BudgetDateRange} from "../dto/budget/budget-date-range";
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +47,16 @@ export class MoneyApi {
       .withUrl('/api/money/transaction/loan'));
   }
 
-  createOrUpdateMoneyTransactionGroup(id: number | null, name: string, groupTypes: MoneyTransactionGroupType[], qualifiers: MoneyTransactionGroupQualifier[], accountIds: number[]): Observable<MoneyTransactionGroup> {
+  createOrUpdateMoneyTransactionGroup(id: number | null,
+                                      name: string,
+                                      groupTypes: MoneyTransactionGroupType[],
+                                      qualifiers: MoneyTransactionGroupQualifier[],
+                                      accountIds: number[],
+                                      startDate: string,
+                                      endDate: string,
+                                      amount: number,
+                                      dateRange: BudgetDateRange,
+                                      dateRangeAmount: number): Observable<MoneyTransactionGroup> {
     return this.http.httpPost<MoneyTransactionGroup>(new HttpRequestData()
       .withUrl('/api/money/transactions-group')
       .withBody({
@@ -54,7 +64,12 @@ export class MoneyApi {
         name: name,
         groupTypes: groupTypes,
         qualifiers: qualifiers,
-        accountIds: accountIds
+        accountIds: accountIds,
+        startDate: startDate,
+        endDate: endDate,
+        amount: amount,
+        dateRange: dateRange,
+        dateRangeAmount: dateRangeAmount,
       }));
   }
 
@@ -107,7 +122,7 @@ export class MoneyApi {
                             description: string,
                             currencyId: number,
                             groupId: number,
-                            budgetId: number,
+                            // budgetId: number,
                             loanId: number,
                             exchangeRate: number): Observable<MoneyTransaction> {
     let body: any = {};
@@ -123,7 +138,7 @@ export class MoneyApi {
     body.description = description;
     body.currencyId = currencyId;
     body.groupId = groupId;
-    body.budgetId = budgetId;
+    // body.budgetId = budgetId;
     body.loanId = loanId;
     body.exchangeRate = exchangeRate;
     return this.http.httpPostSingle(MoneyTransaction, new HttpRequestData()

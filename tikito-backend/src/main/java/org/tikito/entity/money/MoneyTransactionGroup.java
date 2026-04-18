@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.dto.DateRange;
 import org.tikito.dto.export.MoneyTransactionGroupExportDto;
 import org.tikito.dto.money.MoneyTransactionGroupDto;
 import org.tikito.dto.money.MoneyTransactionGroupType;
@@ -11,6 +12,7 @@ import org.tikito.entity.Account;
 import org.tikito.entity.budget.Budget;
 import org.tikito.entity.loan.Loan;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -41,14 +43,17 @@ public class MoneyTransactionGroup {
     @Column(name = "account_id")
     private Set<Long> accountIds = new HashSet<>();
 
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "budget_id")
-    private Budget budget;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "loan_id")
     private Loan loan;
+
+
+    private LocalDate startDate;
+    private LocalDate endDate;
+    @Enumerated(EnumType.STRING)
+    private DateRange dateRange;
+    private Integer dateRangeAmount; // -1 for infinite
+    private Double amount;
 
     public MoneyTransactionGroup(final MoneyTransactionGroupDto dto) {
         this.userId = dto.getUserId();
@@ -88,7 +93,12 @@ public class MoneyTransactionGroup {
                         .stream()
                         .map(MoneyTransactionGroupQualifier::toDto)
                         .toList(),
-                accountIds);
+                accountIds,
+                startDate,
+                endDate,
+                dateRange,
+                dateRangeAmount,
+                amount);
     }
 
     public MoneyTransactionGroupExportDto toExportDto(final Map<Long, Account> accountsById) {

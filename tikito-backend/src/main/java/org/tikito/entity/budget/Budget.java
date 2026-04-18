@@ -9,9 +9,7 @@ import org.tikito.dto.budget.BudgetDto;
 import org.tikito.entity.money.MoneyTransactionGroup;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -38,8 +36,8 @@ public class Budget {
     @Column(name = "account_id")
     private Set<Long> accountIds = new HashSet<>();
 
-    @OneToMany(mappedBy = "budget", fetch = FetchType.EAGER)
-    private List<MoneyTransactionGroup> groups = new ArrayList<>();
+    @OneToOne(fetch = FetchType.EAGER)
+    private MoneyTransactionGroup moneyTransactionGroup;
 
     public Budget(final long userId) {
         this.userId = userId;
@@ -56,9 +54,6 @@ public class Budget {
                 dateRangeAmount,
                 amount,
                 accountIds,
-                groups
-                        .stream()
-                        .map(MoneyTransactionGroup::toDto)
-                        .toList());
+                moneyTransactionGroup.toDto());
     }
 }

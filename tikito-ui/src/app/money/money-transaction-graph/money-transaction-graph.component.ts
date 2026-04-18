@@ -92,7 +92,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
   moneyTransactions: MoneyTransaction[];
   allTransactions: MoneyBudgetTransaction[];
   budgets: Budget[];
-  budgetsById: any;
+  // budgetsById: any;
   historicalBudgetValues: HistoricalBudgetValue[];
   normalizedValues: NormalizedMoneyValue[];
   aggregatedValuesPerDateRange: NormalizedMoneyValue[];
@@ -162,29 +162,31 @@ export class MoneyTransactionGraphComponent implements OnInit {
         return;
       }
 
-      this.budgetApi.getBudgets().subscribe(budgets => {
-        this.budgets = budgets;
-        this.budgetsById = {};
-        this.budgets.forEach(budget => {
-          this.budgetsById[budget.id] = budget;
-        });
+      // this.budgetApi.getBudgets().subscribe(budgets => {
+      //   this.budgets = budgets;
+        // this.budgetsById = {};
+        // this.budgets.forEach(budget => {
+        //   this.budgetsById[budget.id] = budget;
+        // });
 
         this.budgetApi.getHistoricalValues(this.getStartDate() as moment.Moment, this.getEndDate() as moment.Moment).subscribe(historicalBudgetValues => {
           this.historicalBudgetValues = historicalBudgetValues;
           observer.next();
         });
       });
-    });
+    // });
   }
 
   resetGraph() {
     this.assertHasTransactions().subscribe(() => {
       this.assertHasBudget().subscribe(() => {
         this.perf('save');
+        this.generateGroupsByName()
+
         this.generateMoneyBudgetTransactions();
 
         this.perf('generateGroupsByName');
-        this.generateGroupsByName();
+        this.generateOtherGroupsByName();
         this.perf('mapHistoricalMoneyValueToNormalizedMoneyValue');
         this.mapHistoricalMoneyValueToNormalizedMoneyValue();
         this.perf('calculateNormalizedAggregatedValues');
@@ -208,16 +210,21 @@ export class MoneyTransactionGraphComponent implements OnInit {
     if (this.historicalBudgetValues) {
       this.allTransactions = this.allTransactions.concat(this.historicalBudgetValues.map(budgetValue => this.mapToMoneyBudgetTransaction(budgetValue)));
     }
+    console.log(this.historicalBudgetValues);
     this.allTransactions.sort((a, b) => moment(a.timestamp).unix() - moment(b.timestamp).unix());
   }
 
   mapToMoneyBudgetTransaction(budgetValue: HistoricalBudgetValue): MoneyBudgetTransaction {
     let transaction = budgetValue as unknown as MoneyBudgetTransaction;
-    transaction.amount = -budgetValue.budgeted - budgetValue.spent;
-    transaction.timestamp = budgetValue.date;// + 'T03:00:00.000Z';
-    transaction.counterpartAccountName = this.budgetsById[budgetValue.budgetId].name;
-    transaction.budgeted = budgetValue.budgeted; // Ensure budgeted field is set to distinguish from other transactions
-    transaction.groupIds = this.budgetsById[budgetValue.budgetId].groupIds;
+    transaction.amount = -budgetValue.budgeted;//-budgetValue.budgeted - budgetValue.spent;
+    if(transaction.amount > 0) {
+      transaction.amount = 0;
+    }
+    transaction.timestamp = budgetValue.date;
+    transaction.counterpartAccountName = this.groupsById[budgetValue.groupId].name;
+    transaction.budgeted = budgetValue.budgeted;
+    transaction.groupId = budgetValue.groupId;
+    console.log(transaction, budgetValue);
     return transaction;
   }
 
@@ -234,7 +241,9 @@ export class MoneyTransactionGraphComponent implements OnInit {
       this.groupsByName[groupInfo.key] = groupInfo;
       this.groupsById[group.id] = group;
     });
+  }
 
+  generateOtherGroupsByName() {
     // now put all the non-grouped values in it by the counterpart name
     this
       .allTransactions
@@ -338,6 +347,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
     this.normalizedValues
       // .filter(value => !this.transactionFilter.showOther && this.highestValuedGroups[value.groupName] == null)
       .forEach(value => {
+        console.log(value);
         let isLowestGroupValue = this.highestValuedGroups[value.groupKey] == null;
         if (isLowestGroupValue) {
           value.groupKey = new GroupKey('Other', false).toString();

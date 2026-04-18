@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class HistoricalBudgetValueDto {
     private Long id;
     private long userId;
-    private long budgetId;
+    private long groupId;
     private LocalDate date;
     private double budgeted;
     private double spent;

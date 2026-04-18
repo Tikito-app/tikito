@@ -98,14 +98,14 @@
     </mat-form-field>
     <br/>
 
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>{{ 'budget' | translatePipe }}</mat-label>
-      <mat-select formControlName="budgetId" [attr.data-cy]="'transaction-type'">
-        @for (budget of budgets; track budget) {
-          <mat-option [value]="budget.id">{{ budget.name }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+<!--    <mat-form-field appearance="fill" class="full-width">-->
+<!--      <mat-label>{{ 'budget' | translatePipe }}</mat-label>-->
+<!--      <mat-select formControlName="budgetId" [attr.data-cy]="'transaction-type'">-->
+<!--        @for (budget of budgets; track budget) {-->
+<!--&lt;!&ndash;          <mat-option [value]="budget.id">{{ budget.name }}</mat-option>&ndash;&gt;-->
+<!--        }-->
+<!--      </mat-select>-->
+<!--    </mat-form-field>-->
   </form>
 </div>
 <div mat-dialog-actions>

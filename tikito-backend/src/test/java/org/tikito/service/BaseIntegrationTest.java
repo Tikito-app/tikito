@@ -193,12 +193,12 @@ public class BaseIntegrationTest extends BaseTest {
                 DEFAULT_SECURITY_ACCOUNT.getId(),
                 "My Regex Group",
                 MoneyTransactionGroupQualifierType.REGEX, "AH ([0-9]+) (.*)",
-                Set.of(MoneyTransactionGroupType.MONEY, MoneyTransactionGroupType.BUDGET, MoneyTransactionGroupType.LOAN));
+                Set.of(MoneyTransactionGroupType.MONEY, MoneyTransactionGroupType.LOAN));
         TRANSACTION_GROUP_CLUSTER = withExistingTransactionGroup(
                 DEFAULT_SECURITY_ACCOUNT.getId(),
                 "My Cluster Group",
                 MoneyTransactionGroupQualifierType.SIMILAR, "AH 134 test",
-                Set.of(MoneyTransactionGroupType.MONEY, MoneyTransactionGroupType.BUDGET, MoneyTransactionGroupType.LOAN));
+                Set.of(MoneyTransactionGroupType.MONEY, MoneyTransactionGroupType.LOAN));
     }
 
     protected MoneyTransactionGroup withExistingTransactionGroup(final Long accountId,

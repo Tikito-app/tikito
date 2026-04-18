@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.entity.money.MoneyTransactionGroup;
 
 import java.time.LocalDate;
 
@@ -20,23 +21,23 @@ public class HistoricalBudgetValue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private long userId;
-    private long budgetId;
+    private long groupId;
     private LocalDate date;
     private double budgeted;
     private double spent;
 
-    public HistoricalBudgetValue(final long userId, final Budget budget, final LocalDate date) {
+    public HistoricalBudgetValue(final long userId, final MoneyTransactionGroup group, final LocalDate date) {
         this.userId = userId;
-        this.budgetId = budget.getId();
+        this.groupId = group.getId();
         this.date = date;
-        this.budgeted = budget.getAmount();
+        this.budgeted = group.getAmount();
     }
 
     public HistoricalBudgetValueDto toDto() {
         return new HistoricalBudgetValueDto(
                 id,
                 userId,
-                budgetId,
+                groupId,
                 date,
                 budgeted,
                 spent);

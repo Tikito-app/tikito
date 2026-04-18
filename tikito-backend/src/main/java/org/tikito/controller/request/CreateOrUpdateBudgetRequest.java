@@ -11,12 +11,10 @@ import java.util.Set;
 @Getter
 @Setter
 public class CreateOrUpdateBudgetRequest extends CreateOrUpdateRequest {
-    private String name;
+    private long groupId;
     private LocalDate startDate;
     private LocalDate endDate;
     private DateRange dateRange;
     private int dateRangeAmount;
     private double amount;
-    private Set<Long> accountIds;
-    private Set<Long> groupIds = new HashSet<>();
 }

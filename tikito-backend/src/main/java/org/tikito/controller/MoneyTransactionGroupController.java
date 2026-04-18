@@ -3,12 +3,14 @@ package org.tikito.controller;
 import org.springframework.validation.annotation.Validated;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.CreateOrUpdateMoneyTransactionGroupRequest;
+import org.tikito.dto.budget.HistoricalBudgetValueDto;
 import org.tikito.dto.money.MoneyTransactionGroupDto;
 import org.tikito.service.money.MoneyTransactionGroupService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -39,6 +41,17 @@ public class MoneyTransactionGroupController {
     @DeleteMapping("/{groupId}")
     public ResponseEntity<Void> deleteGroup(final AuthUser authUser, @PathVariable("groupId") final long groupId) {
         groupService.deleteGroup(authUser.getId(), groupId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/historical-values/{startDate}/{endDate}")
+    public ResponseEntity<List<HistoricalBudgetValueDto>> getHistoricalBudgets(final AuthUser authUser, @PathVariable("startDate") final LocalDate startDate, @PathVariable("endDate") final LocalDate endDate) {
+        return ResponseEntity.ok(groupService.getHistoricalBudgets(authUser.getId(), startDate, endDate));
+    }
+
+    @GetMapping("/recalculate-historical-budget")
+    public ResponseEntity<Void> recalculateHistoricalBudget(final AuthUser authUser) {
+        groupService.recalculateHistoricalBudget(authUser.getId());
         return ResponseEntity.ok().build();
     }
 }

@@ -25,5 +25,5 @@ public class BudgetDto {
     private int dateRangeAmount;
     private double amount;
     private Set<Long> accountIds;
-    private List<MoneyTransactionGroupDto> groups;
+    private MoneyTransactionGroupDto moneyTransactionGroupDto;
 }

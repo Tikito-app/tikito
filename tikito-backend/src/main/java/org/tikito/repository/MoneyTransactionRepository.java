@@ -41,6 +41,9 @@ public interface MoneyTransactionRepository extends JpaRepository<MoneyTransacti
     @Query("select t from MoneyTransaction t where t.groupId in :moneyGroupIds")
     List<MoneyTransaction> findByGroupIdIn(Set<Long> moneyGroupIds);
 
+    @Query("select t from MoneyTransaction t where t.groupId = :groupId")
+    List<MoneyTransaction> findByGroupId(long groupId);
+
     List<MoneyTransaction> findAllByUserId(long userId);
 
     @Query("select t from MoneyTransaction t where t.userId = :userId and t.loanId is not null")

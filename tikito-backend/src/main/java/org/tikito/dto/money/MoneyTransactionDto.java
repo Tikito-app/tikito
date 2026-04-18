@@ -24,7 +24,7 @@ public class MoneyTransactionDto {
     private String description;
     private long currencyId;
     private Long groupId;
-    private Long budgetId;
+//    private Long budgetId;
     private Long loanId;
     private double exchangeRate;
 

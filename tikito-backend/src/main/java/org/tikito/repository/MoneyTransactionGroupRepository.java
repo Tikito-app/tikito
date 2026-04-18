@@ -20,6 +20,6 @@ public interface MoneyTransactionGroupRepository extends JpaRepository<MoneyTran
     @Query("select g from MoneyTransactionGroup g where g.id in :ids or g.loan.id = :loanId")
     List<MoneyTransactionGroup> findAllByIdsOrLoanId(Set<Long> ids, long loanId);
 
-    @Query("select g from MoneyTransactionGroup g where g.id in :ids or g.budget.id = :budgetId")
-    List<MoneyTransactionGroup> findAllByIdsOrBudgetId(Set<Long> ids, long budgetId);
+    @Query("select g from MoneyTransactionGroup g where g.id = :groupId")
+    Optional<MoneyTransactionGroup> findAllByIdOrBudgetId(long groupId, long budgetId);
 }

@@ -5,11 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.tikito.dto.DateRange;
-import org.tikito.entity.budget.Budget;
 import org.tikito.entity.budget.HistoricalBudgetValue;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.entity.money.MoneyTransactionGroup;
-import org.tikito.repository.BudgetRepository;
 import org.tikito.repository.HistoricalBudgetValueRepository;
 import org.tikito.repository.MoneyTransactionRepository;
 
@@ -19,45 +17,40 @@ import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class BudgetValueService {
     private final HistoricalBudgetValueRepository historicalBudgetValueRepository;
-    private final BudgetRepository budgetRepository;
     private final MoneyTransactionRepository moneyTransactionRepository;
 
     public BudgetValueService(final HistoricalBudgetValueRepository historicalBudgetValueRepository,
-                              final BudgetRepository budgetRepository,
                               final MoneyTransactionRepository moneyTransactionRepository) {
         this.historicalBudgetValueRepository = historicalBudgetValueRepository;
-        this.budgetRepository = budgetRepository;
         this.moneyTransactionRepository = moneyTransactionRepository;
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    void generateValues(final long userId, final long budgetId) {
-        final Budget budget = budgetRepository.findByUserIdAndId(userId, budgetId).orElseThrow();
-        final LocalDate endDate = incrementByDateRange(budget.getEndDate() == null ? LocalDate.now().plusYears(2) : budget.getEndDate(), budget.getDateRange(), 1);
+    public void generateValues(final long userId, final MoneyTransactionGroup group) {
+        final LocalDate endDate = incrementByDateRange(group.getEndDate() == null ? LocalDate.now().plusYears(2) : group.getEndDate(), group.getDateRange(), 1);
         final Map<String, List<MoneyTransaction>> transactionsPerDateRange = new HashMap<>();
         final List<HistoricalBudgetValue> values = new ArrayList<>();
 
         moneyTransactionRepository
-                .findByGroupIdIn(budget.getGroups().stream().map(MoneyTransactionGroup::getId).collect(Collectors.toSet()))
+                .findByGroupId(group.getId())
                 .forEach(transaction -> {
-                    final String dateRangeString = getDateRangeString(LocalDate.ofInstant(transaction.getTimestamp(), ZoneId.systemDefault()), budget.getDateRange());
+                    final String dateRangeString = getDateRangeString(LocalDate.ofInstant(transaction.getTimestamp(), ZoneId.systemDefault()), group.getDateRange());
                     transactionsPerDateRange.putIfAbsent(dateRangeString, new ArrayList<>());
                     transactionsPerDateRange.get(dateRangeString).add(transaction);
                 });
 
-        for (LocalDate currentDate = budget.getStartDate();
-            !currentDate.isAfter(endDate);
-            currentDate = incrementByDateRange(currentDate, budget.getDateRange(), 1)) {
-            final String dateRangeString = getDateRangeString(currentDate, budget.getDateRange());
-            final HistoricalBudgetValue value = new HistoricalBudgetValue(userId, budget, currentDate);
+        for (LocalDate currentDate = group.getStartDate();
+             !currentDate.isAfter(endDate);
+             currentDate = incrementByDateRange(currentDate, group.getDateRange(), 1)) {
+            final String dateRangeString = getDateRangeString(currentDate, group.getDateRange());
+            final HistoricalBudgetValue value = new HistoricalBudgetValue(userId, group, currentDate);
 
-            if(transactionsPerDateRange.containsKey(dateRangeString)) {
+            if (transactionsPerDateRange.containsKey(dateRangeString)) {
                 final List<MoneyTransaction> transactions = transactionsPerDateRange.get(dateRangeString);
                 transactions.forEach(transaction -> apply(value, transaction));
             }
@@ -67,7 +60,7 @@ public class BudgetValueService {
 
         log.info("Persisting {} budget values", values.size());
 
-        historicalBudgetValueRepository.deleteByUserIdAndBudgetId(userId, budgetId);
+        historicalBudgetValueRepository.deleteByUserIdAndGroupId(userId, group.getId());
         historicalBudgetValueRepository.saveAllAndFlush(values);
     }
 

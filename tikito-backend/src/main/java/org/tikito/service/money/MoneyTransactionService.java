@@ -52,9 +52,9 @@ public class MoneyTransactionService {
         if(request.getGroupId() != null) {
             moneyTransactionGroupRepository.findByUserIdAndId(userId, request.getGroupId()).orElseThrow();
         }
-        if(request.getBudgetId() != null) {
-            budgetRepository.findByUserIdAndId(userId, request.getBudgetId()).orElseThrow();
-        }
+//        if(request.getBudgetId() != null) {
+//            budgetRepository.findByUserIdAndId(userId, request.getBudgetId()).orElseThrow();
+//        }
         if(request.getLoanId() != null) {
             loanRepository.findByUserIdAndId(userId, request.getLoanId()).orElseThrow();
         }
@@ -67,7 +67,7 @@ public class MoneyTransactionService {
         transaction.setDescription(request.getDescription());
         transaction.setCurrencyId(request.getCurrencyId());
         transaction.setGroupId(request.getGroupId());
-        transaction.setBudgetId(request.getBudgetId());
+//        transaction.setBudgetId(request.getBudgetId());
         transaction.setLoanId(request.getLoanId());
         transaction.setExchangeRate(request.getExchangeRate());
 

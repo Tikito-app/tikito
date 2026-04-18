@@ -36,6 +36,36 @@
               }
             </mat-select>
           </mat-form-field>
+
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ 'budget/amount' | translatePipe }}</mat-label>
+            <input type="number" [attr.data-cy]="'amount'" matInput formControlName="amount">
+            <mat-icon matSuffix>amount</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field class="half-width">
+            <mat-label>{{'start-date' | translatePipe}}</mat-label>
+            <input matInput [matDatepicker]="pickerStartDate" formControlName="startDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-icon *ngIf="form.value['startDate']" matIconSuffix (click)="form.controls['startDate'].setValue(null);" class="clickable">close</mat-icon>
+            <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
+            <mat-datepicker #pickerStartDate></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'budget/date-range' | translatePipe }}</mat-label>
+            <mat-select formControlName="dateRange" [attr.data-cy]="'date-range'">
+              @for (dateRange of Util.getBudgetDateRanges(); track dateRange) {
+                <mat-option [value]="dateRange">{{ dateRange }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ 'budget/date-range-amount' | translatePipe }}</mat-label>
+            <input type="number" matInput formControlName="dateRangeAmount">
+            <mat-icon matSuffix>amount</mat-icon>
+          </mat-form-field>
         </ng-container>
 
         <div *ngIf="nameInEdit">

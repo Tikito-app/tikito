@@ -26,23 +26,21 @@ export class BudgetApi {
           .withUrl('/api/budget/filter'));
     }
 
-    createOrUpdateBudget(id: number | null,
-                         name: string,
+    createOrUpdateBudget(groupId: number,
                          amount: number,
                          startDate: string,
+                         endDate: string,
                          dateRange: BudgetDateRange,
-                         dateRangeAmount: number,
-                         groupIds: number[]): Observable<Budget> {
+                         dateRangeAmount: number): Observable<Budget> {
         return this.http.httpPost<Budget>(new HttpRequestData()
             .withUrl('/api/budget')
             .withBody({
-                id: id != null ? id : null,
-                name: name,
+                groupId: groupId,
                 amount: amount,
                 startDate: startDate,
+                endDate: endDate,
                 dateRange: dateRange,
                 dateRangeAmount: dateRangeAmount,
-                groupIds: groupIds
             }))
     }
 
@@ -58,10 +56,10 @@ export class BudgetApi {
       let startDateFormatted = startDate.format('yyyy-MM-DD');
       let endDateFormatted = (endDate == null ? moment() : endDate).format('yyyy-MM-DD');
       return this.http.httpGetList<HistoricalBudgetValue>(HistoricalBudgetValue,
-          new HttpRequestData().withUrl('/api/budget/historical-values/' + startDateFormatted + '/' + endDateFormatted));
+          new HttpRequestData().withUrl('/api/money/transactions-group/historical-values/' + startDateFormatted + '/' + endDateFormatted));
     }
 
     updateAll() {
-        this.http.basicHttpRequest(new HttpRequestData().withRequestMethod(HttpRequestMethod.GET).withUrl('/api/budget/recalculate-historical-budget')).subscribe();
+        this.http.basicHttpRequest(new HttpRequestData().withRequestMethod(HttpRequestMethod.GET).withUrl('/api/money/transactions-group/recalculate-historical-budget')).subscribe();
     }
 }

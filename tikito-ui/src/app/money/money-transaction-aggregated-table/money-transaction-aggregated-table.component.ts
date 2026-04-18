@@ -56,7 +56,7 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
   historicalBudgetValues: HistoricalBudgetValue[];
   moneyTransactionGroups: MoneyTransactionGroup[] = [];
   groupsById: any;
-  budgetsById: any;
+  // budgetsById: any;
   budgets: any[];
 
   aggregatedData: AggregatedGroupData[] = [];
@@ -119,18 +119,18 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
         return;
       }
 
-      this.budgetApi.getBudgets().subscribe(budgets => {
-        this.budgets = budgets;
-        this.budgetsById = {};
-        this.budgets.forEach(budget => {
-          this.budgetsById[budget.id] = budget;
-        });
-
-        // this.budgetApi.getHistoricalValues().subscribe(historicalBudgetValues => {
-        //   this.historicalBudgetValues = historicalBudgetValues;
-        //   observer.next();
-        // })
-      });
+    //   this.budgetApi.getBudgets().subscribe(budgets => {
+    //     this.budgets = budgets;
+    //     this.budgetsById = {};
+    //     this.budgets.forEach(budget => {
+    //       this.budgetsById[budget.id] = budget;
+    //     });
+    //
+    //     // this.budgetApi.getHistoricalValues().subscribe(historicalBudgetValues => {
+    //     //   this.historicalBudgetValues = historicalBudgetValues;
+    //     //   observer.next();
+    //     // })
+    //   });
     });
   }
 
@@ -250,7 +250,7 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
         if (startDate && date.isBefore(startDate)) return;
         if (endDate && date.isAfter(endDate)) return;
 
-        let groupName = this.budgetsById[budgetValue.budgetId].name;
+        let groupName = this.groupsById[budgetValue.groupId].name;
         if (!dataMap[groupName]) {
           dataMap[groupName] = new AggregatedGroupData(groupName);
         }
