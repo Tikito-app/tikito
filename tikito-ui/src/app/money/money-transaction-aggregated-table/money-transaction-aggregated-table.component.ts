@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
 import {MoneyTransactionsFilter, TransactionDateRange} from "../../dto/money/money-transactions-filter";
 import {Observable} from "rxjs";
 import {MoneyApi} from "../../api/money-api";
@@ -7,13 +7,13 @@ import {BudgetApi} from "../../api/budget-api";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
 import MoneyTransaction from "../../dto/money/money-transaction";
 import {HistoricalBudgetValue} from "../../dto/budget/historical-budget-value";
-import {MoneyBudgetTransaction} from "../../dto/money/money-budget-transaction";
 import moment from "moment";
 import {Util} from "../../util";
-import {MatTableModule} from "@angular/material/table";
+import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {CommonModule} from "@angular/common";
 import {MatTabChangeEvent, MatTabGroup, MatTab} from "@angular/material/tabs";
+import {PaginatorComponent} from "../../components/paginator/paginator.component";
 
 class AggregatedGroupData {
   name: string;
@@ -40,7 +40,7 @@ class TabInfo {
 @Component({
   selector: 'app-money-transaction-aggregated-table',
   standalone: true,
-  imports: [MatTableModule, TranslatePipe, CommonModule, MatTabGroup, MatTab],
+  imports: [MatTableModule, TranslatePipe, CommonModule, MatTabGroup, MatTab, PaginatorComponent],
   templateUrl: './money-transaction-aggregated-table.component.html',
   styleUrl: './money-transaction-aggregated-table.component.scss'
 })
@@ -52,6 +52,8 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
   @Input()
   onFilterUpdateCallback: EventEmitter<MoneyTransactionsFilter>;
 
+  @ViewChild(PaginatorComponent) paginator: PaginatorComponent;
+
   moneyTransactions: MoneyTransaction[];
   historicalBudgetValues: HistoricalBudgetValue[];
   moneyTransactionGroups: MoneyTransactionGroup[] = [];
@@ -59,7 +61,7 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
   // budgetsById: any;
   budgets: any[];
 
-  aggregatedData: AggregatedGroupData[] = [];
+  dataSource = new MatTableDataSource<AggregatedGroupData>([]);
   displayedColumns: string[] = ['name', 'spent', 'budgeted'];
 
   tabs: TabInfo[] = [];
@@ -252,7 +254,10 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
       });
     }
 
-    this.aggregatedData = Object.values(dataMap).sort((a, b) => b.spent - a.spent);
+    this.dataSource.data = Object.values(dataMap).sort((a, b) => b.spent - a.spent);
+    setTimeout(() => {
+      this.dataSource.paginator = this.paginator.getPaginator();
+    });
   }
 
   getGroupName(transaction: MoneyTransaction): string {
