@@ -104,6 +104,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
   performanceTimes: any = {};
   lastPerformanceName: string;
   accountsOfTransactions: any;
+  lastDateRange: TransactionDateRange | null;
 
   constructor(private api: MoneyApi,
               private authService: AuthService,
@@ -135,20 +136,22 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
   assertHasTransactions(): Observable<void> {
     this.perf('getTransactions');
-    if(this.accountsOfTransactions != this.transactionFilter.accountIds) {
+    // todo, make nicer; find a nice way to reset the transactions when needed
+    const accountIdsJson = JSON.stringify(this.transactionFilter.accountIds);
+    if (this.accountsOfTransactions !== accountIdsJson || this.lastDateRange !== this.transactionFilter.dateRange) {
       this.moneyTransactions = [];
       this.allTransactions = [];
     }
-    this.accountsOfTransactions = this.transactionFilter.accountIds;
+    this.accountsOfTransactions = accountIdsJson;
+    this.lastDateRange = this.transactionFilter.dateRange;
+
     return new Observable(observer => {
-      if ((this.allTransactions != null && this.allTransactions.length > 0) || !this.transactionFilter.includeMoney) {
+      if ((this.moneyTransactions != null && this.moneyTransactions.length > 0) || !this.transactionFilter.includeMoney) {
         observer.next();
       } else {
         this.api.getTransactions(this.transactionFilter.withoutStartAndEndDate()).subscribe(transactions => {
-          this.moneyTransactions = transactions;
-          if (this.moneyTransactions != null && this.moneyTransactions.length > 0) {
-            observer.next();
-          }
+          this.moneyTransactions = transactions || [];
+          observer.next();
         });
       }
     });
@@ -162,19 +165,16 @@ export class MoneyTransactionGraphComponent implements OnInit {
         return;
       }
 
-      // this.budgetApi.getBudgets().subscribe(budgets => {
-      //   this.budgets = budgets;
-        // this.budgetsById = {};
-        // this.budgets.forEach(budget => {
-        //   this.budgetsById[budget.id] = budget;
-        // });
+      let startDate = this.getStartDate();
+      if (startDate == null) {
+        startDate = moment().subtract(1, 'year');
+      }
 
-        this.budgetApi.getHistoricalValues(this.getStartDate() as moment.Moment, this.getEndDate() as moment.Moment).subscribe(historicalBudgetValues => {
-          this.historicalBudgetValues = historicalBudgetValues;
-          observer.next();
-        });
+      this.budgetApi.getHistoricalValues(startDate as moment.Moment, this.getEndDate() as moment.Moment).subscribe(historicalBudgetValues => {
+        this.historicalBudgetValues = historicalBudgetValues;
+        observer.next();
       });
-    // });
+    });
   }
 
   resetGraph() {
@@ -204,23 +204,28 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
   generateMoneyBudgetTransactions() {
     this.allTransactions = [];
-    if (this.moneyTransactions) {
-      this.allTransactions = this.allTransactions.concat(this.moneyTransactions.map(transaction => transaction as MoneyBudgetTransaction));
+    if (this.transactionFilter.includeMoney && this.moneyTransactions) {
+      this.allTransactions = this.allTransactions.concat(this.moneyTransactions.map(transaction => {
+        const t = {...transaction} as MoneyBudgetTransaction;
+        t.budgeted = undefined as any;
+        return t;
+      }));
     }
-    if (this.historicalBudgetValues) {
+    if (this.transactionFilter.includeBudget && this.historicalBudgetValues) {
       this.allTransactions = this.allTransactions.concat(this.historicalBudgetValues.map(budgetValue => this.mapToMoneyBudgetTransaction(budgetValue)));
     }
     this.allTransactions.sort((a, b) => moment(a.timestamp).unix() - moment(b.timestamp).unix());
   }
 
   mapToMoneyBudgetTransaction(budgetValue: HistoricalBudgetValue): MoneyBudgetTransaction {
-    let transaction = budgetValue as unknown as MoneyBudgetTransaction;
-    transaction.amount = -budgetValue.budgeted;//-budgetValue.budgeted - budgetValue.spent;
+    let transaction = {...budgetValue} as unknown as MoneyBudgetTransaction;
+    transaction.amount = -budgetValue.budgeted;
     if(transaction.amount > 0) {
       transaction.amount = 0;
     }
     transaction.timestamp = budgetValue.date;
-    transaction.counterpartAccountName = this.groupsById[budgetValue.groupId].name;
+    const group = this.groupsById[budgetValue.groupId];
+    transaction.counterpartAccountName = group ? group.name : ('Group ' + budgetValue.groupId);
     transaction.budgeted = budgetValue.budgeted;
     transaction.groupId = budgetValue.groupId;
     return transaction;
@@ -248,10 +253,11 @@ export class MoneyTransactionGraphComponent implements OnInit {
       .filter(value => value.groupId == null || value.budgeted != null)
       .forEach(value => {
         const groupName = this.getGroupNameOfHistoricalValue(value);
-        const isBudget = value.budgeted != null; // Determine if budget based on property existence or logic
+        const isBudget = value.budgeted != null;
         const key = new GroupKey(groupName, isBudget).toString();
         if (!this.groupsByName[key]) {
-          this.groupsByName[key] = new GroupInfo(-1, groupName, isBudget);
+          const id = value.groupId != null ? value.groupId : -1;
+          this.groupsByName[key] = new GroupInfo(id, groupName, isBudget);
         }
       });
   }
@@ -290,14 +296,14 @@ export class MoneyTransactionGraphComponent implements OnInit {
   calculateNormalizedAggregatedValues() {
     let startDate = this.getStartDate();
     let endDate = this.getEndDate();
-    this
-      .normalizedValues
-      // we have to filter here, in order to already calculate the transaction that we are interested in
-      .filter(value => startDate == null || startDate.isBefore(value.date))
-      .filter(value => endDate == null || endDate.isSameOrAfter(value.date))
+    this.allTransactions
+      .filter(value => startDate == null || moment(value.timestamp).isSameOrAfter(startDate))
+      .filter(value => endDate == null || moment(value.timestamp).isSameOrBefore(endDate))
       .forEach(value => {
-        if (this.groupsByName[value.groupKey]) {
-          this.groupsByName[value.groupKey].normalizedAggregatedValue += this.getPositiveValue(value.value);
+        const isBudget = value.budgeted != null;
+        const key = new GroupKey(this.getGroupNameOfHistoricalValue(value), isBudget).toString();
+        if (this.groupsByName[key]) {
+          this.groupsByName[key].normalizedAggregatedValue += this.getPositiveValue(value.amount);
         }
       });
   }
@@ -311,7 +317,6 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
     // first limit to all non-grouped groups and then sort, because groupsByName contains both
     // grouped and non-grouped values.
-    // We don't filter on date here, because that is already done in calculateNormalizedAggregatedValues()
     Object.values(this.groupsByName)
       .filter((group: any) => group.id == -1)
       .sort((group1: any, group2: any) => {
@@ -355,8 +360,6 @@ export class MoneyTransactionGraphComponent implements OnInit {
           valuesPerGroupAndDateRange[value.groupKey] = {};
         }
         if (valuesPerGroupAndDateRange[value.groupKey][dateString] == null) {
-          // we are not interested in the sum of transaction values on that date range, but we want to
-          // know total accumulated amount over all time
           let startValue = previousValuesPerGroup[value.groupKey] == null ? 0 : previousValuesPerGroup[value.groupKey].value;
           valuesPerGroupAndDateRange[value.groupKey][dateString] = new NormalizedMoneyValue(
             dateString,
@@ -398,13 +401,18 @@ export class MoneyTransactionGraphComponent implements OnInit {
       if (!groupKeys.includes(otherBudgetKey)) groupKeys.push(otherBudgetKey);
     }
     let valuesPerDateRange: any = this.getHistoricalValuesPerDateRangeValue();
+    if (this.aggregatedValuesPerDateRange.length == 0) {
+      this.chartOption = {};
+      return;
+    }
+
     let firstDate = this.aggregatedValuesPerDateRange[0].date;
     let firstDateToRender: moment.Moment = this.transactionFilter.startDate == null ?
-      this.aggregatedValuesPerDateRange[0].date :
-      moment(this.transactionFilter.startDate);
+      this.aggregatedValuesPerDateRange[0].date.clone() :
+      this.getDateByDateRange(this.transactionFilter.dateRange, moment(this.transactionFilter.startDate));
     let lastDateToRender = this.transactionFilter.endDate == null ?
       moment() :
-      moment(this.transactionFilter.endDate);
+      this.getDateByDateRange(this.transactionFilter.dateRange, moment(this.transactionFilter.endDate));
 
     let currentDate = firstDate.clone();
     let dateRangeFormat = this.getDateRangeFormat();
@@ -419,9 +427,6 @@ export class MoneyTransactionGraphComponent implements OnInit {
       lastValueIfNotReset[groupKey] = null;
     });
 
-    // we loop over every date, also outside of the scope of the filter. This is because we need to get the
-    // previous values. If we have only a value on the third date index, not on index 0, 1, 2, but we
-    // do have historical value on index -1, then we want to know those historical values.
     while (currentDate.isSameOrBefore(lastDateToRender)) {
       let currentRangedString = currentDate.format(dateRangeFormat);
       let withinDateRange = currentDate.isSameOrAfter(firstDateToRender);
@@ -507,7 +512,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
     return {
       responsive: true,
       maintainAspectRatio: true,
-      height: this.height,//'calc(100% - 100px)',
+      height: this.height,
       xAxis: {
         type: 'category',
         data: allDates,
@@ -572,7 +577,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
   }
 
   getGroupNameOfHistoricalValue(transaction: MoneyTransaction): string {
-    if (transaction.groupId != null) {
+    if (transaction.groupId != null && this.groupsById[transaction.groupId]) {
       return this.groupsById[transaction.groupId].name;
     }
     if (transaction.counterpartAccountName != null) {

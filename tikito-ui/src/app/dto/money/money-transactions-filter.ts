@@ -25,6 +25,7 @@ export class MoneyTransactionsFilter {
     filter.amountOfOtherGroups = this.amountOfOtherGroups;
     filter.includeBudget = this.includeBudget;
     filter.includeMoney = this.includeMoney;
+    filter.dateRange = this.dateRange;
     return filter;
   }
 }
