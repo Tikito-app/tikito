@@ -119,18 +119,17 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
         return;
       }
 
-    //   this.budgetApi.getBudgets().subscribe(budgets => {
-    //     this.budgets = budgets;
-    //     this.budgetsById = {};
-    //     this.budgets.forEach(budget => {
-    //       this.budgetsById[budget.id] = budget;
-    //     });
-    //
-    //     // this.budgetApi.getHistoricalValues().subscribe(historicalBudgetValues => {
-    //     //   this.historicalBudgetValues = historicalBudgetValues;
-    //     //   observer.next();
-    //     // })
-    //   });
+      let startDate = this.transactionFilter.startDate ? moment(this.transactionFilter.startDate) : null;
+      let endDate = this.transactionFilter.endDate ? moment(this.transactionFilter.endDate) : null;
+
+      if (!startDate) {
+        startDate = moment().subtract(1, 'year');
+      }
+
+      this.budgetApi.getHistoricalValues(startDate, endDate as moment.Moment).subscribe(historicalBudgetValues => {
+        this.historicalBudgetValues = historicalBudgetValues;
+        observer.next();
+      });
     });
   }
 
@@ -142,18 +141,15 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
     let endDate = this.transactionFilter.endDate ? moment(this.transactionFilter.endDate) : moment();
 
     if (!startDate) {
-      // If no data and no filter, just show current period or "All"
       startDate = moment().startOf('year');
     }
     
-    // Safety check if startDate is after endDate
     if (startDate.isAfter(endDate)) {
        startDate = endDate.clone().startOf('day');
     }
 
     let range = this.transactionFilter.dateRange;
 
-    // If range is null or ALL, create a single tab.
     if (!range || range === TransactionDateRange.ALL) {
       this.tabs.push(new TabInfo('All', startDate, endDate));
       return;
@@ -161,14 +157,13 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
 
     let current = startDate.clone();
     
-    // Align start date to the beginning of the period
     if (range === TransactionDateRange.YEAR) current.startOf('year');
     if (range === TransactionDateRange.MONTH) current.startOf('month');
     if (range === TransactionDateRange.WEEK) current.startOf('isoWeek');
 
     while (current.isSameOrBefore(endDate)) {
        let tabStart = current.clone();
-       let tabEnd = current.clone(); // Placeholder
+       let tabEnd = current.clone();
        let label = '';
 
        if (range === TransactionDateRange.YEAR) {
@@ -184,7 +179,6 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
           tabEnd.endOf('isoWeek');
           current.add(1, 'week');
        } else {
-           // Fallback for day or others
            label = current.format('YYYY-MM-DD');
            tabEnd.endOf('day');
            current.add(1, 'day');
@@ -228,7 +222,6 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
       endDate = this.tabs[this.selectedTabIndex].end;
     }
 
-    // Process Money Transactions
     if (this.moneyTransactions) {
       this.moneyTransactions.forEach(transaction => {
         let date = moment(transaction.timestamp);
@@ -243,18 +236,19 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
       });
     }
 
-    // Process Budget Values
     if (this.historicalBudgetValues) {
       this.historicalBudgetValues.forEach(budgetValue => {
         let date = moment(budgetValue.date);
         if (startDate && date.isBefore(startDate)) return;
         if (endDate && date.isAfter(endDate)) return;
 
-        let groupName = this.groupsById[budgetValue.groupId].name;
-        if (!dataMap[groupName]) {
-          dataMap[groupName] = new AggregatedGroupData(groupName);
+        if(this.groupsById[budgetValue.groupId]) {
+          let groupName = this.groupsById[budgetValue.groupId].name;
+          if (!dataMap[groupName]) {
+            dataMap[groupName] = new AggregatedGroupData(groupName);
+          }
+          dataMap[groupName].budgeted += budgetValue.budgeted;
         }
-        dataMap[groupName].budgeted += budgetValue.budgeted;
       });
     }
 
