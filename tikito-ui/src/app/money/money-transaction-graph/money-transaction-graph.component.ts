@@ -210,7 +210,6 @@ export class MoneyTransactionGraphComponent implements OnInit {
     if (this.historicalBudgetValues) {
       this.allTransactions = this.allTransactions.concat(this.historicalBudgetValues.map(budgetValue => this.mapToMoneyBudgetTransaction(budgetValue)));
     }
-    console.log(this.historicalBudgetValues);
     this.allTransactions.sort((a, b) => moment(a.timestamp).unix() - moment(b.timestamp).unix());
   }
 
@@ -224,7 +223,6 @@ export class MoneyTransactionGraphComponent implements OnInit {
     transaction.counterpartAccountName = this.groupsById[budgetValue.groupId].name;
     transaction.budgeted = budgetValue.budgeted;
     transaction.groupId = budgetValue.groupId;
-    console.log(transaction, budgetValue);
     return transaction;
   }
 
@@ -247,7 +245,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
     // now put all the non-grouped values in it by the counterpart name
     this
       .allTransactions
-      .filter(value => value.groupId == null)
+      .filter(value => value.groupId == null || value.budgeted != null)
       .forEach(value => {
         const groupName = this.getGroupNameOfHistoricalValue(value);
         const isBudget = value.budgeted != null; // Determine if budget based on property existence or logic
@@ -345,12 +343,11 @@ export class MoneyTransactionGraphComponent implements OnInit {
     let previousValuesPerGroup: any = {};
 
     this.normalizedValues
-      // .filter(value => !this.transactionFilter.showOther && this.highestValuedGroups[value.groupName] == null)
       .forEach(value => {
-        console.log(value);
         let isLowestGroupValue = this.highestValuedGroups[value.groupKey] == null;
         if (isLowestGroupValue) {
-          value.groupKey = new GroupKey('Other', false).toString();
+          const groupKeyObject = GroupKey.fromString(value.groupKey);
+          value.groupKey = new GroupKey('Other', groupKeyObject.isBudget).toString();
         }
 
         let dateString = value.dateString;
@@ -395,7 +392,10 @@ export class MoneyTransactionGraphComponent implements OnInit {
   generateGraph() {
     let groupKeys = Object.keys(this.highestValuedGroups);
     if (this.transactionFilter.showOther) {
-      groupKeys.push(new GroupKey('Other', false).toString());
+      const otherActualKey = new GroupKey('Other', false).toString();
+      const otherBudgetKey = new GroupKey('Other', true).toString();
+      if (!groupKeys.includes(otherActualKey)) groupKeys.push(otherActualKey);
+      if (!groupKeys.includes(otherBudgetKey)) groupKeys.push(otherBudgetKey);
     }
     let valuesPerDateRange: any = this.getHistoricalValuesPerDateRangeValue();
     let firstDate = this.aggregatedValuesPerDateRange[0].date;
@@ -463,6 +463,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
   generateSeriesGroups(seriesValuesByKey: any) {
     let colorIndex = 0;
+    const colorMap: {[key: string]: number} = {};
     return Object.keys(seriesValuesByKey)
       .map((key: any) => {
         const groupInfo = this.highestValuedGroups[key] || this.groupsByName[key];
@@ -470,16 +471,19 @@ export class MoneyTransactionGraphComponent implements OnInit {
         const name = groupInfo ? groupInfo.name : groupKeyObject.name;
         const isBudget = groupInfo ? groupInfo.isBudget : groupKeyObject.isBudget;
 
-        let group = {
+        if (colorMap[name] === undefined) {
+          colorMap[name] = colorIndex++;
+        }
+        const seriesColorIndex = colorMap[name];
+
+        return {
           data: seriesValuesByKey[key],
           name: name,
           type: 'bar',
-          stack: true,
+          stack: isBudget ? 'budget' : 'actual',
           showSymbol: false,
-          itemStyle: this.getItemStyle(colorIndex, isBudget)
+          itemStyle: this.getItemStyle(seriesColorIndex, isBudget)
         }
-        colorIndex++;
-        return group;
       })
   }
 
