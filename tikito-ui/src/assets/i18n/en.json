@@ -174,7 +174,7 @@
   "money/transactions": "Transactions",
   "money/graph": "Graph",
   "money/apply-grouping": "Apply grouping",
-  "money/transaction-group": "Money groups",
+  "money/transaction-group": "Groups and budget",
   "money/group/introduction-text": "On this page you can manage your money transactions groups. With these, you can group your transactions together. For example, if you want to group all your transactions from different supermarkets into one group, then this is the place to do so. ",
 
   "money/graph/start-at-zero-from-beginning": "Start at 0",
@@ -190,6 +190,9 @@
   "money/graph/aggregate-per-month": "Per month",
   "money/graph/aggregate-per-week": "Per week",
   "money/graph/show-amount-of-non-grouped-groups": "Non-grouped groups",
+  "money/graph/include-money": "Include money",
+  "money/graph/include-budget": "Include budget",
+  "money/graph/show-include-money-budget-tooltip": "Show only money, budget or show both in the graph",
 
   "money/transaction/debit-credit": "Debit/credit",
   "money/transaction/counterpart-account-name": "Counterpart",
@@ -206,7 +209,7 @@
   "money/transaction-group/edit-group": "Edit group",
   "money/transaction-group/back-to-list": "Back to list",
   "money/transaction-group/subtitle": "Qualifiers",
-  "money/transaction-group/name": "Group name",
+  "money/transaction-group/name": "Group",
   "money/transaction-group/DESCRIPTION": "Description",
   "money/transaction-group/COUNTERPART_NAME": "Counterpart name",
   "money/transaction-group/COUNTERPART_NUMBER": "Counterpart account number",
@@ -217,6 +220,9 @@
   "money/transaction-group/qualifier": "Qualifier",
   "money/transaction-group/qualifier-type": "Type",
   "money/transaction-group/group-type": "Group types",
+  "money/transaction-group/budgeted": "Budgeted",
+  "money/transaction-group/date-range": "Date range",
+  "money/transaction-group/date-range-amount": "Date range amount",
 
   "--------------- IMPORT ---------------------": "",
   "import": "Import",
@@ -227,16 +233,6 @@
   "import-file-type-account-mismatch": "The security type of the account that you selected does not match the security type of the file type.",
 
 
-  "--------------- BUDGET ---------------------": "",
-  "budget/budget": "Budget",
-  "budget/overview": "Overview",
-  "budget/list": "List",
-  "budget/create-budget": "Create",
-  "budget/name": "Name",
-  "budget/amount": "Amount",
-  "budget/date-range": "Date range",
-  "budget/date-range-amount": "Date range amount",
-  "budget/money-transaction-groups": "Money transaction groups",
 
 
   "--------------- ADMIN ---------------------": "",
@@ -251,6 +247,7 @@
   "admin/money": "Money",
   "admin/money/recalculate-historical-value": "Recalculate value",
   "admin/money/group-transactions": "Group transactions",
+  "admin/money/recalculate-historical-budget-values": "Recalculate budget values",
 
   "admin/security": "Securities",
   "admin/security/update-all": "Update all",

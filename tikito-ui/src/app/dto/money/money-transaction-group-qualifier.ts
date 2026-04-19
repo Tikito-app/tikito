@@ -2,7 +2,7 @@ import {MoneyTransactionGroupQualifierType} from "./money-transaction-group-qual
 import {MoneyTransactionField} from "./money-transaction-field";
 
 export default class MoneyTransactionGroupQualifier {
-    id: number;
+    id: number = 0;
     accountId: number;
     qualifierType: MoneyTransactionGroupQualifierType;
     qualifier: string;

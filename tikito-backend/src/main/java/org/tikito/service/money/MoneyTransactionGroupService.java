@@ -3,13 +3,16 @@ package org.tikito.service.money;
 import org.tikito.controller.request.CreateOrUpdateMoneyTransactionGroupRequest;
 import org.tikito.dto.AccountDto;
 import org.tikito.dto.AccountType;
+import org.tikito.dto.money.HistoricalBudgetValueDto;
 import org.tikito.dto.money.MoneyTransactionGroupDto;
 import org.tikito.entity.Account;
 import org.tikito.entity.Job;
+import org.tikito.entity.money.HistoricalBudgetValue;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.entity.money.MoneyTransactionGroup;
 import org.tikito.entity.money.MoneyTransactionGroupQualifier;
 import org.tikito.repository.AccountRepository;
+import org.tikito.repository.HistoricalBudgetValueRepository;
 import org.tikito.repository.MoneyTransactionGroupRepository;
 import org.tikito.repository.MoneyTransactionRepository;
 import jakarta.validation.Valid;
@@ -20,9 +23,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.tikito.service.BudgetValueService;
 import org.tikito.service.job.JobProcessor;
 import org.tikito.service.job.JobType;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -31,20 +36,26 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class MoneyTransactionGroupService implements JobProcessor {
-    private final MoneyTransactionGroupRepository groupRepository;
+    private final MoneyTransactionGroupRepository moneyTransactionGroupRepository;
     private final AccountRepository accountRepository;
     private final MoneyTransactionRepository moneyTransactionRepository;
+    private final HistoricalBudgetValueRepository historicalBudgetValueRepository;
+    private final BudgetValueService budgetValueService;
 
-    public MoneyTransactionGroupService(final MoneyTransactionGroupRepository groupRepository,
+    public MoneyTransactionGroupService(final MoneyTransactionGroupRepository moneyTransactionGroupRepository,
                                         final AccountRepository accountRepository,
-                                        final MoneyTransactionRepository moneyTransactionRepository) {
-        this.groupRepository = groupRepository;
+                                        final MoneyTransactionRepository moneyTransactionRepository,
+                                        final HistoricalBudgetValueRepository historicalBudgetValueRepository,
+                                        final BudgetValueService budgetValueService) {
+        this.moneyTransactionGroupRepository = moneyTransactionGroupRepository;
         this.accountRepository = accountRepository;
         this.moneyTransactionRepository = moneyTransactionRepository;
+        this.historicalBudgetValueRepository = historicalBudgetValueRepository;
+        this.budgetValueService = budgetValueService;
     }
 
     public List<MoneyTransactionGroupDto> getGroups(final long userId) {
-        return groupRepository
+        return moneyTransactionGroupRepository
                 .findByUserId(userId)
                 .stream()
                 .map(MoneyTransactionGroup::toDto)
@@ -53,7 +64,7 @@ public class MoneyTransactionGroupService implements JobProcessor {
     }
 
     public MoneyTransactionGroupDto getGroup(final long userId, final long groupId) {
-        return groupRepository
+        return moneyTransactionGroupRepository
                 .findByUserIdAndId(userId, groupId)
                 .orElseThrow()
                 .toDto();
@@ -61,15 +72,21 @@ public class MoneyTransactionGroupService implements JobProcessor {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public MoneyTransactionGroupDto createOrUpdateGroup(final long userId, final @Valid @NotNull CreateOrUpdateMoneyTransactionGroupRequest request) {
-        final MoneyTransactionGroup group = request.isNew() ? new MoneyTransactionGroup(userId) : groupRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
+        final MoneyTransactionGroup group = request.isNew() ? new MoneyTransactionGroup(userId) : moneyTransactionGroupRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
         final Map<Long, MoneyTransactionGroupQualifier> existingQualifiersMap = group.getQualifiers().stream().collect(Collectors.toMap(MoneyTransactionGroupQualifier::getId, Function.identity()));
+
         group.setName(request.getName());
         group.getQualifiers().clear();
         group.setGroupTypes(request.getGroupTypes());
         group.setAccountIds(new HashSet<>(request.getAccountIds()));
+        group.setStartDate(request.getStartDate());
+        group.setEndDate(request.getEndDate());
+        group.setDateRange(request.getDateRange());
+        group.setDateRangeAmount(request.getDateRangeAmount());
+        group.setBudgeted(request.getBudgeted());
+
         if (request.getQualifiers() != null) {
-            request
-                    .getQualifiers()
+            request.getQualifiers()
                     .stream()
                     .map(qualifier -> new MoneyTransactionGroupQualifier(
                             existingQualifiersMap.containsKey(qualifier.getId()) ? qualifier.getId() : null,
@@ -79,12 +96,14 @@ public class MoneyTransactionGroupService implements JobProcessor {
                             qualifier.getTransactionField()))
                     .forEach(qualifier -> group.getQualifiers().add(qualifier));
         }
-        return groupRepository.saveAndFlush(group).toDto();
+        final MoneyTransactionGroupDto dto = moneyTransactionGroupRepository.saveAndFlush(group).toDto();
+        budgetValueService.generateValues(userId, dto);
+        return dto;
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void deleteGroup(final long userId, final long groupId) {
-        groupRepository.deleteByUserIdAndId(userId, groupId);
+        moneyTransactionGroupRepository.deleteByUserIdAndId(userId, groupId);
     }
 
     public void groupTransactions(final long userId) {
@@ -95,7 +114,7 @@ public class MoneyTransactionGroupService implements JobProcessor {
 
     public void groupTransactions(final long userId, final long accountId) {
         log.info("Grouping money transactions for {}", accountId);
-        final List<MoneyTransactionGroup> groups = groupRepository.findByUserId(userId);
+        final List<MoneyTransactionGroup> groups = moneyTransactionGroupRepository.findByUserId(userId);
         final Map<String, AccountDto> accountsByAccountNumber = accountRepository
                 .findByUserId(userId)
                 .stream()
@@ -107,9 +126,32 @@ public class MoneyTransactionGroupService implements JobProcessor {
         log.info("Done grouping {} transactions", transactions.size());
     }
 
+    public List<HistoricalBudgetValueDto> getHistoricalBudgets(final long userId, final LocalDate startDate, final LocalDate endDate) {
+        return historicalBudgetValueRepository
+                .findByUserIdDateBetween(userId, startDate, endDate)
+                .stream()
+                .map(HistoricalBudgetValue::toDto)
+                .toList();
+    }
+
+    public void recalculateHistoricalBudget(final long userId) {
+        moneyTransactionGroupRepository
+                .findByUserId(userId)
+                .stream()
+                .filter(this::hasBudget)
+                .map(MoneyTransactionGroup::toDto)
+                .forEach(group -> budgetValueService.generateValues(userId, group));
+    }
+
+    private boolean hasBudget(final MoneyTransactionGroup group) {
+        return group.getBudgeted() != null &&
+                group.getDateRange() != null &&
+                group.getDateRangeAmount() != null &&
+                group.getStartDate() != null;
+    }
+
     private void groupTransaction(final MoneyTransaction transaction, final List<MoneyTransactionGroup> groups, final Map<String, AccountDto> accountsByAccountNumber) {
         transaction.setGroupId(null);
-        transaction.setBudgetId(null);
         transaction.setLoanId(null);
 
         for (final MoneyTransactionGroup group : groups) {
@@ -117,7 +159,6 @@ public class MoneyTransactionGroupService implements JobProcessor {
                 group.getGroupTypes().forEach(groupType -> {
                     switch (groupType) {
                         case MONEY -> transaction.setGroupId(group.getId());
-                        case BUDGET -> transaction.setBudgetId(group.getId());
                         case LOAN -> transaction.setLoanId(group.getId()); // todo: why not the loan id itself?
                     }
                 });

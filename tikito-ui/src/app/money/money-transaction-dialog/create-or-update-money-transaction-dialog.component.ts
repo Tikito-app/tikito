@@ -25,9 +25,7 @@ import {AccountType} from "../../dto/account-type";
 import MoneyTransaction from "../../dto/money/money-transaction";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
 import {Loan} from "../../dto/loan";
-import Budget from "../../dto/budget";
 import {LoanApi} from "../../api/loan-api";
-import {BudgetApi} from "../../api/budget-api";
 import {TranslatePipe} from "../../service/translate-pipe.pipe";
 
 export interface MyData {
@@ -67,15 +65,13 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
   accounts: Account[] = [];
   groups: MoneyTransactionGroup[] = [];
   loans: Loan[] = [];
-  budgets: Budget[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<CreateOrUpdateMoneyTransactionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: MyData,
     private api: MoneyApi,
     private loanApi: LoanApi,
-    private budgetApi: BudgetApi,
-    private accountApi : AccountApi) {
+    private accountApi: AccountApi) {
   }
 
   ngOnInit(): void {
@@ -92,10 +88,7 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
       transactionType: new FormControl(''),
       groupId: new FormControl(''),
       loanId: new FormControl(''),
-      budgetId: new FormControl(''),
     });
-
-    console.log(this.data.transaction)
 
     this.form.controls['accountId'].setValue(this.data.transaction.accountId);
     this.form.controls['counterpartAccountName'].setValue(this.data.transaction.counterpartAccountName);
@@ -108,7 +101,6 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
     this.form.controls['exchangeRate'].setValue(this.data.transaction.exchangeRate);
     this.form.controls['groupId'].setValue(this.data.transaction.groupId);
     this.form.controls['loanId'].setValue(this.data.transaction.loanId);
-    this.form.controls['budgetId'].setValue(this.data.transaction.budgetId);
 
     this.accountApi.getAccounts().subscribe(accounts => {
       this.accounts = accounts.filter(account => account.accountType == AccountType.DEBIT);
@@ -116,7 +108,6 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
 
     this.api.getMoneyTransactionGroups().subscribe(groups => this.groups = groups)
     this.loanApi.getLoans().subscribe(loans => this.loans = loans)
-    this.budgetApi.getBudgets().subscribe(budgets => this.budgets = budgets)
   }
 
   onSave() {
@@ -131,7 +122,6 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
       this.form.value.description,
       this.form.value.currencyId,
       this.form.value.groupId,
-      this.form.value.budgetId,
       this.form.value.loanId,
       this.form.value.exchangeRate
     ).subscribe(transaction => {

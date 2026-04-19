@@ -6,4 +6,5 @@ public enum DateRange {
     WEEK,
     DAY,
     ALL,
+    ONCE
 }

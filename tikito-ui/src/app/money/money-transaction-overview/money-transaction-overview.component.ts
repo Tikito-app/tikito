@@ -22,7 +22,7 @@ import {MatButton} from "@angular/material/button";
 import {provideNativeDateAdapter} from "@angular/material/core";
 import {MatInput, MatInputModule} from "@angular/material/input";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
-import {MoneyTransactionsFilter} from "../../dto/money/money-transactions-filter";
+import {MoneyTransactionsFilter, TransactionDateRange} from "../../dto/money/money-transactions-filter";
 import {UserPreferenceService} from "../../service/user-preference-service";
 import {UserPreference} from "../../dto/user-preference";
 import {MatIcon, MatIconModule} from "@angular/material/icon";
@@ -37,6 +37,7 @@ import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {AuthService} from "../../service/auth.service";
+import {MoneyTransactionAggregatedTableComponent} from "../money-transaction-aggregated-table/money-transaction-aggregated-table.component";
 
 @Component({
   selector: 'app-money-transaction-overview',
@@ -46,6 +47,7 @@ import {AuthService} from "../../service/auth.service";
     MatTab,
     MoneyTransactionListComponent,
     MoneyTransactionGraphComponent,
+    MoneyTransactionAggregatedTableComponent,
     MatCard,
     MatCardTitle,
     MatCardContent,
@@ -108,7 +110,9 @@ export class MoneyTransactionOverviewComponent implements OnInit {
         dateRange: new FormControl(),
         amountOfOtherGroups: new FormControl(),
         startDate: new FormControl,
-        endDate: new FormControl
+        endDate: new FormControl,
+        includeBudget: new FormControl(),
+        includeMoney: new FormControl()
       });
       this.reset();
     });
@@ -133,13 +137,15 @@ export class MoneyTransactionOverviewComponent implements OnInit {
         this.form.controls['startAtZeroFromBeginning'].setValue(UserPreferenceService.get(UserPreference.START_AT_ZERO_FROM_BEGINNING, true) || this.form.value.nonGrouped);
         this.form.controls['startAtZeroAfterDateAggregation'].setValue(UserPreferenceService.get(UserPreference.START_AT_ZERO_AFTER_DATE_RANGE, true));
         this.form.controls['showOther'].setValue(UserPreferenceService.get(UserPreference.MONEY_SHOW_OTHER, true));
-        this.form.controls['accountIds'].setValue(UserPreferenceService.get(UserPreference.ACCOUNT_IDS, '').toString().split(',').map(parseInt));
-        this.form.controls['groupIds'].setValue(UserPreferenceService.get(UserPreference.GROUP_IDS, '').toString().split(',').map(parseInt));
-        this.form.controls['dateRange'].setValue(UserPreferenceService.get(UserPreference.DATE_RANGE, null));
+        this.form.controls['accountIds'].setValue(UserPreferenceService.get(UserPreference.ACCOUNT_IDS, '').toString().split(',').map(v => parseInt(v)));
+        this.form.controls['groupIds'].setValue(UserPreferenceService.get(UserPreference.GROUP_IDS, '').toString().split(',').map(v => parseInt(v)));
+        this.form.controls['dateRange'].setValue(UserPreferenceService.get(UserPreference.DATE_RANGE, TransactionDateRange.MONTH));
         this.form.controls['aggregateDateRange'].setValue(UserPreferenceService.get(UserPreference.AGGREGATE_DATE_RANGE, true));
         this.form.controls['amountOfOtherGroups'].setValue(UserPreferenceService.get(UserPreference.AMOUNT_OF_OTHER_GROUPS, 5));
         this.form.controls['startDate'].setValue(UserPreferenceService.get(UserPreference.START_DATE, null));
         this.form.controls['endDate'].setValue(UserPreferenceService.get(UserPreference.END_DATE, null));
+        this.form.controls['includeBudget'].setValue(UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_BUDGET, true));
+        this.form.controls['includeMoney'].setValue(UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_MONEY, true));
         if (this.form.value.nonGrouped) {
           this.form.get('startAtZeroFromBeginning')?.disable();
         } else {
@@ -153,7 +159,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
   getTransactionFilter() {
     let filter = new MoneyTransactionsFilter();
     filter.accountIds = this.form.value.accountIds;
-    filter.groupIds = this.form.value.groupIds == null ? [] : this.form.value.groupIds.filter((id: any) => id != null);
+    filter.groupIds = this.form.value.groupIds == null ? [] : this.form.value.groupIds.filter((id: any) => id != null && !Number.isNaN(id));
     filter.aggregateDateRange = this.form.value.aggregateDateRange;
     filter.startAtZeroFromBeginning = this.form.value.startAtZeroFromBeginning;// || this.form.value.aggregateDateRange;
     filter.startAtZeroAfterDateAggregation = this.form.value.startAtZeroAfterDateAggregation;
@@ -163,6 +169,8 @@ export class MoneyTransactionOverviewComponent implements OnInit {
     filter.startDate = this.form.value.startDate;
     filter.endDate = this.form.value.endDate;
     filter.amountOfOtherGroups = this.form.value.amountOfOtherGroups;
+    filter.includeBudget = this.form.value.includeBudget;
+    filter.includeMoney = this.form.value.includeMoney;
     return filter;
   }
 

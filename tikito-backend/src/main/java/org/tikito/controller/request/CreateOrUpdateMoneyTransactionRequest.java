@@ -18,7 +18,6 @@ public class CreateOrUpdateMoneyTransactionRequest extends CreateOrUpdateRequest
     private String description;
     private long currencyId;
     private Long groupId;
-    private Long budgetId;
     private Long loanId;
     private double exchangeRate;
 }

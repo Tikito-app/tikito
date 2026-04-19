@@ -10,7 +10,6 @@ export default class MoneyTransaction {
   currencyId: number;
   groupId: number;
   groupName: string;
-  budgetId: number;
   loanId: number;
   exchangeRate: number;
 }

@@ -1,6 +1,4 @@
 import {Routes} from '@angular/router';
-import {BudgetFormComponent} from "./budget/budget-form/budget-form.component";
-import {BudgetListComponent} from "./budget/budget-list/budget-list.component";
 import {
   MoneyTransactionGroupListComponent
 } from "./money/money-transaction-group-list/money-transaction-group-list.component";
@@ -46,10 +44,6 @@ export const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'logout', component: LogoutComponent},
   {path: 'register', component: RegisterComponent},
-
-  {path: 'budget', component: BudgetListComponent},
-  {path: 'budget/create', component: BudgetFormComponent},
-  {path: 'budget/:budgetId', component: BudgetFormComponent},
 
   {path: 'account', component: AccountListComponent},
   {path: 'account/create', component: AccountFormComponent},

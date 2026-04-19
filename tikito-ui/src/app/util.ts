@@ -1,5 +1,5 @@
 import {Observable, Subject} from "rxjs";
-import {BudgetDateRange} from "./dto/budget-date-range";
+import {DateRange} from "./dto/date-range";
 import {ActivatedRoute} from "@angular/router";
 import {MoneyTransactionGroupQualifierType} from "./dto/money/money-transaction-group-qualifier-type";
 import {MoneyTransactionField} from "./dto/money/money-transaction-field";
@@ -11,6 +11,7 @@ import {MoneyTransactionGroupType} from "./dto/money-transaction-group-type";
 import {LoanType} from "./dto/loan-type";
 import {CacheService} from "./service/cache-service";
 import {SecurityTransactionType} from "./dto/security/security-transaction-type";
+import {TransactionDateRange} from "./dto/money/money-transactions-filter";
 
 export class Util {
   public static DATE_FORMAT: string = 'dd-MM-YYYY';
@@ -118,7 +119,7 @@ export class Util {
 
   static getBudgetDateRanges(): string[] {
     return Object
-      .keys(BudgetDateRange)
+      .keys(DateRange)
       .filter((v) => isNaN(Number(v)))
   }
 
@@ -170,6 +171,10 @@ export class Util {
       .filter((v) => isNaN(Number(v)));
   }
 
+  static getMonths(): number[] {
+    return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  }
+
   static getIdFromRoute(route: ActivatedRoute, key: string): number {
     let value = route.snapshot.paramMap.get(key) as string;
     if (value == null) {
@@ -212,6 +217,18 @@ export class Util {
   static formatDate(date: Date, format: string): string {
     const datepipe: DatePipe = new DatePipe('en-US')
     return datepipe.transform(date, format) as string;
+  }
+
+  static getDateRangeFormat(dateRange: DateRange) {
+      switch (dateRange) {
+          case DateRange.YEAR:
+              return 'YYYY';
+          case DateRange.MONTH:
+              return 'YYYY-MM';
+          case DateRange.WEEK:
+              return 'YYYY-WW';
+      }
+      return 'YYY-MM-dd';
   }
 
   static currencyFormat(value: number): string {

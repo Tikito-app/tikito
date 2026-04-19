@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {NgForOf, NgIf} from "@angular/common";
 import {MatInput} from "@angular/material/input";
@@ -19,10 +19,11 @@ import {
   MoneyTransactionGroupQualifierFormComponent
 } from "../money-transaction-group-qualifier-form/money-transaction-group-qualifier-form.component";
 import {AuthService} from "../../service/auth.service";
-import {MatOption} from "@angular/material/core";
+import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
 import {AccountApi} from "../../api/account-api";
 import {Account} from "../../dto/account";
+import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 
 @Component({
   selector: 'app-moneyTransactionGroup-form',
@@ -45,10 +46,16 @@ import {Account} from "../../dto/account";
     MoneyTransactionGroupQualifierFormComponent,
     MatOption,
     MatSelect,
-    TranslatePipe
+    TranslatePipe,
+    MatDatepicker,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatHint,
+    MatSuffix
   ],
   templateUrl: './money-transaction-group-form.component.html',
-  styleUrl: './money-transaction-group-form.component.scss'
+  styleUrl: './money-transaction-group-form.component.scss',
+  providers: [provideNativeDateAdapter()],
 })
 export class MoneyTransactionGroupFormComponent implements OnInit {
   form: FormGroup;
@@ -78,11 +85,14 @@ export class MoneyTransactionGroupFormComponent implements OnInit {
   reset() {
     let group: any = {
       name: new FormControl(''),
-      dateRange: new FormControl(''),
       groupIds: new FormControl(''),
       accountIds: new FormControl(''),
       groupTypes: new FormControl(''),
-      amount: new FormControl(''),
+      startDate: new FormControl(''),
+      endDate: new FormControl(''),
+      budgeted: new FormControl(''),
+      dateRange: new FormControl(''),
+      dateRangeAmount: new FormControl(''),
     };
     this.form = new FormGroup(group);
     if (this.moneyTransactionGroupId != 0) {
@@ -91,6 +101,11 @@ export class MoneyTransactionGroupFormComponent implements OnInit {
         this.form.controls['name'].setValue(group.name);
         this.form.controls['groupTypes'].setValue(group.groupTypes);
         this.form.controls['accountIds'].setValue(group.accountIds);
+        this.form.controls['startDate'].setValue(group.startDate);
+        this.form.controls['endDate'].setValue(group.endDate);
+        this.form.controls['budgeted'].setValue(group.budgeted);
+        this.form.controls['dateRange'].setValue(group.dateRange);
+        this.form.controls['dateRangeAmount'].setValue(group.dateRangeAmount);
       });
     } else {
       this.group = new MoneyTransactionGroup();
@@ -103,7 +118,12 @@ export class MoneyTransactionGroupFormComponent implements OnInit {
       this.form.value.name,
       this.form.value.groupTypes,
       this.group == null ? [] : this.group.qualifiers,
-      this.form.value.accountIds
+      this.form.value.accountIds,
+      this.form.value.startDate,
+      this.form.value.endDate,
+      this.form.value.budgeted,
+      this.form.value.dateRange,
+      this.form.value.dateRangeAmount
     ).subscribe(group => {
       window.location.href = '/money/transaction-group/' + group.id;
     })
@@ -153,5 +173,4 @@ export class MoneyTransactionGroupFormComponent implements OnInit {
   }
 
   protected readonly Util = Util;
-  protected readonly name = name;
 }

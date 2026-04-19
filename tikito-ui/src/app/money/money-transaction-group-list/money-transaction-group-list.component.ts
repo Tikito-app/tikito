@@ -26,6 +26,8 @@ import {MatSort} from "@angular/material/sort";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
 import {AuthService} from "../../service/auth.service";
 import {MatCard, MatCardHeader} from "@angular/material/card";
+import {Util} from "../../util";
+import {CurrencyComponent} from "../../components/currency/currency.component";
 
 @Component({
   selector: 'app-moneyTransactionGroup-list',
@@ -51,13 +53,14 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
     PaginatorComponent,
     TranslatePipe,
     MatCard,
-    MatCardHeader
+    MatCardHeader,
+    CurrencyComponent
   ],
   templateUrl: './money-transaction-group-list.component.html',
   styleUrl: './money-transaction-group-list.component.scss'
 })
 export class MoneyTransactionGroupListComponent implements AfterViewInit {
-  displayedColumns: string[] = ['name'];
+  displayedColumns: string[] = ['name', 'budgeted'];
   dataSource: MatTableDataSource<MoneyTransactionGroup>;
   moneyTransactionGroups: MoneyTransactionGroup[] = [];
   accountId: number;
@@ -104,4 +107,6 @@ export class MoneyTransactionGroupListComponent implements AfterViewInit {
   onRowClicked(row: MoneyTransactionGroup) {
     this.router.navigate(['/money/transaction-group/' + row.id]);
   }
+
+  protected readonly Util = Util;
 }

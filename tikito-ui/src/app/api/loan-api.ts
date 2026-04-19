@@ -6,7 +6,7 @@ import {Loan} from "../dto/loan";
 import {LoanType} from "../dto/loan-type";
 import {LoanInterest} from "../dto/loan-interest";
 import {LoanValue} from "../dto/loan-value";
-import {BudgetDateRange} from "../dto/budget-date-range";
+import {DateRange} from "../dto/date-range";
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,7 @@ export class LoanApi {
 
   createOrUpdateLoan(loanId: number,
                      name: string,
-                     dateRange: BudgetDateRange,
+                     dateRange: DateRange,
                      groupIds: number[]) {
     return this.http.httpPost<Loan>(new HttpRequestData()
       .withUrl('/api/loan')

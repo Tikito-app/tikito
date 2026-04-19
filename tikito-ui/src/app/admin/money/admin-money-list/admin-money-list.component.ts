@@ -115,6 +115,12 @@ export class AdminMoneyListComponent implements AfterViewInit {
     });
   }
 
+  onRecalculateHistoricalBudgetValue() {
+    this.api.recalculateHistoricalBudgetValue().subscribe(() => {
+      this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
+    });
+  }
+
   onGroupMoneyTransactions() {
     this.api.groupMoneyTransactions().subscribe(() => {
       this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
