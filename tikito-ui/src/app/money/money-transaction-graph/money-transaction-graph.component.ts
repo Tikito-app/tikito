@@ -278,7 +278,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
       .map(value => {
         let date = moment(value.timestamp);
         let dateRangeString = date.format(format); // format
-        let dateRange = this.getDateByDateRange(this.transactionFilter.dateRange, date);
+        let dateRange = this.getDateByDateRange(date);
         const isBudget = value.budgeted != null;
 
         return new NormalizedMoneyValue(
@@ -296,9 +296,14 @@ export class MoneyTransactionGraphComponent implements OnInit {
   calculateNormalizedAggregatedValues() {
     let startDate = this.getStartDate();
     let endDate = this.getEndDate();
+    
+    // Align filter dates to period boundaries for consistent weight calculation
+    let alignedStartDate = startDate ? this.getDateByDateRange(startDate) : null;
+    let alignedEndDate = endDate ? this.getDateByDateRange(endDate).endOf(this.getPeriodUnit()) : null;
+
     this.allTransactions
-      .filter(value => startDate == null || moment(value.timestamp).isSameOrAfter(startDate))
-      .filter(value => endDate == null || moment(value.timestamp).isSameOrBefore(endDate))
+      .filter(value => alignedStartDate == null || moment(value.timestamp).isSameOrAfter(alignedStartDate))
+      .filter(value => alignedEndDate == null || moment(value.timestamp).isSameOrBefore(alignedEndDate))
       .forEach(value => {
         const isBudget = value.budgeted != null;
         const key = new GroupKey(this.getGroupNameOfHistoricalValue(value), isBudget).toString();
@@ -409,10 +414,10 @@ export class MoneyTransactionGraphComponent implements OnInit {
     let firstDate = this.aggregatedValuesPerDateRange[0].date;
     let firstDateToRender: moment.Moment = this.transactionFilter.startDate == null ?
       this.aggregatedValuesPerDateRange[0].date.clone() :
-      this.getDateByDateRange(this.transactionFilter.dateRange, moment(this.transactionFilter.startDate));
+      this.getDateByDateRange(moment(this.transactionFilter.startDate));
     let lastDateToRender = this.transactionFilter.endDate == null ?
       moment() :
-      this.getDateByDateRange(this.transactionFilter.dateRange, moment(this.transactionFilter.endDate));
+      this.getDateByDateRange(moment(this.transactionFilter.endDate));
 
     let currentDate = firstDate.clone();
     let dateRangeFormat = this.getDateRangeFormat();
@@ -634,6 +639,15 @@ export class MoneyTransactionGraphComponent implements OnInit {
     return 'YYYY-MM-DD';
   }
 
+  getPeriodUnit() {
+    switch (this.transactionFilter.dateRange) {
+      case TransactionDateRange.YEAR: return 'year';
+      case TransactionDateRange.MONTH: return 'month';
+      case TransactionDateRange.WEEK: return 'isoWeek';
+      default: return 'day';
+    }
+  }
+
   calculateNextCurrentDate(currentDate: moment.Moment) {
     switch(this.transactionFilter.dateRange) {
       case TransactionDateRange.YEAR:
@@ -647,17 +661,8 @@ export class MoneyTransactionGraphComponent implements OnInit {
     }
   }
 
-  getDateByDateRange(range: TransactionDateRange | null, date: moment.Moment) {
-    switch (range) {
-      case TransactionDateRange.WEEK:
-        return date.clone().startOf('isoWeek');
-      case TransactionDateRange.MONTH:
-        return date.clone().startOf('month');
-      case TransactionDateRange.YEAR:
-        return date.clone().startOf('year');
-      default:
-        return date.clone().startOf('day');
-    }
+  getDateByDateRange(date: moment.Moment) {
+    return date.clone().startOf(this.getPeriodUnit());
   }
 
   getStartDate() {
@@ -670,12 +675,13 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
   getOffsetPerGroup(firstDateToRender: moment.Moment, valuesPerDateRange: any) {
     let offset: any = {};
-    let dateString = firstDateToRender.format(this.getDateRangeFormat());
-    let dates = Object.keys(valuesPerDateRange);
+    let dateRangeFormat = this.getDateRangeFormat();
+    let dateString = firstDateToRender.format(dateRangeFormat);
+    let dates = Object.keys(valuesPerDateRange).sort();
 
     for (let date of dates) {
-      if (date == dateString) {
-        return offset;
+      if (date >= dateString) {
+        break;
       }
       Object.keys(valuesPerDateRange[date]).forEach((groupKey: any) => {
         offset[groupKey] = valuesPerDateRange[date][groupKey].value;
