@@ -159,7 +159,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
   getTransactionFilter() {
     let filter = new MoneyTransactionsFilter();
     filter.accountIds = this.form.value.accountIds;
-    filter.groupIds = this.form.value.groupIds == null ? [] : this.form.value.groupIds.filter((id: any) => id != null);
+    filter.groupIds = this.form.value.groupIds == null ? [] : this.form.value.groupIds.filter((id: any) => id != null && !Number.isNaN(id));
     filter.aggregateDateRange = this.form.value.aggregateDateRange;
     filter.startAtZeroFromBeginning = this.form.value.startAtZeroFromBeginning;// || this.form.value.aggregateDateRange;
     filter.startAtZeroAfterDateAggregation = this.form.value.startAtZeroAfterDateAggregation;

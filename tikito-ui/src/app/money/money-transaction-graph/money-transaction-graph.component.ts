@@ -137,7 +137,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
   assertHasTransactions(): Observable<void> {
     this.perf('getTransactions');
     // todo, make nicer; find a nice way to reset the transactions when needed
-    const accountIdsJson = JSON.stringify(this.transactionFilter.accountIds);
+    const accountIdsJson = JSON.stringify(this.transactionFilter.accountIds) + JSON.stringify(this.transactionFilter.groupIds);
     if (this.accountsOfTransactions !== accountIdsJson || this.lastDateRange !== this.transactionFilter.dateRange) {
       this.moneyTransactions = [];
       this.allTransactions = [];
@@ -170,8 +170,12 @@ export class MoneyTransactionGraphComponent implements OnInit {
         startDate = moment().subtract(1, 'year');
       }
 
-      this.budgetApi.getHistoricalValues(startDate as moment.Moment, this.getEndDate() as moment.Moment).subscribe(historicalBudgetValues => {
-        this.historicalBudgetValues = historicalBudgetValues;
+
+      this.budgetApi.getHistoricalValues(this.getDateByDateRange(startDate), this.getEndDate() as moment.Moment).subscribe(historicalBudgetValues => {
+        console.log(this.transactionFilter.groupIds);
+        console.log(this.transactionFilter.groupIds == null || this.transactionFilter.groupIds?.length == 0);
+        this.historicalBudgetValues = historicalBudgetValues
+          .filter(value => this.transactionFilter.groupIds == null || this.transactionFilter.groupIds?.length == 0 || this.transactionFilter.groupIds.includes(value.groupId));
         observer.next();
       });
     });
