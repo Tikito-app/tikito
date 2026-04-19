@@ -65,7 +65,6 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
   accounts: Account[] = [];
   groups: MoneyTransactionGroup[] = [];
   loans: Loan[] = [];
-  // budgets: Budget[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<CreateOrUpdateMoneyTransactionDialogComponent>,
@@ -90,8 +89,6 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
       groupId: new FormControl(''),
       loanId: new FormControl(''),
     });
-
-    console.log(this.data.transaction)
 
     this.form.controls['accountId'].setValue(this.data.transaction.accountId);
     this.form.controls['counterpartAccountName'].setValue(this.data.transaction.counterpartAccountName);

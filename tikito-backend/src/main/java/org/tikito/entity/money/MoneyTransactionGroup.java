@@ -46,7 +46,6 @@ public class MoneyTransactionGroup {
     @JoinColumn(name = "loan_id")
     private Loan loan;
 
-
     private LocalDate startDate;
     private LocalDate endDate;
     @Enumerated(EnumType.STRING)

@@ -57,9 +57,6 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
   historicalBudgetValues: HistoricalBudgetValue[];
   moneyTransactionGroups: MoneyTransactionGroup[] = [];
   groupsById: any;
-  // budgetsById: any;
-  budgets: any[];
-
   dataSource = new MatTableDataSource<AggregatedGroupData>([]);
   displayedColumns: string[] = ['name', 'spent', 'budgeted'];
 

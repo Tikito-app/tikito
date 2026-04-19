@@ -1,4 +1,4 @@
-export enum MoneyDateRange {
+export enum DateRange {
     YEAR = 'YEAR',
     MONTH = 'MONTH',
     WEEK = 'WEEK',

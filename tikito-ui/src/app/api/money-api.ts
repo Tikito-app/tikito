@@ -10,7 +10,7 @@ import {AggregatedHistoricalMoneyHoldingValue} from "../dto/money/aggregated-his
 import {MoneyTransactionImportLine} from "../dto/money/money-transaction-import-line";
 import {MoneyTransactionGroupType} from "../dto/money-transaction-group-type";
 import {MoneyHolding} from "../dto/money-holding";
-import {MoneyDateRange} from "../dto/money/money-date-range";
+import {DateRange} from "../dto/date-range";
 import moment from "moment";
 import {HistoricalBudgetValue} from "../dto/money/historical-budget-value";
 
@@ -56,7 +56,7 @@ export class MoneyApi {
                                       startDate: string,
                                       endDate: string,
                                       budgeted: number,
-                                      dateRange: MoneyDateRange,
+                                      dateRange: DateRange,
                                       dateRangeAmount: number): Observable<MoneyTransactionGroup> {
     return this.http.httpPost<MoneyTransactionGroup>(new HttpRequestData()
       .withUrl('/api/money/transactions-group')
