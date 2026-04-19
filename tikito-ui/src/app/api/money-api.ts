@@ -55,7 +55,7 @@ export class MoneyApi {
                                       accountIds: number[],
                                       startDate: string,
                                       endDate: string,
-                                      amount: number,
+                                      budgeted: number,
                                       dateRange: MoneyDateRange,
                                       dateRangeAmount: number): Observable<MoneyTransactionGroup> {
     return this.http.httpPost<MoneyTransactionGroup>(new HttpRequestData()
@@ -68,7 +68,7 @@ export class MoneyApi {
         accountIds: accountIds,
         startDate: startDate,
         endDate: endDate,
-        amount: amount,
+        budgeted: budgeted,
         dateRange: dateRange,
         dateRangeAmount: dateRangeAmount,
       }));

@@ -23,5 +23,5 @@ public class CreateOrUpdateMoneyTransactionGroupRequest extends CreateOrUpdateRe
     private LocalDate endDate;
     private DateRange dateRange;
     private Integer dateRangeAmount;
-    private Double amount;
+    private Double budgeted;
 }

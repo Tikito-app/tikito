@@ -83,7 +83,7 @@ public class MoneyTransactionGroupService implements JobProcessor {
         group.setEndDate(request.getEndDate());
         group.setDateRange(request.getDateRange());
         group.setDateRangeAmount(request.getDateRangeAmount());
-        group.setBudgeted(request.getAmount());
+        group.setBudgeted(request.getBudgeted());
 
         if (request.getQualifiers() != null) {
             request.getQualifiers()
