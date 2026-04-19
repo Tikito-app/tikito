@@ -1,6 +1,5 @@
 package org.tikito.entity.budget;
 
-import org.tikito.dto.budget.HistoricalBudgetValueDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,7 +7,8 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tikito.entity.money.MoneyTransactionGroup;
+import org.tikito.dto.budget.HistoricalBudgetValueDto;
+import org.tikito.dto.money.MoneyTransactionGroupDto;
 
 import java.time.LocalDate;
 
@@ -26,7 +26,7 @@ public class HistoricalBudgetValue {
     private double budgeted;
     private double spent;
 
-    public HistoricalBudgetValue(final long userId, final MoneyTransactionGroup group, final LocalDate date) {
+    public HistoricalBudgetValue(final long userId, final MoneyTransactionGroupDto group, final LocalDate date) {
         this.userId = userId;
         this.groupId = group.getId();
         this.date = date;

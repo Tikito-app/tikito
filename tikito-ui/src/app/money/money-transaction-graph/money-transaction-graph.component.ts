@@ -216,10 +216,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
   mapToMoneyBudgetTransaction(budgetValue: HistoricalBudgetValue): MoneyBudgetTransaction {
     let transaction = {...budgetValue} as unknown as MoneyBudgetTransaction;
-    transaction.amount = -budgetValue.budgeted;
-    if(transaction.amount > 0) {
-      transaction.amount = 0;
-    }
+    transaction.amount = budgetValue.budgeted;
     transaction.timestamp = budgetValue.date;
     const group = this.groupsById[budgetValue.groupId];
     transaction.counterpartAccountName = group ? group.name : ('Group ' + budgetValue.groupId);
@@ -558,7 +555,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
           }
           return '';
         }
-        let html = '<table><tr><td></td><td>Group</td><td><span style="float: right; margin-left: 20px;">Spent</span></td><td><span style="float: right; margin-left: 20px;">Budgeted</span></td></tr>';
+        let html = '<table><tr><td></td><td></td><td><span style="float: right; margin-left: 20px;">Spent</span></td><td><span style="float: right; margin-left: 20px;">Budgeted</span></td></tr>';
 
         let groupNames = Object.keys(allGroups)
           .filter(key => allGroups[key] != 0)
@@ -659,7 +656,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
   }
 
   getDateByDateRange(date: moment.Moment) {
-    return date.clone().startOf(this.getPeriodUnit());
+    return date.clone().startOf(this.getPeriodUnit() as any);
   }
 
   getStartDate() {
@@ -677,8 +674,8 @@ export class MoneyTransactionGraphComponent implements OnInit {
     let dates = Object.keys(valuesPerDateRange).sort();
 
     for (let date of dates) {
-      if (date >= dateString) {
-        break;
+      if (date == dateString) {
+        return offset;
       }
       Object.keys(valuesPerDateRange[date]).forEach((groupKey: any) => {
         offset[groupKey] = valuesPerDateRange[date][groupKey].value;

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.tikito.dto.DateRange;
+import org.tikito.dto.money.MoneyTransactionGroupDto;
 import org.tikito.entity.budget.HistoricalBudgetValue;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.entity.money.MoneyTransactionGroup;
@@ -31,7 +32,7 @@ public class BudgetValueService {
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public void generateValues(final long userId, final MoneyTransactionGroup group) {
+    public void generateValues(final long userId, final MoneyTransactionGroupDto group) {
         final LocalDate endDate = incrementByDateRange(group.getEndDate() == null ? LocalDate.now().plusYears(2) : group.getEndDate(), group.getDateRange(), 1);
         final Map<String, List<MoneyTransaction>> transactionsPerDateRange = new HashMap<>();
         final List<HistoricalBudgetValue> values = new ArrayList<>();

@@ -96,7 +96,9 @@ public class MoneyTransactionGroupService implements JobProcessor {
                             qualifier.getTransactionField()))
                     .forEach(qualifier -> group.getQualifiers().add(qualifier));
         }
-        return moneyTransactionGroupRepository.saveAndFlush(group).toDto();
+        final MoneyTransactionGroupDto dto = moneyTransactionGroupRepository.saveAndFlush(group).toDto();
+        budgetValueService.generateValues(userId, dto);
+        return dto;
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -137,6 +139,7 @@ public class MoneyTransactionGroupService implements JobProcessor {
                 .findByUserId(userId)
                 .stream()
                 .filter(this::hasBudget)
+                .map(MoneyTransactionGroup::toDto)
                 .forEach(group -> budgetValueService.generateValues(userId, group));
     }
 
