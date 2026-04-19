@@ -1,5 +1,5 @@
 import {Observable, Subject} from "rxjs";
-import {BudgetDateRange} from "./dto/budget/budget-date-range";
+import {MoneyDateRange} from "./dto/money/money-date-range";
 import {ActivatedRoute} from "@angular/router";
 import {MoneyTransactionGroupQualifierType} from "./dto/money/money-transaction-group-qualifier-type";
 import {MoneyTransactionField} from "./dto/money/money-transaction-field";
@@ -119,7 +119,7 @@ export class Util {
 
   static getBudgetDateRanges(): string[] {
     return Object
-      .keys(BudgetDateRange)
+      .keys(MoneyDateRange)
       .filter((v) => isNaN(Number(v)))
   }
 
@@ -219,13 +219,13 @@ export class Util {
     return datepipe.transform(date, format) as string;
   }
 
-  static getDateRangeFormat(dateRange: BudgetDateRange) {
+  static getDateRangeFormat(dateRange: MoneyDateRange) {
       switch (dateRange) {
-          case BudgetDateRange.YEAR:
+          case MoneyDateRange.YEAR:
               return 'YYYY';
-          case BudgetDateRange.MONTH:
+          case MoneyDateRange.MONTH:
               return 'YYYY-MM';
-          case BudgetDateRange.WEEK:
+          case MoneyDateRange.WEEK:
               return 'YYYY-WW';
       }
       return 'YYY-MM-dd';

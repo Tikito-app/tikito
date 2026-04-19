@@ -1,7 +1,6 @@
 import MoneyTransactionGroupQualifier from "./money-transaction-group-qualifier";
 import {MoneyTransactionGroupType} from "../money-transaction-group-type";
-import Budget from "../budget/budget";
-import {BudgetDateRange} from "../budget/budget-date-range";
+import {MoneyDateRange} from "./money-date-range";
 
 export default class MoneyTransactionGroup {
     id: number;
@@ -11,7 +10,7 @@ export default class MoneyTransactionGroup {
     accountIds: number[] = [];
     startDate: string;
     endDate: string;
-    dateRange: BudgetDateRange;
+    dateRange: MoneyDateRange;
     dateRangeAmount: number;
-    amount: number;
+    budgeted: number;
 }

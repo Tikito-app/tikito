@@ -3,10 +3,9 @@ import {MoneyTransactionsFilter, TransactionDateRange} from "../../dto/money/mon
 import {Observable} from "rxjs";
 import {MoneyApi} from "../../api/money-api";
 import {AuthService} from "../../service/auth.service";
-import {BudgetApi} from "../../api/budget-api";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
 import MoneyTransaction from "../../dto/money/money-transaction";
-import {HistoricalBudgetValue} from "../../dto/budget/historical-budget-value";
+import {HistoricalBudgetValue} from "../../dto/money/historical-budget-value";
 import moment from "moment";
 import {Util} from "../../util";
 import {MatTableDataSource, MatTableModule} from "@angular/material/table";
@@ -70,8 +69,7 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
   protected readonly Util = Util;
 
   constructor(private api: MoneyApi,
-              private authService: AuthService,
-              private budgetApi: BudgetApi) {
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -128,7 +126,7 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
         startDate = moment().subtract(1, 'year');
       }
 
-      this.budgetApi.getHistoricalValues(startDate, endDate as moment.Moment).subscribe(historicalBudgetValues => {
+      this.api.getHistoricalBudgetValues(startDate, endDate as moment.Moment).subscribe(historicalBudgetValues => {
         this.historicalBudgetValues = historicalBudgetValues;
         observer.next();
       });

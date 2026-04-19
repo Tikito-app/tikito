@@ -44,7 +44,7 @@ public class MoneyTransactionGroupController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/historical-values/{startDate}/{endDate}")
+    @GetMapping("/historical-budget-values/{startDate}/{endDate}")
     public ResponseEntity<List<HistoricalBudgetValueDto>> getHistoricalBudgets(final AuthUser authUser, @PathVariable("startDate") final LocalDate startDate, @PathVariable("endDate") final LocalDate endDate) {
         return ResponseEntity.ok(groupService.getHistoricalBudgets(authUser.getId(), startDate, endDate));
     }

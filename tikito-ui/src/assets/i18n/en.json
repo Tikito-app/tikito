@@ -220,6 +220,9 @@
   "money/transaction-group/qualifier": "Qualifier",
   "money/transaction-group/qualifier-type": "Type",
   "money/transaction-group/group-type": "Group types",
+  "money/transaction-group/budgeted": "Budgeted",
+  "money/transaction-group/date-range": "Date range",
+  "money/transaction-group/date-range-amount": "Date range amount",
 
   "--------------- IMPORT ---------------------": "",
   "import": "Import",
@@ -230,16 +233,6 @@
   "import-file-type-account-mismatch": "The security type of the account that you selected does not match the security type of the file type.",
 
 
-  "--------------- BUDGET ---------------------": "",
-  "budget/budget": "Budget",
-  "budget/overview": "Overview",
-  "budget/list": "List",
-  "budget/create-budget": "Create Budget",
-  "budget/name": "Name",
-  "budget/amount": "Amount",
-  "budget/date-range": "Date range",
-  "budget/date-range-amount": "Date range amount",
-  "budget/money-transaction-group": "Money transaction group",
 
 
   "--------------- ADMIN ---------------------": "",
@@ -254,6 +247,7 @@
   "admin/money": "Money",
   "admin/money/recalculate-historical-value": "Recalculate value",
   "admin/money/group-transactions": "Group transactions",
+  "admin/money/recalculate-historical-budget-values": "Recalculate budget values",
 
   "admin/security": "Securities",
   "admin/security/update-all": "Update all",

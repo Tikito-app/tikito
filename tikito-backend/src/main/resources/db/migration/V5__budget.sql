@@ -20,7 +20,7 @@ alter table historical_budget_value drop column budget_id;
 alter table historical_budget_value add column group_id bigint not null;
 
 alter table money_transaction_group add date_range varchar(255) null;
-alter table money_transaction_group add amount double(20, 5) null;
+alter table money_transaction_group add budgeted double(20, 5) null;
 alter table money_transaction_group add date_range_amount int null;
 alter table money_transaction_group add start_date date null;
 alter table money_transaction_group add end_date date null;

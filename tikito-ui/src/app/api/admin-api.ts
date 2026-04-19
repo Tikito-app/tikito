@@ -9,6 +9,7 @@ import {Account} from "../dto/account";
 import {Isin} from "../dto/isin";
 import {AccountApi} from "./account-api";
 import {AccountType} from "../dto/account-type";
+import {HttpRequestMethod} from "../dto/http-request-method";
 
 @Injectable({
   providedIn: 'root'
@@ -129,5 +130,11 @@ export class AdminApi {
   groupMoneyTransactions() {
     return this.http.httpPost(new HttpRequestData()
       .withUrl('/api/admin/money/group-transactions'));
+  }
+
+  recalculateHistoricalBudgetValue() {
+    return this.http.basicHttpRequest(new HttpRequestData()
+      .withRequestMethod(HttpRequestMethod.GET)
+      .withUrl('/api/money/transactions-group/recalculate-historical-budget'))
   }
 }

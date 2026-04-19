@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import MoneyTransactionGroupQualifier from "../../dto/money/money-transaction-group-qualifier";
-import {BudgetApi} from "../../api/budget-api";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
@@ -41,8 +40,7 @@ export class MoneyTransactionGroupQualifierFormComponent implements OnInit {
   @Output()
   deleteCallback: EventEmitter<void> = new EventEmitter();
 
-  constructor(private api: BudgetApi,
-              private router: Router,
+  constructor(private router: Router,
               private authService: AuthService,
               private route: ActivatedRoute) {
   }

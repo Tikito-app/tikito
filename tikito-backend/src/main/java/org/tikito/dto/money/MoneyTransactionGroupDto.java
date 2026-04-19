@@ -23,5 +23,5 @@ public class MoneyTransactionGroupDto {
     private LocalDate endDate;
     private DateRange dateRange;
     private Integer dateRangeAmount; // -1 for infinite
-    private Double amount;
+    private Double budgeted;
 }

@@ -9,7 +9,6 @@ import org.tikito.dto.export.MoneyTransactionGroupExportDto;
 import org.tikito.dto.money.MoneyTransactionGroupDto;
 import org.tikito.dto.money.MoneyTransactionGroupType;
 import org.tikito.entity.Account;
-import org.tikito.entity.budget.Budget;
 import org.tikito.entity.loan.Loan;
 
 import java.time.LocalDate;
@@ -53,7 +52,7 @@ public class MoneyTransactionGroup {
     @Enumerated(EnumType.STRING)
     private DateRange dateRange;
     private Integer dateRangeAmount; // -1 for infinite
-    private Double amount;
+    private Double budgeted;
 
     public MoneyTransactionGroup(final MoneyTransactionGroupDto dto) {
         this.userId = dto.getUserId();
@@ -98,7 +97,7 @@ public class MoneyTransactionGroup {
                 endDate,
                 dateRange,
                 dateRangeAmount,
-                amount);
+                budgeted);
     }
 
     public MoneyTransactionGroupExportDto toExportDto(final Map<Long, Account> accountsById) {

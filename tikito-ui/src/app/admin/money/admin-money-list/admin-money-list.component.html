@@ -8,6 +8,7 @@
     <input matInput (keyup)="applyFilter($event)" #input>
   </mat-form-field>
   <button mat-button color="secondary" (click)="onGroupMoneyTransactions()">{{'admin/money/group-transactions' | translatePipe}}</button>
+  <button mat-button color="secondary" (click)="onRecalculateHistoricalBudgetValue()">{{'admin/money/recalculate-historical-budget-values' | translatePipe}}</button>
   @if(dataSource) {
     <mat-card>
       <mat-card-header>

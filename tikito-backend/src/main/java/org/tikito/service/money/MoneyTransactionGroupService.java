@@ -83,7 +83,7 @@ public class MoneyTransactionGroupService implements JobProcessor {
         group.setEndDate(request.getEndDate());
         group.setDateRange(request.getDateRange());
         group.setDateRangeAmount(request.getDateRangeAmount());
-        group.setAmount(request.getAmount());
+        group.setBudgeted(request.getAmount());
 
         if (request.getQualifiers() != null) {
             request.getQualifiers()
@@ -141,7 +141,7 @@ public class MoneyTransactionGroupService implements JobProcessor {
     }
 
     private boolean hasBudget(final MoneyTransactionGroup group) {
-        return group.getAmount() != null &&
+        return group.getBudgeted() != null &&
                 group.getDateRange() != null &&
                 group.getDateRangeAmount() != null &&
                 group.getStartDate() != null;

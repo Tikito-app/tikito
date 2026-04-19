@@ -1,8 +1,8 @@
-import {BudgetDateRange} from "./budget/budget-date-range";
+import {MoneyDateRange} from "./money/money-date-range";
 
 export class HistoricalBudget {
     id: number;
     name: string;
-    dateRange: BudgetDateRange;
+    dateRange: MoneyDateRange;
     amount: number;
 }

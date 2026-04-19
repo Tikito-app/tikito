@@ -9,9 +9,10 @@ import {MoneyTransactionsFilter} from "../dto/money/money-transactions-filter";
 import {AggregatedHistoricalMoneyHoldingValue} from "../dto/money/aggregated-historical-money-holding-value";
 import {MoneyTransactionImportLine} from "../dto/money/money-transaction-import-line";
 import {MoneyTransactionGroupType} from "../dto/money-transaction-group-type";
-import {SecurityTransaction} from "../dto/security/security-transaction";
 import {MoneyHolding} from "../dto/money-holding";
-import {BudgetDateRange} from "../dto/budget/budget-date-range";
+import {MoneyDateRange} from "../dto/money/money-date-range";
+import moment from "moment";
+import {HistoricalBudgetValue} from "../dto/money/historical-budget-value";
 
 @Injectable({
   providedIn: 'root'
@@ -55,7 +56,7 @@ export class MoneyApi {
                                       startDate: string,
                                       endDate: string,
                                       amount: number,
-                                      dateRange: BudgetDateRange,
+                                      dateRange: MoneyDateRange,
                                       dateRangeAmount: number): Observable<MoneyTransactionGroup> {
     return this.http.httpPost<MoneyTransactionGroup>(new HttpRequestData()
       .withUrl('/api/money/transactions-group')
@@ -122,7 +123,6 @@ export class MoneyApi {
                             description: string,
                             currencyId: number,
                             groupId: number,
-                            // budgetId: number,
                             loanId: number,
                             exchangeRate: number): Observable<MoneyTransaction> {
     let body: any = {};
@@ -138,7 +138,6 @@ export class MoneyApi {
     body.description = description;
     body.currencyId = currencyId;
     body.groupId = groupId;
-    // body.budgetId = budgetId;
     body.loanId = loanId;
     body.exchangeRate = exchangeRate;
     return this.http.httpPostSingle(MoneyTransaction, new HttpRequestData()
@@ -149,5 +148,12 @@ export class MoneyApi {
   getHoldings(): Observable<MoneyHolding[]> {
     return this.http.httpGetList<MoneyHolding>(MoneyHolding, new HttpRequestData()
       .withUrl('/api/money/holding'));
+  }
+
+  getHistoricalBudgetValues(startDate: moment.Moment, endDate: moment.Moment): Observable<HistoricalBudgetValue[]> {
+    let startDateFormatted = startDate.format('yyyy-MM-DD');
+    let endDateFormatted = (endDate == null ? moment() : endDate).format('yyyy-MM-DD');
+    return this.http.httpGetList<HistoricalBudgetValue>(HistoricalBudgetValue,
+      new HttpRequestData().withUrl('/api/money/transactions-group/historical-budget-values/' + startDateFormatted + '/' + endDateFormatted));
   }
 }

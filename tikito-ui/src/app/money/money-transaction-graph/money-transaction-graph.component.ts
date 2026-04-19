@@ -10,9 +10,7 @@ import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
 import MoneyTransaction from "../../dto/money/money-transaction";
 import {Observable} from "rxjs";
 import {AuthService} from "../../service/auth.service";
-import {HistoricalBudgetValue} from "../../dto/budget/historical-budget-value";
-import {BudgetApi} from "../../api/budget-api";
-import Budget from "../../dto/budget/budget";
+import {HistoricalBudgetValue} from "../../dto/money/historical-budget-value";
 import {MoneyBudgetTransaction} from "../../dto/money/money-budget-transaction";
 
 class GroupKey {
@@ -91,8 +89,6 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
   moneyTransactions: MoneyTransaction[];
   allTransactions: MoneyBudgetTransaction[];
-  budgets: Budget[];
-  // budgetsById: any;
   historicalBudgetValues: HistoricalBudgetValue[];
   normalizedValues: NormalizedMoneyValue[];
   aggregatedValuesPerDateRange: NormalizedMoneyValue[];
@@ -107,8 +103,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
   lastDateRange: TransactionDateRange | null;
 
   constructor(private api: MoneyApi,
-              private authService: AuthService,
-              private budgetApi: BudgetApi) {
+              private authService: AuthService) {
   }
 
   perf(name: string) {
@@ -171,9 +166,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
       }
 
 
-      this.budgetApi.getHistoricalValues(this.getDateByDateRange(startDate), this.getEndDate() as moment.Moment).subscribe(historicalBudgetValues => {
-        console.log(this.transactionFilter.groupIds);
-        console.log(this.transactionFilter.groupIds == null || this.transactionFilter.groupIds?.length == 0);
+      this.api.getHistoricalBudgetValues(this.getDateByDateRange(startDate), this.getEndDate() as moment.Moment).subscribe(historicalBudgetValues => {
         this.historicalBudgetValues = historicalBudgetValues
           .filter(value => this.transactionFilter.groupIds == null || this.transactionFilter.groupIds?.length == 0 || this.transactionFilter.groupIds.includes(value.groupId));
         observer.next();

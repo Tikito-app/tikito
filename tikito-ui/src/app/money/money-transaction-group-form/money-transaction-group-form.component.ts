@@ -90,7 +90,7 @@ export class MoneyTransactionGroupFormComponent implements OnInit {
       groupTypes: new FormControl(''),
       startDate: new FormControl(''),
       endDate: new FormControl(''),
-      amount: new FormControl(''),
+      budgeted: new FormControl(''),
       dateRange: new FormControl(''),
       dateRangeAmount: new FormControl(''),
     };
@@ -103,7 +103,7 @@ export class MoneyTransactionGroupFormComponent implements OnInit {
         this.form.controls['accountIds'].setValue(group.accountIds);
         this.form.controls['startDate'].setValue(group.startDate);
         this.form.controls['endDate'].setValue(group.endDate);
-        this.form.controls['amount'].setValue(group.amount);
+        this.form.controls['budgeted'].setValue(group.budgeted);
         this.form.controls['dateRange'].setValue(group.dateRange);
         this.form.controls['dateRangeAmount'].setValue(group.dateRangeAmount);
       });
@@ -121,7 +121,7 @@ export class MoneyTransactionGroupFormComponent implements OnInit {
       this.form.value.accountIds,
       this.form.value.startDate,
       this.form.value.endDate,
-      this.form.value.amount,
+      this.form.value.budgeted,
       this.form.value.dateRange,
       this.form.value.dateRangeAmount
     ).subscribe(group => {

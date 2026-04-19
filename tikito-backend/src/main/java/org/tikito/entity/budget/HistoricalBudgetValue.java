@@ -30,7 +30,7 @@ public class HistoricalBudgetValue {
         this.userId = userId;
         this.groupId = group.getId();
         this.date = date;
-        this.budgeted = group.getAmount();
+        this.budgeted = group.getBudgeted();
     }
 
     public HistoricalBudgetValueDto toDto() {
