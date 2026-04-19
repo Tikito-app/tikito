@@ -30,8 +30,10 @@
           <mat-radio-button style="padding-left: 30px;" value="MONTH">{{'money/graph/aggregate-per-month' | translatePipe}}</mat-radio-button><br/>
           <mat-radio-button style="padding-left: 30px;" value="WEEK">{{'money/graph/aggregate-per-week' | translatePipe}}</mat-radio-button>
         </mat-radio-group>
+        <br/>
         <mat-checkbox formControlName="includeBudget" (change)="UserPreferenceService.onCheckboxChange(UserPreference.MONEY_GRAPH_INCLUDE_BUDGET, $event.checked)">{{ 'money/graph/include-budget' | translatePipe}}</mat-checkbox>
         <mat-checkbox formControlName="includeMoney" (change)="UserPreferenceService.onCheckboxChange(UserPreference.MONEY_GRAPH_INCLUDE_MONEY, $event.checked)">{{ 'money/graph/include-money' | translatePipe}}</mat-checkbox>
+        <app-popover text="money/graph/show-include-money-budget-tooltip"></app-popover>
 
         <mat-form-field class="full-width">
           <mat-label>{{'money/transaction-groups' | translatePipe}}</mat-label>
