@@ -1,4 +1,4 @@
-package org.tikito.dto.budget;
+package org.tikito.dto.money;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

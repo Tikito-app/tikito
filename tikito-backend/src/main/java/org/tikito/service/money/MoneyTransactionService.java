@@ -25,7 +25,6 @@ public class MoneyTransactionService {
     private final AccountRepository accountRepository;
     private final SecurityRepository securityRepository;
     private final JobService jobService;
-    private final BudgetRepository budgetRepository;
     private final LoanRepository loanRepository;
 
     public MoneyTransactionService(final MoneyTransactionRepository moneyTransactionRepository,
@@ -33,14 +32,12 @@ public class MoneyTransactionService {
                                    final AccountRepository accountRepository,
                                    final SecurityRepository securityRepository,
                                    final JobService jobService,
-                                   final BudgetRepository budgetRepository,
                                    final LoanRepository loanRepository) {
         this.moneyTransactionRepository = moneyTransactionRepository;
         this.moneyTransactionGroupRepository = moneyTransactionGroupRepository;
         this.accountRepository = accountRepository;
         this.securityRepository = securityRepository;
         this.jobService = jobService;
-        this.budgetRepository = budgetRepository;
         this.loanRepository = loanRepository;
     }
 
@@ -49,13 +46,10 @@ public class MoneyTransactionService {
         final MoneyTransaction transaction = request.isNew() ? new MoneyTransaction(userId) : moneyTransactionRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
         accountRepository.findByUserIdAndIdAndAccountType(userId, request.getAccountId(), AccountType.DEBIT).orElseThrow();
         securityRepository.findByIdAndSecurityType(request.getCurrencyId(), SecurityType.CURRENCY).orElseThrow();
-        if(request.getGroupId() != null) {
+        if (request.getGroupId() != null) {
             moneyTransactionGroupRepository.findByUserIdAndId(userId, request.getGroupId()).orElseThrow();
         }
-//        if(request.getBudgetId() != null) {
-//            budgetRepository.findByUserIdAndId(userId, request.getBudgetId()).orElseThrow();
-//        }
-        if(request.getLoanId() != null) {
+        if (request.getLoanId() != null) {
             loanRepository.findByUserIdAndId(userId, request.getLoanId()).orElseThrow();
         }
         transaction.setAccountId(request.getAccountId());

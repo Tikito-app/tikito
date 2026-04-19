@@ -6,9 +6,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.tikito.dto.DateRange;
 import org.tikito.dto.money.MoneyTransactionGroupDto;
-import org.tikito.entity.budget.HistoricalBudgetValue;
+import org.tikito.entity.money.HistoricalBudgetValue;
 import org.tikito.entity.money.MoneyTransaction;
-import org.tikito.entity.money.MoneyTransactionGroup;
 import org.tikito.repository.HistoricalBudgetValueRepository;
 import org.tikito.repository.MoneyTransactionRepository;
 

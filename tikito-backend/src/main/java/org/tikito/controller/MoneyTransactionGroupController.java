@@ -3,7 +3,7 @@ package org.tikito.controller;
 import org.springframework.validation.annotation.Validated;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.CreateOrUpdateMoneyTransactionGroupRequest;
-import org.tikito.dto.budget.HistoricalBudgetValueDto;
+import org.tikito.dto.money.HistoricalBudgetValueDto;
 import org.tikito.dto.money.MoneyTransactionGroupDto;
 import org.tikito.service.money.MoneyTransactionGroupService;
 import org.springframework.http.ResponseEntity;

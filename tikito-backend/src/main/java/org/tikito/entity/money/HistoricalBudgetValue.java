@@ -1,4 +1,4 @@
-package org.tikito.entity.budget;
+package org.tikito.entity.money;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tikito.dto.budget.HistoricalBudgetValueDto;
+import org.tikito.dto.money.HistoricalBudgetValueDto;
 import org.tikito.dto.money.MoneyTransactionGroupDto;
 
 import java.time.LocalDate;
