@@ -137,8 +137,8 @@ export class MoneyTransactionOverviewComponent implements OnInit {
         this.form.controls['startAtZeroFromBeginning'].setValue(UserPreferenceService.get(UserPreference.START_AT_ZERO_FROM_BEGINNING, true) || this.form.value.nonGrouped);
         this.form.controls['startAtZeroAfterDateAggregation'].setValue(UserPreferenceService.get(UserPreference.START_AT_ZERO_AFTER_DATE_RANGE, true));
         this.form.controls['showOther'].setValue(UserPreferenceService.get(UserPreference.MONEY_SHOW_OTHER, true));
-        this.form.controls['accountIds'].setValue(UserPreferenceService.get(UserPreference.ACCOUNT_IDS, '').toString().split(',').map(parseInt));
-        this.form.controls['groupIds'].setValue(UserPreferenceService.get(UserPreference.GROUP_IDS, '').toString().split(',').map(parseInt));
+        this.form.controls['accountIds'].setValue(UserPreferenceService.get(UserPreference.ACCOUNT_IDS, '').toString().split(',').map(v => parseInt(v)));
+        this.form.controls['groupIds'].setValue(UserPreferenceService.get(UserPreference.GROUP_IDS, '').toString().split(',').map(v => parseInt(v)));
         this.form.controls['dateRange'].setValue(UserPreferenceService.get(UserPreference.DATE_RANGE, TransactionDateRange.MONTH));
         this.form.controls['aggregateDateRange'].setValue(UserPreferenceService.get(UserPreference.AGGREGATE_DATE_RANGE, true));
         this.form.controls['amountOfOtherGroups'].setValue(UserPreferenceService.get(UserPreference.AMOUNT_OF_OTHER_GROUPS, 5));

@@ -45,7 +45,7 @@
         <br/>
         <mat-form-field class="half-width">
           <mat-label>{{'start-date' | translatePipe}}</mat-label>
-          <input matInput [matDatepicker]="pickerStartDate" formControlName="startDate" (selectionchange)="UserPreferenceService.onDatePickerChange(UserPreference.START_DATE, form.value.startDate)">
+          <input matInput [matDatepicker]="pickerStartDate" formControlName="startDate" (dateChange)="UserPreferenceService.onDatePickerChange(UserPreference.START_DATE, form.value.startDate)">
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-icon *ngIf="form.value['startDate']" matIconSuffix (click)="form.controls['startDate'].setValue(null);" class="clickable">close</mat-icon>
           <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
@@ -53,7 +53,7 @@
         </mat-form-field>
         <mat-form-field class="half-width">
           <mat-label>{{'end-date' | translatePipe}}</mat-label>
-          <input matInput [matDatepicker]="pickerEndDate" formControlName="endDate" (selectionchange)="UserPreferenceService.onDatePickerChange(UserPreference.END_DATE, form.value.endDate)">
+          <input matInput [matDatepicker]="pickerEndDate" formControlName="endDate" (dateChange)="UserPreferenceService.onDatePickerChange(UserPreference.END_DATE, form.value.endDate)">
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-icon *ngIf="form.value['endDate']" matIconSuffix (click)="form.controls['endDate'].setValue(null);" class="clickable">close</mat-icon>
           <mat-datepicker-toggle matIconSuffix [for]="pickerEndDate"></mat-datepicker-toggle>
@@ -75,6 +75,6 @@
   <mat-tab-group *ngIf="form">
     <mat-tab [label]="'money/graph' | translatePipe"> <app-money-transaction-graph [height]="600" [accountId]="accountId" [onFilterUpdateCallback]="onFilterUpdateCallback" [transactionFilter]="getTransactionFilter()"></app-money-transaction-graph> </mat-tab>
     <mat-tab [label]="'money/transactions' | translatePipe"> <app-moneyTransaction-list [accountId]="accountId" [onFilterUpdateCallback]="onFilterUpdateCallback" [transactionFilter]="getTransactionFilter()"></app-moneyTransaction-list> </mat-tab>
-    <mat-tab [label]="'money/aggregated-table' | translatePipe"> <app-money-transaction-aggregated-table [onFilterUpdateCallback]="onFilterUpdateCallback" [transactionFilter]="getTransactionFilter()"></app-money-transaction-aggregated-table> </mat-tab>
+<!--    <mat-tab [label]="'money/aggregated-table' | translatePipe"> <app-money-transaction-aggregated-table [onFilterUpdateCallback]="onFilterUpdateCallback" [transactionFilter]="getTransactionFilter()"></app-money-transaction-aggregated-table> </mat-tab>-->
   </mat-tab-group>
 </div>

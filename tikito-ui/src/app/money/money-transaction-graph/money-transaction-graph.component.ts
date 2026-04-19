@@ -116,7 +116,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
     this.performanceTimes[name] = now;
 
     if (this.lastPerformanceName != null) {
-      console.log(this.lastPerformanceName + ' took ' + (now - this.performanceTimes[this.lastPerformanceName]));
+      // console.log(this.lastPerformanceName + ' took ' + (now - this.performanceTimes[this.lastPerformanceName]));
     }
 
     this.lastPerformanceName = name;
@@ -421,6 +421,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
     let lastValueIfNotReset: any = {};
     let allDates: string[] = [];
     let offsetPerGroup = this.getOffsetPerGroup(firstDateToRender, valuesPerDateRange);
+    let groupValuePerDate: any = {}
 
     groupKeys.forEach((groupKey: any) => {
       seriesValuesByKey[groupKey] = []
@@ -429,7 +430,9 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
     while (currentDate.isSameOrBefore(lastDateToRender)) {
       let currentRangedString = currentDate.format(dateRangeFormat);
+      let currentDateString = currentDate.format('DD-MM-yyyy');
       let withinDateRange = currentDate.isSameOrAfter(firstDateToRender);
+      groupValuePerDate[currentDateString] = {};
 
       if (withinDateRange) {
         allDates.push(currentDate.format('DD-MM-yyyy'));
@@ -457,13 +460,14 @@ export class MoneyTransactionGraphComponent implements OnInit {
           groupSeries.push(value);
         }
         lastValueIfNotReset[groupKey] = nonResettedValue;
+        groupValuePerDate[currentDateString][groupKey] = value;
       });
 
       currentDate = this.calculateNextCurrentDate(currentDate);
     }
 
     let seriesWithGroups: any = this.generateSeriesGroups(seriesValuesByKey);
-    this.chartOption = this.generateGraphOptions(allDates, seriesWithGroups);
+    this.chartOption = this.generateGraphOptions(allDates, seriesWithGroups, groupValuePerDate);
   }
 
   generateSeriesGroups(seriesValuesByKey: any) {
@@ -508,7 +512,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
     }
   }
 
-  generateGraphOptions(allDates: string[], seriesWithGroups: any) {
+  generateGraphOptions(allDates: string[], seriesWithGroups: any, groupValuePerDate: any) {
     return {
       responsive: true,
       maintainAspectRatio: true,
@@ -521,7 +525,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
         type: 'value',
       },
       series: seriesWithGroups,
-      tooltip: this.getTooltip(),
+      tooltip: this.getTooltip(groupValuePerDate),
       legend: {
         position: "top",
       },
@@ -531,7 +535,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
     };
   }
 
-  private getTooltip() {
+  private getTooltip(groupValuePerDate: any) {
     return {
       trigger: 'axis',
       axisPointer: {
@@ -542,13 +546,34 @@ export class MoneyTransactionGraphComponent implements OnInit {
       },
       formatter(params: any): any {
         let date = params[0].axisValue;
-        let html = '';
+        let allGroups = groupValuePerDate[date];
 
-        params.forEach((param: any) => {
-          if (param.value != 0) {
-            html += `${param.marker} ${Util.maxDisplayString(param.seriesName, 25)} <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(param.value)};">${Util.currencyFormat(param.value)}</span><br/>`;
+        function getMarker(params: any, field: string) {
+          for (let param of params) {
+            if (param.seriesName == field) {
+              return param.marker;
+            }
           }
-        });
+          return '';
+        }
+        let html = '<table><tr><td></td><td>Group</td><td><span style="float: right; margin-left: 20px;">Spent</span></td><td><span style="float: right; margin-left: 20px;">Budgeted</span></td></tr>';
+
+        let groupNames = Object.keys(allGroups)
+          .filter(key => allGroups[key] != 0)
+          .map(GroupKey.fromString)
+          .map(key => key.name);
+        let uniqueGroupNames = [...new Set(groupNames)].sort()
+
+
+        for(let groupName of uniqueGroupNames) {
+          let moneyGroupKey = new GroupKey(groupName, false).toString();
+          let budgetGroupKey = new GroupKey(groupName, true).toString();
+          html += `<tr><td>${getMarker(params, groupName.toString())}</td><td>${Util.maxDisplayString(groupName, 25)}</td><td>`;
+          html += (allGroups[moneyGroupKey] != null ? `<span style="float: right; margin-left: 20px; color: ${Util.currencyColor(allGroups[moneyGroupKey])};">${Util.currencyFormatWithSymbol(allGroups[moneyGroupKey], 47)}</span>` : ``) + '</td><td>';
+          html += (allGroups[budgetGroupKey] != null ? `<span style="float: right; margin-left: 20px; color: ${Util.currencyColor(allGroups[budgetGroupKey])};">${Util.currencyFormatWithSymbol(allGroups[budgetGroupKey], 47)}</span>` : ``) + '</td>';
+          html += '</tr>';
+        }
+        html += '</table>';
 
         return `${date}<br/>` + html;
       },

@@ -86,11 +86,8 @@ export class MoneyTransactionListComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('init');
     this.authService.onSystemReady((loggedInUser: any) => {
-      console.log('ready');
       this.onFilterUpdateCallback.subscribe(filter => {
-        console.log('subscribe');
         this.transactionFilter = filter;
         this.resetTransactions();
       });
