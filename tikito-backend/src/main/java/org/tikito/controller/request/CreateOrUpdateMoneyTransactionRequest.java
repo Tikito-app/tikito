@@ -10,8 +10,8 @@ import java.time.Instant;
 public class CreateOrUpdateMoneyTransactionRequest extends CreateOrUpdateRequest {
     private long userId;
     private long accountId;
-    private String counterpartAccountName;
-    private String counterpartAccountNumber;
+    private String counterpartyAccountName;
+    private String counterpartyAccountNumber;
     private Instant timestamp;
     private double amount;
     private Double finalBalance;

@@ -15,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MoneyTransactionImportLine {
-    private String counterpartAccountNumber;
-    private String counterpartAccountName;
+    private String counterpartyAccountNumber;
+    private String counterpartyAccountName;
     private Instant timestamp;
     private DebitCredit debitCredit;
     private String code;
@@ -40,8 +40,8 @@ public class MoneyTransactionImportLine {
 
     public MoneyTransactionImportLine(final AccountDto account, final MT940Transaction transaction, final int lineNumber) {
         this.mt940Transaction = transaction;
-        this.counterpartAccountNumber = transaction.getToAccountNumber();
-        this.counterpartAccountName = transaction.getToAccountName();
+        this.counterpartyAccountNumber = transaction.getToAccountNumber();
+        this.counterpartyAccountName = transaction.getToAccountName();
         this.timestamp = transaction.getDate().atStartOfDay().toInstant(ZoneOffset.UTC);
         this.debitCredit = transaction.getAmount() < 0 ? DebitCredit.DEBIT : DebitCredit.CREDIT;
         this.amount = transaction.getAmount();

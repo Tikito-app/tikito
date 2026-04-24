@@ -23,9 +23,9 @@ public class MoneyTransaction {
     private Long id;
     private long userId;
     private long accountId;
-    private String counterpartAccountName;
-    private String counterpartAccountNumber;
-    private Long counterpartAccountId;
+    private String counterpartyAccountName;
+    private String counterpartyAccountNumber;
+    private Long counterpartyAccountId;
     private Instant timestamp;
     private double amount;
     private Double finalBalance;
@@ -38,8 +38,8 @@ public class MoneyTransaction {
     public MoneyTransaction(final long userId, final long accountId, final MoneyTransactionImportLine line) {
         this.userId = userId;
         this.accountId = accountId;
-        this.counterpartAccountName = line.getCounterpartAccountName();
-        this.counterpartAccountNumber = line.getCounterpartAccountNumber();
+        this.counterpartyAccountName = line.getCounterpartyAccountName();
+        this.counterpartyAccountNumber = line.getCounterpartyAccountNumber();
         this.timestamp = line.getTimestamp();
         this.amount = line.getAmount() * line.getExchangeRate();
         this.finalBalance = line.getFinalBalance() * line.getExchangeRate();
@@ -51,9 +51,9 @@ public class MoneyTransaction {
     public MoneyTransaction(final long userId, final long accountId, final long currencyId, final MoneyTransactionExportDto dto) {
         this.userId = userId;
         this.accountId = accountId;
-        this.counterpartAccountName = dto.getCounterpartAccountName();
-        this.counterpartAccountNumber = dto.getCounterpartAccountNumber();
-//        this.counterpartAccountId = dto.getCounterpartAccountName(; // todo
+        this.counterpartyAccountName = dto.getCounterpartyAccountName();
+        this.counterpartyAccountNumber = dto.getCounterpartyAccountNumber();
+//        this.counterpartyAccountId = dto.getCounterpartyAccountName(; // todo
         this.timestamp = dto.getTimestamp();
         this.amount = dto.getAmount();
         this.finalBalance = dto.getFinalBalance();
@@ -71,8 +71,8 @@ public class MoneyTransaction {
                 id,
                 userId,
                 accountId,
-                counterpartAccountName,
-                counterpartAccountNumber,
+                counterpartyAccountName,
+                counterpartyAccountNumber,
                 timestamp,
                 amount,
                 finalBalance,
@@ -86,8 +86,8 @@ public class MoneyTransaction {
     public MoneyTransactionExportDto toExportDto(final String accountName, final String currency) {
         return new MoneyTransactionExportDto(
                 accountName,
-                counterpartAccountName,
-                counterpartAccountNumber,
+                counterpartyAccountName,
+                counterpartyAccountNumber,
                 timestamp,
                 amount,
                 finalBalance,

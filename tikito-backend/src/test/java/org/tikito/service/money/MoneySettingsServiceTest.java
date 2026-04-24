@@ -19,8 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class MoneySettingsServiceTest {
     final MoneyTransactionImportSettings.MoneyTransactionImportSettingsBuilder settingsBuilder = MoneyTransactionImportSettings.builder()
             .amountColumnIndex(0)
-            .counterpartAccountNameColumnIndex(1)
-            .counterpartAccountNumberColumnIndex(2)
+            .counterpartyAccountNameColumnIndex(1)
+            .counterpartyAccountNumberColumnIndex(2)
             .debitCreditColumnIndex(3)
             .debitCreditColumnCreditIndication("Credit")
             .timestampColumnIndex(4)
@@ -35,8 +35,8 @@ class MoneySettingsServiceTest {
         final MoneyTransactionImportSettings settings = settingsBuilder.build();
         final MoneyTransactionImportLine line = applySettingsGetFirst(settings, toLine(lineBuilder));
 
-        assertEquals(lineBuilder.getCounterpartAccountNumber(), line.getCounterpartAccountNumber());
-        assertEquals(lineBuilder.getCounterpartAccountName(), line.getCounterpartAccountName());
+        assertEquals(lineBuilder.getCounterpartyAccountNumber(), line.getCounterpartyAccountNumber());
+        assertEquals(lineBuilder.getCounterpartyAccountName(), line.getCounterpartyAccountName());
         assertEquals(lineBuilder.getFinalBalance(), line.getFinalBalance());
         assertEquals(lineBuilder.getDescription(), line.getDescription());
     }
@@ -112,8 +112,8 @@ class MoneySettingsServiceTest {
     private List<List<String>> toLine(final MoneyImportLineBuilder lineBuilder) {
         final List<String> list = new ArrayList<>();
         list.add(Double.toString(lineBuilder.getAmount()));
-        list.add(lineBuilder.getCounterpartAccountName());
-        list.add(lineBuilder.getCounterpartAccountNumber());
+        list.add(lineBuilder.getCounterpartyAccountName());
+        list.add(lineBuilder.getCounterpartyAccountNumber());
         list.add(lineBuilder.getDebitCredit());
         list.add(lineBuilder.getTimestamp());
         list.add(lineBuilder.getCurrency());

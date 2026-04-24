@@ -153,8 +153,8 @@ class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
         transaction.setCurrencyId(CURRENCY_EURO_ID);
         transaction.setDescription(description);
         transaction.setTimestamp(Instant.now());
-        transaction.setCounterpartAccountName(TestUtil.randomString(5, 10));
-        transaction.setCounterpartAccountNumber(TestUtil.randomIBAN());
+        transaction.setCounterpartyAccountName(TestUtil.randomString(5, 10));
+        transaction.setCounterpartyAccountNumber(TestUtil.randomIBAN());
         transaction.setFinalBalance(TestUtil.randomDouble(100, 1000));
         return moneyTransactionRepository.save(transaction);
     }

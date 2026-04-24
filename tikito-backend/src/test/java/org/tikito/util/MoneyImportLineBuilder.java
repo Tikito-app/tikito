@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 public class MoneyImportLineBuilder {
-    private String counterpartAccountNumber;
-    private String counterpartAccountName;
+    private String counterpartyAccountNumber;
+    private String counterpartyAccountName;
     private String timestamp;
     private String debitCredit;
     private String currency;
@@ -17,8 +17,8 @@ public class MoneyImportLineBuilder {
     private String description;
 
     public MoneyImportLineBuilder withRandom() {
-        counterpartAccountNumber = TestUtil.randomIBAN();
-        counterpartAccountName = TestUtil.randomString(5, 10);
+        counterpartyAccountNumber = TestUtil.randomIBAN();
+        counterpartyAccountName = TestUtil.randomString(5, 10);
         timestamp = "2025" + TestUtil.randomInt(10, 12) + TestUtil.randomInt(10, 27);
         debitCredit = TestUtil.randomBool() ? "Debit" : "Credit";
         currency = "EUR";
@@ -29,13 +29,13 @@ public class MoneyImportLineBuilder {
         return this;
     }
 
-    public MoneyImportLineBuilder setCounterpartAccountNumber(final String counterpartAccountNumber) {
-        this.counterpartAccountNumber = counterpartAccountNumber;
+    public MoneyImportLineBuilder setCounterpartyAccountNumber(final String counterpartyAccountNumber) {
+        this.counterpartyAccountNumber = counterpartyAccountNumber;
         return this;
     }
 
-    public MoneyImportLineBuilder setCounterpartAccountName(final String counterpartAccountName) {
-        this.counterpartAccountName = counterpartAccountName;
+    public MoneyImportLineBuilder setCounterpartyAccountName(final String counterpartyAccountName) {
+        this.counterpartyAccountName = counterpartyAccountName;
         return this;
     }
 

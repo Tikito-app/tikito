@@ -2,8 +2,8 @@ package org.tikito.service.importer.money;
 
 public final class CustomMoneyImportHeaderName {
     public static final String AMOUNT = "amount";
-    public static final String COUNTERPART_ACCOUNT_NAME = "counterpart-account-name";
-    public static final String COUNTERPART_ACCOUNT_NUMBER = "counterpart-account-number";
+    public static final String COUNTERPARTY_ACCOUNT_NAME = "counterparty-account-name";
+    public static final String COUNTERPARTY_ACCOUNT_NUMBER = "counterparty-account-number";
     public static final String DEBIT_CREDIT = "debit-credit";
     public static final String TIMESTAMP = "timestamp";
     public static final String CURRENCY = "currency";

@@ -70,14 +70,14 @@ public final class MoneySettingsService {
     }
 
     private static void applyAccountName(final MoneyTransactionImportSettings settings, final MoneyTransactionImportLine line) {
-        if (settings.getCounterpartAccountNameColumnIndex() != -1) {
-            line.setCounterpartAccountName(line.getCells().get(settings.getCounterpartAccountNameColumnIndex()));
+        if (settings.getCounterpartyAccountNameColumnIndex() != -1) {
+            line.setCounterpartyAccountName(line.getCells().get(settings.getCounterpartyAccountNameColumnIndex()));
         }
     }
 
     private static void applyAccountNumber(final MoneyTransactionImportSettings settings, final MoneyTransactionImportLine line) {
-        if (settings.getCounterpartAccountNumberColumnIndex() != -1) {
-            line.setCounterpartAccountNumber(line.getCells().get(settings.getCounterpartAccountNumberColumnIndex()));
+        if (settings.getCounterpartyAccountNumberColumnIndex() != -1) {
+            line.setCounterpartyAccountNumber(line.getCells().get(settings.getCounterpartyAccountNumberColumnIndex()));
         }
     }
 

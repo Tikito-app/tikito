@@ -13,6 +13,7 @@ import {MoneyHolding} from "../dto/money-holding";
 import {DateRange} from "../dto/date-range";
 import moment from "moment";
 import {HistoricalBudgetValue} from "../dto/money/historical-budget-value";
+import {Util} from "../util";
 
 @Injectable({
   providedIn: 'root'
@@ -69,8 +70,8 @@ export class MoneyApi {
         startDate: startDate,
         endDate: endDate,
         budgeted: budgeted,
-        dateRange: dateRange,
-        dateRangeAmount: dateRangeAmount,
+        dateRange: Util.emptyToNull(dateRange),
+        dateRangeAmount: Util.emptyToNull(dateRangeAmount),
       }));
   }
 

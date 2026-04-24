@@ -241,7 +241,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
   }
 
   generateOtherGroupsByName() {
-    // now put all the non-grouped values in it by the counterpart name
+    // now put all the non-grouped values in it by the counterparty name
     this
       .allTransactions
       .filter(value => value.groupId == null || value.budgeted != null)

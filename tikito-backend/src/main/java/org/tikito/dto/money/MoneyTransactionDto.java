@@ -16,8 +16,8 @@ public class MoneyTransactionDto {
     private Long id;
     private long userId;
     private long accountId;
-    private String counterpartAccountName;
-    private String counterpartAccountNumber;
+    private String counterpartyAccountName;
+    private String counterpartyAccountNumber;
     private Instant timestamp;
     private double amount;
     private Double finalBalance;
@@ -28,14 +28,14 @@ public class MoneyTransactionDto {
     private double exchangeRate;
 
     public static String getUniqueKey(final MoneyTransaction transaction) {
-        return transaction.getCounterpartAccountNumber() + "#" +
+        return transaction.getCounterpartyAccountNumber() + "#" +
                 LocalDate.ofInstant(transaction.getTimestamp(), ZoneOffset.UTC) + "#" +
                 transaction.getAmount() + "#" +
                 transaction.getCurrencyId();
     }
 
     public static String getUniqueKey(final MoneyTransactionImportLine line) {
-        return line.getCounterpartAccountNumber() + "#" +
+        return line.getCounterpartyAccountNumber() + "#" +
                 LocalDate.ofInstant(line.getTimestamp(), ZoneOffset.UTC) + "#" +
                 line.getAmount() + "#" +
                 line.getCurrencyId();

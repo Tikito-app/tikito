@@ -30,8 +30,8 @@ public class CustomMoneyFileParser extends MoneyTransactionFileParser {
     public MoneyTransactionImportSettings getSettings() {
         return new MoneyTransactionImportSettings(
                 getHeader(AMOUNT),
-                getHeader(COUNTERPART_ACCOUNT_NAME),
-                getHeader(COUNTERPART_ACCOUNT_NUMBER),
+                getHeader(COUNTERPARTY_ACCOUNT_NAME),
+                getHeader(COUNTERPARTY_ACCOUNT_NUMBER),
                 getHeader(DEBIT_CREDIT),
                 debitIndication,
                 getHeader(TIMESTAMP),

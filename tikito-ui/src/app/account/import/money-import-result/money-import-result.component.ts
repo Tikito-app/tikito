@@ -54,7 +54,7 @@ export class MoneyImportResultComponent implements OnInit {
   @Input()
   transactions: MoneyTransactionImportLine[];
 
-  displayedColumns: string[] = ['row', 'timestamp', 'counterpart-account-name', 'counterpart-account-number', 'amount', 'description', 'exchange-rate', 'failed-reason'];
+  displayedColumns: string[] = ['row', 'timestamp', 'counterparty-account-name', 'counterparty-account-number', 'amount', 'description', 'exchange-rate', 'failed-reason'];
   dataSource: MatTableDataSource<MoneyTransactionImportLine>;
 
   @ViewChild(PaginatorComponent) paginator: PaginatorComponent;

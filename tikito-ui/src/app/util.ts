@@ -279,4 +279,8 @@ export class Util {
     }
     return value;
   }
+
+  static emptyToNull(value: any): any {
+    return value == '' ? null : value;
+  }
 }
