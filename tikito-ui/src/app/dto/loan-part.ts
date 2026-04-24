@@ -12,6 +12,6 @@ export class LoanPart {
   remainingAmount: number;
   currencyId: number;
   loanType: LoanType;
-  interests: LoanInterest[];
+  interests: LoanInterest[] = [];
   periodicPayment: number;
 }

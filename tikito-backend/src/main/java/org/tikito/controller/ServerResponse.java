@@ -14,7 +14,8 @@ public class ServerResponse<T> {
     private String message;
     private T data;
 
-    public ServerResponse(final T data) {
+    public ServerResponse(final String error, final T data) {
+        this.error = error;
         this.data = data;
     }
 

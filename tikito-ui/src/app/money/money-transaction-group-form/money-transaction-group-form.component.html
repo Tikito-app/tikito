@@ -70,7 +70,7 @@
 
         <div *ngIf="nameInEdit">
           <button [attr.data-cy]="'save-button'"  mat-raised-button color="primary" (click)="onSaveButtonClicked(); nameInEdit = false">{{'save' | translatePipe}}</button>&nbsp;
-          <button [attr.data-cy]="'cancel-button'"  mat-raised-button color="secundary" (click)="nameInEdit = false">{{'cancel' | translatePipe}}</button>
+          <button [attr.data-cy]="'cancel-button'"  mat-raised-button color="secondary" (click)="nameInEdit = false">{{'cancel' | translatePipe}}</button>
           <button [attr.data-cy]="'delete-button'" style="float: right" mat-button color="warn" (click)="onDeleteButtonClicked();">{{'delete' | translatePipe}}</button>
         </div>
 

@@ -18,8 +18,10 @@
         <ng-container *ngIf="nameInEdit">
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{'loan/name' | translatePipe}}</mat-label>
-            <input type="text" [attr.data-cy]="'name'" matInput formControlName="name" >
-            <mat-icon matSuffix>name</mat-icon>
+            <input type="text" [attr.data-cy]="'name'" matInput formControlName="name" required>
+            <mat-error *ngIf="form.get('name')?.hasError('required')">
+              {{'loan/form/name-required' | translatePipe}}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field class="full-width">
@@ -33,7 +35,10 @@
 
           <mat-form-field class="full-width">
             <mat-label>{{ 'loan/date-range' | translatePipe }}</mat-label>
-            <mat-select formControlName="dateRange" [attr.data-cy]="'date-range'">
+            <mat-error *ngIf="form.get('dateRange')?.hasError('required')">
+              {{'loan/form/date-range-required' | translatePipe}}
+            </mat-error>
+            <mat-select formControlName="dateRange" [attr.data-cy]="'date-range'" required>
               @for (dateRange of Util.getBudgetDateRanges(); track dateRange) {
                 <mat-option [value]="dateRange">{{ dateRange }}</mat-option>
               }
@@ -42,8 +47,8 @@
         </ng-container>
 
         <div *ngIf="nameInEdit">
-          <button [attr.data-cy]="'save-button'"  mat-raised-button color="primary" (click)="onSaveButtonClicked(); nameInEdit = false">{{'save' | translatePipe}}</button>&nbsp;
-          <button [attr.data-cy]="'cancel-button'"  mat-raised-button color="secundary" (click)="nameInEdit = false">{{'cancel' | translatePipe}}</button>
+          <button [attr.data-cy]="'save-button'"  mat-raised-button color="primary" (click)="onSaveButtonClicked();">{{'save' | translatePipe}}</button>&nbsp;
+          <button [attr.data-cy]="'cancel-button'"  mat-raised-button color="secondary" (click)="nameInEdit = false">{{'cancel' | translatePipe}}</button>
           <button [attr.data-cy]="'delete-button'" style="float: right" mat-button color="warn" (click)="onDeleteButtonClicked();">{{'delete' | translatePipe}}</button>
         </div>
 

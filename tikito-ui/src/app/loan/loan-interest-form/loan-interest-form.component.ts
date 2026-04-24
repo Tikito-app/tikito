@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../service/auth.service";
 import {LoanInterest} from "../../dto/loan-interest";
 import {MatButton} from "@angular/material/button";
-import {MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
+import {MatError, MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {provideNativeDateAdapter} from "@angular/material/core";
@@ -30,7 +30,8 @@ import {DialogService} from "../../service/dialog.service";
     MatHint,
     MatSuffix,
     NgIf,
-    TranslatePipe
+    TranslatePipe,
+    MatError
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './loan-interest-form.component.html',
@@ -60,9 +61,9 @@ export class LoanInterestFormComponent implements OnInit {
 
   reset() {
     let formGroup: any = {
-      startDate: new FormControl(''),
-      endDate: new FormControl(''),
-      amount: new FormControl(''),
+      startDate: new FormControl('', Validators.required),
+      endDate: new FormControl('', Validators.required),
+      amount: new FormControl('', Validators.required),
     };
     this.form = new FormGroup(formGroup);
 
@@ -72,6 +73,9 @@ export class LoanInterestFormComponent implements OnInit {
   }
 
   onSaveButtonClicked() {
+    if (this.form.invalid) {
+      return;
+    }
     this.interest.startDate = Util.toLocalDate(this.form.value['startDate']);
     this.interest.endDate = Util.toLocalDate(this.form.value['endDate']);
     this.interest.amount = this.form.value['amount'];

@@ -7,6 +7,9 @@
       <mat-icon *ngIf="form.value['startDate']" matIconSuffix (click)="form.controls['startDate'].setValue(null);" class="clickable">close</mat-icon>
       <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
       <mat-datepicker #pickerStartDate></mat-datepicker>
+      <mat-error *ngIf="form.get('startDate')?.hasError('required')">
+        {{'loan/form/start-date-required' | translatePipe}}
+      </mat-error>
     </mat-form-field>
     <mat-form-field class="half-width">
       <mat-label>{{'end-date' | translatePipe}}</mat-label>
@@ -15,17 +18,23 @@
       <mat-icon *ngIf="form.value['endDate']" matIconSuffix (click)="form.controls['endDate'].setValue(null);" class="clickable">close</mat-icon>
       <mat-datepicker-toggle matIconSuffix [for]="pickerEndDate"></mat-datepicker-toggle>
       <mat-datepicker #pickerEndDate></mat-datepicker>
+      <mat-error *ngIf="form.get('endDate')?.hasError('required')">
+        {{'loan/form/end-date-required' | translatePipe}}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill" style="width: 50%">
       <mat-label>{{'loan/part/interest/amount' | translatePipe}}</mat-label>
-      <input type="text" [attr.data-cy]="'amount'" matInput formControlName="amount" >
-      <mat-icon matSuffix>amount</mat-icon>
+      <input type="text" [attr.data-cy]="'amount'" matInput formControlName="amount" required>
+
+      <mat-error *ngIf="form.get('amount')?.hasError('required')">
+        {{'loan/form/amount-required' | translatePipe}}
+      </mat-error>
     </mat-form-field>
   </ng-container>
   <br/>
   <button [attr.data-cy]="'save-button'" mat-raised-button color="primary" (click)="onSaveButtonClicked();">{{'save' | translatePipe}}</button>&nbsp;
-  <button [attr.data-cy]="'cancel-button'" mat-raised-button color="secundary" (click)="onCancelButtonClicked()">{{'cancel' | translatePipe}}</button>
+  <button [attr.data-cy]="'cancel-button'" mat-raised-button color="secondary" (click)="onCancelButtonClicked()">{{'cancel' | translatePipe}}</button>
   <button [attr.data-cy]="'delete-button'" style="float: right" mat-button color="warn" (click)="onDeleteButtonClicked();">{{'delete' | translatePipe}}</button>
 
 </form>

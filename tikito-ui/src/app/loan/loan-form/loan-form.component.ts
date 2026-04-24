@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton, MatFabButton} from "@angular/material/button";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
-import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
+import {MatError, MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
@@ -25,6 +25,7 @@ import {LoanPartListComponent} from "../loan-part-list/loan-part-list.component"
 import {MoneyTransactionGroupType} from "../../dto/money-transaction-group-type";
 import {MatSelect} from "@angular/material/select";
 import {DialogService} from "../../service/dialog.service";
+import {DateRange} from "../../dto/date-range";
 
 @Component({
   selector: 'app-loan-form',
@@ -47,7 +48,8 @@ import {DialogService} from "../../service/dialog.service";
     LoanPartListComponent,
     MatOption,
     MatSelect,
-    TranslatePipe
+    TranslatePipe,
+    MatError
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './loan-form.component.html',
@@ -85,9 +87,9 @@ export class LoanFormComponent implements OnInit {
 
   reset() {
     let group: any = {
-      name: new FormControl(''),
+      name: new FormControl('', Validators.required),
       groupIds: new FormControl(''),
-      dateRange: new FormControl(''),
+      dateRange: new FormControl(DateRange.MONTH, Validators.required),
     };
     this.form = new FormGroup(group);
 
@@ -108,6 +110,9 @@ export class LoanFormComponent implements OnInit {
   }
 
   onSaveButtonClicked() {
+    if (this.form.invalid) {
+      return;
+    }
     this.api.createOrUpdateLoan(
       this.loanId,
       this.form.value.name,

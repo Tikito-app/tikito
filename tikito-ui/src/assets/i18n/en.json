@@ -297,6 +297,7 @@
   "loan/date-range": "Date range",
   "loan/name": "Name",
   "loan/graph": "Graph",
+  "loan/graph/no-values": "There are no values yet, you need to configure the loan",
   "loan/edit": "Edit loan",
   "loan/transactions": "Transactions",
   "loan/parts": "Loan parts",
@@ -308,9 +309,16 @@
   "loan/part/amount": "Amount",
   "loan/part/remaining-amount": "Remaining amount",
   "loan/part/repayment-amount": "Repayment amount",
-  "loan/part/interest/amount": "Interest %",
+  "loan/part/interest/amount": "Interest percentage",
   "loan/part/create": "Create loan part",
   "loan/part/money-transaction-groups": "Money groups",
+  "loan/form/name-required": "Name is required",
+  "loan/form/date-range-required": "Date range is required",
+  "loan/form/amount-required": "Amount is required",
+  "loan/form/start-date-required": "Start date is required",
+  "loan/form/end-date-required": "End date is required",
+  "loan/form/loan-type-required": "Loan type is required",
+  "loan/form/currency-required": "Currency is required",
 
 
 

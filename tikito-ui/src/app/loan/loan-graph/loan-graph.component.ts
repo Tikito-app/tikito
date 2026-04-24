@@ -7,12 +7,14 @@ import {Util} from "../../util";
 import moment from "moment";
 import {NgxEchartsDirective, provideEchartsCore} from "ngx-echarts";
 import * as echarts from "echarts/core";
+import {TranslatePipe} from "../../service/translate-pipe.pipe";
 
 @Component({
   selector: 'app-loan-graph',
   standalone: true,
   imports: [
-    NgxEchartsDirective
+    NgxEchartsDirective,
+    TranslatePipe
   ],
   providers: [
     provideEchartsCore({echarts}),
@@ -44,6 +46,9 @@ export class LoanGraphComponent implements OnInit {
   }
 
   resetGraph() {
+    if(this.loanValues.length == 0) {
+      return ;
+    }
     let firstDate = this.loanValues[0].date;
     let lastDate = this.loanValues[this.loanValues.length - 1].date;
     let dateRangeFormat = this.getDateRangeFormat();

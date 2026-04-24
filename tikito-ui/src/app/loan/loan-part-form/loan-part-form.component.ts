@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton, MatFabButton} from "@angular/material/button";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
-import {MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
+import {MatError, MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
@@ -57,7 +57,8 @@ import {LoanType} from "../../dto/loan-type";
     MatDatepickerToggle,
     MatHint,
     MatSuffix,
-    TranslatePipe
+    TranslatePipe,
+    MatError
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './loan-part-form.component.html',
@@ -97,17 +98,16 @@ export class LoanPartFormComponent implements OnInit {
 
   reset() {
     let group: any = {
-      name: new FormControl(''),
-      startDate: new FormControl(''),
-      endDate: new FormControl(''),
-      currencyId: new FormControl(''),
-      amount: new FormControl(''),
-      loanType: new FormControl(''),
-      groupIds: new FormControl(''),
+      name: new FormControl('', Validators.required),
+      startDate: new FormControl('', Validators.required),
+      endDate: new FormControl('', Validators.required),
+      currencyId: new FormControl('', Validators.required),
+      amount: new FormControl('', Validators.required),
+      loanType: new FormControl('', Validators.required),
       repaymentAmount: new FormControl(''),
     };
     this.form = new FormGroup(group);
-    this.form.controls['currencyId'].setValue(UserPreferenceService.get<string>(UserPreference.DEFAULT_CURRENCY, 'EUR'));
+    this.form.controls['currencyId'].setValue(UserPreferenceService.get<string>(UserPreference.DEFAULT_CURRENCY, ''));
 
     this.moneyApi.getMoneyTransactionGroups().subscribe(groups => {
       this.groups = groups.filter(group => group.groupTypes.includes(MoneyTransactionGroupType.LOAN));
@@ -132,6 +132,9 @@ export class LoanPartFormComponent implements OnInit {
   }
 
   onSaveButtonClicked() {
+    if (this.form.invalid) {
+      return;
+    }
     this.api.createOrUpdateLoanPart(
       this.loanPartId,
       this.loan.id,
@@ -181,7 +184,11 @@ export class LoanPartFormComponent implements OnInit {
   }
 
   interestCallback(interest: LoanInterest | null) {
-    this.onSaveButtonClicked();
+    if(interest != null) {
+      this.onSaveButtonClicked();
+    } else {
+      this.loanPart.interests.pop()
+    }
     this.interestInEdit = null;
   }
 

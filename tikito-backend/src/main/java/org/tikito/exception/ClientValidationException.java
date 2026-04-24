@@ -1,4 +1,4 @@
-package org.tikito.controller;
+package org.tikito.exception;
 
 public class ClientValidationException extends RuntimeException {
 }

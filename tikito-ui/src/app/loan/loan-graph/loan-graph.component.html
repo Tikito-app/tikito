@@ -1,3 +1,6 @@
 <div style="height: 700px;">
+  @if (loanValues.length == 0) {
+    {{'loan/graph/no-values' | translatePipe}}
+  }
   <div echarts [options]="chartOption" class="demo-chart" style="height: 100%"></div>
 </div>

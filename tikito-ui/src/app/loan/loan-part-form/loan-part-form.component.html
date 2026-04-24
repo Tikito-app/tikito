@@ -23,23 +23,30 @@
         <ng-container *ngIf="nameInEdit">
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{ 'loan/part/name' | translatePipe }}</mat-label>
-            <input type="text" [attr.data-cy]="'name'" matInput formControlName="name">
-            <mat-icon matSuffix>name</mat-icon>
+            <input type="text" [attr.data-cy]="'name'" matInput formControlName="name" required>
+            <mat-error *ngIf="form.get('name')?.hasError('required')">
+              {{'loan/form/name-required' | translatePipe}}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{ 'loan/part/amount' | translatePipe }}</mat-label>
-            <input type="text" [attr.data-cy]="'amount'" matInput formControlName="amount">
-            <mat-icon matSuffix>amount</mat-icon>
+            <input type="text" [attr.data-cy]="'amount'" matInput formControlName="amount" required>
+            <mat-error *ngIf="form.get('amount')?.hasError('required')">
+              {{'loan/form/amount-required' | translatePipe}}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field class="full-width">
             <mat-label>{{ 'loan/part/loan-type' | translatePipe }}</mat-label>
-            <mat-select formControlName="loanType" [attr.data-cy]="'groupType'">
+            <mat-select formControlName="loanType" [attr.data-cy]="'loanType'" required>
               @for (loanType of Util.getLoanTypes(); track loanType) {
                 <mat-option [value]="loanType">{{ loanType }}</mat-option>
               }
             </mat-select>
+            <mat-error *ngIf="form.get('loanType')?.hasError('required')">
+              {{'loan/form/loan-type-required' | translatePipe}}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="full-width" *ngIf="form.value.loanType == LoanType.MORTGAGE_LINEAR">
@@ -57,6 +64,9 @@
             </mat-icon>
             <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
             <mat-datepicker #pickerStartDate></mat-datepicker>
+            <mat-error *ngIf="form.get('startDate')?.hasError('required')">
+              {{'loan/form/start-date-required' | translatePipe}}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field class="half-width">
@@ -68,24 +78,30 @@
             </mat-icon>
             <mat-datepicker-toggle matIconSuffix [for]="pickerEndDate"></mat-datepicker-toggle>
             <mat-datepicker #pickerEndDate></mat-datepicker>
+            <mat-error *ngIf="form.get('endDate')?.hasError('required')">
+              {{'loan/form/end-date-required' | translatePipe}}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{ 'currency' | translatePipe }}</mat-label>
-            <mat-select formControlName="currencyId" [attr.data-cy]="'currency'">
+            <mat-select formControlName="currencyId" [attr.data-cy]="'currency'" required>
               @for (currency of CacheService.getCurrencies(); track currency) {
                 <mat-option [value]="currency.id">{{ 'currency/' + currency.currentIsin | translatePipe }}</mat-option>
               }
             </mat-select>
+            <mat-error *ngIf="form.get('currencyId')?.hasError('required')">
+              {{'loan/form/currency-required' | translatePipe}}
+            </mat-error>
           </mat-form-field>
         </ng-container>
 
 
         <div *ngIf="nameInEdit">
           <button [attr.data-cy]="'save-button'" mat-raised-button color="primary"
-                  (click)="onSaveButtonClicked(); nameInEdit = false">{{ 'save' | translatePipe }}
+                  (click)="onSaveButtonClicked();">{{ 'save' | translatePipe }}
           </button>&nbsp;
-          <button [attr.data-cy]="'cancel-button'" mat-raised-button color="secundary"
+          <button [attr.data-cy]="'cancel-button'" mat-raised-button color="secondary"
                   (click)="nameInEdit = false">{{ 'cancel' | translatePipe }}
           </button>
           <button [attr.data-cy]="'delete-button'" style="float: right" mat-button color="warn"
