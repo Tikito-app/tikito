@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
-import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatIcon} from "@angular/material/icon";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {NgIf} from "@angular/common";
 import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
@@ -26,13 +25,13 @@ import {CacheService} from "../../service/cache-service";
     ReactiveFormsModule,
     MatLabel,
     MatFormField,
-    MatIcon,
     NgIf,
     MatInput,
     MatButton,
     MatOption,
     MatSelect,
-    TranslatePipe
+    TranslatePipe,
+    MatError
   ],
   templateUrl: './account-form.component.html',
   styleUrl: './account-form.component.scss'
@@ -56,10 +55,10 @@ export class AccountFormComponent implements OnInit {
 
   reset() {
     let group: any = {
-      name: new FormControl(''),
-      accountNumber: new FormControl(''),
-      accountType: new FormControl(''),
-      currencyId: new FormControl(''),
+      name: new FormControl('', Validators.required),
+      accountNumber: new FormControl('', Validators.required),
+      accountType: new FormControl('', Validators.required),
+      currencyId: new FormControl('', Validators.required),
     };
     this.form = new FormGroup(group);
 
@@ -74,6 +73,9 @@ export class AccountFormComponent implements OnInit {
   }
 
   onSaveButtonClicked() {
+    if(this.form.invalid) {
+      return ;
+    }
     this.api.createOrUpdateAccount(
       this.accountId,
       this.form.value.name,

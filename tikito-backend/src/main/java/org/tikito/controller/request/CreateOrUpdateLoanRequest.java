@@ -13,12 +13,13 @@ import java.util.Set;
 @Setter
 public class CreateOrUpdateLoanRequest extends CreateOrUpdateRequest {
     private Long id;
-    private long loanId;
+    @NotNull
+    private Long loanId;
     @NotNull
     private DateRange dateRange;
     @NotBlank
     private String name;
-    private Set<Long> groupIds = new HashSet<>();
+    private Set<@NotNull Long> groupIds = new HashSet<>();
 
     public boolean isNew() {
         return id == null || id == 0;

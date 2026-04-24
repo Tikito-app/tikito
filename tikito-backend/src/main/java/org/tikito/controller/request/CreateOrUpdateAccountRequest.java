@@ -15,5 +15,6 @@ public class CreateOrUpdateAccountRequest extends CreateOrUpdateRequest {
     private String accountNumber;
     @NotNull
     private AccountType accountType;
-    private long currencyId;
+    @NotNull
+    private Long currencyId;
 }

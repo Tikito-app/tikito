@@ -12,13 +12,17 @@
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{ 'user-account/name' | translatePipe }}</mat-label>
             <input type="text" [attr.data-cy]="'name'" matInput formControlName="name">
-            <mat-icon matSuffix>name</mat-icon>
+            <mat-error *ngIf="form.get('name')?.hasError('required')">
+              {{'user-account/form/name-required' | translatePipe}}
+            </mat-error>
           </mat-form-field>
           <br/>
           <mat-form-field appearance="fill">
             <mat-label>{{ 'user-account/account-number' | translatePipe }}</mat-label>
             <input type="text" [attr.data-cy]="'account-number'" matInput formControlName="accountNumber">
-            <mat-icon matSuffix>account-number</mat-icon>
+            <mat-error *ngIf="form.get('accountNumber')?.hasError('required')">
+              {{'user-account/form/account-number-required' | translatePipe}}
+            </mat-error>
           </mat-form-field>
           &nbsp;
           <mat-form-field>
@@ -28,15 +32,21 @@
                 <mat-option [value]="accountType">{{ 'account/type/' + accountType | translatePipe }}</mat-option>
               }
             </mat-select>
+            <mat-error *ngIf="form.get('accountType')?.hasError('required')">
+              {{'user-account/form/account-type-required' | translatePipe}}
+            </mat-error>
           </mat-form-field>
           &nbsp;
           <mat-form-field>
             <mat-label>{{ 'currency' | translatePipe }}</mat-label>
-            <mat-select formControlName="currencyId" [attr.data-cy]="'currency'">
+            <mat-select formControlName="currencyId" [attr.data-cy]="'currency'" required>
               @for (currency of CacheService.getCurrencies(); track currency) {
                 <mat-option [value]="currency.id">{{ 'currency/' + currency.currentIsin | translatePipe }}</mat-option>
               }
             </mat-select>
+            <mat-error *ngIf="form.get('currencyId')?.hasError('required')">
+              {{'user-account/form/currency-required' | translatePipe}}
+            </mat-error>
           </mat-form-field>
 
         </ng-container>
