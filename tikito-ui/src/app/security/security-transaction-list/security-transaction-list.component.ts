@@ -44,7 +44,6 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
     MatHeaderCellDef,
     MatCellDef,
     MatRowDef,
-    NgIf,
     PaginatorComponent,
     DatePipe,
     CurrencyComponent,
@@ -111,7 +110,7 @@ export class SecurityTransactionListComponent implements OnInit {
       .then((doDelete) => {
         if (doDelete) {
           this.api.deleteSecurityTransaction(transaction.id).subscribe(() => this.dialogService.snackbar(
-            this.translateService.translate('security/holding/deleted-message'),
+            this.translateService.translate('money/transaction/deleted-message'),
             this.translateService.translate('close')));
         }
       })
