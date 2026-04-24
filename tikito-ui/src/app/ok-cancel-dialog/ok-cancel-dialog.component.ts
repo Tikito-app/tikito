@@ -3,7 +3,6 @@ import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
 import {CommonModule} from '@angular/common';
-import {TranslateModule} from "@ngx-translate/core";
 import {MatBadgeModule} from "@angular/material/badge";
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -22,7 +21,6 @@ export interface MyData {
     MatMenuModule,
     MatIconModule,
     CommonModule,
-    TranslateModule,
     MatBadgeModule,
     MatFormFieldModule,
     MatInputModule,

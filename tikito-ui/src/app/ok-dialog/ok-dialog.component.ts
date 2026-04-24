@@ -4,7 +4,6 @@ import {MyData} from "../ok-cancel-dialog/ok-cancel-dialog.component";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
 import {CommonModule} from '@angular/common';
-import {TranslateModule} from "@ngx-translate/core";
 import {MatBadgeModule} from "@angular/material/badge";
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -18,7 +17,6 @@ import {TranslatePipe} from "../service/translate-pipe.pipe";
     MatMenuModule,
     MatIconModule,
     CommonModule,
-    TranslateModule,
     MatBadgeModule,
     MatFormFieldModule,
     MatInputModule,

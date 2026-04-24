@@ -2,7 +2,6 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {CommonModule, DOCUMENT} from '@angular/common'
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
-import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {HttpClient} from "@angular/common/http";
 import {HttpRequestData} from "../../dto/http-request-data";
 import {HttpService} from "../../service/http.service";
@@ -10,7 +9,6 @@ import {Util} from "../../util";
 import {MatCardModule} from "@angular/material/card";
 import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
-import {I18nModule} from "../../i18n/i18n.module";
 import {MatButtonModule} from "@angular/material/button";
 import {MatListModule} from "@angular/material/list";
 import {MatOptionModule} from "@angular/material/core";
@@ -29,18 +27,16 @@ import {TranslatePipe} from "../../service/translate-pipe.pipe";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   imports: [CommonModule, MatCardModule,
-    TranslateModule,
     ReactiveFormsModule,
     MatInputModule,
     MatIconModule,
-    //HttpClientModule,
-    I18nModule,
     MatButtonModule,
     MatListModule,
     MatOptionModule,
     MatSelectModule,
     MatSidenavModule,
-    MatToolbarModule, TranslatePipe]
+    MatToolbarModule,
+    TranslatePipe],
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
@@ -59,7 +55,6 @@ export class LoginComponent implements OnInit {
               private route: ActivatedRoute,
               private authService: AuthService,
               private envService: EnvService,
-              private translateService: TranslateService,
               private httpClient: HttpClient) {
   }
 

@@ -3,7 +3,6 @@ import {RouterOutlet} from '@angular/router';
 import {TopHeaderComponent} from "./top-header/top-header.component";
 import {FormsModule} from "@angular/forms";
 import {CacheService} from "./service/cache-service";
-import {I18nModule} from "./i18n/i18n.module";
 import {UserPreferenceService} from "./service/user-preference-service";
 
 @Component({
@@ -12,8 +11,7 @@ import {UserPreferenceService} from "./service/user-preference-service";
   imports: [
     RouterOutlet,
     TopHeaderComponent,
-    FormsModule,
-    I18nModule],
+    FormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 
