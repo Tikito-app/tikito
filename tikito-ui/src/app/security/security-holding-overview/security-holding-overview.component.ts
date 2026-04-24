@@ -75,7 +75,6 @@ export class SecurityHoldingOverviewComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private dialogService: DialogService,
-              private translate: TranslatePipe,
               private authService: AuthService,
               private api: SecurityApi) {
   }

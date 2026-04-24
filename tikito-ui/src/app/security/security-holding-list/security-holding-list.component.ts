@@ -78,7 +78,8 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
     MatCardHeader
   ],
   templateUrl: './security-holding-list.component.html',
-  styleUrl: './security-holding-list.component.scss'
+  styleUrl: './security-holding-list.component.scss',
+  providers: [TranslatePipe]
 })
 export class SecurityHoldingListComponent implements AfterViewInit {
   displayedColumns: string[] = ['security-name', 'security-type', 'position-value', 'isin', 'performance', 'profit-loss', 'options'];

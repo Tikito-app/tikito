@@ -7,10 +7,8 @@ import {UserAccount} from "../../dto/user-account";
 import {HttpRequestData} from "../../dto/http-request-data";
 
 import {MatCardModule} from "@angular/material/card";
-import {TranslateModule} from "@ngx-translate/core";
 import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
-import {I18nModule} from "../../i18n/i18n.module";
 import {MatButtonModule} from "@angular/material/button";
 import {MatListModule} from "@angular/material/list";
 import {MatOptionModule} from "@angular/material/core";
@@ -26,17 +24,16 @@ import {TranslatePipe} from "../../service/translate-pipe.pipe";
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
   imports: [CommonModule, MatCardModule,
-    TranslateModule,
     ReactiveFormsModule,
     MatInputModule,
     MatIconModule,
-    I18nModule,
     MatButtonModule,
     MatListModule,
     MatOptionModule,
     MatSelectModule,
     MatSidenavModule,
-    MatToolbarModule, TranslatePipe]
+    MatToolbarModule,
+    TranslatePipe]
 })
 export class RegisterComponent implements OnInit {
   showPasswordFlag = false;
