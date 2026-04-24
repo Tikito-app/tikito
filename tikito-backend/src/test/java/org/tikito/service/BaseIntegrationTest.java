@@ -219,9 +219,9 @@ public class BaseIntegrationTest extends BaseTest {
         final double v2 = randomDouble(50, 100);
         final double v3 = randomDouble(-150, -100);
         return List.of(
-                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME.minus(35, ChronoUnit.DAYS), account.getCurrencyId(), v1, setFinalBalance ? v1 : null, COUNTERPART_ACCOUNT_NUMBER, COUNTERPART_ACCOUNT_NAME),
-                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME.minus(15, ChronoUnit.DAYS), account.getCurrencyId(), v2, setFinalBalance ? v1 + v2 : null, COUNTERPART_ACCOUNT_NUMBER, COUNTERPART_ACCOUNT_NAME),
-                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME, account.getCurrencyId(), v3, setFinalBalance ? v1 + v2 + v3 : null, COUNTERPART_ACCOUNT_NUMBER, COUNTERPART_ACCOUNT_NAME));
+                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME.minus(35, ChronoUnit.DAYS), account.getCurrencyId(), v1, setFinalBalance ? v1 : null, COUNTERPARTY_ACCOUNT_NUMBER, COUNTERPARTY_ACCOUNT_NAME),
+                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME.minus(15, ChronoUnit.DAYS), account.getCurrencyId(), v2, setFinalBalance ? v1 + v2 : null, COUNTERPARTY_ACCOUNT_NUMBER, COUNTERPARTY_ACCOUNT_NAME),
+                withExistingMoneyTransaction(DEFAULT_USER_ACCOUNT.getId(), account.getId(), NOW_TIME, account.getCurrencyId(), v3, setFinalBalance ? v1 + v2 + v3 : null, COUNTERPARTY_ACCOUNT_NUMBER, COUNTERPARTY_ACCOUNT_NAME));
     }
 
     protected MoneyTransaction withExistingMortgageTransaction(final long loanId, final long groupId, final LocalDate date, final double amount) {
@@ -238,9 +238,9 @@ public class BaseIntegrationTest extends BaseTest {
                                                            final long currencyId,
                                                            final double amount,
                                                            final Double finalBalance,
-                                                           final String counterpartAccountNumber,
-                                                           final String counterpartAccountName) {
-        return moneyTransactionRepository.saveAndFlush(moneyTransaction(userId, accountId, timestamp, currencyId, amount, finalBalance, counterpartAccountNumber, counterpartAccountName, ""));
+                                                           final String counterpartyAccountNumber,
+                                                           final String counterpartyAccountName) {
+        return moneyTransactionRepository.saveAndFlush(moneyTransaction(userId, accountId, timestamp, currencyId, amount, finalBalance, counterpartyAccountNumber, counterpartyAccountName, ""));
     }
 
     protected Loan withExistingLoan() {

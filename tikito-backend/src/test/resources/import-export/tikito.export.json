@@ -75,8 +75,8 @@
       "moneyTransactions": [
         {
           "accountName": "ING",
-          "counterpartAccountName": "Counter part name",
-          "counterpartAccountNumber": "NL12SOMETHING",
+          "counterpartyAccountName": "Counter part name",
+          "counterpartyAccountNumber": "NL12SOMETHING",
           "timestamp": "2024-03-18T13:18:00Z",
           "amount": -200,
           "finalBalance": 40.37,
@@ -85,8 +85,8 @@
         },
         {
           "accountName": "ING",
-          "counterpartAccountName": "Someone via Tikkie",
-          "counterpartAccountNumber": "SOMEThING",
+          "counterpartyAccountName": "Someone via Tikkie",
+          "counterpartyAccountNumber": "SOMEThING",
           "timestamp": "2024-04-18T13:18:00Z",
           "amount": -20,
           "finalBalance": 250.31,

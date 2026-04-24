@@ -48,17 +48,17 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
 
     private void defaultImportCsv(final MoneyImportLineBuilder builder) {
         final String csv = builder.getTimestamp() + ";" +
-                builder.getCounterpartAccountName() + ";" +
+                builder.getCounterpartyAccountName() + ";" +
                 "my-number;" +
-                builder.getCounterpartAccountNumber() + ";" +
+                builder.getCounterpartyAccountNumber() + ";" +
                 "GT;" +
                 builder.getDebitCredit() + ";" +
                 builder.getAmount() + ";" +
                 builder.getTransactionType() + ";" +
                 "notifications;" +
                 builder.getFinalBalance() + ";" +
-                builder.getCounterpartAccountName() + ";" +
-                builder.getCounterpartAccountName() + ";";
+                builder.getCounterpartyAccountName() + ";" +
+                builder.getCounterpartyAccountName() + ";";
         try {
             service.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId(), new MockMultipartFile("Abn.csv", csv.getBytes()), false,
                     Map.of(), "debit", "dd-MM-yyyy", "dd-MM-yyyy", null, ";");
@@ -141,11 +141,11 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
         final AccountDto accountDto = new AccountDto();
         final MoneyTransactionImportLine line = new MoneyTransactionImportLine(0, List.of());
         final List<MoneyTransactionImportLine> lines = new ArrayList<>();
-        line.setCounterpartAccountNumber(" 1234    657 ");
+        line.setCounterpartyAccountNumber(" 1234    657 ");
         line.setTimestamp(Instant.now());
         lines.add(line);
         service.enrichValidateAndMap(accountDto, lines, 0);
-        assertEquals("1234657", line.getCounterpartAccountNumber());
+        assertEquals("1234657", line.getCounterpartyAccountNumber());
     }
 
     void validateResults(final MoneyTransactionImportResultDto result) {
@@ -162,7 +162,7 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
         assertEquals(CURRENCY_EURO_ID, transaction1.getCurrencyId());
         assertEquals(250, transaction1.getAmount());
         assertEquals(250, transaction1.getFinalBalance());
-        assertEquals("NL13INGB0001234567", transaction1.getCounterpartAccountNumber());
+        assertEquals("NL13INGB0001234567", transaction1.getCounterpartyAccountNumber());
 
 
         final Instant expectedTimestamp2 = LocalDateTime.of(2024, 11, 17, 10, 42).toInstant(ZoneOffset.UTC);
@@ -182,7 +182,7 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
         assertEquals(CURRENCY_EURO_ID, transaction.getCurrencyId());
         assertEquals(250, transaction.getAmount());
         assertEquals(250, transaction.getFinalBalance());
-        assertEquals("NL13INGB0001234567", transaction.getCounterpartAccountNumber());
+        assertEquals("NL13INGB0001234567", transaction.getCounterpartyAccountNumber());
         assertEquals("SEPA Overboeking                 IBAN: NL13INGB0001234567        BIC: INGBNL2A                    Naam: Hr Test Person              ", transaction.getDescription());
     }
 

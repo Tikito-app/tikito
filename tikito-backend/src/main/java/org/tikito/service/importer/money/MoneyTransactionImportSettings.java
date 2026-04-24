@@ -12,9 +12,9 @@ public class MoneyTransactionImportSettings {
     @Builder.Default
     private final int amountColumnIndex = -1;
     @Builder.Default
-    private final int counterpartAccountNameColumnIndex = -1;
+    private final int counterpartyAccountNameColumnIndex = -1;
     @Builder.Default
-    private final int counterpartAccountNumberColumnIndex = -1;
+    private final int counterpartyAccountNumberColumnIndex = -1;
     @Builder.Default
     private final int debitCreditColumnIndex = -1;
     private final String debitCreditColumnCreditIndication;

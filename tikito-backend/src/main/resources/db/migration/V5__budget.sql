@@ -11,6 +11,7 @@ create table historical_budget_value(
 
 drop table budget_groups;
 drop table budget;
+drop table budget_account;
 alter table money_transaction drop column budget_id;
 alter table money_transaction_group drop column budget_id;
 delete from money_transaction_group_group_type where group_type = 1;

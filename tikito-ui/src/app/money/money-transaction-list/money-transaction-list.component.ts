@@ -64,7 +64,7 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
   styleUrl: './money-transaction-list.component.scss'
 })
 export class MoneyTransactionListComponent implements OnInit {
-  displayedColumns: string[] = ['timestamp', 'debit-credit', 'counterpart-account-name', 'counterpart-account-number', 'amount', 'group', 'description', 'options'];
+  displayedColumns: string[] = ['timestamp', 'debit-credit', 'counterparty-account-name', 'counterparty-account-number', 'amount', 'group', 'description', 'options'];
   dataSource: MatTableDataSource<MoneyTransaction>;
   moneyTransactions: MoneyTransaction[];
   groupsById: any = {};

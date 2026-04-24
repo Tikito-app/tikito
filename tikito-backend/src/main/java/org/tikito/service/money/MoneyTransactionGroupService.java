@@ -97,7 +97,9 @@ public class MoneyTransactionGroupService implements JobProcessor {
                     .forEach(qualifier -> group.getQualifiers().add(qualifier));
         }
         final MoneyTransactionGroupDto dto = moneyTransactionGroupRepository.saveAndFlush(group).toDto();
-        budgetValueService.generateValues(userId, dto);
+        if(hasBudget(dto)) {
+            budgetValueService.generateValues(userId, dto);
+        }
         return dto;
     }
 
@@ -165,8 +167,8 @@ public class MoneyTransactionGroupService implements JobProcessor {
                 break;
             }
         }
-        if (accountsByAccountNumber.containsKey(transaction.getCounterpartAccountNumber())) {
-            transaction.setCounterpartAccountId(accountsByAccountNumber.get(transaction.getCounterpartAccountNumber()).getId());
+        if (accountsByAccountNumber.containsKey(transaction.getCounterpartyAccountNumber())) {
+            transaction.setCounterpartyAccountId(accountsByAccountNumber.get(transaction.getCounterpartyAccountNumber()).getId());
         }
     }
 
@@ -200,8 +202,8 @@ public class MoneyTransactionGroupService implements JobProcessor {
     private static String getValue(final MoneyTransaction transaction, final MoneyTransactionGroupQualifier qualifier) {
         final String value = switch (qualifier.getTransactionField()) {
             case DESCRIPTION -> transaction.getDescription();
-            case COUNTERPARTY_NAME -> transaction.getCounterpartAccountName();
-            case COUNTERPARTY_NUMBER -> transaction.getCounterpartAccountNumber();
+            case COUNTERPARTY_NAME -> transaction.getCounterpartyAccountName();
+            case COUNTERPARTY_NUMBER -> transaction.getCounterpartyAccountNumber();
         };
 
         return normalizeValue(value);
@@ -233,6 +235,13 @@ public class MoneyTransactionGroupService implements JobProcessor {
     private boolean clusterAppliesToTransaction(final String value, final String qualifier) {
         final double score = new JaccardSimilarity().apply(value, qualifier);
         return score > 0.6;
+    }
+
+    private boolean hasBudget(final MoneyTransactionGroupDto dto) {
+        return dto.getBudgeted() != null &&
+                dto.getDateRange() != null &&
+                dto.getDateRangeAmount() != null &&
+                dto.getStartDate() != null;
     }
 
     @Override

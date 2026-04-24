@@ -12,8 +12,8 @@ import java.time.Instant;
 @NoArgsConstructor
 public class MoneyTransactionExportDto {
     private String accountName;
-    private String counterpartAccountName;
-    private String counterpartAccountNumber;
+    private String counterpartyAccountName;
+    private String counterpartyAccountNumber;
     private Instant timestamp;
     private double amount;
     private Double finalBalance;
@@ -21,16 +21,16 @@ public class MoneyTransactionExportDto {
     private String currency;
 
     public MoneyTransactionExportDto(final String accountName,
-                                     final String counterpartAccountName,
-                                     final String counterpartAccountNumber,
+                                     final String counterpartyAccountName,
+                                     final String counterpartyAccountNumber,
                                      final Instant timestamp,
                                      final double amount,
                                      final Double finalBalance,
                                      final String description,
                                      final String currency) {
         this.accountName = accountName;
-        this.counterpartAccountName = counterpartAccountName;
-        this.counterpartAccountNumber = counterpartAccountNumber;
+        this.counterpartyAccountName = counterpartyAccountName;
+        this.counterpartyAccountNumber = counterpartyAccountNumber;
         this.timestamp = timestamp;
         this.amount = amount;
         this.finalBalance = finalBalance;
@@ -41,8 +41,8 @@ public class MoneyTransactionExportDto {
     public MoneyTransactionImportLine toImportLine() {
         return MoneyTransactionImportLine
                 .builder()
-                .counterpartAccountName(counterpartAccountName)
-                .counterpartAccountNumber(counterpartAccountNumber)
+                .counterpartyAccountName(counterpartyAccountName)
+                .counterpartyAccountNumber(counterpartyAccountNumber)
                 .timestamp(timestamp)
                 .amount(amount)
                 .finalBalance(finalBalance)

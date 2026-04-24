@@ -53,8 +53,8 @@ public class MoneyTransactionService {
             loanRepository.findByUserIdAndId(userId, request.getLoanId()).orElseThrow();
         }
         transaction.setAccountId(request.getAccountId());
-        transaction.setCounterpartAccountName(request.getCounterpartAccountName());
-        transaction.setCounterpartAccountNumber(request.getCounterpartAccountNumber());
+        transaction.setCounterpartyAccountName(request.getCounterpartyAccountName());
+        transaction.setCounterpartyAccountNumber(request.getCounterpartyAccountNumber());
         transaction.setTimestamp(request.getTimestamp());
         transaction.setAmount(request.getAmount());
         transaction.setFinalBalance(request.getFinalBalance());

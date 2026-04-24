@@ -70,7 +70,7 @@ export class SelectColumnsComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
 
   securityColumns = ['date', 'isin', 'amount', 'price', 'transaction-costs', 'admin-costs', 'currency', 'exchange-rate', 'buy-sell', 'buy-text', 'description'];
-  moneyColumns = ['timestamp', 'counterpart-account-name', 'counterpart-account-number', 'amount', 'debit-credit', 'currency', 'exchange-rate', 'final-balance', 'description'];
+  moneyColumns = ['timestamp', 'counterparty-account-name', 'counterparty-account-number', 'amount', 'debit-credit', 'currency', 'exchange-rate', 'final-balance', 'description'];
 
 
   ngOnInit(): void {

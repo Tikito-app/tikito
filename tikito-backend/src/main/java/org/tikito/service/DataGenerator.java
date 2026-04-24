@@ -260,8 +260,8 @@ public class DataGenerator {
             transaction.setAccountId(DEBIT_ACCOUNT.getId());
             transaction.setAmount(randomDouble(-150, -50));
             transaction.setTimestamp(currentDate.atStartOfDay().toInstant(ZoneOffset.UTC));
-            transaction.setCounterpartAccountName("Supermarket");
-            transaction.setCounterpartAccountNumber("NL13BANK0001234567");
+            transaction.setCounterpartyAccountName("Supermarket");
+            transaction.setCounterpartyAccountNumber("NL13BANK0001234567");
             transaction.setCurrencyId(EURO_ID);
             transaction.setExchangeRate(1);
             transactions.add(transaction);
@@ -276,8 +276,8 @@ public class DataGenerator {
             transaction.setAccountId(DEBIT_ACCOUNT.getId());
             transaction.setAmount(randomDouble(-2000, -1000));
             transaction.setTimestamp(currentDate.atStartOfDay().toInstant(ZoneOffset.UTC));
-            transaction.setCounterpartAccountName("Mortgage");
-            transaction.setCounterpartAccountNumber("NL13BANK0001234567");
+            transaction.setCounterpartyAccountName("Mortgage");
+            transaction.setCounterpartyAccountNumber("NL13BANK0001234567");
             transaction.setCurrencyId(EURO_ID);
             transaction.setExchangeRate(1);
             transactions.add(transaction);
@@ -292,8 +292,8 @@ public class DataGenerator {
             transaction.setAccountId(DEBIT_ACCOUNT.getId());
             transaction.setAmount(randomDouble(2000, 3000));
             transaction.setTimestamp(currentDate.atStartOfDay().toInstant(ZoneOffset.UTC));
-            transaction.setCounterpartAccountName("Paycheck");
-            transaction.setCounterpartAccountNumber("NL13BANK0005365");
+            transaction.setCounterpartyAccountName("Paycheck");
+            transaction.setCounterpartyAccountNumber("NL13BANK0005365");
             transaction.setCurrencyId(EURO_ID);
             transaction.setExchangeRate(1);
             transactions.add(transaction);
@@ -308,8 +308,8 @@ public class DataGenerator {
             transaction.setAccountId(DEBIT_ACCOUNT.getId());
             transaction.setAmount(randomDouble(-100, 50));
             transaction.setTimestamp(currentDate.atStartOfDay().toInstant(ZoneOffset.UTC));
-            transaction.setCounterpartAccountName("Shop " + randomInt(1, 10));
-            transaction.setCounterpartAccountNumber("NL13BANK0001234567");
+            transaction.setCounterpartyAccountName("Shop " + randomInt(1, 10));
+            transaction.setCounterpartyAccountNumber("NL13BANK0001234567");
             transaction.setCurrencyId(EURO_ID);
             transaction.setExchangeRate(1);
             transactions.add(transaction);

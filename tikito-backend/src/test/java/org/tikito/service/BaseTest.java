@@ -51,8 +51,8 @@ public class BaseTest {
     public static final String ACCOUNT_NUMBER_TWO = "67890";
     public static final String ACCOUNT_NUMBER_THREE = "1122";
 
-    public static final String COUNTERPART_ACCOUNT_NUMBER = "54321";
-    public static final String COUNTERPART_ACCOUNT_NAME = "Other test counterpart account";
+    public static final String COUNTERPARTY_ACCOUNT_NUMBER = "54321";
+    public static final String COUNTERPARTY_ACCOUNT_NAME = "Other test counterparty account";
 
     public static final String ISIN_ONE = "NL0000395903"; // WOLTERS KLUWER
     public static final String ISIN_ONE_OLD = "NL0000395903-old"; // WOLTERS KLUWER
@@ -152,16 +152,16 @@ public class BaseTest {
                                                 final long currencyId,
                                                 final double amount,
                                                 final Double finalBalance,
-                                                final String counterpartAccountNumber,
-                                                final String counterpartAccountName,
+                                                final String counterpartyAccountNumber,
+                                                final String counterpartyAccountName,
                                                 final String description) {
         final MoneyTransaction transaction = new MoneyTransaction();
         transaction.setUserId(userId);
         transaction.setAccountId(accountId);
         transaction.setTimestamp(timestamp);
         transaction.setCurrencyId(currencyId);
-        transaction.setCounterpartAccountNumber(counterpartAccountNumber);
-        transaction.setCounterpartAccountName(counterpartAccountName);
+        transaction.setCounterpartyAccountNumber(counterpartyAccountNumber);
+        transaction.setCounterpartyAccountName(counterpartyAccountName);
         transaction.setAmount(amount);
         transaction.setFinalBalance(finalBalance);
         transaction.setDescription(description);

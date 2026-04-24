@@ -1,0 +1,3 @@
+alter table money_transaction rename column counterpart_account_name to counterparty_account_name;
+alter table money_transaction rename column counterpart_account_number to counterparty_account_number;
+alter table money_transaction rename column counterpart_account_id to counterparty_account_id;

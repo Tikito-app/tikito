@@ -218,8 +218,8 @@ public class MoneyImportService {
             line.setFailedReason(FAILED_NO_VALID_TIMESTAMP);
             return;
         }
-        if (StringUtils.hasText(line.getCounterpartAccountNumber())) {
-            line.setCounterpartAccountNumber(line.getCounterpartAccountNumber().replaceAll(" ", ""));
+        if (StringUtils.hasText(line.getCounterpartyAccountNumber())) {
+            line.setCounterpartyAccountNumber(line.getCounterpartyAccountNumber().replaceAll(" ", ""));
         }
     }
 
