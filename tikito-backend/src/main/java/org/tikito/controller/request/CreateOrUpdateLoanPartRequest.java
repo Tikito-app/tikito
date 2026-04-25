@@ -14,17 +14,20 @@ import java.util.List;
 @Getter
 @Setter
 public class CreateOrUpdateLoanPartRequest extends CreateOrUpdateRequest {
-    private long loanId;
+    @NotNull
+    private Long loanId;
     @NotBlank
     private String name;
     @NotNull
     private LocalDate startDate;
     @NotNull
     private LocalDate endDate;
-    private double amount;
+    @NotNull
+    private Double amount;
     @NotNull
     private LoanType loanType;
-    private long currencyId;
+    @NotNull
+    private Long currencyId;
     private List<LoanInterestDto> interests = new ArrayList<>();
     private Double repaymentAmount;
 }

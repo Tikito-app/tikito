@@ -12,7 +12,6 @@ import java.util.Set;
 @Getter
 @Setter
 public class CreateOrUpdateLoanRequest extends CreateOrUpdateRequest {
-    private Long id;
     @NotNull
     private Long loanId;
     @NotNull
@@ -20,8 +19,4 @@ public class CreateOrUpdateLoanRequest extends CreateOrUpdateRequest {
     @NotBlank
     private String name;
     private Set<@NotNull Long> groupIds = new HashSet<>();
-
-    public boolean isNew() {
-        return id == null || id == 0;
-    }
 }
