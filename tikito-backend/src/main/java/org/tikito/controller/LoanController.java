@@ -1,8 +1,8 @@
 package org.tikito.controller;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.CreateOrUpdateLoanPartRequest;
@@ -35,12 +35,12 @@ public class LoanController {
     }
 
     @PostMapping
-    public ResponseEntity<LoanDto> createOrUpdateLoan(final AuthUser authUser, @Validated @RequestBody final CreateOrUpdateLoanRequest request) {
+    public ResponseEntity<LoanDto> createOrUpdateLoan(final AuthUser authUser, @Valid @RequestBody final CreateOrUpdateLoanRequest request) {
         return ResponseEntity.ok(loanService.createOrUpdateLoan(authUser.getId(), request));
     }
 
     @PostMapping("/part")
-    public ResponseEntity<LoanPartDto> createOrUpdateLoanPart(final AuthUser authUser, @Validated @RequestBody final CreateOrUpdateLoanPartRequest request) {
+    public ResponseEntity<LoanPartDto> createOrUpdateLoanPart(final AuthUser authUser, @Valid @RequestBody final CreateOrUpdateLoanPartRequest request) {
         final LoanPartDto loanPart = loanService.createOrUpdateLoanPart(authUser.getId(), request);
         return ResponseEntity.ok(loanPart);
     }

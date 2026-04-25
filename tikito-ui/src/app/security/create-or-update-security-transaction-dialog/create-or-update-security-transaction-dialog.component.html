@@ -9,19 +9,26 @@
           <mat-option [value]="account.id">{{account.name}}</mat-option>
         }
       </mat-select>
+      <mat-error *ngIf="form.get('accountId')?.hasError('required')">
+        {{'security/transaction/form/account-required' | translatePipe}}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>{{ 'security/isin' | translatePipe }}</mat-label>
       <input type="text" [attr.data-cy]="'isin'" matInput formControlName="isin">
-      <mat-icon matSuffix>isin</mat-icon>
+      <mat-error *ngIf="form.get('isin')?.hasError('required')">
+        {{'security/transaction/form/isin-required' | translatePipe}}
+      </mat-error>
     </mat-form-field>
     <br/>
 
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>{{ 'security/transaction/amount' | translatePipe }}</mat-label>
       <input type="number" [attr.data-cy]="'amount'" matInput formControlName="amount">
-      <mat-icon matSuffix>amount</mat-icon>
+      <mat-error *ngIf="form.get('amount')?.hasError('required')">
+        {{'security/transaction/form/amount-required' | translatePipe}}
+      </mat-error>
     </mat-form-field>
     <br/>
 
@@ -32,12 +39,17 @@
           <mat-option [value]="currency.id">{{ 'currency/' + currency.currentIsin | translatePipe }}</mat-option>
         }
       </mat-select>
+      <mat-error *ngIf="form.get('currencyId')?.hasError('required')">
+        {{'security/transaction/form/currency-required' | translatePipe}}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>{{ 'security/transaction/price' | translatePipe }}</mat-label>
       <input type="number" [attr.data-cy]="'price'" matInput formControlName="price">
-      <mat-icon matSuffix>price</mat-icon>
+      <mat-error *ngIf="form.get('price')?.hasError('required')">
+        {{'security/transaction/form/price-required' | translatePipe}}
+      </mat-error>
     </mat-form-field>
     <br/>
 
@@ -55,19 +67,23 @@
       <mat-icon *ngIf="form.value['timestamp']" matIconSuffix (click)="form.controls['timestamp'].setValue(null);" class="clickable">close</mat-icon>
       <mat-datepicker-toggle matIconSuffix [for]="pickerTimestamp"></mat-datepicker-toggle>
       <mat-datepicker #pickerTimestamp></mat-datepicker>
+      <mat-error *ngIf="form.get('timestamp')?.hasError('required')">
+        {{'security/transaction/form/timestamp-required' | translatePipe}}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>{{ 'security/transaction/cash' | translatePipe }}</mat-label>
       <input type="number" [attr.data-cy]="'cash'" matInput formControlName="cash">
-      <mat-icon matSuffix>cash</mat-icon>
     </mat-form-field>
     <br/>
 
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>{{ 'security/transaction/exchange-rate' | translatePipe }}</mat-label>
       <input type="number" [attr.data-cy]="'exchangeRate'" matInput formControlName="exchangeRate">
-      <mat-icon matSuffix>exchangeRate</mat-icon>
+      <mat-error *ngIf="form.get('exchangeRate')?.hasError('required')">
+        {{'security/transaction/form/exchange-rate-required' | translatePipe}}
+      </mat-error>
     </mat-form-field>
     <br/>
 
@@ -78,6 +94,9 @@
           <mat-option [value]="transactionType">{{ 'security/transaction/type/' + transactionType | translatePipe }}</mat-option>
         }
       </mat-select>
+      <mat-error *ngIf="form.get('transactionType')?.hasError('required')">
+        {{'security/transaction/form/transaction-type-required' | translatePipe}}
+      </mat-error>
     </mat-form-field>
   </form>
 </div>

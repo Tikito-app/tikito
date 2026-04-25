@@ -2,7 +2,7 @@
 <div mat-dialog-content>
   <form [formGroup]="form">
     <mat-form-field class="full-width">
-      <mat-label>{{'money/accounts' | translatePipe}}</mat-label>
+      <mat-label>{{'money/group' | translatePipe}}</mat-label>
       <mat-select [attr.data-cy]="'group'" formControlName="group">
         @for (group of groups; track groups) {
           <mat-option [value]="group">{{group.name}}</mat-option>
@@ -12,6 +12,6 @@
   </form>
 </div>
 <div mat-dialog-actions>
-  <button [attr.data-cy]="'cancel'" mat-button (click)="onCancel()">{{'cancel' | translatePipe}}</button>
-  <button [attr.data-cy]="'ok'" mat-button cdkFocusInitial (click)="onSave()">{{'save' | translatePipe}}</button>
+  <button [attr.data-cy]="'save-button'"  mat-raised-button color="primary" (click)="onSave();">{{'save' | translatePipe}}</button>&nbsp;
+  <button [attr.data-cy]="'cancel-button'"  mat-raised-button color="secondary" (click)="onCancel()">{{'cancel' | translatePipe}}</button>
 </div>

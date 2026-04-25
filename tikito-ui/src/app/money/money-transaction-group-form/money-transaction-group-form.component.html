@@ -17,8 +17,10 @@
         <ng-container *ngIf="nameInEdit">
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{'money/transaction-group/name' | translatePipe}}</mat-label>
-            <input type="text" [attr.data-cy]="'name'" matInput formControlName="name" >
-            <mat-icon matSuffix>name</mat-icon>
+            <input type="text" [attr.data-cy]="'name'" matInput formControlName="name">
+            <mat-error *ngIf="form.get('name')?.hasError('required')">
+              {{'money/transaction-group/form/name-required' | translatePipe}}
+            </mat-error>
           </mat-form-field>
           <mat-form-field class="full-width">
             <mat-label>{{'money/accounts' | translatePipe}}</mat-label>
@@ -27,6 +29,9 @@
                 <mat-option [value]="account.id">{{account.name}}</mat-option>
               }
             </mat-select>
+            <mat-error *ngIf="form.get('accountIds')?.hasError('required')">
+              {{'money/transaction-group/form/account-required' | translatePipe}}
+            </mat-error>
           </mat-form-field>
           <mat-form-field class="full-width">
             <mat-label>{{ 'money/transaction-group/group-type' | translatePipe }}</mat-label>
@@ -35,12 +40,14 @@
                 <mat-option [value]="group">{{ group }}</mat-option>
               }
             </mat-select>
+            <mat-error *ngIf="form.get('groupTypes')?.hasError('required')">
+              {{'money/transaction-group/form/group-types-required' | translatePipe}}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{ 'money/transaction-group/budgeted' | translatePipe }}</mat-label>
             <input type="number" [attr.data-cy]="'budgeted'" matInput formControlName="budgeted">
-            <mat-icon matSuffix>budgeted</mat-icon>
           </mat-form-field>
 
           <mat-form-field class="half-width">
@@ -64,13 +71,12 @@
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{ 'money/transaction-group/date-range-amount' | translatePipe }}</mat-label>
             <input type="number" matInput formControlName="dateRangeAmount">
-            <mat-icon matSuffix>amount</mat-icon>
           </mat-form-field>
         </ng-container>
 
         <div *ngIf="nameInEdit">
           <button [attr.data-cy]="'save-button'"  mat-raised-button color="primary" (click)="onSaveButtonClicked(); nameInEdit = false">{{'save' | translatePipe}}</button>&nbsp;
-          <button [attr.data-cy]="'cancel-button'"  mat-raised-button color="secundary" (click)="nameInEdit = false">{{'cancel' | translatePipe}}</button>
+          <button [attr.data-cy]="'cancel-button'"  mat-raised-button color="secondary" (click)="nameInEdit = false">{{'cancel' | translatePipe}}</button>
           <button [attr.data-cy]="'delete-button'" style="float: right" mat-button color="warn" (click)="onDeleteButtonClicked();">{{'delete' | translatePipe}}</button>
         </div>
 

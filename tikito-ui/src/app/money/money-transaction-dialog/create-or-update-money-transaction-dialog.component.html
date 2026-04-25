@@ -9,19 +9,20 @@
           <mat-option [value]="account.id">{{account.name}}</mat-option>
         }
       </mat-select>
+      <mat-error *ngIf="form.get('name')?.hasError('required')">
+        {{'user-account/form/name-required' | translatePipe}}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>{{ 'money/transaction/counterparty-account-name' | translatePipe }}</mat-label>
       <input type="text" [attr.data-cy]="'counterpartAccountName'" matInput formControlName="counterpartAccountName">
-      <mat-icon matSuffix>counterpartAccountName</mat-icon>
     </mat-form-field>
     <br/>
 
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>{{ 'money/transaction/counterparty-account-number' | translatePipe }}</mat-label>
       <input type="text" [attr.data-cy]="'counterpartAccountNumber'" matInput formControlName="counterpartAccountNumber">
-      <mat-icon matSuffix>counterpartAccountNumber</mat-icon>
     </mat-form-field>
     <br/>
 
@@ -32,26 +33,29 @@
           <mat-option [value]="currency.id">{{ 'currency/' + currency.currentIsin | translatePipe }}</mat-option>
         }
       </mat-select>
+      <mat-error *ngIf="form.get('name')?.hasError('required')">
+        {{'user-account/form/name-required' | translatePipe}}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>{{ 'money/transaction/amount' | translatePipe }}</mat-label>
       <input type="number" [attr.data-cy]="'amount'" matInput formControlName="amount">
-      <mat-icon matSuffix>amount</mat-icon>
+      <mat-error *ngIf="form.get('name')?.hasError('required')">
+        {{'user-account/form/name-required' | translatePipe}}
+      </mat-error>
     </mat-form-field>
     <br/>
 
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>{{ 'money/transaction/final-balance' | translatePipe }}</mat-label>
       <input type="number" [attr.data-cy]="'finalBalance'" matInput formControlName="finalBalance">
-      <mat-icon matSuffix>finalBalance</mat-icon>
     </mat-form-field>
     <br/>
 
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>{{ 'money/transaction/description' | translatePipe }}</mat-label>
       <input type="text" [attr.data-cy]="'description'" matInput formControlName="description">
-      <mat-icon matSuffix>description</mat-icon>
     </mat-form-field>
     <br/>
 
@@ -62,19 +66,14 @@
       <mat-icon *ngIf="form.value['timestamp']" matIconSuffix (click)="form.controls['timestamp'].setValue(null);" class="clickable">close</mat-icon>
       <mat-datepicker-toggle matIconSuffix [for]="pickerTimestamp"></mat-datepicker-toggle>
       <mat-datepicker #pickerTimestamp></mat-datepicker>
+      <mat-error *ngIf="form.get('name')?.hasError('required')">
+        {{'user-account/form/name-required' | translatePipe}}
+      </mat-error>
     </mat-form-field>
-
-<!--    <mat-form-field appearance="fill" class="full-width">-->
-<!--      <mat-label>{{ 'money/transaction/cash' | translatePipe }}</mat-label>-->
-<!--      <input type="number" [attr.data-cy]="'cash'" matInput formControlName="cash">-->
-<!--      <mat-icon matSuffix>cash</mat-icon>-->
-<!--    </mat-form-field>-->
-<!--    <br/>-->
 
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>{{ 'money/transaction/exchange-rate' | translatePipe }}</mat-label>
       <input type="number" [attr.data-cy]="'exchangeRate'" matInput formControlName="exchangeRate">
-      <mat-icon matSuffix>exchangeRate</mat-icon>
     </mat-form-field>
     <br/>
 
@@ -89,7 +88,7 @@
     <br/>
 
     <mat-form-field appearance="fill" class="full-width">
-      <mat-label>{{ 'loan' | translatePipe }}</mat-label>
+      <mat-label>{{ 'money/transaction/loan' | translatePipe }}</mat-label>
       <mat-select formControlName="loanId" [attr.data-cy]="'transaction-type'">
         @for (loan of loans; track loan) {
           <mat-option [value]="loan.id">{{ loan.name }}</mat-option>
@@ -99,6 +98,7 @@
   </form>
 </div>
 <div mat-dialog-actions>
-  <button [attr.data-cy]="'cancel'" mat-raised-button (click)="onCancel()">{{'cancel' | translatePipe}}</button>
-  <button [attr.data-cy]="'ok'" mat-raised-button color="primary" cdkFocusInitial (click)="onSave()">{{'save' | translatePipe}}</button>
+  <button [attr.data-cy]="'ok'" mat-raised-button color="primary" cdkFocusInitial (click)="onSaveButtonClicked()">{{'save' | translatePipe}}</button>
+  <button [attr.data-cy]="'cancel'" mat-raised-button (click)="onCancelButtonClicked()">{{'cancel' | translatePipe}}</button>
+  <button [attr.data-cy]="'delete-button'" mat-button color="warn" style="float: right;" (click)="onDeleteButtonClicked();">{{ 'delete' | translatePipe }}</button>
 </div>

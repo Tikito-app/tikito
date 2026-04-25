@@ -1,5 +1,6 @@
 package org.tikito.dto.export;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +17,9 @@ import java.util.Set;
 @Getter
 @Setter
 public class LoanExportDto {
-    private DateRange dateRange;
+    @NotNull
     private String name;
+    private DateRange dateRange;
     private Set<String> groups = new HashSet<>();
     private List<LoanPartExportDto> loanParts = new ArrayList<>();
 }

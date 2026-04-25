@@ -14,7 +14,7 @@ import {
 } from "@angular/material/table";
 import {MatButton} from "@angular/material/button";
 import {TranslatePipe} from "../../service/translate-pipe.pipe";
-import {DatePipe, NgIf} from "@angular/common";
+import {DatePipe} from "@angular/common";
 import {MoneyApi} from "../../api/money-api";
 import MoneyTransaction from "../../dto/money/money-transaction";
 import {Util} from "../../util";
@@ -151,7 +151,7 @@ export class MoneyTransactionListComponent implements OnInit {
   onDeleteTransaction(transaction: MoneyTransaction) {
     this.dialogService.deleteConfirmation().subscribe(() => {
       this.api.deleteMoneyTransaction(transaction.id).subscribe(() => this.dialogService.snackbar(
-        this.translateService.translate('security/holding/deleted-message'),
+        this.translateService.translate('money/transaction/deleted-message'),
         this.translateService.translate('close')));
       this.resetTransactions();
     });

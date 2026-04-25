@@ -22,7 +22,7 @@ public class MoneyTransactionFilter {
     private LocalDate startDate;
     private LocalDate endDate;
     private Boolean nonGrouped;
-    private boolean aggregateDateRange;
+    private Boolean aggregateDateRange;
 
     public Set<Long> getAccountIds() {
         if (accountIds != null) {

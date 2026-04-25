@@ -16,8 +16,8 @@ import java.util.List;
 public class LoanDto {
     private long id;
     private long userId;
-    private DateRange dateRange;
     private String name;
+    private DateRange dateRange;
     private List<MoneyTransactionGroupDto> groups;
     private List<LoanPartDto> loanParts;
 }

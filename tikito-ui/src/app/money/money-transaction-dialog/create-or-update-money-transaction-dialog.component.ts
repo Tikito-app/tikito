@@ -7,8 +7,8 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from "@angular/material/dialog";
-import {MatFormField, MatHint, MatInput, MatLabel, MatSuffix} from "@angular/material/input";
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatError, MatFormField, MatHint, MatInput, MatLabel, MatSuffix} from "@angular/material/input";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
 import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
@@ -27,6 +27,8 @@ import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
 import {Loan} from "../../dto/loan";
 import {LoanApi} from "../../api/loan-api";
 import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {DialogService} from "../../service/dialog.service";
+import {TranslateService} from "../../service/translate.service";
 
 export interface MyData {
   transaction: MoneyTransaction;
@@ -55,6 +57,7 @@ export interface MyData {
     MatSuffix,
     NgIf,
     TranslatePipe,
+    MatError,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './create-or-update-money-transaction-dialog.component.html',
@@ -71,21 +74,23 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: MyData,
     private api: MoneyApi,
     private loanApi: LoanApi,
+    private dialogService: DialogService,
+    private translateService: TranslateService,
     private accountApi: AccountApi) {
   }
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      accountId: new FormControl(''),
+      accountId: new FormControl('', Validators.required),
       counterpartAccountName: new FormControl(''),
       counterpartAccountNumber: new FormControl(''),
-      amount: new FormControl(''),
+      amount: new FormControl('', Validators.required),
       finalBalance: new FormControl(''),
       description: new FormControl(''),
-      timestamp: new FormControl(''),
-      currencyId: new FormControl(''),
-      exchangeRate: new FormControl(''),
-      transactionType: new FormControl(''),
+      timestamp: new FormControl('', Validators.required),
+      currencyId: new FormControl('', Validators.required),
+      exchangeRate: new FormControl('', Validators.required),
+      transactionType: new FormControl('', Validators.required),
       groupId: new FormControl(''),
       loanId: new FormControl(''),
     });
@@ -110,7 +115,7 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
     this.loanApi.getLoans().subscribe(loans => this.loans = loans)
   }
 
-  onSave() {
+  onSaveButtonClicked() {
     this.api.createOrUpdateTransaction(
       this.data.transaction.id,
       this.form.value.accountId,
@@ -129,8 +134,17 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
     });
   }
 
-  onCancel() {
+  onCancelButtonClicked() {
     this.dialogRef.close();
+  }
+
+  onDeleteButtonClicked() {
+    this.dialogService.deleteConfirmation().subscribe(() => {
+      this.api.deleteMoneyTransaction(this.data.transaction.id).subscribe(() => this.dialogService.snackbar(
+        this.translateService.translate('money/transaction/deleted-message'),
+        this.translateService.translate('close')));
+      this.dialogRef.close();
+    });
   }
 
   protected readonly CacheService = CacheService;

@@ -1,10 +1,10 @@
 package org.tikito.controller;
 
+import jakarta.validation.Valid;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.CreateOrUpdateAccountRequest;
@@ -40,7 +40,7 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<AccountDto> createOrUpdateAccount(final AuthUser authUser, @Validated @RequestBody final CreateOrUpdateAccountRequest request) {
+    public ResponseEntity<AccountDto> createOrUpdateAccount(final AuthUser authUser, @Valid @RequestBody final CreateOrUpdateAccountRequest request) {
         return ResponseEntity.ok(accountService.createOrUpdate(authUser.getId(), request));
     }
 

@@ -1,5 +1,6 @@
 package org.tikito.controller.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,16 +9,22 @@ import java.time.Instant;
 @Getter
 @Setter
 public class CreateOrUpdateMoneyTransactionRequest extends CreateOrUpdateRequest {
-    private long userId;
-    private long accountId;
+    @NotNull
+    private Long userId;
+    @NotNull
+    private Long accountId;
     private String counterpartyAccountName;
     private String counterpartyAccountNumber;
+    @NotNull
     private Instant timestamp;
-    private double amount;
+    @NotNull
+    private Double amount;
     private Double finalBalance;
     private String description;
-    private long currencyId;
+    @NotNull
+    private Long currencyId;
     private Long groupId;
     private Long loanId;
-    private double exchangeRate;
+    @NotNull
+    private Double exchangeRate;
 }

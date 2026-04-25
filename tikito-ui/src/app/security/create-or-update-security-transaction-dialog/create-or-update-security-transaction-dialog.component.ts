@@ -7,9 +7,9 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from "@angular/material/dialog";
-import {MatFormField, MatHint, MatInput, MatLabel, MatSuffix} from "@angular/material/input";
+import {MatError, MatFormField, MatHint, MatInput, MatLabel, MatSuffix} from "@angular/material/input";
 import {SecurityTransaction} from "../../dto/security/security-transaction";
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
 import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
@@ -52,6 +52,7 @@ export interface MyData {
     MatSuffix,
     NgIf,
     TranslatePipe,
+    MatError,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './create-or-update-security-transaction-dialog.component.html',
@@ -70,16 +71,16 @@ export class CreateOrUpdateSecurityTransactionDialogComponent implements OnInit 
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      accountId: new FormControl(''),
+      accountId: new FormControl('', Validators.required),
       isin: new FormControl(''),
-      currencyId: new FormControl(''),
-      amount: new FormControl(''),
-      price: new FormControl(''),
+      currencyId: new FormControl('', Validators.required),
+      amount: new FormControl('', Validators.required),
+      price: new FormControl('', Validators.required),
       description: new FormControl(''),
-      timestamp: new FormControl(''),
+      timestamp: new FormControl('', Validators.required),
       cash: new FormControl(''),
-      exchangeRate: new FormControl(''),
-      transactionType: new FormControl(''),
+      exchangeRate: new FormControl('', Validators.required),
+      transactionType: new FormControl('', Validators.required),
     });
 
     this.form.controls['accountId'].setValue(this.data.transaction.accountId);
@@ -99,6 +100,9 @@ export class CreateOrUpdateSecurityTransactionDialogComponent implements OnInit 
   }
 
   onSave() {
+    if(this.form.invalid) {
+      return;
+    }
     this.api.createOrUpdateTransaction(
       this.data.transaction.id,
       this.form.value.accountId,

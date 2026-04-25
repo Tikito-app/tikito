@@ -6,9 +6,8 @@
 
   <app-loan-graph-filter *ngIf="tabIndex == 0 || tabIndex == null"></app-loan-graph-filter>
 </div>
+
 <div class="{{tabIndex == 1 ? 'main-center-column-small' : 'main-center-column'}} main-column" *ngIf="loans.length > 0">
-
-
   <mat-tab-group (selectedIndexChange)="onTabSelectionChanged($event)">
     <mat-tab label="{{'loan/graph' | translatePipe}}">
       <app-loan-graph [loans]="loans" [loanValues]="allValues" *ngIf="loans.length > 0"></app-loan-graph>
