@@ -1,6 +1,7 @@
 package org.tikito.controller.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.tikito.dto.DateRange;
@@ -16,9 +17,11 @@ import java.util.Set;
 public class CreateOrUpdateMoneyTransactionGroupRequest extends CreateOrUpdateRequest {
     @NotBlank
     private String name;
-    private Set<MoneyTransactionGroupType> groupTypes;
-    private List<MoneyTransactionGroupQualifierDto> qualifiers;
-    private Set<Long> accountIds;
+    @NotNull
+    private Set<@NotNull MoneyTransactionGroupType> groupTypes;
+    private List<@NotNull MoneyTransactionGroupQualifierDto> qualifiers;
+    @NotNull
+    private Set<@NotNull Long> accountIds;
     private LocalDate startDate;
     private LocalDate endDate;
     private DateRange dateRange;

@@ -1,14 +1,14 @@
 package org.tikito.controller;
 
-import org.springframework.validation.annotation.Validated;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.CreateOrUpdateMoneyTransactionGroupRequest;
 import org.tikito.dto.money.HistoricalBudgetValueDto;
 import org.tikito.dto.money.MoneyTransactionGroupDto;
 import org.tikito.service.money.MoneyTransactionGroupService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,7 +34,7 @@ public class MoneyTransactionGroupController {
     }
 
     @PostMapping
-    public ResponseEntity<MoneyTransactionGroupDto> createOrUpdate(final AuthUser authUser, @Validated @RequestBody final CreateOrUpdateMoneyTransactionGroupRequest request) {
+    public ResponseEntity<MoneyTransactionGroupDto> createOrUpdate(final AuthUser authUser, @Valid @RequestBody final CreateOrUpdateMoneyTransactionGroupRequest request) {
         return ResponseEntity.ok(groupService.createOrUpdateGroup(authUser.getId(), request));
     }
 

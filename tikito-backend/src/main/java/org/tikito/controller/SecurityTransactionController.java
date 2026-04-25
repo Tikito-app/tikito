@@ -1,5 +1,6 @@
 package org.tikito.controller;
 
+import jakarta.validation.Valid;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.CreateOrUpdateSecurityTransactionRequest;
 import org.tikito.dto.security.SecurityTransactionDto;
@@ -31,7 +32,7 @@ public class SecurityTransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<SecurityTransactionDto> createOrDeleteTransaction(final AuthUser authUser, @RequestBody final CreateOrUpdateSecurityTransactionRequest request) {
+    public ResponseEntity<SecurityTransactionDto> createOrDeleteTransaction(final AuthUser authUser, @Valid @RequestBody final CreateOrUpdateSecurityTransactionRequest request) {
         return ResponseEntity.ok(securityTransactionService.createOrUpdate(authUser.getId(), request));
     }
 

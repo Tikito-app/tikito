@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
-import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {MatError, MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {NgForOf, NgIf} from "@angular/common";
 import {MatInput} from "@angular/material/input";
@@ -51,7 +51,8 @@ import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/m
     MatDatepickerInput,
     MatDatepickerToggle,
     MatHint,
-    MatSuffix
+    MatSuffix,
+    MatError
   ],
   templateUrl: './money-transaction-group-form.component.html',
   styleUrl: './money-transaction-group-form.component.scss',
@@ -84,10 +85,9 @@ export class MoneyTransactionGroupFormComponent implements OnInit {
 
   reset() {
     let group: any = {
-      name: new FormControl(''),
-      groupIds: new FormControl(''),
-      accountIds: new FormControl(''),
-      groupTypes: new FormControl(''),
+      name: new FormControl('', Validators.required),
+      accountIds: new FormControl('', [Validators.required, Validators.minLength(1)]),
+      groupTypes: new FormControl('', Validators.required),
       startDate: new FormControl(''),
       endDate: new FormControl(''),
       budgeted: new FormControl(''),
@@ -113,6 +113,9 @@ export class MoneyTransactionGroupFormComponent implements OnInit {
   }
 
   onSaveButtonClicked() {
+    if(this.form.invalid) {
+      return;
+    }
     this.api.createOrUpdateMoneyTransactionGroup(
       this.moneyTransactionGroupId,
       this.form.value.name,

@@ -142,6 +142,15 @@
   "security/transaction/cash": "Cash",
   "security/transaction/timestamp": "Timestamp",
 
+  "security/transaction/form/account-required": "Account is required",
+  "security/transaction/form/isin-required": "Isin is required",
+  "security/transaction/form/amount-required": "Amount is required",
+  "security/transaction/form/currency-required": "Currency is required",
+  "security/transaction/form/price-required": "Price is required",
+  "security/transaction/form/timestamp-required": "Timestamp is required",
+  "security/transaction/form/exchange-rate-required": "Exchange rate is required",
+  "security/transaction/form/transaction-type-required": "Transaction type is required",
+
   "security/transaction/type/BUY": "Buy",
   "security/transaction/type/BUY_PRODUCT_CHANGE": "Product change",
   "security/transaction/type/BUY_ISIN_CHANGE": "Isin change",
@@ -236,6 +245,9 @@
   "money/transaction-group/budgeted": "Budgeted",
   "money/transaction-group/date-range": "Date range",
   "money/transaction-group/date-range-amount": "Date range amount",
+  "money/transaction-group/form/name-required": "Name is required",
+  "money/transaction-group/form/account-required": "Account is required",
+  "money/transaction-group/form/group-types-required": "Group type is required",
 
   "--------------- IMPORT ---------------------": "",
   "import": "Import",

@@ -1,5 +1,6 @@
 package org.tikito.dto.security;
 
+import jakarta.validation.constraints.NotNull;
 import org.tikito.dto.DateRange;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class SecurityHoldingFilter {
-    private Set<Long> holdingIds;
+    private Set<@NotNull Long> holdingIds;
     private DateRange dateRange;
     private LocalDate startDate;
 

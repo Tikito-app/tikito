@@ -1,8 +1,8 @@
 package org.tikito.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.tikito.auth.AuthUser;
 import org.tikito.dto.security.*;
@@ -44,12 +44,12 @@ public class SecurityHoldingController {
     }
 
     @PostMapping("/transactions")
-    public ResponseEntity<List<SecurityTransactionDto>> getSecurityTransactions(final AuthUser authUser, @Validated @RequestBody final SecurityHoldingFilter filter) {
+    public ResponseEntity<List<SecurityTransactionDto>> getSecurityTransactions(final AuthUser authUser, @Valid @RequestBody final SecurityHoldingFilter filter) {
         return ResponseEntity.ok(securityTransactionService.getSecurityTransactions(authUser.getId(), filter));
     }
 
     @PostMapping("/historical-values")
-    public ResponseEntity<List<HistoricalSecurityHoldingValueDto>> getHistoricalHoldingValues(final AuthUser authUser, @Validated @RequestBody final SecurityHoldingFilter filter) {
+    public ResponseEntity<List<HistoricalSecurityHoldingValueDto>> getHistoricalHoldingValues(final AuthUser authUser, @Valid @RequestBody final SecurityHoldingFilter filter) {
         return ResponseEntity.ok(securityHoldingService.getHistoricalHoldingValues(authUser.getId(), filter));
     }
 
