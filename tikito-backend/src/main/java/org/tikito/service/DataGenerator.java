@@ -106,9 +106,7 @@ public class DataGenerator {
         securityService.updateSecurityPrices(SECURITY1.getId());
         pricesPerDateAndSecurityId.put(SECURITY1.getId(), new HashMap<>());
         securityPriceRepository.findAllBySecurityId(SECURITY1.getId())
-                .forEach(price -> {
-                    pricesPerDateAndSecurityId.get(SECURITY1.getId()).put(price.getDate(), price);
-                });
+                .forEach(price -> pricesPerDateAndSecurityId.get(SECURITY1.getId()).put(price.getDate(), price));
 //        generateSecurityPrices(SECURITY1, false);
 
         generateSecurityTransactions(SECURITY1, STOCK_ACCOUNT.getId());
@@ -243,7 +241,7 @@ public class DataGenerator {
         final CreateOrUpdateMoneyTransactionGroupRequest request = new CreateOrUpdateMoneyTransactionGroupRequest();
         request.setName("Groceries");
         request.setQualifiers(new ArrayList<>(List.of(
-                new MoneyTransactionGroupQualifierDto(0, 0L, MoneyTransactionGroupQualifierType.INCLUDES, "Supermarket", MoneyTransactionField.DESCRIPTION)
+                new MoneyTransactionGroupQualifierDto(0L, 0L, MoneyTransactionGroupQualifierType.INCLUDES, "Supermarket", MoneyTransactionField.DESCRIPTION)
         )));
         moneyTransactionGroupService.createOrUpdateGroup(USER_ID, request);
     }

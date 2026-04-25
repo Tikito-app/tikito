@@ -15,7 +15,7 @@
       <form [formGroup]="form">
         <ng-container *ngIf="!nameInEdit">
           {{ loanPart.name }}
-          <button mat-button (click)="nameInEdit = true" *ngIf="!interestInEdit">
+          <button mat-button (click)="nameInEdit = true" *ngIf="!interestInEdit" [attr.data-cy]="'edit-loan-part'">
             <mat-icon>edit</mat-icon>
           </button>
           <br/><br/>
@@ -39,7 +39,7 @@
 
           <mat-form-field class="full-width">
             <mat-label>{{ 'loan/part/loan-type' | translatePipe }}</mat-label>
-            <mat-select formControlName="loanType" [attr.data-cy]="'loanType'" required>
+            <mat-select formControlName="loanType" [attr.data-cy]="'loan-type'" required>
               @for (loanType of Util.getLoanTypes(); track loanType) {
                 <mat-option [value]="loanType">{{ loanType }}</mat-option>
               }
@@ -51,13 +51,13 @@
 
           <mat-form-field appearance="fill" class="full-width" *ngIf="form.value.loanType == LoanType.MORTGAGE_LINEAR">
             <mat-label>{{ 'loan/part/repayment-amount' | translatePipe }}</mat-label>
-            <input type="text" [attr.data-cy]="'repaymentAmount'" matInput formControlName="repaymentAmount">
+            <input type="text" [attr.data-cy]="'repayment-amount'" matInput formControlName="repaymentAmount">
             <mat-icon matSuffix>amount</mat-icon>
           </mat-form-field>
 
           <mat-form-field class="half-width">
             <mat-label>{{ 'start-date' | translatePipe }}</mat-label>
-            <input matInput [matDatepicker]="pickerStartDate" formControlName="startDate">
+            <input matInput [matDatepicker]="pickerStartDate" formControlName="startDate" [attr.data-cy]="'start-date'">
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-icon *ngIf="form.value['startDate']" matIconSuffix (click)="form.controls['startDate'].setValue(null);"
                       class="clickable">close
@@ -71,7 +71,7 @@
 
           <mat-form-field class="half-width">
             <mat-label>{{ 'end-date' | translatePipe }}</mat-label>
-            <input matInput [matDatepicker]="pickerEndDate" formControlName="endDate">
+            <input matInput [matDatepicker]="pickerEndDate" formControlName="endDate" [attr.data-cy]="'end-date'">
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-icon *ngIf="form.value['endDate']" matIconSuffix (click)="form.controls['endDate'].setValue(null);"
                       class="clickable">close
@@ -134,7 +134,7 @@
 </div>
 <div class="main-side-column main-column">
   <br/><br/><br/><br/><br/>
-  <button *ngIf="!nameInEdit && !interestInEdit" mat-fab aria-label="Add Interest"
+  <button *ngIf="!nameInEdit && !interestInEdit" mat-fab [attr.data-cy]="'add'"
           (click)="onAddInterestButtonClicked()" class="fab-button">
     <mat-icon>add</mat-icon>
   </button>

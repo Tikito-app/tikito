@@ -96,7 +96,7 @@ public class LoanService {
     @Transactional(propagation = Propagation.MANDATORY)
     public LoanDto createOrUpdateLoan(final long userId, final CreateOrUpdateLoanRequest request) {
         final Loan loan = request.isNew() ? new Loan(userId) : loanRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
-        final List<MoneyTransactionGroup> groups = moneyTransactionGroupRepository.findAllByIdsOrLoanId(request.getGroupIds(), request.getLoanId());
+        final List<MoneyTransactionGroup> groups = request.isNew() ? new ArrayList<>() : moneyTransactionGroupRepository.findAllByIdsOrLoanId(request.getGroupIds(), request.getId());
         loan.setName(request.getName());
         loan.setDateRange(request.getDateRange());
         loan.setGroups(groups);
@@ -123,7 +123,7 @@ public class LoanService {
         loanPart.setLoanType(request.getLoanType());
         loanPart.setCurrencyId(request.getCurrencyId());
         loanPart.getInterests().clear();
-        loanPart.setPeriodicPayment(request.getAmount() / Util.getChronoUnit(loan.getDateRange()).between(loanPart.getStartDate(), loanPart.getEndDate()));
+        loanPart.setPeriodicPayment(request.getAmount() / Math.max(1, Util.getChronoUnit(loan.getDateRange()).between(loanPart.getStartDate(), loanPart.getEndDate())));
 
         if (request.getInterests() != null) {
             request

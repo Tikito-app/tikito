@@ -13,8 +13,6 @@ import java.util.Set;
 @Setter
 public class CreateOrUpdateLoanRequest extends CreateOrUpdateRequest {
     @NotNull
-    private Long loanId;
-    @NotNull
     private DateRange dateRange;
     @NotBlank
     private String name;

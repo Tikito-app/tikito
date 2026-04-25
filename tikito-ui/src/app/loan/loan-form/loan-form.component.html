@@ -26,7 +26,7 @@
 
           <mat-form-field class="full-width">
             <mat-label>{{ 'loan/part/money-transaction-groups' | translatePipe }}</mat-label>
-            <mat-select formControlName="groupIds" [attr.data-cy]="'groupIds'" multiple>
+            <mat-select formControlName="groupIds" [attr.data-cy]="'groups'" multiple>
               @for (group of groups; track group) {
                 <mat-option [value]="group.id">{{ group.name }}</mat-option>
               }
@@ -60,6 +60,6 @@
 </div>
 <div class="main-side-column main-column">
   <br/><br/><br/><br/><br/>
-  <button *ngIf="!nameInEdit && !interestInEdit" mat-fab (click)="onAddLoanPartClicked()" class="fab-button"><mat-icon>add</mat-icon></button>
+  <button *ngIf="!nameInEdit && !interestInEdit" mat-fab (click)="onAddLoanPartClicked()" class="fab-button" [attr.data-cy]="'add'"><mat-icon>add</mat-icon></button>
 
 </div>

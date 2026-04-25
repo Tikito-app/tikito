@@ -54,5 +54,5 @@
   }
 </div>
 <div class="main-side-column main-column">
-  <button mat-fab aria-label="Add budget" (click)="onAddAccountButtonClicked()" class="fab-button"><mat-icon>add</mat-icon></button>
+  <button mat-fab [attr.data-cy]="'add'" (click)="onAddAccountButtonClicked()" class="fab-button"><mat-icon>add</mat-icon></button>
 </div>
