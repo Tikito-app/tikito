@@ -1,5 +1,6 @@
 package org.tikito.controller.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.tikito.dto.export.ImportExportSettings;
@@ -10,5 +11,5 @@ import java.util.Set;
 @Setter
 public class ExportRequest {
     private ImportExportSettings settings;
-    private Set<Long> accountIds;
+    private Set<@NotNull Long> accountIds;
 }

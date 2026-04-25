@@ -1,6 +1,6 @@
 package org.tikito.controller;
 
-import org.springframework.validation.annotation.Validated;
+import jakarta.validation.Valid;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.CreateOrUpdateMoneyTransactionRequest;
 import org.tikito.controller.request.SetMoneyTransactionGroupIdRequest;
@@ -33,12 +33,12 @@ public class MoneyTransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<List<MoneyTransactionDto>> getTransactions(final AuthUser authUser, @Validated @RequestBody final MoneyTransactionFilter filter) {
+    public ResponseEntity<List<MoneyTransactionDto>> getTransactions(final AuthUser authUser, @Valid @RequestBody final MoneyTransactionFilter filter) {
         return ResponseEntity.ok(moneyTransactionService.getTransactions(authUser.getId(), filter));
     }
 
     @PostMapping("/create-or-update")
-    public ResponseEntity<MoneyTransactionDto> createOrUpdate(final AuthUser authUser, @Validated @RequestBody final CreateOrUpdateMoneyTransactionRequest request) {
+    public ResponseEntity<MoneyTransactionDto> createOrUpdate(final AuthUser authUser, @Valid @RequestBody final CreateOrUpdateMoneyTransactionRequest request) {
         return ResponseEntity.ok(moneyTransactionService.createOrUpdate(authUser.getId(), request));
     }
 
@@ -48,7 +48,7 @@ public class MoneyTransactionController {
     }
 
     @PostMapping("/set-group-id")
-    public ResponseEntity<MoneyTransaction> setTransactionGroupId(final AuthUser authUser, @Validated @RequestBody final SetMoneyTransactionGroupIdRequest request) {
+    public ResponseEntity<MoneyTransaction> setTransactionGroupId(final AuthUser authUser, @Valid @RequestBody final SetMoneyTransactionGroupIdRequest request) {
         return ResponseEntity.ok(moneyTransactionService.setTransactionGroupId(authUser.getId(), request.getTransactionId(), request.getGroupId()));
     }
 

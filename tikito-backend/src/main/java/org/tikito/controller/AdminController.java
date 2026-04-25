@@ -1,8 +1,8 @@
 package org.tikito.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.*;
@@ -45,7 +45,7 @@ public class AdminController {
     }
 
     @PostMapping("/users/{userAccountId}")
-    public ResponseEntity<UserAccountDto> editUser(final AuthUser authUser, @PathVariable("userAccountId") final long userAccountId, @Validated @RequestBody final AdminEditUserRequest request) throws PasswordNotLongEnoughException {
+    public ResponseEntity<UserAccountDto> editUser(final AuthUser authUser, @PathVariable("userAccountId") final long userAccountId, @Valid @RequestBody final AdminEditUserRequest request) throws PasswordNotLongEnoughException {
         return ResponseEntity.ok(userAccountService.editUser(userAccountId, request.getEmail(), request.getPassword()));
     }
 
@@ -60,7 +60,7 @@ public class AdminController {
     }
 
     @PostMapping("/securities/{securityId}")
-    public ResponseEntity<SecurityDto> editSecurity(final AuthUser authUser, @PathVariable("securityId") final long securityId, @Validated @RequestBody final AdminEditSecurityRequest request) {
+    public ResponseEntity<SecurityDto> editSecurity(final AuthUser authUser, @PathVariable("securityId") final long securityId, @Valid @RequestBody final AdminEditSecurityRequest request) {
         return ResponseEntity.ok(securityService.editSecurity(securityId, request.getName()));
     }
 
@@ -112,7 +112,7 @@ public class AdminController {
     }
 
     @PostMapping("/securities/isin/{isin}")
-    public ResponseEntity<IsinDto> updateIsin(final AuthUser authUser, @PathVariable("isin") final String isin, @Validated @RequestBody final UpdateIsinRequest request) {
+    public ResponseEntity<IsinDto> updateIsin(final AuthUser authUser, @PathVariable("isin") final String isin, @Valid @RequestBody final UpdateIsinRequest request) {
         return ResponseEntity.ok(securityService.updateIsin(isin, request.getSymbol(), request.getValidFrom(), request.getValidTo()));
     }
 
@@ -135,12 +135,12 @@ public class AdminController {
     }
 
     @PostMapping("/export")
-    public ResponseEntity<TikitoExportDto> export(final AuthUser authUser, @Validated @RequestBody final ExportRequest request) {
+    public ResponseEntity<TikitoExportDto> export(final AuthUser authUser, @Valid @RequestBody final ExportRequest request) {
         return ResponseEntity.ok(importExportService.export(authUser.getId(), request.getAccountIds(), request.getSettings()));
     }
 
     @PostMapping("/import")
-    public ResponseEntity<Void> doImport(final AuthUser authUser, @Validated @RequestBody final ImportRequest request) {
+    public ResponseEntity<Void> doImport(final AuthUser authUser, @Valid @RequestBody final ImportRequest request) {
         importExportService.importFrom(authUser.getId(), request.getData(), request.getSettings());
         return ResponseEntity.ok().build();
     }

@@ -1,7 +1,7 @@
 package org.tikito.dto.export;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Set;
 public class MoneyTransactionGroupExportDto {
     @NotBlank
     private String name;
-    private Set<MoneyTransactionGroupType> groupTypes;
-    private List<@Valid MoneyTransactionGroupQualifierExportDto> qualifiers;
-    private Set<String> accountNames;
+    private Set<@NotNull MoneyTransactionGroupType> groupTypes;
+    private List<@NotNull MoneyTransactionGroupQualifierExportDto> qualifiers;
+    private Set<@NotNull String> accountNames;
 }

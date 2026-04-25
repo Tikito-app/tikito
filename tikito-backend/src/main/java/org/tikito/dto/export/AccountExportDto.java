@@ -1,5 +1,6 @@
 package org.tikito.dto.export;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,9 +14,12 @@ import java.util.List;
 @Getter
 @Setter
 public class AccountExportDto {
+    @NotNull
     private String name;
+    @NotNull
     private AccountType accountType;
     private String accountNumber;
+    @NotNull
     private String currency;
 
     public AccountExportDto(final String name, final AccountType accountType, final String accountNumber, final String currency) {

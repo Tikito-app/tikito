@@ -7,7 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SetMoneyTransactionGroupIdRequest {
-    private long transactionId;
+    @NotNull
+    private Long transactionId;
     @NotNull
     private Long groupId;
 }
