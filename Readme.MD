@@ -35,14 +35,16 @@
 | Features                                | Supported   |
 |:----------------------------------------|-------------|
 | Import of stock transactions            | Yes         |
-| Import of debit transactions            | Yes         |
+| Import of debit/credit transactions     | Yes         |
 | Retrieve security prices from Yahoo     | Yes         |
 | Group your money transactions           | Yes         |
 | Visualize your stock and money growth   | Yes         |
 | Loans, such as mortgages (only annuity) | Yes         |
 | Backup and restore                      | Yes         |
-| Budgeting                               | Comnig soon |
+| Budgeting                               | Yes         |
+| Manually add/edit transactions          | Yes         |
 | More options to import data             | Comnig soon |
-| Manually add transactions               | Comnig soon |
 | Translations                            | Comnig soon |
+| Generic loans                           | Comnig soon |
+| Crypto                                  | Comnig soon |
 
