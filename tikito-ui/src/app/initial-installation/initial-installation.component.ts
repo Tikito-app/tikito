@@ -36,6 +36,9 @@ import {TranslatePipe} from "../service/translate-pipe.pipe";
     NgIf,
     TranslatePipe
   ],
+  providers: [
+    TranslatePipe
+  ],
   templateUrl: './initial-installation.component.html',
   styleUrl: './initial-installation.component.scss'
 })

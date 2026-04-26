@@ -45,7 +45,7 @@ export class AdminApi {
 
   getIsins(securityId: number): Observable<Isin[]> {
     return this.http.httpGetList(Isin, new HttpRequestData()
-      .withUrl('/api/admin/securities/' + securityId + '/isins'));
+      .withUrl('/api/security/' + securityId + '/isins'));
   }
 
   updateSecurity(securityId: number,

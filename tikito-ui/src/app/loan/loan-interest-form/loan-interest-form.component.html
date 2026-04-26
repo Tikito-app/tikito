@@ -2,7 +2,7 @@
   <ng-container>
     <mat-form-field class="half-width">
       <mat-label>{{'start-date' | translatePipe}}</mat-label>
-      <input matInput [matDatepicker]="pickerStartDate" formControlName="startDate">
+      <input matInput [matDatepicker]="pickerStartDate" formControlName="startDate" [attr.data-cy]="'start-date'">
       <mat-hint>MM/DD/YYYY</mat-hint>
       <mat-icon *ngIf="form.value['startDate']" matIconSuffix (click)="form.controls['startDate'].setValue(null);" class="clickable">close</mat-icon>
       <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
@@ -13,7 +13,7 @@
     </mat-form-field>
     <mat-form-field class="half-width">
       <mat-label>{{'end-date' | translatePipe}}</mat-label>
-      <input matInput [matDatepicker]="pickerEndDate" formControlName="endDate">
+      <input matInput [matDatepicker]="pickerEndDate" formControlName="endDate" [attr.data-cy]="'end-date'">
       <mat-hint>MM/DD/YYYY</mat-hint>
       <mat-icon *ngIf="form.value['endDate']" matIconSuffix (click)="form.controls['endDate'].setValue(null);" class="clickable">close</mat-icon>
       <mat-datepicker-toggle matIconSuffix [for]="pickerEndDate"></mat-datepicker-toggle>

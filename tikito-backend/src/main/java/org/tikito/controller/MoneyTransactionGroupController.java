@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.CreateOrUpdateMoneyTransactionGroupRequest;
 import org.tikito.dto.money.HistoricalBudgetValueDto;
+import org.tikito.dto.money.MoneyTransactionFilter;
 import org.tikito.dto.money.MoneyTransactionGroupDto;
 import org.tikito.service.money.MoneyTransactionGroupService;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -44,9 +44,9 @@ public class MoneyTransactionGroupController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/historical-budget-values/{startDate}/{endDate}")
-    public ResponseEntity<List<HistoricalBudgetValueDto>> getHistoricalBudgets(final AuthUser authUser, @PathVariable("startDate") final LocalDate startDate, @PathVariable("endDate") final LocalDate endDate) {
-        return ResponseEntity.ok(groupService.getHistoricalBudgets(authUser.getId(), startDate, endDate));
+    @PostMapping("/historical-budget-values")
+    public ResponseEntity<List<HistoricalBudgetValueDto>> getHistoricalBudgets(final AuthUser authUser, @Valid final MoneyTransactionFilter filter) {
+        return ResponseEntity.ok(groupService.getHistoricalBudgets(authUser.getId(), filter.getStartDate(), filter.getEndDate()));
     }
 
     @GetMapping("/recalculate-historical-budget")

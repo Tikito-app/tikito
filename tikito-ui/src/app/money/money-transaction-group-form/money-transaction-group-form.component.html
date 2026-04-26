@@ -11,7 +11,7 @@
     <mat-card-content>
       <form [formGroup]="form">
         <ng-container *ngIf="!nameInEdit">
-          {{group.name}} <button mat-button (click)="nameInEdit = true" *ngIf="!qualifierInEdit"><mat-icon>edit</mat-icon></button>
+          {{group.name}} <button mat-button (click)="nameInEdit = true" *ngIf="!qualifierInEdit" [attr.data-cy]="'edit-group'"><mat-icon>edit</mat-icon></button>
           <br/><br/>
         </ng-container>
         <ng-container *ngIf="nameInEdit">
@@ -24,7 +24,7 @@
           </mat-form-field>
           <mat-form-field class="full-width">
             <mat-label>{{'money/accounts' | translatePipe}}</mat-label>
-            <mat-select [attr.data-cy]="'accountIds'" multiple formControlName="accountIds">
+            <mat-select [attr.data-cy]="'account-ids'" multiple formControlName="accountIds">
               @for (account of accounts; track accounts) {
                 <mat-option [value]="account.id">{{account.name}}</mat-option>
               }
@@ -35,7 +35,7 @@
           </mat-form-field>
           <mat-form-field class="full-width">
             <mat-label>{{ 'money/transaction-group/group-type' | translatePipe }}</mat-label>
-            <mat-select formControlName="groupTypes" [attr.data-cy]="'groupType'" multiple>
+            <mat-select formControlName="groupTypes" [attr.data-cy]="'group-type'" multiple>
               @for (group of Util.getMoneyTransactionGroupTypes(); track group) {
                 <mat-option [value]="group">{{ group }}</mat-option>
               }
@@ -52,7 +52,7 @@
 
           <mat-form-field class="half-width">
             <mat-label>{{'start-date' | translatePipe}}</mat-label>
-            <input matInput [matDatepicker]="pickerStartDate" formControlName="startDate">
+            <input matInput [matDatepicker]="pickerStartDate" [attr.data-cy]="'start-date'" formControlName="startDate">
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-icon *ngIf="form.value['startDate']" matIconSuffix (click)="form.controls['startDate'].setValue(null);" class="clickable">close</mat-icon>
             <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
@@ -70,7 +70,7 @@
 
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{ 'money/transaction-group/date-range-amount' | translatePipe }}</mat-label>
-            <input type="number" matInput formControlName="dateRangeAmount">
+            <input type="number" matInput [attr.data-cy]="'date-range-amount'" formControlName="dateRangeAmount">
           </mat-form-field>
         </ng-container>
 
@@ -98,6 +98,6 @@
 </div>
 <div class="main-side-column main-column">
   <br/><br/><br/><br/><br/>
-  <button *ngIf="!nameInEdit && !qualifierInEdit && group != null && group.id" mat-fab aria-label="Add qualifier" (click)="onAddQualifierButtonClicked()" class="fab-button"><mat-icon>add</mat-icon></button>
+  <button *ngIf="!nameInEdit && !qualifierInEdit && group != null && group.id" mat-fab [attr.data-cy]="'add'" (click)="onAddQualifierButtonClicked()" class="fab-button"><mat-icon>add</mat-icon></button>
 
 </div>

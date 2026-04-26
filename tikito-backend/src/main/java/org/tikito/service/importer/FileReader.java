@@ -1,5 +1,6 @@
 package org.tikito.service.importer;
 
+import lombok.extern.slf4j.Slf4j;
 import org.tikito.dto.ImportFileType;
 import org.tikito.exception.CannotReadFileException;
 import org.tikito.util.Util;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 public final class FileReader {
 
     // visible for testing
@@ -103,6 +105,7 @@ public final class FileReader {
         try {
             return readCsv(multipartFile.getInputStream(), separatorChar, quoteChar);
         } catch (final IOException e) {
+            log.error(e.getMessage(), e);
             throw new CannotReadFileException();
         }
     }
@@ -124,6 +127,7 @@ public final class FileReader {
                     .map(Arrays::asList)
                     .toList());
         } catch (final IOException | CsvException e) {
+            log.error(e.getMessage(), e);
             throw new CannotReadFileException();
         }
     }

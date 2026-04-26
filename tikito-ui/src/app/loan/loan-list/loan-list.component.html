@@ -9,10 +9,10 @@
 
 <div class="{{tabIndex == 1 ? 'main-center-column-small' : 'main-center-column'}} main-column" *ngIf="loans.length > 0">
   <mat-tab-group (selectedIndexChange)="onTabSelectionChanged($event)">
-    <mat-tab label="{{'loan/graph' | translatePipe}}">
+    <mat-tab label="{{'loan/graph' | translatePipe}}" [attr.data-cy]="'loan-graph-tab'">
       <app-loan-graph [loans]="loans" [loanValues]="allValues" *ngIf="loans.length > 0"></app-loan-graph>
     </mat-tab>
-    <mat-tab label="{{'loan/loans' | translatePipe}}">
+    <mat-tab label="{{'loan/loans' | translatePipe}}" [attr.data-cy]="'loan-list-tab'">
 
       @if(dataSource) {
         <mat-card>
@@ -33,12 +33,12 @@
         <app-paginator></app-paginator>
       }
     </mat-tab>
-    <mat-tab label="{{'loan/transactions' | translatePipe}}">
+    <mat-tab label="{{'loan/transactions' | translatePipe}}" [attr.data-cy]="'loan-transactions-tab'">
       <app-loan-money-transactions-list></app-loan-money-transactions-list>
     </mat-tab>
   </mat-tab-group>
 
 </div>
 <div class="main-side-column main-column" *ngIf="tabIndex == 1 || loans.length == 0">
-  <button mat-fab (click)="onAddLoanButtonClicked()" class="fab-button"><mat-icon>add</mat-icon></button>
+  <button mat-fab [attr.data-cy]="'add'" (click)="onAddLoanButtonClicked()" class="fab-button"><mat-icon>add</mat-icon></button>
 </div>

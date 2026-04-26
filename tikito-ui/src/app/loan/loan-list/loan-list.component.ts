@@ -31,6 +31,8 @@ import {
   LoanMoneyTransactionsListComponent
 } from "../loan-money-transactions-list/loan-money-transactions-list.component";
 import {MatCard, MatCardHeader} from "@angular/material/card";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatSelect} from "@angular/material/select";
 
 @Component({
   selector: 'app-loan-list',
@@ -60,7 +62,10 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
     LoanMoneyTransactionsListComponent,
     TranslatePipe,
     MatCard,
-    MatCardHeader
+    MatCardHeader,
+    FormsModule,
+    MatSelect,
+    ReactiveFormsModule
   ],
   templateUrl: './loan-list.component.html',
   styleUrl: './loan-list.component.scss'

@@ -27,20 +27,17 @@ import java.util.stream.Collectors;
 public class LoanService {
     private final LoanRepository loanRepository;
     private final LoanPartRepository loanPartRepository;
-    private final LoanInterestRepository loanInterestRepository;
     private final MoneyTransactionGroupRepository moneyTransactionGroupRepository;
     private final LoanValueRepository loanValueRepository;
     private final JobService jobService;
 
     public LoanService(final LoanRepository loanRepository,
                        final LoanPartRepository loanPartRepository,
-                       final LoanInterestRepository loanInterestRepository,
                        final MoneyTransactionGroupRepository moneyTransactionGroupRepository,
                        final LoanValueRepository loanValueRepository,
                        final JobService jobService) {
         this.loanRepository = loanRepository;
         this.loanPartRepository = loanPartRepository;
-        this.loanInterestRepository = loanInterestRepository;
         this.moneyTransactionGroupRepository = moneyTransactionGroupRepository;
         this.loanValueRepository = loanValueRepository;
         this.jobService = jobService;
@@ -96,7 +93,7 @@ public class LoanService {
     @Transactional(propagation = Propagation.MANDATORY)
     public LoanDto createOrUpdateLoan(final long userId, final CreateOrUpdateLoanRequest request) {
         final Loan loan = request.isNew() ? new Loan(userId) : loanRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
-        final List<MoneyTransactionGroup> groups = moneyTransactionGroupRepository.findAllByIdsOrLoanId(request.getGroupIds(), request.getLoanId());
+        final List<MoneyTransactionGroup> groups = request.isNew() ? new ArrayList<>() : moneyTransactionGroupRepository.findAllByIdsOrLoanId(request.getGroupIds(), request.getId());
         loan.setName(request.getName());
         loan.setDateRange(request.getDateRange());
         loan.setGroups(groups);
@@ -123,7 +120,7 @@ public class LoanService {
         loanPart.setLoanType(request.getLoanType());
         loanPart.setCurrencyId(request.getCurrencyId());
         loanPart.getInterests().clear();
-        loanPart.setPeriodicPayment(request.getAmount() / Util.getChronoUnit(loan.getDateRange()).between(loanPart.getStartDate(), loanPart.getEndDate()));
+        loanPart.setPeriodicPayment(request.getAmount() / Math.max(1, Util.getChronoUnit(loan.getDateRange()).between(loanPart.getStartDate(), loanPart.getEndDate())));
 
         if (request.getInterests() != null) {
             request
@@ -152,14 +149,14 @@ public class LoanService {
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public void deleteLoanPart(final long userId, final long loanId, final long loanPartId) {
+    public void deleteLoanPart(final long userId, final long loanPartId) {
         loanPartRepository.findByUserIdAndId(userId, loanPartId).orElseThrow();
         loanPartRepository.deleteByUserIdAndId(userId, loanPartId);
         loanValueRepository.deleteByLoanPartId(loanPartId);
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public void deleteLoanInterest(final long userId, final long loanId, final long loanPartId, final long loanInterestId) {
+    public void deleteLoanInterest(final long userId, final long loanPartId, final long loanInterestId) {
         final LoanPart loanPart = loanPartRepository.findByUserIdAndId(userId, loanPartId).orElseThrow();
         final LoanInterest interest = loanPart.getInterests().stream().filter(i -> i.getId() == loanInterestId).findFirst().orElseThrow();
         interest.setLoanPart(null);

@@ -13,6 +13,6 @@ public interface HistoricalBudgetValueRepository extends JpaRepository<Historica
     @Modifying
     void deleteByUserIdAndGroupId(long userId, long groupId);
 
-    @Query("select v from HistoricalBudgetValue v where v.userId = :userId and v.date >= :startDate and v.date < :endDate")
+    @Query("select v from HistoricalBudgetValue v where v.userId = :userId and (:startDate is null or v.date >= :startDate) and (:endDate is null or v.date < :endDate)")
     List<HistoricalBudgetValue> findByUserIdDateBetween(long userId, LocalDate startDate, LocalDate endDate);
 }

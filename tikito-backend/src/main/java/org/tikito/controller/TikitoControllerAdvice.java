@@ -15,15 +15,28 @@ import org.tikito.exception.ClientFormExceptionResponse.ClientFormValidationExce
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @ControllerAdvice
 public class TikitoControllerAdvice {
 
-    @ExceptionHandler(value = {ClientValidationException.class})
-    protected ResponseEntity<Object> handleClientValidationException(final Exception ex) {
+    @ExceptionHandler(value = {Exception.class})
+    protected ResponseEntity<Object> handleClientValidationEdxception(final Exception ex) {
         log.warn(ex.getMessage(), ex);
         return handleExceptionInternal(ex, new ServerResponse<>(ex), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {ClientValidationException.class})
+    protected ResponseEntity<Object> handleClientValidationException(final ClientValidationException ex) {
+        log.warn(ex.getMessage(), ex);
+        return handleExceptionInternal(ex, new ServerResponse<>(ex), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {NoSuchElementException.class})
+    protected ResponseEntity<Object> handleNoSuchElementException(final NoSuchElementException ex) {
+        log.warn(ex.getMessage(), ex);
+        return handleExceptionInternal(ex, new ServerResponse<>(ex), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -1,5 +1,6 @@
 package org.tikito.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.tikito.entity.Job;
 import org.tikito.repository.MoneyTransactionRepository;
 import org.tikito.repository.SecurityTransactionRepository;
@@ -24,6 +25,7 @@ public class UpdaterService {
     }
 
     @Scheduled(cron = "0 0 3 * * *")
+    @Transactional
     public void assertDataIsUpToDate() {
         updateCurrencies();
     }

@@ -116,7 +116,7 @@ public class AdminController {
         return ResponseEntity.ok(securityService.updateIsin(isin, request.getSymbol(), request.getValidFrom(), request.getValidTo()));
     }
 
-    @DeleteMapping("/securities/isin{isin}")
+    @DeleteMapping("/securities/isin/{isin}")
     public ResponseEntity<Void> deleteIsin(final AuthUser authUser, @PathVariable("isin") final String isin) {
         securityService.deleteIsin(isin);
         return ResponseEntity.ok().build();

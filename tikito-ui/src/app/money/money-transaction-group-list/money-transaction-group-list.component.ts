@@ -57,7 +57,8 @@ import {CurrencyComponent} from "../../components/currency/currency.component";
     CurrencyComponent
   ],
   templateUrl: './money-transaction-group-list.component.html',
-  styleUrl: './money-transaction-group-list.component.scss'
+  styleUrl: './money-transaction-group-list.component.scss',
+  providers: [TranslatePipe]
 })
 export class MoneyTransactionGroupListComponent implements AfterViewInit {
   displayedColumns: string[] = ['name', 'budgeted'];
