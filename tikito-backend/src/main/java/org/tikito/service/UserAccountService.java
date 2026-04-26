@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.tikito.auth.*;
+import org.tikito.config.TikitoProperties;
 import org.tikito.controller.request.ActivateRequest;
 import org.tikito.controller.request.LoginRequest;
 import org.tikito.dto.DateRange;
@@ -39,17 +40,20 @@ public class UserAccountService {
     private final SecurityRepository securityRepository;
     private final IsinRepository isinRepository;
     private final UserPreferenceRepository userPreferenceRepository;
+    private final TikitoProperties tikitoProperties;
 
     public UserAccountService(final UserAccountRepository userAccountRepository,
                               final CacheService cacheService,
                               final SecurityRepository securityRepository,
                               final IsinRepository isinRepository,
-                              final UserPreferenceRepository userPreferenceRepository) {
+                              final UserPreferenceRepository userPreferenceRepository,
+                              final TikitoProperties tikitoProperties) {
         this.userAccountRepository = userAccountRepository;
         this.cacheService = cacheService;
         this.securityRepository = securityRepository;
         this.isinRepository = isinRepository;
         this.userPreferenceRepository = userPreferenceRepository;
+        this.tikitoProperties = tikitoProperties;
     }
 
     public LoggedInUserDto login(final LoginRequest request) throws InvalidCredentialsException {
@@ -60,7 +64,7 @@ public class UserAccountService {
         } else if (!userAccount.isActivated()) {
             throw new InvalidCredentialsException();
         }
-        final String jwt = JwtGeneratorService.generateJwt(userAccount.toAuthUser(), Arrays.asList(Scope.values()));
+        final String jwt = JwtGeneratorService.generateJwt(tikitoProperties.getApiKey(), userAccount.toAuthUser(), Arrays.asList(Scope.values()));
 
         return new LoggedInUserDto(
                 userAccount,

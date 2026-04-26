@@ -10,6 +10,9 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 public class TikitoProperties {
+
+    private String apiKey;
+
     private FinnubProperties finnhub;
 
     @Getter

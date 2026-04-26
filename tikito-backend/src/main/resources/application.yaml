@@ -18,5 +18,6 @@ server:
   port: ${TIKITO_API_PORT}}
 
 tikito:
+  api-key: 1PkG80NKaJDg75xAOCMpOAkSLUB+QT0CuLHghK+DK4IEriPQVbQSF7mjUhj3Gar6amAekE5VZ0Y5EaLYeaaGIA==
   finnhub:
     token: ${FINNHUB_TOKEN}

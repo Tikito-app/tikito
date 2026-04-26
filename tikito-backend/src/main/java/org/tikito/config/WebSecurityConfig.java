@@ -20,13 +20,13 @@ import java.util.List;
 @EnableWebSecurity
 public class WebSecurityConfig {
     @Bean
-    public SecurityFilterChain configure(final HttpSecurity http) throws Exception {
+    public SecurityFilterChain configure(final HttpSecurity http, final TikitoProperties tikitoProperties) {
 
         http.cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 // this disables session creation on Spring Security
                 .sessionManagement(Customizer.withDefaults())
-                .addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new AuthorizationFilter(tikitoProperties.getApiKey()), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/user/register", "/api/user/login", "/api/user/initial-installation").permitAll()
                         .anyRequest().authenticated()
