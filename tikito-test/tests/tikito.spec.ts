@@ -72,6 +72,10 @@ test.describe('Tikito Application Tests', () => {
     await clickPlusButton(page);
     await createMoneyGroupQualifier(page, 'Description', 'Includes', 'test');
 
+    await gotoGroupsAndBudget(page);
+    await clickPlusButton(page);
+    await click(page, 'edit-group');
+
     await createMoneyGroup(page, 'Annuity loan group', 'LOAN', null, null, null, null);
     await clickPlusButton(page);
     await createMoneyGroupQualifier(page, 'Description', 'Includes', 'test');
