@@ -2,8 +2,7 @@ package org.tikito.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwt;
+import io.jsonwebtoken.Jws;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -28,6 +27,11 @@ public class AuthorizationFilter extends GenericFilterBean {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String INTERNAL_USER_AUTHORIZATION_PREFIX = "Bearer ";
 
+    private final String apiKey;
+
+    public AuthorizationFilter(final String apiKey) {
+        this.apiKey = apiKey;
+    }
 
     @Override
     public void doFilter(final ServletRequest servletRequest,
@@ -56,15 +60,19 @@ public class AuthorizationFilter extends GenericFilterBean {
         try {
 
             if (StringUtils.hasText(jwt)) {
-                final Jwt<Header, Claims> headerClaimsJwt;
-                headerClaimsJwt = JwtGeneratorService.unsafeParseJwt(jwt);
-
+                final Jws<Claims> jws = JwtGeneratorService.unsafeParseJwt(apiKey, jwt);
 
                 Set<Scope> scopes = new HashSet<>();
                 try {
-                    scopes = Arrays.stream(headerClaimsJwt.getBody().get("scopes").toString().split(",")).map(Scope::valueOf).collect(Collectors.toSet());
+                    scopes = Arrays.stream(jws.getPayload()
+                            .get("scopes")
+                            .toString()
+                            .split(","))
+                            .filter(StringUtils::hasText)
+                            .map(Scope::valueOf)
+                            .collect(Collectors.toSet());
                 } catch (final Exception e) {
-
+                    log.error("Error parsing scopes from JWT", e);
                 }
 
                 user = parseUser(jwt, scopes);
@@ -72,42 +80,23 @@ public class AuthorizationFilter extends GenericFilterBean {
 
             if (user != null) {
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>()));
-            } else {
-                //            throw new RuntimeException("Not allowed");
             }
         } catch (final ExpiredJwtException e) {
-//                throw new RuntimeException("Not allowed");
+            log.warn("JWT expired", e);
+        } catch (final Exception e) {
+            log.error("JWT validation failed", e);
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
     AuthUser parseUser(final String jwt, final Set<Scope> scopes) {
-//        String authenticationToken = authorizationHeader.replace(INTERNAL_USER_AUTHORIZATION_PREFIX, "");
-//        try {
-        final Jwt<Header, Claims> headerClaimsJwt = JwtGeneratorService.unsafeParseJwt(jwt);
+        final Jws<Claims> jws = JwtGeneratorService.unsafeParseJwt(apiKey, jwt);
         return new AuthUser(
                 jwt,
-                Long.parseLong(getClaim("id", headerClaimsJwt.getBody())),
-                getClaim("email", headerClaimsJwt.getBody()),
+                Long.parseLong(getClaim("id", jws.getPayload())),
+                getClaim("email", jws.getPayload()),
                 scopes);
-//        } catch (NoSuchAlgorithmException e) {
-//            log.error(e.getMessage(), e);
-//            return null;
-//        } catch (InvalidKeySpecException e) {
-//            log.error(e.getMessage(), e);
-//            return null;
-//        } catch (SignatureException e) {
-//            log.error(e.getMessage(), e);
-//            return null;
-//        }
-    }
-
-    private Set<String> splitToStringList(final String value) {
-        if (!StringUtils.hasText(value)) {
-            return new HashSet<>();
-        }
-        return Arrays.stream(value.split(",")).collect(Collectors.toSet());
     }
 
     private String getClaim(final String name, final Claims claims) {
