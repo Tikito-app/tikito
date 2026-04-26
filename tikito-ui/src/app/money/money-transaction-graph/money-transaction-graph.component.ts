@@ -160,13 +160,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
         return;
       }
 
-      let startDate = this.getStartDate();
-      if (startDate == null) {
-        startDate = moment().subtract(1, 'year');
-      }
-
-
-      this.api.getHistoricalBudgetValues(this.getDateByDateRange(startDate), this.getEndDate() as moment.Moment).subscribe(historicalBudgetValues => {
+      this.api.getHistoricalBudgetValues(this.getStartDate(), this.getEndDate() as moment.Moment).subscribe(historicalBudgetValues => {
         this.historicalBudgetValues = historicalBudgetValues
           .filter(value => this.transactionFilter.groupIds == null || this.transactionFilter.groupIds?.length == 0 || this.transactionFilter.groupIds.includes(value.groupId));
         observer.next();

@@ -151,10 +151,14 @@ export class MoneyApi {
       .withUrl('/api/money/holding'));
   }
 
-  getHistoricalBudgetValues(startDate: moment.Moment, endDate: moment.Moment): Observable<HistoricalBudgetValue[]> {
-    let startDateFormatted = startDate.format('yyyy-MM-DD');
-    let endDateFormatted = (endDate == null ? moment() : endDate).format('yyyy-MM-DD');
-    return this.http.httpGetList<HistoricalBudgetValue>(HistoricalBudgetValue,
-      new HttpRequestData().withUrl('/api/money/transactions-group/historical-budget-values/' + startDateFormatted + '/' + endDateFormatted));
+  getHistoricalBudgetValues(startDate: moment.Moment | null, endDate: moment.Moment | null): Observable<HistoricalBudgetValue[]> {
+    let startDateFormatted = (startDate == null ? '' : startDate.format('yyyy-MM-DD'));
+    let endDateFormatted = (endDate == null ? null : endDate.format('yyyy-MM-DD'));
+    return this.http.httpPostList<HistoricalBudgetValue>(HistoricalBudgetValue,
+      new HttpRequestData().withUrl('/api/money/transactions-group/historical-budget-values')
+        .withBody({
+          startDate: startDateFormatted,
+          endDate: endDateFormatted
+        }));
   }
 }

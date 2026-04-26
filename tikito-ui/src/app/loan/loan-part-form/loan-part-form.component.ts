@@ -158,7 +158,7 @@ export class LoanPartFormComponent implements OnInit {
   onDeleteButtonClicked() {
     if (this.loanId != 0) {
       this.dialogService.deleteConfirmation().subscribe(() => {
-        this.api.deleteLoanPart(this.loanId, this.loanPartId as number).subscribe(() => this.onCancelButtonClicked());
+        this.api.deleteLoanPart(this.loanPartId as number).subscribe(() => this.onCancelButtonClicked());
       });
     } else {
       this.onCancelButtonClicked();
@@ -193,7 +193,7 @@ export class LoanPartFormComponent implements OnInit {
   }
 
   interestDeleteCallback() {
-    this.api.deleteInterest(this.loanId, this.loanPartId, this.interestInEdit?.id).subscribe(() => this.onCancelButtonClicked());
+    this.api.deleteInterest(this.loanPartId, this.interestInEdit?.id).subscribe(() => this.onCancelButtonClicked());
 
   }
 

@@ -14,7 +14,7 @@
       </mat-select>
     </mat-form-field>
     <br/>
-    <input type="file" class="file-input" *ngIf="form.value.account" (change)="onFileSelected($event)" #fileUpload/>
+    <input type="file" class="file-input" [attr.data-cy]="'file'" *ngIf="form.value.account" (change)="onFileSelected($event)" #fileUpload/>
     <br/>
     <br/>
     <ng-container *ngIf="showCsvImportOptions">
@@ -24,14 +24,14 @@
       </mat-form-field>
       <button mat-raised-button
               color="{{showCustomHeaderConfig || moneyImportResult || securityImportResult ? 'secondary' : 'primary'}}"
-              (click)="processImportFileContent()">{{ 'account/import/continue' | translatePipe }}
+              (click)="processImportFileContent()" [attr.data-cy]="'continue'" >{{ 'account/import/continue' | translatePipe }}
       </button>
     </ng-container>
     <br/>
     <ng-container *ngIf="moneyImportResult || securityImportResult">
       <p>{{ 'account/import/do-import-no-dry-run-text' | translatePipe }}</p>
       <button mat-raised-button color="primary" *ngIf="!showLoadingText"
-              (click)="uploadFileToBackend(false)">{{ 'account/import' | translatePipe }}
+              (click)="uploadFileToBackend(false)" [attr.data-cy]="'import'" >{{ 'account/import' | translatePipe }}
       </button>
     </ng-container>
     <br/>

@@ -21,6 +21,12 @@ import java.util.NoSuchElementException;
 @ControllerAdvice
 public class TikitoControllerAdvice {
 
+    @ExceptionHandler(value = {Exception.class})
+    protected ResponseEntity<Object> handleClientValidationEdxception(final Exception ex) {
+        log.warn(ex.getMessage(), ex);
+        return handleExceptionInternal(ex, new ServerResponse<>(ex), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(value = {ClientValidationException.class})
     protected ResponseEntity<Object> handleClientValidationException(final ClientValidationException ex) {
         log.warn(ex.getMessage(), ex);

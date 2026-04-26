@@ -33,12 +33,12 @@ public class SecurityController {
     }
 
     @GetMapping("/{securityId}/isins")
-    public ResponseEntity<List<IsinDto>> getIsins(final AuthUser authUser, @PathVariable("id") final long securityId) {
+    public ResponseEntity<List<IsinDto>> getIsins(final AuthUser authUser, @PathVariable("securityId") final long securityId) {
         return ResponseEntity.ok(securityService.getIsins(securityId));
     }
 
     @GetMapping("/{securityId}/prices")
-    public ResponseEntity<List<SecurityPriceDto>> getPrices(final AuthUser authUser, @PathVariable("id") final long securityId) {
+    public ResponseEntity<List<SecurityPriceDto>> getPrices(final AuthUser authUser, @PathVariable("securityId") final long securityId) {
         return ResponseEntity.ok(securityService.getPrices(securityId));
     }
 }

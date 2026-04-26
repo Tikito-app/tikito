@@ -13,7 +13,8 @@ import {TranslatePipe} from "../../service/translate-pipe.pipe";
     TranslatePipe
   ],
   templateUrl: './admin.component.html',
-  styleUrl: './admin.component.scss'
+  styleUrl: './admin.component.scss',
+  providers: [TranslatePipe]
 })
 export class AdminComponent {
 

@@ -67,12 +67,12 @@ export class LoanApi {
     return this.http.httpDelete(new HttpRequestData().withUrl('/api/loan/' + loanId));
   }
 
-  deleteLoanPart(loanId: number, loanPartId: number): Observable<void> {
-    return this.http.httpDelete(new HttpRequestData().withUrl('/api/loan/' + loanId + '/part/' + loanPartId));
+  deleteLoanPart(loanPartId: number): Observable<void> {
+    return this.http.httpDelete(new HttpRequestData().withUrl('/api/loan/part/' + loanPartId));
   }
 
-  deleteInterest(loanId: number | null, loanPartId: number | null, interestId: number | undefined) {
-    return this.http.httpDelete(new HttpRequestData().withUrl('/api/loan/' + loanId + '/part/' + loanPartId + '/interest/' + interestId));
+  deleteInterest(loanPartId: number | null, interestId: number | undefined) {
+    return this.http.httpDelete(new HttpRequestData().withUrl('/api/loan//part/' + loanPartId + '/interest/' + interestId));
   }
 
   getLoanValues(): Observable<LoanValue[]> {

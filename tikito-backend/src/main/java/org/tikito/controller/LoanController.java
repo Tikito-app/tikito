@@ -61,15 +61,15 @@ public class LoanController {
         return ResponseEntity.ok(loanService.getCurrentLoanValues(authUser.getId()));
     }
 
-    @DeleteMapping("/{loanId}/part/{loanPartId}")
-    public ResponseEntity<Void> deleteLoanPart(final AuthUser authUser, @PathVariable("loanId") final long loanId, @PathVariable("loanPartId") final long loanPartId) {
-        loanService.deleteLoanPart(authUser.getId(), loanId, loanPartId);
+    @DeleteMapping("/part/{loanPartId}")
+    public ResponseEntity<Void> deleteLoanPart(final AuthUser authUser, @PathVariable("loanPartId") final long loanPartId) {
+        loanService.deleteLoanPart(authUser.getId(), loanPartId);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{loanId}/part/{loanPartId}/interest/{interestId}")
-    public ResponseEntity<Void> deleteLoanInterest(final AuthUser authUser, @PathVariable("loanId") final long loanId, @PathVariable("loanPartId") final long loanPartId, @PathVariable("interestId") final long loanInterestId) {
-        loanService.deleteLoanInterest(authUser.getId(), loanId, loanPartId, loanInterestId);
+    @DeleteMapping("/part/{loanPartId}/interest/{interestId}")
+    public ResponseEntity<Void> deleteLoanInterest(final AuthUser authUser, @PathVariable("loanPartId") final long loanPartId, @PathVariable("interestId") final long loanInterestId) {
+        loanService.deleteLoanInterest(authUser.getId(), loanPartId, loanInterestId);
         return ResponseEntity.ok().build();
     }
 }
