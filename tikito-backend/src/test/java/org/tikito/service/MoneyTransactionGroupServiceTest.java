@@ -179,7 +179,7 @@ class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
 
     private MoneyTransactionGroupQualifierDto qualifier(final MoneyTransactionGroupQualifierType qualifierType, final String qualifier) {
         return new MoneyTransactionGroupQualifierDto(
-                0,
+                0L,
                 0L,
                 qualifierType,
                 qualifier,
