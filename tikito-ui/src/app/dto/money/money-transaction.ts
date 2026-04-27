@@ -1,8 +1,8 @@
 export default class MoneyTransaction {
   id: number;
   accountId: number;
-  counterpartAccountName: string;
-  counterpartAccountNumber: string;
+  counterpartyAccountName: string;
+  counterpartyAccountNumber: string;
   timestamp: string;
   amount: number;
   finalBalance: number;

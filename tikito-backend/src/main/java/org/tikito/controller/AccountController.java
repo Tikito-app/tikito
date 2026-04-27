@@ -12,6 +12,7 @@ import org.tikito.dto.AccountDto;
 import org.tikito.dto.AccountType;
 import org.tikito.service.AccountService;
 import org.tikito.service.importer.money.ABNFileParser;
+import org.tikito.service.importer.money.BitvavoFileParser;
 import org.tikito.service.importer.money.INGFileParser;
 import org.tikito.service.importer.security.DeGiroAccountImporter;
 
@@ -56,6 +57,7 @@ public class AccountController {
         map.put("ABN", ImportTypeData.builder().accountType(AccountType.DEBIT).headers(new ABNFileParser().getHeaders()).build());
         map.put("ING", ImportTypeData.builder().accountType(AccountType.DEBIT).headers(new INGFileParser().getHeaders()).build());
         map.put("DE_GIRO", ImportTypeData.builder().accountType(AccountType.SECURITY).headers(new DeGiroAccountImporter().getHeaders()).build());
+        map.put("BITVAVO", ImportTypeData.builder().accountType(AccountType.DEBIT).headers(new BitvavoFileParser().getHeaders()).build());
         return ResponseEntity.ok(map);
     }
 

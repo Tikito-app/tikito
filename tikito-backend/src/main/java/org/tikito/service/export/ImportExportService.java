@@ -137,14 +137,14 @@ public class ImportExportService {
 
     private Map<Long, Security> getCurrenciesById() {
         return securityRepository
-                .findBySecurityType(SecurityType.CURRENCY)
+                .findBySecurityTypes(Set.of(SecurityType.CURRENCY, SecurityType.CRYPTO))
                 .stream()
                 .collect(Collectors.toMap(Security::getId, Function.identity()));
     }
 
     private Map<String, Security> getCurrenciesByIsin() {
         return securityRepository
-                .findBySecurityType(SecurityType.CURRENCY)
+                .findBySecurityTypes(Set.of(SecurityType.CURRENCY, SecurityType.CRYPTO))
                 .stream()
                 .collect(Collectors.toMap(Security::getCurrentIsin, Function.identity()));
     }

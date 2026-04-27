@@ -66,12 +66,11 @@ public class MoneyTransactionController {
                                                                                @RequestParam(name = "header-config", required = false) final String customHeaderConfigString,
                                                                                @RequestParam(name = "debit-indication", required = false) final String debitIndication,
                                                                                @RequestParam(name = "timestamp-format", required = false) final String timestampFormat,
-                                                                               @RequestParam(name = "date-format", required = false) final String dateFormat,
                                                                                @RequestParam(name = "time-format", required = false) final String timeFormat,
                                                                                @RequestParam("dryRun") final boolean dryRun) throws CannotReadFileException {
         try {
             return ResponseEntity.ok(moneyImportService
-                    .importTransactions(authUser.getId(), accountId, file, dryRun, customHeaderConfigString, debitIndication, timestampFormat, dateFormat, timeFormat, csvSeparator)
+                    .importTransactions(authUser.getId(), accountId, file, dryRun, customHeaderConfigString, debitIndication, timestampFormat, timeFormat, csvSeparator)
                     .getLines());
         } catch (final JsonProcessingException e) {
             throw new RuntimeException(e);

@@ -67,7 +67,7 @@ public class CacheService {
         refreshSecurities();
         currencies.clear();
         currencies.addAll(securityRepository
-                .findBySecurityType(SecurityType.CURRENCY)
+                .findBySecurityTypes(Set.of(SecurityType.CURRENCY, SecurityType.CRYPTO))
                 .stream()
                 .map(Security::toDto)
                 .toList());

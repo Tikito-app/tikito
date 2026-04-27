@@ -27,7 +27,7 @@ class AccountServiceTest extends BaseIntegrationTest {
     void testCreateNewDebitAccount() {
         final AccountDto dto = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, AccountType.DEBIT);
 
-        final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), dto.getId()).orElseThrow();
+        final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), dto.getId()).getFirst();
         assertEquals(CURRENCY_EURO_ID, moneyHolding.getCurrencyId());
     }
 
@@ -36,7 +36,7 @@ class AccountServiceTest extends BaseIntegrationTest {
         final AccountDto dto = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, AccountType.CREDIT);
         assertEquals(AccountType.CREDIT, dto.getAccountType());
 
-        final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), dto.getId()).orElseThrow();
+        final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), dto.getId()).getFirst();
         assertEquals(CURRENCY_EURO_ID, moneyHolding.getCurrencyId());
     }
 

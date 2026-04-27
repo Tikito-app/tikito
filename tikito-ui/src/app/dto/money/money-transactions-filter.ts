@@ -1,5 +1,6 @@
 export class MoneyTransactionsFilter {
   accountIds: number[] | null;
+  currencies: number[] | null;
   groupIds: number[] | null;
   dateRange: TransactionDateRange | null;
   startAtZeroAfterDateAggregation: boolean;
@@ -16,6 +17,7 @@ export class MoneyTransactionsFilter {
   withoutStartAndEndDate(): MoneyTransactionsFilter {
     let filter = new MoneyTransactionsFilter();
     filter.accountIds = this.accountIds;
+    filter.currencies = this.currencies;
     filter.groupIds = this.groupIds;
     filter.startAtZeroAfterDateAggregation = this.startAtZeroAfterDateAggregation;
     filter.startAtZeroFromBeginning = this.startAtZeroFromBeginning;

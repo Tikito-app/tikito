@@ -125,8 +125,6 @@ export class ImportComponent implements OnInit {
         if (this.importFileState.accountType == null) {
           this.importFileState.accountType = this.form.value.account.accountType;
           this.showCustomHeaderConfig = true;
-        } else if (this.importFileState.accountType != this.form.value.account.accountType) {
-          this.dialogService.snackbar(this.translateService.translate('account/import/wrong-account-type'), this.translateService.translate('account/import/wrong-account-type'));
         } else {
           this.uploadFileToBackend(true);
         }
@@ -171,7 +169,7 @@ export class ImportComponent implements OnInit {
         this.dialogService.snackbar(this.translateService.translate('account/import/file-import-success'));
       });
     } else if (this.importFileState.accountType == AccountType.DEBIT) {
-      this.moneyApi.importFile(this.form.value.account.id, this.importFileState.file, dryRun, headers, debitCreditValue, timestampFormat, dateFormat, timeFormat, csvSeparator).subscribe(transactions => {
+      this.moneyApi.importFile(this.form.value.account.id, this.importFileState.file, dryRun, headers, debitCreditValue, timestampFormat, timeFormat, csvSeparator).subscribe(transactions => {
         this.moneyImportResult = transactions;
         this.showLoadingText = false;
         this.dialogService.snackbar(this.translateService.translate('account/import/file-import-success'));

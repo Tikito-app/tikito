@@ -183,7 +183,7 @@ public class BaseIntegrationTest extends BaseTest {
         DEFAULT_SECURITY_ACCOUNT_DTO = DEFAULT_SECURITY_ACCOUNT.toDto();
         DEBIT_DOLLAR_ACCOUNT_DTO = DEBIT_DOLLAR_ACCOUNT.toDto();
 
-        final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT_DTO.getId()).orElseThrow();
+        final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT_DTO.getId()).getFirst();
         moneyHolding.setAmountOffset(randomDouble(200, 500));
         moneyHoldingRepository.saveAndFlush(moneyHolding);
     }

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class MoneyTransactionFilter {
     private Set<Long> accountIds;
+    private Set<Long> currencies;
     private Set<Long> groupIds;
     private DateRange dateRange;
     private LocalDate startDate;
@@ -27,6 +28,16 @@ public class MoneyTransactionFilter {
     public Set<Long> getAccountIds() {
         if (accountIds != null) {
             final Set<Long> ids = accountIds.stream().filter(Objects::nonNull).collect(Collectors.toSet());
+            if (!ids.isEmpty()) {
+                return ids;
+            }
+        }
+        return null;
+    }
+
+    public Set<Long> getCurrencies() {
+        if (currencies != null) {
+            final Set<Long> ids = currencies.stream().filter(Objects::nonNull).collect(Collectors.toSet());
             if (!ids.isEmpty()) {
                 return ids;
             }

@@ -77,7 +77,6 @@
   "account/import/required-column-buy-sell": "Buy/sell",
   "account/import/required-column-buy-text": "",
   "account/import/unknown-file-type": "Unknown file type",
-  "account/import/wrong-account-type": "Wrong account type compared to account type of account",
 
   "account/import/required-column-timestamp": "Timestamp",
   "account/import/required-column-counterparty-account-name": "Counterparty name",

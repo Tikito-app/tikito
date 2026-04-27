@@ -11,7 +11,6 @@ import {MoneyTransactionGroupType} from "./dto/money-transaction-group-type";
 import {LoanType} from "./dto/loan-type";
 import {CacheService} from "./service/cache-service";
 import {SecurityTransactionType} from "./dto/security/security-transaction-type";
-import {TransactionDateRange} from "./dto/money/money-transactions-filter";
 
 export class Util {
   public static DATE_FORMAT: string = 'dd-MM-YYYY';

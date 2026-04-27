@@ -5,13 +5,14 @@ import {EChartModule} from "../../echart-module";
 import {MoneyApi} from "../../api/money-api";
 import {Util} from "../../util";
 import {MoneyTransactionsFilter, TransactionDateRange} from "../../dto/money/money-transactions-filter";
-import moment from "moment";
+import moment, {Moment} from "moment";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
 import MoneyTransaction from "../../dto/money/money-transaction";
 import {Observable} from "rxjs";
 import {AuthService} from "../../service/auth.service";
 import {HistoricalBudgetValue} from "../../dto/money/historical-budget-value";
 import {MoneyBudgetTransaction} from "../../dto/money/money-budget-transaction";
+import {SecurityApi} from "../../api/security-api";
 
 class GroupKey {
   name: string;
@@ -38,12 +39,14 @@ class GroupInfo {
   isBudget: boolean;
   key: string;
   normalizedAggregatedValue: number = 0;
+  currencyId: number;
 
-  constructor(id: number, name: string, isBudget: boolean) {
+  constructor(id: number, name: string, isBudget: boolean, currencyId: number) {
     this.id = id;
     this.name = name;
     this.isBudget = isBudget;
     this.key = new GroupKey(name, isBudget).toString();
+    this.currencyId = currencyId;
   }
 }
 
@@ -52,13 +55,15 @@ export class NormalizedMoneyValue {
   date: moment.Moment;
   value: number;
   groupKey: string;
+  currencyId: number;
   previous: NormalizedMoneyValue | null;
 
-  constructor(dateString: string, date: moment.Moment, value: number, groupKey: string, previous: NormalizedMoneyValue | null) {
+  constructor(dateString: string, date: moment.Moment, value: number, groupKey: string, currencyId: number, previous: NormalizedMoneyValue | null) {
     this.dateString = dateString;
     this.date = date;
     this.value = value;
     this.groupKey = groupKey;
+    this.currencyId = currencyId;
     this.previous = previous;
   }
 }
@@ -101,8 +106,10 @@ export class MoneyTransactionGraphComponent implements OnInit {
   lastPerformanceName: string;
   accountsOfTransactions: any;
   lastDateRange: TransactionDateRange | null;
+  securityPricesByIdAndDate: any = {}
 
   constructor(private api: MoneyApi,
+              private securityApi: SecurityApi,
               private authService: AuthService) {
   }
 
@@ -132,7 +139,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
   assertHasTransactions(): Observable<void> {
     this.perf('getTransactions');
     // todo, make nicer; find a nice way to reset the transactions when needed
-    const accountIdsJson = JSON.stringify(this.transactionFilter.accountIds) + JSON.stringify(this.transactionFilter.groupIds);
+    const accountIdsJson = JSON.stringify(this.transactionFilter.accountIds) + JSON.stringify(this.transactionFilter.currencies) + JSON.stringify(this.transactionFilter.groupIds);
     if (this.accountsOfTransactions !== accountIdsJson || this.lastDateRange !== this.transactionFilter.dateRange) {
       this.moneyTransactions = [];
       this.allTransactions = [];
@@ -168,6 +175,29 @@ export class MoneyTransactionGraphComponent implements OnInit {
     });
   }
 
+
+  assertHasSecurityPrices(): Observable<void> {
+    let currencyIds: any = {};
+    this.allTransactions
+      .map(transaction => transaction.currencyId)
+      .forEach((currencyId) => {
+        currencyIds[currencyId] = true;
+      });
+    return new Observable(observer => {
+      this.securityApi.getSecurityPrices(Object.keys(currencyIds).map(id => parseInt(id)))
+        .subscribe(securityPrices => {
+        this.securityPricesByIdAndDate = {};
+        securityPrices.forEach(price => {
+          if(this.securityPricesByIdAndDate[price.securityId] == null) {
+            this.securityPricesByIdAndDate[price.securityId] = {}
+          }
+          this.securityPricesByIdAndDate[price.securityId][price.date] = price;
+        });
+        observer.next();
+      })
+    });
+  }
+
   resetGraph() {
     this.assertHasTransactions().subscribe(() => {
       this.assertHasBudget().subscribe(() => {
@@ -176,19 +206,22 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
         this.generateMoneyBudgetTransactions();
 
-        this.perf('generateGroupsByName');
-        this.generateOtherGroupsByName();
-        this.perf('mapHistoricalMoneyValueToNormalizedMoneyValue');
-        this.mapHistoricalMoneyValueToNormalizedMoneyValue();
-        this.perf('calculateNormalizedAggregatedValues');
-        this.calculateNormalizedAggregatedValues();
-        this.perf('splitGroupsAndMapByName');
-        this.splitGroupsAndMapByName();
-        this.perf('aggregateValues');
-        this.aggregateValues();
-        this.perf('generateGraphOptions');
-        this.generateGraph();
-        this.perf('end');
+        this.assertHasSecurityPrices().subscribe(() => {
+
+          this.perf('generateGroupsByName');
+          this.generateOtherGroupsByName();
+          this.perf('mapHistoricalMoneyValueToNormalizedMoneyValue');
+          this.mapHistoricalMoneyValueToNormalizedMoneyValue();
+          this.perf('calculateNormalizedAggregatedValues');
+          this.calculateNormalizedAggregatedValues();
+          this.perf('splitGroupsAndMapByName');
+          this.splitGroupsAndMapByName();
+          this.perf('aggregateValues');
+          this.aggregateValues();
+          this.perf('generateGraphOptions');
+          this.generateGraph();
+          this.perf('end');
+        });
       });
     });
   }
@@ -213,7 +246,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
     transaction.amount = budgetValue.budgeted;
     transaction.timestamp = budgetValue.date;
     const group = this.groupsById[budgetValue.groupId];
-    transaction.counterpartAccountName = group ? group.name : ('Group ' + budgetValue.groupId);
+    transaction.counterpartyAccountName = group ? group.name : ('Group ' + budgetValue.groupId);
     transaction.budgeted = budgetValue.budgeted;
     transaction.groupId = budgetValue.groupId;
     return transaction;
@@ -228,7 +261,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
     this.groupsByName = {};
     this.groupsById = {};
     this.moneyTransactionGroups.forEach(group => {
-      let groupInfo = new GroupInfo(group.id, group.name, false);
+      let groupInfo = new GroupInfo(group.id, group.name, false, 0);
       this.groupsByName[groupInfo.key] = groupInfo;
       this.groupsById[group.id] = group;
     });
@@ -245,7 +278,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
         const key = new GroupKey(groupName, isBudget).toString();
         if (!this.groupsByName[key]) {
           const id = value.groupId != null ? value.groupId : -1;
-          this.groupsByName[key] = new GroupInfo(id, groupName, isBudget);
+          this.groupsByName[key] = new GroupInfo(id, groupName, isBudget, value.currencyId);
         }
       });
   }
@@ -272,8 +305,9 @@ export class MoneyTransactionGraphComponent implements OnInit {
         return new NormalizedMoneyValue(
           dateRangeString,
           dateRange,
-          value.amount,
+          value.amount, //this.applyExchangeRate(date, value.currencyId, value.amount),
           new GroupKey(this.getGroupNameOfHistoricalValue(value), isBudget).toString(),
+          value.currencyId,
           null);
       });
   }
@@ -296,7 +330,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
         const isBudget = value.budgeted != null;
         const key = new GroupKey(this.getGroupNameOfHistoricalValue(value), isBudget).toString();
         if (this.groupsByName[key]) {
-          this.groupsByName[key].normalizedAggregatedValue += this.getPositiveValue(value.amount);
+          this.groupsByName[key].normalizedAggregatedValue += this.getPositiveValue(value.amount * value.exchangeRate);
         }
       });
   }
@@ -359,6 +393,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
             value.date,
             startValue,
             value.groupKey,
+            value.currencyId,
             previousValuesPerGroup[value.groupKey]);
           previousValuesPerGroup[value.groupKey] = valuesPerGroupAndDateRange[value.groupKey][dateString];
         }
@@ -410,6 +445,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
     let currentDate = firstDate.clone();
     let dateRangeFormat = this.getDateRangeFormat();
     let previousSeriesValue: any = {};
+    let previousSeriesCurrency: any = {};
     let seriesValuesByKey: any = {};
     let lastValueIfNotReset: any = {};
     let allDates: string[] = [];
@@ -435,12 +471,16 @@ export class MoneyTransactionGraphComponent implements OnInit {
         let groupSeries = seriesValuesByKey[groupKey];
         let hasNoValueForDateAndGroup = valuesPerDateRange[currentRangedString] == null || valuesPerDateRange[currentRangedString][groupKey] == null;
         let value = 0;
+        let currencyId = 0;
 
         if (hasNoValueForDateAndGroup) {
           let hasNoPreviousValue = previousSeriesValue[groupKey] == null;
           value = hasNoPreviousValue ? 0 : previousSeriesValue[groupKey];
+          currencyId = hasNoPreviousValue ? 0 : previousSeriesCurrency[groupKey];
         } else {
-          value = valuesPerDateRange[currentRangedString][groupKey].value - this.getOffset(offsetPerGroup, groupKey);
+          let groupValue = valuesPerDateRange[currentRangedString][groupKey];
+          value = groupValue.value - this.getOffset(offsetPerGroup, groupKey);
+          currencyId = groupValue.currencyId;
         }
 
         let nonResettedValue = value;
@@ -449,6 +489,8 @@ export class MoneyTransactionGraphComponent implements OnInit {
           value -= lastValueIfNotReset[groupKey];
         }
         previousSeriesValue[groupKey] = nonResettedValue;
+        previousSeriesCurrency[groupKey] = currencyId;
+        value = this.applyExchangeRate(currentDate, currencyId, value);
         if (withinDateRange) {
           groupSeries.push(value);
         }
@@ -598,11 +640,11 @@ export class MoneyTransactionGraphComponent implements OnInit {
     if (transaction.groupId != null && this.groupsById[transaction.groupId]) {
       return this.groupsById[transaction.groupId].name;
     }
-    if (transaction.counterpartAccountName != null) {
-      return transaction.counterpartAccountName;
+    if (transaction.counterpartyAccountName != null) {
+      return transaction.counterpartyAccountName;
     }
-    if (transaction.counterpartAccountNumber != null) {
-      return transaction.counterpartAccountNumber;
+    if (transaction.counterpartyAccountNumber != null) {
+      return transaction.counterpartyAccountNumber;
     }
     return transaction.description;
   }
@@ -706,5 +748,15 @@ export class MoneyTransactionGraphComponent implements OnInit {
     ctx.stroke();
 
     return canvas;
+  }
+
+  applyExchangeRate(date: Moment, currencyId: number, amount: number) {
+    if(this.securityPricesByIdAndDate[currencyId] != null) {
+      let formattedDate = date.format('yyyy-MM-DD');
+      if(this.securityPricesByIdAndDate[currencyId][formattedDate] != null) {
+        return this.securityPricesByIdAndDate[currencyId][formattedDate].price * amount;
+      }
+    }
+    return amount;
   }
 }

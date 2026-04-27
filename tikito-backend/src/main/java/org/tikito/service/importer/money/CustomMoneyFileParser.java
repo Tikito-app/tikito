@@ -10,14 +10,12 @@ public class CustomMoneyFileParser extends MoneyTransactionFileParser {
     private final Map<String, Integer> headerConfig;
     private final String debitIndication;
     private final String timestampFormat;
-    private final String dateFormat;
     private final String timeFormat;
 
-    public CustomMoneyFileParser(final Map<String, Integer> headerConfig, final String debitIndication, final String timestampFormat, final String dateFormat, final String timeFormat) {
+    public CustomMoneyFileParser(final Map<String, Integer> headerConfig, final String debitIndication, final String timestampFormat, final String timeFormat) {
         this.headerConfig = headerConfig;
         this.debitIndication = debitIndication;
         this.timestampFormat = timestampFormat;
-        this.dateFormat = dateFormat;
         this.timeFormat = timeFormat;
     }
 
@@ -36,6 +34,8 @@ public class CustomMoneyFileParser extends MoneyTransactionFileParser {
                 debitIndication,
                 getHeader(TIMESTAMP),
                 timestampFormat,
+                getHeader(TIME),
+                timeFormat,
                 getHeader(CURRENCY),
                 getHeader(FINAL_BALANCE),
                 getHeader(DESCRIPTION),

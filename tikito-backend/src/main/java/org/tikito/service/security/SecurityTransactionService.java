@@ -55,7 +55,7 @@ public class SecurityTransactionService {
         final SecurityTransaction transaction = request.isNew() ? new SecurityTransaction(userId) :  securityTransactionRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
 
         accountRepository.findByUserIdAndIdAndAccountType(userId, request.getAccountId(), AccountType.SECURITY).orElseThrow();
-        securityRepository.findByIdAndSecurityType(request.getCurrencyId(), SecurityType.CURRENCY).orElseThrow();
+        securityRepository.findByIdAndSecurityTypes(request.getCurrencyId(), Set.of(SecurityType.CURRENCY, SecurityType.CRYPTO)).orElseThrow();
 
         transaction.updateFrom(request, isin.getSecurityId());
         return securityTransactionRepository.saveAndFlush(transaction).toDto();

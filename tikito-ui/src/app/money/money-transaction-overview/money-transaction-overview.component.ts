@@ -38,6 +38,9 @@ import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {AuthService} from "../../service/auth.service";
 import {MoneyTransactionAggregatedTableComponent} from "../money-transaction-aggregated-table/money-transaction-aggregated-table.component";
+import {Security} from "../../dto/security/security";
+import {SecurityApi} from "../../api/security-api";
+import {CacheService} from "../../service/cache-service";
 
 @Component({
   selector: 'app-money-transaction-overview',
@@ -84,6 +87,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
   accountId: number;
   groups: MoneyTransactionGroup[];
   accounts: Account[];
+  currencies: Security;
 
   form: FormGroup;
 
@@ -101,6 +105,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
     this.authService.onSystemReady((loggedInUser: any) => {
       this.form = new FormGroup({
         accountIds: new FormControl(),
+        currencies: new FormControl(),
         groupIds: new FormControl(),
         startAtZeroFromBeginning: new FormControl(),
         startAtZeroAfterDateAggregation: new FormControl(),
@@ -138,6 +143,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
         this.form.controls['startAtZeroAfterDateAggregation'].setValue(UserPreferenceService.get(UserPreference.START_AT_ZERO_AFTER_DATE_RANGE, true));
         this.form.controls['showOther'].setValue(UserPreferenceService.get(UserPreference.MONEY_SHOW_OTHER, true));
         this.form.controls['accountIds'].setValue(UserPreferenceService.get(UserPreference.ACCOUNT_IDS, '').toString().split(',').map(v => parseInt(v)));
+        this.form.controls['currencies'].setValue(UserPreferenceService.get(UserPreference.CURRENCY_FILTER, '').toString().split(',').map(v => parseInt(v)));
         this.form.controls['groupIds'].setValue(UserPreferenceService.get(UserPreference.GROUP_IDS, '').toString().split(',').map(v => parseInt(v)));
         this.form.controls['dateRange'].setValue(UserPreferenceService.get(UserPreference.DATE_RANGE, TransactionDateRange.MONTH));
         this.form.controls['aggregateDateRange'].setValue(UserPreferenceService.get(UserPreference.AGGREGATE_DATE_RANGE, true));
@@ -159,6 +165,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
   getTransactionFilter() {
     let filter = new MoneyTransactionsFilter();
     filter.accountIds = this.form.value.accountIds;
+    filter.currencies = this.form.value.currencies;
     filter.groupIds = this.form.value.groupIds == null ? [] : this.form.value.groupIds.filter((id: any) => id != null && !Number.isNaN(id));
     filter.aggregateDateRange = this.form.value.aggregateDateRange;
     filter.startAtZeroFromBeginning = this.form.value.startAtZeroFromBeginning;// || this.form.value.aggregateDateRange;
@@ -197,6 +204,10 @@ export class MoneyTransactionOverviewComponent implements OnInit {
 
   onAccountIdsSelectChanged(value: any[]) {
     UserPreferenceService.onSelectChange(UserPreference.ACCOUNT_IDS, value);
+  }
+
+  onCurrencyFilterChanged(value: any[]) {
+    UserPreferenceService.onSelectChange(UserPreference.CURRENCY_FILTER, value);
   }
 
   protected readonly UserPreferenceService = UserPreferenceService;
@@ -241,4 +252,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
     this.currentGroup.set('');
     event.option.deselect();
   }
+
+  protected readonly Util = Util;
+  protected readonly CacheService = CacheService;
 }

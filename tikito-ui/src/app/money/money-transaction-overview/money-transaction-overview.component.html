@@ -8,9 +8,18 @@
 
         <mat-form-field class="full-width">
           <mat-label>{{'money/accounts' | translatePipe}}</mat-label>
-          <mat-select [attr.data-cy]="'accountIds'" multiple formControlName="accountIds" (selectionChange)="onAccountIdsSelectChanged($event.value)">
+          <mat-select [attr.data-cy]="'account-ids'" multiple formControlName="accountIds" (selectionChange)="onAccountIdsSelectChanged($event.value)">
             @for (account of accounts; track accounts) {
               <mat-option [value]="account.id">{{account.name}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>{{'money/currency-filter' | translatePipe}}</mat-label>
+          <mat-select [attr.data-cy]="'currency-filter'" multiple formControlName="currencies" (selectionChange)="onCurrencyFilterChanged($event.value)">
+            @for (currency of CacheService.getCurrencies(); track currency) {
+              <mat-option [value]="currency.id">{{currency.name}}</mat-option>
             }
           </mat-select>
         </mat-form-field>

@@ -259,11 +259,11 @@ export class MoneyTransactionAggregatedTableComponent implements OnInit {
     if (transaction.groupId != null && this.groupsById[transaction.groupId]) {
       return this.groupsById[transaction.groupId].name;
     }
-    if (transaction.counterpartAccountName != null) {
-      return transaction.counterpartAccountName;
+    if (transaction.counterpartyAccountName != null) {
+      return transaction.counterpartyAccountName;
     }
-    if (transaction.counterpartAccountNumber != null) {
-      return transaction.counterpartAccountNumber;
+    if (transaction.counterpartyAccountNumber != null) {
+      return transaction.counterpartyAccountNumber;
     }
     return transaction.description;
   }

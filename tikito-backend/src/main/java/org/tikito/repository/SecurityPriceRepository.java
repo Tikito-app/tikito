@@ -13,7 +13,8 @@ import java.util.Set;
 public interface SecurityPriceRepository extends JpaRepository<SecurityPrice, Long> {
     List<SecurityPrice> findAllBySecurityId(long securityId);
 
-    List<SecurityPrice> findAllBySecurityIdIn(Set<Long> securityId);
+    @Query("select p from SecurityPrice p where p.securityId in :securityIds")
+    List<SecurityPrice> findAllBySecurityIdIn(Set<Long> securityIds);
 
     @Modifying
     void deleteAllBySecurityId(long securityId);

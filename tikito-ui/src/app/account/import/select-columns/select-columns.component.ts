@@ -90,13 +90,10 @@ export class SelectColumnsComponent implements OnInit {
 
     group['buy-value'] = new FormControl();
     group['timestamp-format'] = new FormControl();
-    group['date-format'] = new FormControl();
     group['time-format'] = new FormControl();
 
     this.form = new FormGroup(group);
     this.dataSource = new MatTableDataSource<any>(this.state.parsedContent);
-
-    this.form.controls['date-format'].setValue(UserPreferenceService.get(UserPreference.IMPORT_DATE_FORMAT, 'dd-MM-yyyy'));
   }
 
   getHeaderConfig() {

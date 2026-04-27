@@ -82,8 +82,8 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
   ngOnInit(): void {
     this.form = new FormGroup({
       accountId: new FormControl('', Validators.required),
-      counterpartAccountName: new FormControl(''),
-      counterpartAccountNumber: new FormControl(''),
+      counterpartyAccountName: new FormControl(''),
+      counterpartyAccountNumber: new FormControl(''),
       amount: new FormControl('', Validators.required),
       finalBalance: new FormControl(''),
       description: new FormControl(''),
@@ -96,8 +96,8 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
     });
 
     this.form.controls['accountId'].setValue(this.data.transaction.accountId);
-    this.form.controls['counterpartAccountName'].setValue(this.data.transaction.counterpartAccountName);
-    this.form.controls['counterpartAccountNumber'].setValue(this.data.transaction.counterpartAccountNumber);
+    this.form.controls['counterpartyAccountName'].setValue(this.data.transaction.counterpartyAccountName);
+    this.form.controls['counterpartyAccountNumber'].setValue(this.data.transaction.counterpartyAccountNumber);
     this.form.controls['amount'].setValue(this.data.transaction.amount);
     this.form.controls['finalBalance'].setValue(this.data.transaction.finalBalance);
     this.form.controls['description'].setValue(this.data.transaction.description);
@@ -119,8 +119,8 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
     this.api.createOrUpdateTransaction(
       this.data.transaction.id,
       this.form.value.accountId,
-      this.form.value.counterpartAccountName,
-      this.form.value.counterpartAccountNumber,
+      this.form.value.counterpartyAccountName,
+      this.form.value.counterpartyAccountNumber,
       this.form.value.timestamp,
       this.form.value.amount,
       this.form.value.finalBalance,

@@ -123,6 +123,7 @@ public class MoneyTransactionGroupService implements JobProcessor {
                 .map(Account::toDto)
                 .collect(Collectors.toMap(AccountDto::getAccountNumber, Function.identity()));
         final List<MoneyTransaction> transactions = moneyTransactionRepository.findByAccountId(accountId);
+        // todo check
         transactions.forEach(transaction -> groupTransaction(transaction, groups, accountsByAccountNumber));
         moneyTransactionRepository.saveAllAndFlush(transactions);
         log.info("Done grouping {} transactions", transactions.size());
