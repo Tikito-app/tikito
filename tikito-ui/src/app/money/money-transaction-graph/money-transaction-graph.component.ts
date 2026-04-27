@@ -13,23 +13,27 @@ import {AuthService} from "../../service/auth.service";
 import {HistoricalBudgetValue} from "../../dto/money/historical-budget-value";
 import {MoneyBudgetTransaction} from "../../dto/money/money-budget-transaction";
 import {SecurityApi} from "../../api/security-api";
+import {CacheService} from "../../service/cache-service";
+import {SecurityType} from "../../dto/security/security-type";
 
 class GroupKey {
   name: string;
   isBudget: boolean;
+  isHolding: boolean
 
-  constructor(name: string, isBudget: boolean) {
+  constructor(name: string, isBudget: boolean, isHolding: boolean) {
     this.name = name;
     this.isBudget = isBudget;
+    this.isHolding = isHolding;
   }
 
   toString(): string {
-    return this.name + '||' + this.isBudget;
+    return this.name + '||' + this.isBudget + '||' + this.isHolding;
   }
 
   static fromString(key: string): GroupKey {
     let parts = key.split('||');
-    return new GroupKey(parts[0], parts[1] == 'true');
+    return new GroupKey(parts[0], parts[1] == 'true', parts[2] == 'true');
   }
 }
 
@@ -37,15 +41,17 @@ class GroupInfo {
   id: number
   name: string;
   isBudget: boolean;
+  isHolding: boolean;
   key: string;
   normalizedAggregatedValue: number = 0;
   currencyId: number;
 
-  constructor(id: number, name: string, isBudget: boolean, currencyId: number) {
+  constructor(id: number, name: string, isBudget: boolean, isHolding: boolean, currencyId: number) {
     this.id = id;
     this.name = name;
     this.isBudget = isBudget;
-    this.key = new GroupKey(name, isBudget).toString();
+    this.isBudget = isHolding;
+    this.key = new GroupKey(name, isBudget, isHolding).toString();
     this.currencyId = currencyId;
   }
 }
@@ -95,6 +101,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
   moneyTransactions: MoneyTransaction[];
   allTransactions: MoneyBudgetTransaction[];
   historicalBudgetValues: HistoricalBudgetValue[];
+  historicalMoneyValuesByCurrencyAndDate: any;
   normalizedValues: NormalizedMoneyValue[];
   aggregatedValuesPerDateRange: NormalizedMoneyValue[];
   groupsByName: any;
@@ -107,6 +114,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
   accountsOfTransactions: any;
   lastDateRange: TransactionDateRange | null;
   securityPricesByIdAndDate: any = {}
+  firstDateOfMoneyHolding: Moment | null;
 
   constructor(private api: MoneyApi,
               private securityApi: SecurityApi,
@@ -175,39 +183,40 @@ export class MoneyTransactionGraphComponent implements OnInit {
     });
   }
 
-
-  assertHasSecurityPrices(): Observable<void> {
-    let currencyIds: any = {};
-    this.allTransactions
-      .map(transaction => transaction.currencyId)
-      .forEach((currencyId) => {
-        currencyIds[currencyId] = true;
-      });
+  assertHasMoneyHoldings(): Observable<void> {
     return new Observable(observer => {
-      this.securityApi.getSecurityPrices(Object.keys(currencyIds).map(id => parseInt(id)))
-        .subscribe(securityPrices => {
-        this.securityPricesByIdAndDate = {};
-        securityPrices.forEach(price => {
-          if(this.securityPricesByIdAndDate[price.securityId] == null) {
-            this.securityPricesByIdAndDate[price.securityId] = {}
-          }
-          this.securityPricesByIdAndDate[price.securityId][price.date] = price;
-        });
+      if(!this.transactionFilter.includeMoneyHolding) {
         observer.next();
-      })
+      }
+      this.api.getHistoricalMoneyValues(this.transactionFilter)
+        .subscribe(values => {
+          this.historicalMoneyValuesByCurrencyAndDate = {};
+          values.forEach(value => {
+            if(this.firstDateOfMoneyHolding == null) {
+              this.firstDateOfMoneyHolding = moment(value.date);
+            }
+            if(this.historicalMoneyValuesByCurrencyAndDate[value.currencyId] == null) {
+              this.historicalMoneyValuesByCurrencyAndDate[value.currencyId] = {}
+            }
+            let dateFormatted = moment(value.date).format('DD-MM-yyyy').toString();
+            if(this.historicalMoneyValuesByCurrencyAndDate[value.currencyId][dateFormatted] == null) {
+              this.historicalMoneyValuesByCurrencyAndDate[value.currencyId][dateFormatted] = value;
+            } else {
+              this.historicalMoneyValuesByCurrencyAndDate[value.currencyId][dateFormatted].amount += value.amount;
+            }
+          });
+          observer.next();
+        })
     });
   }
 
   resetGraph() {
     this.assertHasTransactions().subscribe(() => {
       this.assertHasBudget().subscribe(() => {
-        this.perf('save');
-        this.generateGroupsByName()
-
-        this.generateMoneyBudgetTransactions();
-
-        this.assertHasSecurityPrices().subscribe(() => {
-
+        this.assertHasMoneyHoldings().subscribe(() => {
+          this.perf('save');
+          this.generateGroupsByName()
+          this.generateMoneyBudgetTransactions();
           this.perf('generateGroupsByName');
           this.generateOtherGroupsByName();
           this.perf('mapHistoricalMoneyValueToNormalizedMoneyValue');
@@ -261,7 +270,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
     this.groupsByName = {};
     this.groupsById = {};
     this.moneyTransactionGroups.forEach(group => {
-      let groupInfo = new GroupInfo(group.id, group.name, false, 0);
+      let groupInfo = new GroupInfo(group.id, group.name, false, false,  0);
       this.groupsByName[groupInfo.key] = groupInfo;
       this.groupsById[group.id] = group;
     });
@@ -272,13 +281,14 @@ export class MoneyTransactionGraphComponent implements OnInit {
     this
       .allTransactions
       .filter(value => value.groupId == null || value.budgeted != null)
+      .filter(value => !this.isCrypto(value))
       .forEach(value => {
         const groupName = this.getGroupNameOfHistoricalValue(value);
         const isBudget = value.budgeted != null;
-        const key = new GroupKey(groupName, isBudget).toString();
+        const key = new GroupKey(groupName, isBudget, false).toString();
         if (!this.groupsByName[key]) {
           const id = value.groupId != null ? value.groupId : -1;
-          this.groupsByName[key] = new GroupInfo(id, groupName, isBudget, value.currencyId);
+          this.groupsByName[key] = new GroupInfo(id, groupName, isBudget, false, value.currencyId);
         }
       });
   }
@@ -296,6 +306,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
   mapHistoricalMoneyValueToNormalizedMoneyValue() {
     let format = this.getDateRangeFormat();
     this.normalizedValues = this.allTransactions
+      .filter(value => !this.isCrypto(value))
       .map(value => {
         let date = moment(value.timestamp);
         let dateRangeString = date.format(format); // format
@@ -306,7 +317,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
           dateRangeString,
           dateRange,
           value.amount, //this.applyExchangeRate(date, value.currencyId, value.amount),
-          new GroupKey(this.getGroupNameOfHistoricalValue(value), isBudget).toString(),
+          new GroupKey(this.getGroupNameOfHistoricalValue(value), isBudget, false).toString(),
           value.currencyId,
           null);
       });
@@ -328,7 +339,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
       .filter(value => alignedEndDate == null || moment(value.timestamp).isSameOrBefore(alignedEndDate))
       .forEach(value => {
         const isBudget = value.budgeted != null;
-        const key = new GroupKey(this.getGroupNameOfHistoricalValue(value), isBudget).toString();
+        const key = new GroupKey(this.getGroupNameOfHistoricalValue(value), isBudget, false).toString();
         if (this.groupsByName[key]) {
           this.groupsByName[key].normalizedAggregatedValue += this.getPositiveValue(value.amount * value.exchangeRate);
         }
@@ -379,7 +390,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
         let isLowestGroupValue = this.highestValuedGroups[value.groupKey] == null;
         if (isLowestGroupValue) {
           const groupKeyObject = GroupKey.fromString(value.groupKey);
-          value.groupKey = new GroupKey('Other', groupKeyObject.isBudget).toString();
+          value.groupKey = new GroupKey('Other', groupKeyObject.isBudget, false).toString();
         }
 
         let dateString = value.dateString;
@@ -416,27 +427,39 @@ export class MoneyTransactionGraphComponent implements OnInit {
       }
       return 0;
     });
-
   }
 
+  getFirstDateOfGraph(): Moment | null {
+    if(this.firstDateOfMoneyHolding != null && this.aggregatedValuesPerDateRange[0] != null) {
+      return this.firstDateOfMoneyHolding.isBefore(this.aggregatedValuesPerDateRange[0].date) ? this.firstDateOfMoneyHolding : this.aggregatedValuesPerDateRange[0].date;
+    } else if(this.aggregatedValuesPerDateRange[0] != null) {
+      return this.aggregatedValuesPerDateRange[0].date
+    }
+    return this.firstDateOfMoneyHolding;
+  }
 
   generateGraph() {
     let groupKeys = Object.keys(this.highestValuedGroups);
     if (this.transactionFilter.showOther) {
-      const otherActualKey = new GroupKey('Other', false).toString();
-      const otherBudgetKey = new GroupKey('Other', true).toString();
+      const otherActualKey = new GroupKey('Other', false, false).toString();
+      const otherBudgetKey = new GroupKey('Other', true, false).toString();
+
       if (!groupKeys.includes(otherActualKey)) groupKeys.push(otherActualKey);
       if (!groupKeys.includes(otherBudgetKey)) groupKeys.push(otherBudgetKey);
     }
-    let valuesPerDateRange: any = this.getHistoricalValuesPerDateRangeValue();
-    if (this.aggregatedValuesPerDateRange.length == 0) {
+
+    let valuesPerDateRange: any = this.getAggregatedHistoricalValuesPerDateRangeValue();
+    let firstDate = this.getFirstDateOfGraph();
+
+    if (firstDate == null) {
       this.chartOption = {};
       return;
     }
 
-    let firstDate = this.aggregatedValuesPerDateRange[0].date;
+    console.log(this.historicalMoneyValuesByCurrencyAndDate);
+
     let firstDateToRender: moment.Moment = this.transactionFilter.startDate == null ?
-      this.aggregatedValuesPerDateRange[0].date.clone() :
+      firstDate.clone() :
       this.getDateByDateRange(moment(this.transactionFilter.startDate));
     let lastDateToRender = this.transactionFilter.endDate == null ?
       moment() :
@@ -467,6 +490,9 @@ export class MoneyTransactionGraphComponent implements OnInit {
         allDates.push(currentDate.format('DD-MM-yyyy'));
       }
 
+      this.generateGroupValuesForMoney(groupKeys, seriesValuesByKey, groupValuePerDate, currentDate, currentDateString);
+
+      console.log(groupKeys);
       groupKeys.forEach(groupKey => {
         let groupSeries = seriesValuesByKey[groupKey];
         let hasNoValueForDateAndGroup = valuesPerDateRange[currentRangedString] == null || valuesPerDateRange[currentRangedString][groupKey] == null;
@@ -500,6 +526,9 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
       currentDate = this.calculateNextCurrentDate(currentDate);
     }
+
+    console.log(seriesValuesByKey);
+    console.log(groupValuePerDate);
 
     let seriesWithGroups: any = this.generateSeriesGroups(seriesValuesByKey);
     this.chartOption = this.generateGraphOptions(allDates, seriesWithGroups, groupValuePerDate);
@@ -601,8 +630,8 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
 
         for(let groupName of uniqueGroupNames) {
-          let moneyGroupKey = new GroupKey(groupName, false).toString();
-          let budgetGroupKey = new GroupKey(groupName, true).toString();
+          let moneyGroupKey = new GroupKey(groupName, false, false).toString();
+          let budgetGroupKey = new GroupKey(groupName, true, false).toString();
           html += `<tr><td>${getMarker(params, groupName.toString())}</td><td>${Util.maxDisplayString(groupName, 25)}</td><td>`;
           html += (allGroups[moneyGroupKey] != null ? `<span style="float: right; margin-left: 20px; color: ${Util.currencyColor(allGroups[moneyGroupKey])};">${Util.currencyFormatWithSymbol(allGroups[moneyGroupKey], 47)}</span>` : ``) + '</td><td>';
           html += (allGroups[budgetGroupKey] != null ? `<span style="float: right; margin-left: 20px; color: ${Util.currencyColor(allGroups[budgetGroupKey])};">${Util.currencyFormatWithSymbol(allGroups[budgetGroupKey], 47)}</span>` : ``) + '</td>';
@@ -615,7 +644,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
     }
   }
 
-  getHistoricalValuesPerDateRangeValue() {
+  getAggregatedHistoricalValuesPerDateRangeValue() {
     let map: any = {};
     this.aggregatedValuesPerDateRange.forEach(value => {
       if (map[value.dateString] == null) {
@@ -758,5 +787,27 @@ export class MoneyTransactionGraphComponent implements OnInit {
       }
     }
     return amount;
+  }
+
+  isCrypto(transaction: MoneyTransaction): boolean {
+    let security = CacheService.getCurrencyById(transaction.currencyId as number);
+    return security != null && security.securityType == SecurityType.CRYPTO;
+  }
+
+  generateGroupValuesForMoney(groupKeys: string[], seriesValuesByKey: any, groupValuePerDate: any, date: Moment, currentDateString: string) {
+    for(let currencyId of Object.keys(this.historicalMoneyValuesByCurrencyAndDate)) {
+      let currency = CacheService.getCurrencyById(currencyId as unknown as number);
+      let value = this.historicalMoneyValuesByCurrencyAndDate[currencyId][currentDateString];
+
+      if(value != null) {
+        let key = new GroupKey(currency.name, false, true);
+        if(seriesValuesByKey[key.toString()] == null) {
+          seriesValuesByKey[key.toString()] = [];
+          groupKeys.push(key.toString());
+        }
+
+        groupValuePerDate[currentDateString][key.toString()] = this.applyExchangeRate(date, value.amount, value.currencyId);
+      }
+    }
   }
 }

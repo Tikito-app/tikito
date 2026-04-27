@@ -14,6 +14,7 @@ import {DateRange} from "../dto/date-range";
 import moment from "moment";
 import {HistoricalBudgetValue} from "../dto/money/historical-budget-value";
 import {Util} from "../util";
+import {HistoricalMoneyHoldingValue} from "../dto/money/historical-money-holding-value";
 
 @Injectable({
   providedIn: 'root'
@@ -160,4 +161,10 @@ export class MoneyApi {
           endDate: endDateFormatted
         }));
   }
+
+  getHistoricalMoneyValues(filter: MoneyTransactionsFilter): Observable<HistoricalMoneyHoldingValue[]> {
+      return this.http.httpPostList<HistoricalMoneyHoldingValue>(HistoricalMoneyHoldingValue, new HttpRequestData()
+        .withUrl('/api/money/historical-values')
+        .withBody(filter));
+    }
 }

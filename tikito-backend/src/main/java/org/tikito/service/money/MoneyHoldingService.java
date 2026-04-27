@@ -1,5 +1,6 @@
 package org.tikito.service.money;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -8,6 +9,7 @@ import org.tikito.dto.AccountDto;
 import org.tikito.dto.money.AggregatedHistoricalMoneyHoldingValueDto;
 import org.tikito.dto.money.HistoricalMoneyHoldingValueDto;
 import org.tikito.dto.money.MoneyHoldingDto;
+import org.tikito.dto.money.MoneyTransactionFilter;
 import org.tikito.entity.Account;
 import org.tikito.entity.Job;
 import org.tikito.entity.money.AggregatedHistoricalMoneyHoldingValue;
@@ -57,6 +59,20 @@ public class MoneyHoldingService implements JobProcessor {
                 .stream()
                 .map(AggregatedHistoricalMoneyHoldingValue::toDto)
                 .sorted(Comparator.comparing(AggregatedHistoricalMoneyHoldingValueDto::getDate))
+                .toList();
+    }
+
+    public List<HistoricalMoneyHoldingValueDto> getHistoricalMoneyHoldingValue(final long userId, final MoneyTransactionFilter filter) {
+        return historicalMoneyHoldingValueRepository.
+                findByFilter(
+                        userId,
+                        filter.getAccountIds(),
+                        filter.getCurrencies(),
+                        filter.getNonGrouped() != null && filter.getNonGrouped(),
+                        filter.getStartDate(),
+                        filter.getEndDate())
+                .stream()
+                .map(HistoricalMoneyHoldingValue::toDto)
                 .toList();
     }
 

@@ -37,9 +37,7 @@ import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {AuthService} from "../../service/auth.service";
-import {MoneyTransactionAggregatedTableComponent} from "../money-transaction-aggregated-table/money-transaction-aggregated-table.component";
 import {Security} from "../../dto/security/security";
-import {SecurityApi} from "../../api/security-api";
 import {CacheService} from "../../service/cache-service";
 
 @Component({
@@ -50,7 +48,6 @@ import {CacheService} from "../../service/cache-service";
     MatTab,
     MoneyTransactionListComponent,
     MoneyTransactionGraphComponent,
-    MoneyTransactionAggregatedTableComponent,
     MatCard,
     MatCardTitle,
     MatCardContent,
@@ -117,7 +114,8 @@ export class MoneyTransactionOverviewComponent implements OnInit {
         startDate: new FormControl,
         endDate: new FormControl,
         includeBudget: new FormControl(),
-        includeMoney: new FormControl()
+        includeMoney: new FormControl(),
+        includeMoneyHolding: new FormControl()
       });
       this.reset();
     });
@@ -152,6 +150,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
         this.form.controls['endDate'].setValue(UserPreferenceService.get(UserPreference.END_DATE, null));
         this.form.controls['includeBudget'].setValue(UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_BUDGET, true));
         this.form.controls['includeMoney'].setValue(UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_MONEY, true));
+        this.form.controls['includeMoneyHolding'].setValue(UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_MONEY_HOLDING, true));
         if (this.form.value.nonGrouped) {
           this.form.get('startAtZeroFromBeginning')?.disable();
         } else {
@@ -178,6 +177,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
     filter.amountOfOtherGroups = this.form.value.amountOfOtherGroups;
     filter.includeBudget = this.form.value.includeBudget;
     filter.includeMoney = this.form.value.includeMoney;
+    filter.includeMoneyHolding = this.form.value.includeMoneyHolding;
     return filter;
   }
 
