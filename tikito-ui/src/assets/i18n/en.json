@@ -208,9 +208,11 @@
   "money/graph/aggregate-per-month": "Per month",
   "money/graph/aggregate-per-week": "Per week",
   "money/graph/show-amount-of-non-grouped-groups": "Non-grouped groups",
-  "money/graph/include-money": "Include money",
-  "money/graph/include-budget": "Include budget",
+  "money/graph/include-money": "Income & Expenses",
+  "money/graph/include-budget": "Budget",
+  "money/graph/include-money-holding": "Cash",
   "money/graph/show-include-money-budget-tooltip": "Show only money, budget or show both in the graph",
+  "money/graph/other-group-name": "Other",
 
   "money/transaction/debit-credit": "Debit/credit",
   "money/transaction/counterparty-account-name": "Counterparty",
