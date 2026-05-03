@@ -253,6 +253,16 @@ export class MoneyTransactionOverviewComponent implements OnInit {
     event.option.deselect();
   }
 
+  onIncludeMoneyChanged($event: any) {
+    UserPreferenceService.onCheckboxChange(UserPreference.MONEY_GRAPH_INCLUDE_MONEY, $event.checked);
+
+    if(!$event.checked) {
+      this.form.controls['includeBudget'].setValue(false);
+      UserPreferenceService.onCheckboxChange(UserPreference.MONEY_GRAPH_INCLUDE_BUDGET, false);
+
+    }
+  }
+
   protected readonly Util = Util;
   protected readonly CacheService = CacheService;
 }

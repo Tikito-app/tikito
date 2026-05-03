@@ -41,7 +41,7 @@
         </mat-radio-group>
         <br/>
         <mat-checkbox formControlName="includeBudget" (change)="UserPreferenceService.onCheckboxChange(UserPreference.MONEY_GRAPH_INCLUDE_BUDGET, $event.checked)">{{ 'money/graph/include-budget' | translatePipe}}</mat-checkbox>
-        <mat-checkbox formControlName="includeMoney" (change)="UserPreferenceService.onCheckboxChange(UserPreference.MONEY_GRAPH_INCLUDE_MONEY, $event.checked)">{{ 'money/graph/include-money' | translatePipe}}</mat-checkbox>
+        <mat-checkbox formControlName="includeMoney" (change)="onIncludeMoneyChanged($event)">{{ 'money/graph/include-money' | translatePipe}}</mat-checkbox>
         <mat-checkbox formControlName="includeMoneyHolding" (change)="UserPreferenceService.onCheckboxChange(UserPreference.MONEY_GRAPH_INCLUDE_MONEY_HOLDING, $event.checked)">{{ 'money/graph/include-money-holding' | translatePipe}}</mat-checkbox>
         <app-popover text="money/graph/show-include-money-budget-tooltip"></app-popover>
 

@@ -12,7 +12,6 @@ import {Observable} from "rxjs";
 import {AuthService} from "../../service/auth.service";
 import {HistoricalBudgetValue} from "../../dto/money/historical-budget-value";
 import {MoneyBudgetTransaction} from "../../dto/money/money-budget-transaction";
-import {SecurityApi} from "../../api/security-api";
 import {NormalizedMoneyGraphValue} from "../../dto/money/normalized-money-graph-value";
 import {MoneyGraphGroupInfo} from "../../dto/money/money-graph-group-info";
 import {MoneyGraphGroupKey} from "../../dto/money/money-graph-group-key";
@@ -45,6 +44,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
   otherGroupName: string;
 
+  existingMoneyTransactionGroups: any;
   moneyTransactions: MoneyTransaction[];
   allTransactions: MoneyBudgetTransaction[];
   historicalBudgetValues: HistoricalBudgetValue[];
@@ -65,7 +65,6 @@ export class MoneyTransactionGraphComponent implements OnInit {
   moneyGroupsInTransactions: number[] = [];
 
   constructor(private api: MoneyApi,
-              private securityApi: SecurityApi,
               private authService: AuthService,
               private translateService: TranslateService) {
   }
@@ -96,7 +95,11 @@ export class MoneyTransactionGraphComponent implements OnInit {
   assertHasTransactions(): Observable<void> {
     this.perf('getTransactions');
     // todo, make nicer; find a nice way to reset the transactions when needed
-    const accountIdsJson = JSON.stringify(this.transactionFilter.accountIds) + JSON.stringify(this.transactionFilter.currencies) + JSON.stringify(this.transactionFilter.groupIds);
+    const accountIdsJson =
+      JSON.stringify(this.transactionFilter.accountIds) +
+      JSON.stringify(this.transactionFilter.currencies) +
+      this.transactionFilter.includeMoney + 
+      JSON.stringify(this.transactionFilter.groupIds);
     if (this.accountsOfTransactions !== accountIdsJson || this.lastDateRange !== this.transactionFilter.dateRange) {
       this.moneyTransactions = [];
       this.allTransactions = [];
@@ -166,6 +169,9 @@ export class MoneyTransactionGraphComponent implements OnInit {
         this.assertHasMoneyHoldings().subscribe(() => {
           this.otherGroupName = this.translateService.translate('money/graph/other-group-name');
 
+          this.existingMoneyTransactionGroups = {};
+          this.moneyTransactions.forEach(transaction => this.existingMoneyTransactionGroups[transaction.groupId] = true);
+
           this.perf('save');
           this.generateGroupsByName();
           this.perf('generateGroupsByName');
@@ -200,6 +206,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
   generateMoneyBudgetTransactions() {
     this.allTransactions = [];
+
     if (this.transactionFilter.includeMoney && this.moneyTransactions) {
       this.allTransactions = this.allTransactions.concat(this.moneyTransactions.map(transaction => {
         const t = {...transaction} as MoneyBudgetTransaction;
@@ -207,6 +214,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
         return t;
       }));
     }
+
     if (this.transactionFilter.includeBudget && this.historicalBudgetValues) {
       this.allTransactions = this.allTransactions.concat(this.historicalBudgetValues.map(budgetValue =>
         MoneyGraphService.mapToMoneyBudgetTransaction(budgetValue, this.groupsById)));
@@ -216,6 +224,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
   extractGroupsFromTransactions() {
     this.moneyGroupsInTransactions = [];
+
     this.allTransactions.forEach(transaction => {
       if (!this.moneyGroupsInTransactions.includes(transaction.groupId)) {
         this.moneyGroupsInTransactions.push(transaction.groupId);
@@ -231,7 +240,9 @@ export class MoneyTransactionGraphComponent implements OnInit {
     // first the defined groups
     this.groupsByName = {};
     this.groupsById = {};
-    this.moneyTransactionGroups.forEach(group => {
+    this.moneyTransactionGroups
+      .filter(group => this.existingMoneyTransactionGroups[group.id] != null)
+      .forEach(group => {
       let groupInfo = new MoneyGraphGroupInfo(group.id, group.name, false, false, 0);
       this.groupsByName[groupInfo.key] = groupInfo;
       this.groupsById[group.id] = group;
@@ -288,6 +299,8 @@ export class MoneyTransactionGraphComponent implements OnInit {
       lastValueIfNotReset[groupKey] = null;
     });
 
+    let otherGroupHasValue = false;
+
     while (currentDate.isSameOrBefore(lastDateToRender)) {
       let currentRangedString = currentDate.format(dateRangeFormat);
       let currentDateString = currentDate.format('DD-MM-yyyy');
@@ -314,6 +327,10 @@ export class MoneyTransactionGraphComponent implements OnInit {
             let groupValue = valuesPerDateRange[currentRangedString][groupKey];
             value = groupValue.value - this.getOffset(offsetPerGroup, groupKey);
             currencyId = groupValue.currencyId;
+
+            if(MoneyGraphGroupKey.fromString(groupKey).name == this.otherGroupName) {
+              otherGroupHasValue = true;
+            }
           }
 
           let nonResettedValue = value;
@@ -336,11 +353,11 @@ export class MoneyTransactionGraphComponent implements OnInit {
       currentDate = this.calculateNextCurrentDate(currentDate);
     }
 
-    let seriesWithGroups: any = this.generateSeriesGroups(seriesValuesByKey);
+    let seriesWithGroups: any = this.generateSeriesGroups(seriesValuesByKey, otherGroupHasValue);
     this.chartOption = this.generateGraphOptions(allDates, seriesWithGroups, groupValuePerDate);
   }
 
-  generateSeriesGroups(seriesValuesByKey: any) {
+  generateSeriesGroups(seriesValuesByKey: any, otherGroupHasValue: boolean) {
     let colorIndex = 0;
     const colorMap: { [key: string]: number } = {};
     return Object.keys(seriesValuesByKey)
@@ -362,9 +379,18 @@ export class MoneyTransactionGraphComponent implements OnInit {
           type: isHolding ? 'line' : 'bar',
           stack: (isBudget ? 'budget' : (isHolding ? 'money' : 'actual')),
           showSymbol: false,
-          itemStyle: this.getItemStyle(seriesColorIndex, isBudget)
+          itemStyle: this.getItemStyle(seriesColorIndex, isBudget),
+          lineStyle: isHolding ? {
+            normal: {
+                width: 0.3,
+              }
+            } : null,
+          areaStyle: isHolding ? {
+            opacity: 0.3
+          } : null,
         }
       })
+      .filter(serie => otherGroupHasValue || serie.name != this.otherGroupName)
   }
 
   getItemStyle(colorIndex: number, isBudget: boolean) {
