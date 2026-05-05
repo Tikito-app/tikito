@@ -6,7 +6,7 @@ import {MoneyTransactionGraphComponent} from "../money-transaction-graph/money-t
 import {ActivatedRoute} from "@angular/router";
 import {Util} from "../../util";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
-import {MatCheckbox} from "@angular/material/checkbox";
+import {MatCheckbox, MatCheckboxChange} from "@angular/material/checkbox";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -89,6 +89,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
   currencies: Security;
 
   form: FormGroup;
+  includeBudgetDisabled: boolean = false;
 
   @Output()
   onFilterUpdateCallback: EventEmitter<MoneyTransactionsFilter> = new EventEmitter();
@@ -150,9 +151,11 @@ export class MoneyTransactionOverviewComponent implements OnInit {
         this.form.controls['amountOfOtherGroups'].setValue(UserPreferenceService.get(UserPreference.AMOUNT_OF_OTHER_GROUPS, 5));
         this.form.controls['startDate'].setValue(UserPreferenceService.get(UserPreference.START_DATE, null));
         this.form.controls['endDate'].setValue(UserPreferenceService.get(UserPreference.END_DATE, null));
-        this.form.controls['includeBudget'].setValue(UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_BUDGET, true));
+        this.form.controls['includeBudget'].setValue(UserPreferenceService.get(UserPreference.START_AT_ZERO_AFTER_DATE_RANGE, true) && UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_BUDGET, true));
         this.form.controls['includeMoney'].setValue(UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_MONEY, true));
         this.form.controls['includeMoneyHolding'].setValue(UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_MONEY_HOLDING, true));
+        this.includeBudgetDisabled = !this.form.value['startAtZeroAfterDateAggregation'];
+
         if (this.form.value.nonGrouped) {
           this.form.get('startAtZeroFromBeginning')?.disable();
         } else {
@@ -267,4 +270,14 @@ export class MoneyTransactionOverviewComponent implements OnInit {
 
   protected readonly Util = Util;
   protected readonly CacheService = CacheService;
+
+  protected onStartAtZeroAfterDateAggregationChanged($event: MatCheckboxChange) {
+    UserPreferenceService.onCheckboxChange(UserPreference.START_AT_ZERO_AFTER_DATE_RANGE, $event.checked);
+    this.includeBudgetDisabled = !$event.checked;
+    if($event.checked) {
+      this.form.controls['startAtZeroFromBeginning'].setValue(true);
+    } else {
+      this.form.controls['includeBudget'].setValue(false);
+    }
+  }
 }

@@ -44,31 +44,25 @@ export class MoneyGraphDataFetcher {
       if ((dataDto.moneyTransactionsInRange != null && dataDto.moneyTransactionsInRange.length > 0) || !transactionFilter.includeMoney) {
         observer.next();
       } else {
-        this.api.getTransactions(transactionFilter).subscribe(transactions => {
-          dataDto.moneyTransactionsInRange = transactions || [];
-          if (transactionFilter.startAtZeroFromBeginning || transactionFilter.startAtZeroAfterDateAggregation) {
+        let fetchWithSelectedDate = transactionFilter.startAtZeroFromBeginning || transactionFilter.startAtZeroAfterDateAggregation;
+        this.api.getTransactions(fetchWithSelectedDate ? transactionFilter : transactionFilter.withoutStartDate()).subscribe(moneyTransactionsInRange => {
+            dataDto.moneyTransactionsInRange = moneyTransactionsInRange;
             observer.next();
-          } else {
-            this.api.getTransactions(transactionFilter.withTransactionsBefore()).subscribe(moneyTransactionsBeforeRange => {
-              dataDto.moneyTransactionsInRange = moneyTransactionsBeforeRange.concat(dataDto.moneyTransactionsInRange);
-              observer.next();
-            });
-          }
-        });
+          });
       }
     });
   }
 
   assertHasBudget(dataDto: MoneyGraphDto, transactionFilter: MoneyTransactionsFilter): Observable<void> {
-    dataDto.historicalBudgetValues = [];
+    dataDto.historicalBudgetValuesInRange = [];
     return new Observable(observer => {
-      if (!transactionFilter.includeBudget) {
+      if (!transactionFilter.includeBudget || !transactionFilter.startAtZeroFromBeginning || !transactionFilter.startAtZeroAfterDateAggregation) {
         observer.next();
         return;
       }
 
       this.api.getHistoricalBudgetValues(transactionFilter.getStartDate(), transactionFilter.getEndDate()).subscribe(historicalBudgetValues => {
-        dataDto.historicalBudgetValues = historicalBudgetValues
+        dataDto.historicalBudgetValuesInRange = historicalBudgetValues
           .filter(value => transactionFilter.groupIds == null || transactionFilter.groupIds?.length == 0 || transactionFilter.groupIds.includes(value.groupId));
         observer.next();
       });

@@ -48,10 +48,9 @@ export class MoneyGraphProcessor {
       });
     }
 
-    if (transactionFilter.includeBudget && dataDto.historicalBudgetValues) {
-      console.log('adding', dataDto.historicalBudgetValues.length)
+    if (transactionFilter.includeBudget && dataDto.historicalBudgetValuesInRange) {
       dataDto.moneyTransactionsWithBudget = dataDto.moneyTransactionsWithBudget.concat(
-        dataDto.historicalBudgetValues.map(budgetValue => {
+        dataDto.historicalBudgetValuesInRange.map(budgetValue => {
           let groupName = dataDto.groupNameByGroupId[budgetValue.groupId]
           return MoneyGraphProcessor.mapToMoneyBudgetTransaction(budgetValue, groupName);
         }));
@@ -174,9 +173,12 @@ export class MoneyGraphProcessor {
 
     dataDto.moneyGraphValues
       .forEach(graphValue => {
-        let isLowestGroupValue = dataDto.highestGroupsByKey[graphValue.groupKey] == null;
+        const groupKeyObject = MoneyGraphGroupKey.fromString(graphValue.groupKey);
+        const moneyGroupKeyObject = new MoneyGraphGroupKey(groupKeyObject.name, false, groupKeyObject.isHolding);
+
+        let isLowestGroupValue = dataDto.highestGroupsByKey[moneyGroupKeyObject.toString()] == null;
+
         if (isLowestGroupValue) {
-          const groupKeyObject = MoneyGraphGroupKey.fromString(graphValue.groupKey);
           let groupKey = new MoneyGraphGroupKey(otherGroupName, groupKeyObject.isBudget, false);
           graphValue.groupKey = groupKey.toString();
           MoneyGraphProcessor.addGroupIfNotExists(dataDto, groupKey)
@@ -187,11 +189,10 @@ export class MoneyGraphProcessor {
           dataDto.moneyValuesPerGroupAndDateRange[graphValue.groupKey] = {};
         }
         if (dataDto.moneyValuesPerGroupAndDateRange[graphValue.groupKey][dateString] == null) {
-          let startValue = previousValuesPerGroup[graphValue.groupKey] == null ? 0 : previousValuesPerGroup[graphValue.groupKey].value;
           dataDto.moneyValuesPerGroupAndDateRange[graphValue.groupKey][dateString] = new MoneyGraphValue(
             dateString,
             graphValue.date,
-            startValue,
+            0,
             graphValue.groupKey,
             graphValue.currencyId,
             previousValuesPerGroup[graphValue.groupKey]);
@@ -229,25 +230,6 @@ export class MoneyGraphProcessor {
     }
   }
 
-  static generateMoneyGraphValues(dataDto: MoneyGraphDto) {
-    let aggregatedValuesPerDateRange: NormalizedMoneyGraphValue[] = [];
-    Object
-      .values(dataDto.moneyValuesPerGroupAndDateRange)
-      .forEach((o: any) =>
-        Object
-          .values(o)
-          .forEach((value: any) => aggregatedValuesPerDateRange.push(value)));
-
-    aggregatedValuesPerDateRange.sort((value1, value2) => {
-      if (value1.date.isAfter(value2.date)) {
-        return 1;
-      } else if (value2.date.isAfter(value1.date)) {
-        return -1;
-      }
-      return 0;
-    });
-    return aggregatedValuesPerDateRange;
-  }
 
   static getGroupName(transaction: MoneyTransaction, groupNamesById: any): string {
     if (transaction.groupId != null && groupNamesById[transaction.groupId]) {

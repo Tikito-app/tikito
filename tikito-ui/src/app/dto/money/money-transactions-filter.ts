@@ -35,9 +35,9 @@ export class MoneyTransactionsFilter {
     return filter;
   }
 
-  withTransactionsBefore() {
+  withoutStartDate() {
     let filter = this.withoutStartAndEndDate();
-    filter.endDate = this.startDate;
+    filter.endDate = this.endDate;
     return filter;
   }
 

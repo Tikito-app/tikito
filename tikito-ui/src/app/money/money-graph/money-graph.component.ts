@@ -49,8 +49,7 @@ export class MoneyGraphComponent implements OnInit {
   dataDto = new MoneyGraphDto();
 
 
-  constructor(private api: MoneyApi,
-              private authService: AuthService,
+  constructor(private authService: AuthService,
               private translateService: TranslateService,
               private dataFetcher: MoneyGraphDataFetcher) {
   }
@@ -158,10 +157,11 @@ export class MoneyGraphComponent implements OnInit {
     const colorMap: { [key: string]: number } = {};
     return Object.keys(this.dataDto.seriesPerGroupKey)
       .map((key: any) => {
+        let groupKey = MoneyGraphGroupKey.fromString(key);
         const groupInfo = this.dataDto.moneyGroupsByKey[key];
-        const name = groupInfo ? groupInfo.name : groupInfo.name;
-        const isBudget = groupInfo ? groupInfo.isBudget : groupInfo.isBudget;
-        const isHolding = groupInfo ? groupInfo.isHolding : groupInfo.isHolding;
+        const name = groupInfo ? groupInfo.name : groupKey.name;
+        const isBudget = groupInfo ? groupInfo.isBudget : groupKey.isBudget;
+        const isHolding = groupInfo ? groupInfo.isHolding : groupKey.isHolding;
 
         if (colorMap[name] === undefined) {
           colorMap[name] = colorIndex++;
@@ -185,7 +185,6 @@ export class MoneyGraphComponent implements OnInit {
           } : null,
         }
       })
-      // .filter(serie => otherGroupHasValue || serie.name != this.otherGroupName)
   }
 
   generateGraphOptions(series: any) {
