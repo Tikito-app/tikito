@@ -1,3 +1,5 @@
+import moment, {Moment} from "moment/moment";
+
 export class MoneyTransactionsFilter {
   accountIds: number[] | null;
   currencies: number[] | null;
@@ -31,6 +33,20 @@ export class MoneyTransactionsFilter {
     filter.includeMoneyHolding = this.includeMoneyHolding;
     filter.dateRange = this.dateRange;
     return filter;
+  }
+
+  withTransactionsBefore() {
+    let filter = this.withoutStartAndEndDate();
+    filter.endDate = this.startDate;
+    return filter;
+  }
+
+  getStartDate(): Moment {
+    return (this.startDate == null ? null : moment(this.startDate)) as Moment;
+  }
+
+  getEndDate(): Moment {
+    return (this.endDate == null ? null : moment(this.endDate)) as Moment;
   }
 }
 

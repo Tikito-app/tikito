@@ -7,6 +7,7 @@ export class MoneyGraphGroupInfo {
   isHolding: boolean;
   key: string;
   normalizedAggregatedValue: number = 0;
+  normalizedMutatedAmount: number = 0;
   currencyId: number;
 
   constructor(id: number, name: string, isBudget: boolean, isHolding: boolean, currencyId: number) {

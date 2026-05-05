@@ -74,7 +74,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
     this.performanceTimes[name] = now;
 
     if (this.lastPerformanceName != null) {
-      console.log(this.lastPerformanceName + ' took ' + (now - this.performanceTimes[this.lastPerformanceName]));
+      // console.log(this.lastPerformanceName + ' took ' + (now - this.performanceTimes[this.lastPerformanceName]));
     }
 
     this.lastPerformanceName = name;
@@ -164,11 +164,11 @@ export class MoneyTransactionGraphComponent implements OnInit {
   }
 
   resetGraph() {
+    this.otherGroupName = this.translateService.translate('money/graph/other-group-name');
+
     this.assertHasTransactions().subscribe(() => {
       this.assertHasBudget().subscribe(() => {
         this.assertHasMoneyHoldings().subscribe(() => {
-          this.otherGroupName = this.translateService.translate('money/graph/other-group-name');
-
           this.existingMoneyTransactionGroups = {};
           this.moneyTransactions.forEach(transaction => this.existingMoneyTransactionGroups[transaction.groupId] = true);
 
@@ -187,6 +187,7 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
           this.normalizedValues = MoneyGraphService.mapHistoricalMoneyValueToNormalizedMoneyValue(this.groupsById, this.allTransactions, this.transactionFilter);
           this.perf('calculateNormalizedAggregatedValues');
+          console.log(this.normalizedValues)
 
           MoneyGraphService.calculateNormalizedAggregatedValues(this.allTransactions, this.groupsByName, this.groupsById, this.getStartDate(), this.getEndDate(), this.transactionFilter);
           this.perf('splitGroupsAndMapByName');
@@ -214,7 +215,6 @@ export class MoneyTransactionGraphComponent implements OnInit {
         return t;
       }));
     }
-
     if (this.transactionFilter.includeBudget && this.historicalBudgetValues) {
       this.allTransactions = this.allTransactions.concat(this.historicalBudgetValues.map(budgetValue =>
         MoneyGraphService.mapToMoneyBudgetTransaction(budgetValue, this.groupsById)));
@@ -286,17 +286,19 @@ export class MoneyTransactionGraphComponent implements OnInit {
 
     let currentDate = firstDate.clone();
     let dateRangeFormat = MoneyGraphService.getDateRangeFormat(this.transactionFilter);
-    let previousSeriesValue: any = {};
-    let previousSeriesCurrency: any = {};
     let seriesValuesByKey: any = {};
-    let lastValueIfNotReset: any = {};
     let allDates: string[] = [];
-    let offsetPerGroup = this.getOffsetPerGroup(firstDateToRender, valuesPerDateRange);
+    let cumulativeValuesBeforeFilterStart: any = this.getOffsetPerGroup(firstDateToRender); // Corrected to use the new getOffsetPerGroup
     let groupValuePerDate: any = {}
 
+    let totalCumulativeValueUpToCurrentDate: any = { ...cumulativeValuesBeforeFilterStart }; // Tracks cumulative sum from the very beginning for each group
+
     groupKeys.forEach((groupKey: any) => {
-      seriesValuesByKey[groupKey] = []
-      lastValueIfNotReset[groupKey] = null;
+      seriesValuesByKey[groupKey] = [];
+      // Ensure totalCumulativeValueUpToCurrentDate is initialized for all groups
+      if (totalCumulativeValueUpToCurrentDate[groupKey] == null) {
+        totalCumulativeValueUpToCurrentDate[groupKey] = 0;
+      }
     });
 
     let otherGroupHasValue = false;
@@ -315,37 +317,43 @@ export class MoneyTransactionGraphComponent implements OnInit {
         .filter(key => !MoneyGraphGroupKey.fromString(key).isHolding)
         .forEach(groupKey => {
           let groupSeries = seriesValuesByKey[groupKey];
-          let hasNoValueForDateAndGroup = valuesPerDateRange[currentRangedString] == null || valuesPerDateRange[currentRangedString][groupKey] == null;
-          let value = 0;
+          let groupValueForCurrentRange = valuesPerDateRange[currentRangedString] ? valuesPerDateRange[currentRangedString][groupKey] : null;
+
+          let valueAddedInCurrentPeriod = 0;
           let currencyId = 0;
 
-          if (hasNoValueForDateAndGroup) {
-            let hasNoPreviousValue = previousSeriesValue[groupKey] == null;
-            value = hasNoPreviousValue ? 0 : previousSeriesValue[groupKey];
-            currencyId = hasNoPreviousValue ? 0 : previousSeriesCurrency[groupKey];
+          if (groupValueForCurrentRange) {
+            // groupValueForCurrentRange.value is the cumulative sum up to this period
+            // So, valueAddedInCurrentPeriod is the difference between current cumulative and previous total cumulative
+            valueAddedInCurrentPeriod = groupValueForCurrentRange.value - (totalCumulativeValueUpToCurrentDate[groupKey] || 0);
+            currencyId = groupValueForCurrentRange.currencyId;
+            totalCumulativeValueUpToCurrentDate[groupKey] = groupValueForCurrentRange.value; // Update total cumulative
           } else {
-            let groupValue = valuesPerDateRange[currentRangedString][groupKey];
-            value = groupValue.value - this.getOffset(offsetPerGroup, groupKey);
-            currencyId = groupValue.currencyId;
-
-            if(MoneyGraphGroupKey.fromString(groupKey).name == this.otherGroupName) {
-              otherGroupHasValue = true;
-            }
+            // No transactions in this period, cumulative value remains the same
+            valueAddedInCurrentPeriod = 0;
+            // currencyId remains the same as previous, or 0 if no previous
+            // totalCumulativeValueUpToCurrentDate[groupKey] remains unchanged
           }
 
-          let nonResettedValue = value;
-
-          if (this.transactionFilter.startAtZeroAfterDateAggregation && lastValueIfNotReset[groupKey] != null) {
-            value -= lastValueIfNotReset[groupKey];
+          let valueToPushToSeries = 0;
+          if (this.transactionFilter.startAtZeroFromBeginning) {
+            // If starting at zero, the value is the current total cumulative minus the offset
+            valueToPushToSeries = (totalCumulativeValueUpToCurrentDate[groupKey] || 0) - (cumulativeValuesBeforeFilterStart[groupKey] || 0);
+          } else {
+            // Otherwise, just push the value added in this specific period
+            valueToPushToSeries = valueAddedInCurrentPeriod;
           }
-          previousSeriesValue[groupKey] = nonResettedValue;
-          previousSeriesCurrency[groupKey] = currencyId;
-          value = this.applyExchangeRate(currentDate, currencyId, value);
+
+          valueToPushToSeries = this.applyExchangeRate(currentDate, currencyId, valueToPushToSeries);
+
           if (withinDateRange) {
-            groupSeries.push(value);
+            groupSeries.push(valueToPushToSeries);
           }
-          lastValueIfNotReset[groupKey] = nonResettedValue;
-          groupValuePerDate[currentDateString][groupKey] = value;
+          groupValuePerDate[currentDateString][groupKey] = valueToPushToSeries;
+
+          if(MoneyGraphGroupKey.fromString(groupKey).name == this.otherGroupName && valueToPushToSeries != 0) {
+            otherGroupHasValue = true;
+          }
         });
 
       MoneyGraphService.generateGroupValuesForMoney(this.historicalMoneyValuesByCurrencyAndDate, groupKeys, seriesValuesByKey, groupValuePerDate, currentDateString);
@@ -513,20 +521,14 @@ export class MoneyTransactionGraphComponent implements OnInit {
     return this.transactionFilter.endDate == null ? null : moment(this.transactionFilter.endDate);
   }
 
-  getOffsetPerGroup(firstDateToRender: moment.Moment, valuesPerDateRange: any) {
+  getOffsetPerGroup(firstDateToRender: moment.Moment) {
     let offset: any = {};
-    let dateRangeFormat = MoneyGraphService.getDateRangeFormat(this.transactionFilter);
-    let dateString = firstDateToRender.format(dateRangeFormat);
-    let dates = Object.keys(valuesPerDateRange).sort();
-
-    for (let date of dates) {
-      if (date == dateString) {
-        return offset;
+    // Iterate through the already aggregated values to find the cumulative sum just before firstDateToRender
+    this.aggregatedValuesPerDateRange.forEach(value => {
+      if (value.date.isBefore(firstDateToRender)) {
+        offset[value.groupKey] = value.value; // Store the cumulative value for this group
       }
-      Object.keys(valuesPerDateRange[date]).forEach((groupKey: any) => {
-        offset[groupKey] = valuesPerDateRange[date][groupKey].value;
-      });
-    }
+    });
     return offset;
   }
 

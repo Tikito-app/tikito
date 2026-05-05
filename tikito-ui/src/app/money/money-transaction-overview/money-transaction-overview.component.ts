@@ -39,6 +39,7 @@ import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {AuthService} from "../../service/auth.service";
 import {Security} from "../../dto/security/security";
 import {CacheService} from "../../service/cache-service";
+import {MoneyGraphComponent} from "../money-graph/money-graph.component";
 
 @Component({
   selector: 'app-money-transaction-overview',
@@ -74,7 +75,8 @@ import {CacheService} from "../../service/cache-service";
     PopoverComponent,
     NgIf,
     FormsModule,
-    TranslatePipe
+    TranslatePipe,
+    MoneyGraphComponent
   ],
   templateUrl: './money-transaction-overview.component.html',
   styleUrl: './money-transaction-overview.component.scss',

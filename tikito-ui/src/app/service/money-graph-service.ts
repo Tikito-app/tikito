@@ -236,6 +236,9 @@ export class MoneyGraphService {
   }
 
   static getDateByDateRange(date: moment.Moment, transactionFilter: MoneyTransactionsFilter) {
+    if(date == null) {
+      return null as unknown as Moment;
+    }
     return date.clone().startOf(MoneyGraphService.getPeriodUnit(transactionFilter) as any);
   }
 
