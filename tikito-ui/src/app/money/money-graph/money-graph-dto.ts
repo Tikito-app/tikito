@@ -16,12 +16,10 @@ export class MoneyGraphDto {
   moneyValuesPerGroupAndDateRange: any = {};
   cashHoldingValuesPerGroupAndDateRange: any = {};
 
-  // moneyGroupsById: any;
   moneyGroupsByKey: any = {};
   groupNameByGroupId: any = {};
   historicalCashValuesByCurrencyAndDate: any;
   highestGroupsByKey: any;
-
 
   seriesPerGroupKey: any;
   allDates: string[] = [];

@@ -101,11 +101,13 @@ export class MoneyGraphComponent implements OnInit {
     // 8. Sum up the MoneyGraphValues per date range for both the highest groups and the other groups
     MoneyGraphProcessor.sumValuesPerGroupAndDateRange(this.dataDto, this.otherGroupName);
 
-    // 9. Fill in gaps, e.g. if we should not start from 0 after the date range, or if we have an offset, this will be set in moneyValuesPerGroupAndDateRange
+    // 9. Calculate the amount before the graph starts, if we don't start at zero
+    MoneyGraphProcessor.setAmountWhenNotStartAtZero(this.dataDto, this.transactionFilter, this.getFirstDateOfData(), this.getFirstDateToRender());
+
+    // 10. Fill in gaps, e.g. if we should not start from 0 after the date range, or if we have an offset, this will be set in moneyValuesPerGroupAndDateRange
     MoneyGraphProcessor.fillInGapsForGroups(this.dataDto, this.transactionFilter, this.getFirstDateToRender(), this.getEndDateToRender());
 
-    // 10. generate the graph
-    // todo: make static
+    // 11. generate the graph
     this.processDates();
 
     let series = this.generateSeriesJson();
@@ -124,8 +126,7 @@ export class MoneyGraphComponent implements OnInit {
 
     Object.keys(this.dataDto.moneyValuesPerGroupAndDateRange).forEach(key => {
       this.dataDto.seriesPerGroupKey[key] = [];
-    })
-
+    });
 
     while (currentDate.isSameOrBefore(lastDateToRender)) {
       let currentRangedString = currentDate.format(dateRangeFormat);
@@ -225,7 +226,8 @@ export class MoneyGraphComponent implements OnInit {
         let date = moment(params[0].axisValue, 'DD-MM-yyyy').format(dateRangeFormat);
         function getMarker(params: any, field: string) {
           for (let param of params) {
-            if (param.seriesName == field) {
+            // find by name and not the param that is from the budget
+            if (param.seriesName == field && !param.marker.includes('transparent')) {
               return param.marker;
             }
           }

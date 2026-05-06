@@ -10,6 +10,7 @@ import {MoneyGraphGroupKey} from "../../dto/money/money-graph-group-key";
 import MoneyTransaction from "../../dto/money/money-transaction";
 import {MoneyGraphValue} from "../../dto/money/money-graph-value";
 import {CacheService} from "../../service/cache-service";
+import {Moment} from "moment";
 
 @Injectable({
   providedIn: 'root',
@@ -19,9 +20,6 @@ export class MoneyGraphProcessor {
   static generateHistoricalCashValuesByCurrencyAndDate(dataDto: MoneyGraphDto) {
     dataDto.historicalCashValuesByCurrencyAndDate = {};
     dataDto.historicalCashValues.forEach(value => {
-      // if (firstDateOfMoneyHolding == null) {
-      //   firstDateOfMoneyHolding = moment(value.date);
-      // }
       if (dataDto.historicalCashValuesByCurrencyAndDate[value.currencyId] == null) {
         dataDto.historicalCashValuesByCurrencyAndDate[value.currencyId] = {}
       }
@@ -163,8 +161,7 @@ export class MoneyGraphProcessor {
           dateRange,
           value.amount,
           new MoneyGraphGroupKey(MoneyGraphProcessor.getGroupName(value, dataDto.groupNameByGroupId), isBudget, false).toString(),
-          value.currencyId,
-          null);
+          value.currencyId);
       });
   }
 
@@ -192,14 +189,56 @@ export class MoneyGraphProcessor {
           dataDto.moneyValuesPerGroupAndDateRange[graphValue.groupKey][dateString] = new MoneyGraphValue(
             dateString,
             graphValue.date,
-            MoneyGraphProcessor.getOffset(dataDto, graphValue.groupKey),
+            0,
             graphValue.groupKey,
-            graphValue.currencyId,
-            previousValuesPerGroup[graphValue.groupKey]);
+            graphValue.currencyId);
           previousValuesPerGroup[graphValue.groupKey] = dataDto.moneyValuesPerGroupAndDateRange[graphValue.groupKey][dateString];
         }
         dataDto.moneyValuesPerGroupAndDateRange[graphValue.groupKey][dateString].value += graphValue.value;
       });
+  }
+
+  static setAmountWhenNotStartAtZero(dataDto: MoneyGraphDto, transactionFilter: MoneyTransactionsFilter, firstDateOfData: Moment | null, firstDateToRender: moment.Moment) {
+    if(transactionFilter.startAtZeroFromBeginning || firstDateOfData == null) {
+      return ;
+    }
+
+    let currentDate = firstDateOfData.clone();
+    let dateRangeFormat = MoneyGraphService.getDateRangeFormat(transactionFilter);
+    let totalValuePerGroupBeforeStart: any = {};
+    let currencyPerGroup: any = {};
+
+    while (currentDate.isBefore(firstDateToRender)) {
+      let currentRangedString = currentDate.format(dateRangeFormat);
+      Object.keys(dataDto.moneyValuesPerGroupAndDateRange)
+        .forEach(key => {
+          if(dataDto.moneyValuesPerGroupAndDateRange[key][currentRangedString] != null) {
+            if(totalValuePerGroupBeforeStart[key] == null) {
+              totalValuePerGroupBeforeStart[key] = 0;
+              currencyPerGroup[key] = 0;
+            }
+            totalValuePerGroupBeforeStart[key] += dataDto.moneyValuesPerGroupAndDateRange[key][currentRangedString].value;
+            currencyPerGroup[key] = dataDto.moneyValuesPerGroupAndDateRange[key][currentRangedString].currencyId;
+          }
+
+        })
+
+      currentDate = MoneyGraphProcessor.calculateNextCurrentDate(currentDate, transactionFilter);
+    }
+
+    let currentRangedString = currentDate.format(dateRangeFormat);
+    for(let key of Object.keys(totalValuePerGroupBeforeStart)) {
+      if(dataDto.moneyValuesPerGroupAndDateRange[key][currentRangedString] == null) {
+        dataDto.moneyValuesPerGroupAndDateRange[key][currentRangedString] = new MoneyGraphValue(
+          currentRangedString,
+          currentDate,
+          totalValuePerGroupBeforeStart[key],
+          key,
+          currencyPerGroup[key]);
+      } else {
+        dataDto.moneyValuesPerGroupAndDateRange[key][currentRangedString].value += totalValuePerGroupBeforeStart[key];
+      }
+    }
   }
 
   static fillInGapsForGroups(dataDto: MoneyGraphDto, transactionFilter: MoneyTransactionsFilter, firstDateToRender: any, lastDateToRender: any) {
@@ -218,7 +257,7 @@ export class MoneyGraphProcessor {
           if(dataDto.moneyValuesPerGroupAndDateRange[key][previousRangedString] != null) {
             let previousGraphValue = dataDto.moneyValuesPerGroupAndDateRange[key][previousRangedString];
             if(dataDto.moneyValuesPerGroupAndDateRange[key][currentRangedString] == null) {
-              dataDto.moneyValuesPerGroupAndDateRange[key][currentRangedString] = new MoneyGraphValue(currentRangedString, currentDate, 0, key, previousGraphValue.currencyId, null);
+              dataDto.moneyValuesPerGroupAndDateRange[key][currentRangedString] = new MoneyGraphValue(currentRangedString, currentDate, 0, key, previousGraphValue.currencyId);
             }
 
             dataDto.moneyValuesPerGroupAndDateRange[key][currentRangedString].value += previousGraphValue.value
@@ -245,22 +284,14 @@ export class MoneyGraphProcessor {
         if (dataDto.seriesPerGroupKey[key.toString()] == null) {
           dataDto.seriesPerGroupKey[key.toString()] = [];
           dataDto.cashHoldingValuesPerGroupAndDateRange[key.toString()] = {};
-          // groupKeys.push(key.toString());
         }
 
-        let exchangedValue = value.amount * value.currencyMultiplier;//this.applyExchangeRate(date, value.currencyId, value.amount);
+        let exchangedValue = value.amount * value.currencyMultiplier;
         dataDto.seriesPerGroupKey[key.toString()].push(exchangedValue);
         dataDto.cashHoldingValuesPerGroupAndDateRange[key.toString()][currentRangedString] = value;
-        // dataDto.moneyValuesPerGroupAndDateRange[key.toString()][currentRangedString] = exchangedValue;
-        // groupValuePerDate[currentDateString][key.toString()] = exchangedValue;
       }
     }
   }
-
-  private static getOffset(dataDto: MoneyGraphDto, groupKey: string) {
-    return 0;
-  }
-
 
   static getGroupName(transaction: MoneyTransaction, groupNamesById: any): string {
     if (transaction.groupId != null && groupNamesById[transaction.groupId]) {
