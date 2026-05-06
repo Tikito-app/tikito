@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit} from '@angular/core';
 import {NgxEchartsDirective, provideEchartsCore} from "ngx-echarts";
 import {MoneyTransactionsFilter, TransactionDateRange} from "../../dto/money/money-transactions-filter";
-import {MoneyApi} from "../../api/money-api";
 import {AuthService} from "../../service/auth.service";
 import {TranslateService} from "../../service/translate.service";
 import {MoneyGraphProcessor} from "./money-graph-processor";
@@ -136,6 +135,8 @@ export class MoneyGraphComponent implements OnInit {
 
       this.generateSeriesForDate(currentRangedString);
 
+      MoneyGraphProcessor.generateCashSeriesForDate(this.dataDto, currentDateString, currentRangedString)
+
       currentDate = MoneyGraphProcessor.calculateNextCurrentDate(currentDate, this.transactionFilter);
     }
   }
@@ -233,9 +234,9 @@ export class MoneyGraphComponent implements OnInit {
 
         let html = '<table><tr><td></td><td></td><td><span style="float: right; margin-left: 20px;">Spent</span></td><td><span style="float: right; margin-left: 20px;">Budgeted</span></td></tr>';
 
-        let groupNames = Object.keys(dataDto.moneyValuesPerGroupAndDateRange)
+        let groupNames = Object.keys(dataDto.seriesPerGroupKey)
           .map(MoneyGraphGroupKey.fromString)
-          .filter(key => key.isHolding || dataDto.moneyValuesPerGroupAndDateRange[key.toString()] != 0)
+          .filter(key => key.isHolding || dataDto.moneyValuesPerGroupAndDateRange[key.toString()] != 0 || dataDto.cashHoldingValuesPerGroupAndDateRange[key.toString()] != null)
           .map(key => key.name);
         let uniqueGroupNames = [...new Set(groupNames)].sort()
 
@@ -251,8 +252,11 @@ export class MoneyGraphComponent implements OnInit {
           let firstValue = moneyValue != null ? moneyValue : cashHoldingValue;
 
           if(firstValue != null || budgetValue != null) {
+            // todo: convert amount to value?
+            let value = firstValue != null ? firstValue.value ? firstValue.value : firstValue.amount : null;
+
             html += `<tr><td>${getMarker(params, groupName.toString())}</td><td>${Util.maxDisplayString(groupName, 25)}</td><td>`;
-            html += (firstValue != null ? `<span style="float: right; margin-left: 20px; color: ${Util.currencyColor(firstValue.value)};">${Util.currencyFormatWithSymbol(firstValue.value, firstValue.currencyId)}</span>` : ``) + '</td><td>';
+            html += (firstValue != null ? `<span style="float: right; margin-left: 20px; color: ${Util.currencyColor(value)};">${Util.currencyFormatWithSymbol(value, firstValue.currencyId)}</span>` : ``) + '</td><td>';
             html += (budgetValue != null ? `<span style="float: right; margin-left: 20px; color: ${Util.currencyColor(budgetValue.value)};">${Util.currencyFormatWithSymbol(budgetValue.value, budgetValue.currencyId)}</span>` : ``) + '</td>';
             html += '</tr>';
           }
@@ -268,6 +272,8 @@ export class MoneyGraphComponent implements OnInit {
   static getGraphValue(dataDto: MoneyGraphDto, key: string, date: string) {
     if(dataDto.moneyValuesPerGroupAndDateRange[key] != null && dataDto.moneyValuesPerGroupAndDateRange[key][date] != null) {
       return dataDto.moneyValuesPerGroupAndDateRange[key][date];
+    } else if(dataDto.cashHoldingValuesPerGroupAndDateRange[key] != null && dataDto.cashHoldingValuesPerGroupAndDateRange[key][date] != null) {
+      return dataDto.cashHoldingValuesPerGroupAndDateRange[key][date];
     }
     return null;
   }

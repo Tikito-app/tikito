@@ -28,8 +28,9 @@ export class MoneyGraphDataFetcher {
 
   assertHasMoneyTransactionGroups(dataDto: MoneyGraphDto): Observable<void> {
     return new Observable(observer => {
-      if (dataDto.moneyTransactionGroups != null) {
+      if (dataDto.moneyTransactionGroups.length != 0) {
         observer.next();
+        return ;
       }
       this.api.getMoneyTransactionGroups().subscribe(groups => {
         dataDto.moneyTransactionGroups = groups;

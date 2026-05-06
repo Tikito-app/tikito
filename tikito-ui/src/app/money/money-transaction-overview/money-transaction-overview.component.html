@@ -86,7 +86,6 @@
 <div class="main-center-column main-column">
   <mat-tab-group *ngIf="form">
     <mat-tab [label]="'money/graph' | translatePipe"> <app-money-graph [height]="600" [accountId]="accountId" [onFilterUpdateCallback]="onFilterUpdateCallback" [transactionFilter]="getTransactionFilter()"></app-money-graph> </mat-tab>
-    <mat-tab [label]="'old' | translatePipe"> <app-money-transaction-graph [height]="600" [accountId]="accountId" [onFilterUpdateCallback]="onFilterUpdateCallback" [transactionFilter]="getTransactionFilter()"></app-money-transaction-graph> </mat-tab>
     <mat-tab [label]="'money/transactions' | translatePipe"> <app-moneyTransaction-list [accountId]="accountId" [onFilterUpdateCallback]="onFilterUpdateCallback" [transactionFilter]="getTransactionFilter()"></app-moneyTransaction-list> </mat-tab>
 <!--    <mat-tab [label]="'money/aggregated-table' | translatePipe"> <app-money-transaction-aggregated-table [onFilterUpdateCallback]="onFilterUpdateCallback" [transactionFilter]="getTransactionFilter()"></app-money-transaction-aggregated-table> </mat-tab>-->
   </mat-tab-group>

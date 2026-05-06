@@ -6,15 +6,15 @@ import {MoneyBudgetTransaction} from "../../dto/money/money-budget-transaction";
 import {MoneyGraphValue} from "../../dto/money/money-graph-value";
 
 export class MoneyGraphDto {
-  moneyTransactionGroups: MoneyTransactionGroup[];
-  moneyTransactionsInRange: MoneyTransaction[];
-  historicalBudgetValuesInRange: HistoricalBudgetValue[];
-  historicalBudgetValue: HistoricalBudgetValue[];
-  historicalCashValues: HistoricalMoneyHoldingValue[];
-  moneyTransactionsWithBudget: MoneyBudgetTransaction[];
+  moneyTransactionGroups: MoneyTransactionGroup[] = [];
+  moneyTransactionsInRange: MoneyTransaction[] = [];
+  historicalBudgetValuesInRange: HistoricalBudgetValue[] = [];
+  historicalCashValues: HistoricalMoneyHoldingValue[] = [];
+  moneyTransactionsWithBudget: MoneyBudgetTransaction[] = [];
 
   moneyGraphValues: MoneyGraphValue[];
   moneyValuesPerGroupAndDateRange: any = {};
+  cashHoldingValuesPerGroupAndDateRange: any = {};
 
   // moneyGroupsById: any;
   moneyGroupsByKey: any = {};
