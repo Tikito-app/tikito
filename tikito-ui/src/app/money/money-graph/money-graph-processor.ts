@@ -73,7 +73,7 @@ export class MoneyGraphProcessor {
   }
 
   static generateOtherGroupsByName(dataDto: MoneyGraphDto, transactionFilter: MoneyTransactionsFilter) {
-    if (!transactionFilter.showOther) {
+    if (transactionFilter.amountOfOtherGroups < 0) {
       return;
     }
 

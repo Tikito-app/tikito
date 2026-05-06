@@ -14,7 +14,7 @@ import {
   MatTableDataSource
 } from "@angular/material/table";
 import {MatIcon} from "@angular/material/icon";
-import {MatFabButton} from "@angular/material/button";
+import {MatButton, MatFabButton} from "@angular/material/button";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {NgIf} from "@angular/common";
@@ -54,7 +54,8 @@ import {CurrencyComponent} from "../../components/currency/currency.component";
     TranslatePipe,
     MatCard,
     MatCardHeader,
-    CurrencyComponent
+    CurrencyComponent,
+    MatButton
   ],
   templateUrl: './money-transaction-group-list.component.html',
   styleUrl: './money-transaction-group-list.component.scss',
@@ -107,6 +108,10 @@ export class MoneyTransactionGroupListComponent implements AfterViewInit {
 
   onRowClicked(row: MoneyTransactionGroup) {
     this.router.navigate(['/money/transaction-group/' + row.id]);
+  }
+
+  routeToMoney() {
+    this.router.navigate(['/money-transaction']);
   }
 
   protected readonly Util = Util;

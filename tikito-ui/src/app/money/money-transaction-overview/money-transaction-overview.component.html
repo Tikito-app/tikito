@@ -28,8 +28,6 @@
         <app-popover text="money/graph/start-at-zero-from-beginning-tooltip"></app-popover>
         <mat-checkbox formControlName="startAtZeroAfterDateAggregation" (change)="onStartAtZeroAfterDateAggregationChanged($event)">{{ 'money/graph/start-at-zero-after-date-aggregation' | translatePipe}}</mat-checkbox>
         <app-popover text="money/graph/start-at-zero-after-date-aggregation-tooltip"></app-popover>
-        <mat-checkbox formControlName="showOther" (change)="UserPreferenceService.onCheckboxChange(UserPreference.MONEY_SHOW_OTHER, $event.checked)">{{ 'money/graph/show-other' | translatePipe}}</mat-checkbox>
-        <app-popover text="money/graph/show-other-tooltip"></app-popover>
 
         <mat-checkbox formControlName="aggregateDateRange" (change)="onAggregateDateRangeChanged($event.checked)">{{ 'money/graph/aggregate-date-range' | translatePipe}}</mat-checkbox>
         <app-popover text="money/graph/aggregate-date-range-tooltip"></app-popover><br/>
@@ -79,6 +77,7 @@
         <br/>
 
         <button mat-raised-button (click)="onUpdateFilterButtonClicked()" color="primary">{{'update' | translatePipe}}</button>
+        <button mat-button style="float: right;" (click)="onRouteToMoneySettings()"><mat-icon>settings</mat-icon> {{'money-settings/settings' | translatePipe}}</button>
       </form>
     </mat-card-content>
   </mat-card>

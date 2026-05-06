@@ -44,9 +44,7 @@ export class MoneyGraphComponent implements OnInit {
   chartOption: any;
   lastDateRange: TransactionDateRange | null;
   otherGroupName: string;
-
   dataDto = new MoneyGraphDto();
-
 
   constructor(private authService: AuthService,
               private translateService: TranslateService,

@@ -1,4 +1,7 @@
 <div class="main-side-column main-column">
+  <button mat-button (click)="routeToMoney();"><mat-icon>arrow_back</mat-icon> {{'money-settings/back-to-money' | translatePipe}}</button>
+  <br/><br/>
+
   <mat-form-field>
     <mat-label>{{ 'money/filter' | translatePipe }}</mat-label>
     <input matInput (keyup)="applyFilter($event)" #input>

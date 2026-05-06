@@ -3,7 +3,7 @@ import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {MoneyTransactionListComponent} from "../money-transaction-list/money-transaction-list.component";
 import {MoneyTransactionGraphComponent} from "../money-transaction-graph/money-transaction-graph.component";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Util} from "../../util";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {MatCheckbox, MatCheckboxChange} from "@angular/material/checkbox";
@@ -96,6 +96,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
   onFilterUpdateCallback: EventEmitter<MoneyTransactionsFilter> = new EventEmitter();
 
   constructor(private route: ActivatedRoute,
+              private router: Router,
               private api: MoneyApi,
               private authService: AuthService,
               private accountApi: AccountApi) {
@@ -269,9 +270,6 @@ export class MoneyTransactionOverviewComponent implements OnInit {
     }
   }
 
-  protected readonly Util = Util;
-  protected readonly CacheService = CacheService;
-
   protected onStartAtZeroAfterDateAggregationChanged($event: MatCheckboxChange) {
     UserPreferenceService.onCheckboxChange(UserPreference.START_AT_ZERO_AFTER_DATE_RANGE, $event.checked);
     this.includeBudgetDisabled = !$event.checked;
@@ -281,4 +279,11 @@ export class MoneyTransactionOverviewComponent implements OnInit {
       this.form.controls['includeBudget'].setValue(false);
     }
   }
+
+  onRouteToMoneySettings() {
+    this.router.navigate(['/money/transaction-group'])
+  }
+
+  protected readonly Util = Util;
+  protected readonly CacheService = CacheService;
 }
