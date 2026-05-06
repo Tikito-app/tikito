@@ -19,7 +19,7 @@ public interface HistoricalMoneyHoldingValueRepository extends JpaRepository<His
                 (:accountIds is null or v.accountId in :accountIds) and
                 (:currencies is null or v.currencyId in :currencies) and
                 (:startDate is null or v.date >= :startDate) and
-                (:endDate is null or v.date < :endDate)
+                (:endDate is null or v.date <= :endDate)
                 order by v.date asc
             """)
     List<HistoricalMoneyHoldingValue> findByFilter(final long userId, Set<Long> accountIds, Set<Long> currencies, final boolean nonGrouped, LocalDate startDate, LocalDate endDate);

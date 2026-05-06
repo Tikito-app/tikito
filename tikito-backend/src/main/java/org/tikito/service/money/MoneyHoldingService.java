@@ -1,11 +1,11 @@
 package org.tikito.service.money;
 
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.tikito.dto.AccountDto;
+import org.tikito.dto.AssetType;
 import org.tikito.dto.money.AggregatedHistoricalMoneyHoldingValueDto;
 import org.tikito.dto.money.HistoricalMoneyHoldingValueDto;
 import org.tikito.dto.money.MoneyHoldingDto;
@@ -68,7 +68,7 @@ public class MoneyHoldingService implements JobProcessor {
                         userId,
                         filter.getAccountIds(),
                         filter.getCurrencies(),
-                        filter.getNonGrouped() != null && filter.getNonGrouped(),
+                        filter.getNonGrouped() != null && filter.getNonGrouped(),// todo: add showOther
                         filter.getStartDate(),
                         filter.getEndDate())
                 .stream()
@@ -126,6 +126,7 @@ public class MoneyHoldingService implements JobProcessor {
                 .values()
                 .stream()
                 .map(value -> aggregateHoldingValues(userId, value))
+                .flatMap(map -> map.values().stream())
                 .toList();
 
         log.info("Storing {} aggregated  holding values", aggregatedValues.size());
@@ -152,17 +153,23 @@ public class MoneyHoldingService implements JobProcessor {
                 .toList();
     }
 
-    private AggregatedHistoricalMoneyHoldingValue aggregateHoldingValues(final long userId, final List<HistoricalMoneyHoldingValue> historicalSecurityHoldingValues) {
-        final AggregatedHistoricalMoneyHoldingValue aggregatedValue = new AggregatedHistoricalMoneyHoldingValue(userId);
+    private Map<AssetType, AggregatedHistoricalMoneyHoldingValue> aggregateHoldingValues(final long userId, final List<HistoricalMoneyHoldingValue> historicalSecurityHoldingValues) {
+        final Map<AssetType, AggregatedHistoricalMoneyHoldingValue> holdingValues = new HashMap<>();
 
         for (final HistoricalMoneyHoldingValue historicalSecurityHoldingValue : historicalSecurityHoldingValues) {
-            final double currencyMultiplier = historicalSecurityHoldingValue.getCurrencyMultiplier();
+            final AssetType assetType = cacheService.isCrypto(historicalSecurityHoldingValue.getCurrencyId()) ? AssetType.CRYPTO : AssetType.FIAT;
+            final AggregatedHistoricalMoneyHoldingValue aggregatedHistoricalMoneyHoldingValue = holdingValues.computeIfAbsent(assetType, (_) -> new AggregatedHistoricalMoneyHoldingValue(userId, assetType));
 
-            aggregatedValue.setDate(historicalSecurityHoldingValue.getDate());
-            aggregatedValue.setAmount(aggregatedValue.getAmount() + (historicalSecurityHoldingValue.getAmount() * currencyMultiplier));
+            aggregateHoldingValue(historicalSecurityHoldingValue, aggregatedHistoricalMoneyHoldingValue);
         }
+        return holdingValues;
+    }
 
-        return aggregatedValue;
+    private static void aggregateHoldingValue(final HistoricalMoneyHoldingValue historicalSecurityHoldingValue, final AggregatedHistoricalMoneyHoldingValue aggregatedMoneyValue) {
+        final double currencyMultiplier = historicalSecurityHoldingValue.getCurrencyMultiplier();
+
+        aggregatedMoneyValue.setDate(historicalSecurityHoldingValue.getDate());
+        aggregatedMoneyValue.setAmount(aggregatedMoneyValue.getAmount() + (historicalSecurityHoldingValue.getAmount() * currencyMultiplier));
     }
 
     /**

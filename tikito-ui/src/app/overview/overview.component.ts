@@ -15,13 +15,14 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {UserPreferenceService} from "../service/user-preference-service";
 import {UserPreference} from "../dto/user-preference";
-import {DurationInputArg2} from "moment";
+import {DurationInputArg2, Moment} from "moment";
 import {LoanApi} from "../api/loan-api";
 import {OverviewLoanComponent} from "./overview-loan/overview-loan.component";
 import {LoanValue} from "../dto/loan-value";
 import {TranslatePipe} from "../service/translate-pipe.pipe";
 import {MoneyHolding} from "../dto/money-holding";
 import {CurrencyComponent} from "../components/currency/currency.component";
+import {AssetType} from "../dto/asset-type";
 
 @Component({
   selector: 'app-overview',
@@ -44,6 +45,8 @@ import {CurrencyComponent} from "../components/currency/currency.component";
 })
 export class OverviewComponent implements OnInit {
   overview: Overview;
+
+  aggregatedValuesPerAssetType: any = {};
 
   aggregatedHistoricalSecurityValues: AggregatedHistoricalHoldingsValue[];
   aggregatedHistoricalMoneyHoldingValues: AggregatedHistoricalMoneyHoldingValue[] = [];
@@ -69,10 +72,18 @@ export class OverviewComponent implements OnInit {
 
   reset(): void {
     this.securityApi.getAggregatedHistoricalValues().subscribe(historicalSecurityValues => {
+      this.aggregatedValuesPerAssetType[AssetType.SECURITY] = historicalSecurityValues;
+
       this.aggregatedHistoricalSecurityValues = historicalSecurityValues;
       this.moneyApi.getAggregatedHistoricalMoneyHoldingValues().subscribe(historicalMoneyHoldings => {
-        this.aggregatedHistoricalMoneyHoldingValues = historicalMoneyHoldings;
-        this.interpolateHistoricalSecurityOrMoneyValues();
+        historicalMoneyHoldings.forEach(value => {
+          if(this.aggregatedValuesPerAssetType[value.assetType] == null) {
+            this.aggregatedValuesPerAssetType[value.assetType] = [];
+          }
+          this.aggregatedValuesPerAssetType[value.assetType].push(value);
+        })
+        // this.aggregatedHistoricalMoneyHoldingValues = historicalMoneyHoldings;
+        this.interpolateValues();
         this.generateGraph();
       });
     });
@@ -102,22 +113,43 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  interpolateHistoricalSecurityOrMoneyValues() {
-    let moneyStartDate = moment(this.aggregatedHistoricalMoneyHoldingValues[0].date);
-    let moneyEndDate = moment(this.aggregatedHistoricalMoneyHoldingValues.slice(-1)[0].date);
-    let securityStartDate = moment(this.aggregatedHistoricalSecurityValues[0].date);
-    let securityEndDate = moment(this.aggregatedHistoricalMoneyHoldingValues.slice(-1)[0].date);
+  interpolateValues() {
+    let startDate: Moment | null = null;
+    let endDate: Moment | null = null;
 
-    if (moneyStartDate.isBefore(securityStartDate)) {
-      this.aggregatedHistoricalSecurityValues = this.interpolateValuesStartOf(moneyStartDate, this.aggregatedHistoricalSecurityValues, {positionValue: 0});
-    } else {
-      this.aggregatedHistoricalMoneyHoldingValues = this.interpolateValuesStartOf(securityStartDate, this.aggregatedHistoricalMoneyHoldingValues, {amount: 0});
+    for(let type of Object.keys(this.aggregatedValuesPerAssetType)) {
+      let assetStartDate = moment(this.aggregatedValuesPerAssetType[type][0].date);
+      let assetEndDate = moment(this.aggregatedValuesPerAssetType[type][this.aggregatedValuesPerAssetType[type].length].date);
+      if(startDate == null || assetStartDate.isBefore(startDate)) {
+        startDate = assetStartDate;
+      }
+      if(endDate == null || assetEndDate.isAfter(endDate)) {
+        endDate = assetEndDate;
+      }
     }
-    if (moneyEndDate.isBefore(securityEndDate)) {
-      this.aggregatedHistoricalMoneyHoldingValues = this.interpolateValuesEndOf(securityEndDate, this.aggregatedHistoricalMoneyHoldingValues, {amount: 0});
-    } else {
-      this.aggregatedHistoricalSecurityValues = this.interpolateValuesEndOf(moneyStartDate, this.aggregatedHistoricalSecurityValues, {positionValue: 0});
+
+    let zeroObject = {positionValue: 0, amount: 0}
+
+    for(let type of Object.keys(this.aggregatedValuesPerAssetType)) {
+      this.aggregatedValuesPerAssetType[type] = this.interpolateValuesStartOf(startDate as Moment, this.aggregatedValuesPerAssetType[type], zeroObject);
+      this.aggregatedValuesPerAssetType[type] = this.interpolateValuesEndOf(endDate as Moment, this.aggregatedValuesPerAssetType[type], zeroObject);
     }
+    //
+    //   let moneyStartDate = moment(this.aggregatedHistoricalMoneyHoldingValues[0].date);
+    // let moneyEndDate = moment(this.aggregatedHistoricalMoneyHoldingValues.slice(-1)[0].date);
+    // let securityStartDate = moment(this.aggregatedHistoricalSecurityValues[0].date);
+    // let securityEndDate = moment(this.aggregatedHistoricalMoneyHoldingValues.slice(-1)[0].date);
+
+    // if (moneyStartDate.isBefore(securityStartDate)) {
+    //   this.aggregatedHistoricalSecurityValues = this.interpolateValuesStartOf(moneyStartDate, this.aggregatedHistoricalSecurityValues, {positionValue: 0});
+    // } else {
+    //   this.aggregatedHistoricalMoneyHoldingValues = this.interpolateValuesStartOf(securityStartDate, this.aggregatedHistoricalMoneyHoldingValues, {amount: 0});
+    // }
+    // if (moneyEndDate.isBefore(securityEndDate)) {
+    //   this.aggregatedHistoricalMoneyHoldingValues = this.interpolateValuesEndOf(securityEndDate, this.aggregatedHistoricalMoneyHoldingValues, {amount: 0});
+    // } else {
+    //   this.aggregatedHistoricalSecurityValues = this.interpolateValuesEndOf(moneyStartDate, this.aggregatedHistoricalSecurityValues, {positionValue: 0});
+    // }
   }
 
   interpolateValuesStartOf(startDate: moment.Moment, values: any[], dto: any): any[] {
