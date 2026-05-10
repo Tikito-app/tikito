@@ -9,8 +9,8 @@ export class MoneyTransactionsFilter {
   startAtZeroFromBeginning: boolean;
   aggregateDateRange: boolean;
   nonGrouped: boolean;
-  startDate: string;
-  endDate: string;
+  startDate: string | null;
+  endDate: string | null;
   showOther: boolean;
   amountOfOtherGroups: number;
   includeBudget: boolean;

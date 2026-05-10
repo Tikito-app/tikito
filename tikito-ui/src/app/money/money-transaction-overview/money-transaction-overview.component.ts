@@ -179,8 +179,8 @@ export class MoneyTransactionOverviewComponent implements OnInit {
     filter.showOther = this.form.value.showOther;
     filter.nonGrouped = this.form.value.nonGrouped;
     filter.dateRange = this.form.value.dateRange;
-    filter.startDate = moment(this.form.value.startDate).format("yyyy-MM-DD");
-    filter.endDate = moment(this.form.value.endDate).format("yyyy-MM-DD");
+    filter.startDate = this.form.value.startDate == null ? null : moment(this.form.value.startDate).format("yyyy-MM-DD");
+    filter.endDate = this.form.value.endDate == null ? null :  moment(this.form.value.endDate).format("yyyy-MM-DD");
     filter.amountOfOtherGroups = this.form.value.amountOfOtherGroups;
     filter.includeBudget = this.form.value.includeBudget;
     filter.includeMoney = this.form.value.includeMoney;

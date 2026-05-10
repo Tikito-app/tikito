@@ -200,7 +200,7 @@ export class MoneyGraphComponent implements OnInit {
         type: 'value',
       },
       series: series,
-      tooltip: this.getTooltip(this.dataDto, MoneyGraphService.getDateRangeFormat(this.transactionFilter)),
+      tooltip: this.getTooltip(this.dataDto, MoneyGraphService.getDateRangeFormat(this.transactionFilter), this.translateService),
       legend: {
         position: "top",
       },
@@ -211,7 +211,7 @@ export class MoneyGraphComponent implements OnInit {
   }
 
 
-  private getTooltip(dataDto: MoneyGraphDto, dateRangeFormat: string) {
+  private getTooltip(dataDto: MoneyGraphDto, dateRangeFormat: string, translateService: TranslateService) {
     return {
       trigger: 'axis',
       axisPointer: {
@@ -238,7 +238,11 @@ export class MoneyGraphComponent implements OnInit {
           .map(MoneyGraphGroupKey.fromString)
           .filter(key => key.isHolding || dataDto.moneyValuesPerGroupAndDateRange[key.toString()] != 0 || dataDto.cashHoldingValuesPerGroupAndDateRange[key.toString()] != null)
           .map(key => key.name);
-        let uniqueGroupNames = [...new Set(groupNames)].sort()
+        let uniqueGroupNames = [...new Set(groupNames)].sort();
+        let totalCashValue = 0;
+        let totalBudgeted = 0;
+        let htmlForCurrencies = '';
+        let otherHtml = '';
 
         for (let groupName of uniqueGroupNames) {
           let moneyGroupKey = new MoneyGraphGroupKey(groupName, false, false).toString();
@@ -248,20 +252,37 @@ export class MoneyGraphComponent implements OnInit {
           let moneyValue = MoneyGraphComponent.getGraphValue(dataDto, moneyGroupKey, date);
           let cashHoldingValue = MoneyGraphComponent.getGraphValue(dataDto, holdingGroupKey, date);
           let budgetValue = MoneyGraphComponent.getGraphValue(dataDto, budgetGroupKey, date);
-
           let firstValue = moneyValue != null ? moneyValue : cashHoldingValue;
 
           if(firstValue != null || budgetValue != null) {
             // todo: convert amount to value?
             let value = firstValue != null ? firstValue.value ? firstValue.value : firstValue.amount : null;
+            let isCurrency = firstValue.groupKey == null;
 
-            html += `<tr><td>${getMarker(params, groupName.toString())}</td><td>${Util.maxDisplayString(groupName, 25)}</td><td>`;
-            html += (firstValue != null ? `<span style="float: right; margin-left: 20px; color: ${Util.currencyColor(value)};">${Util.currencyFormatWithSymbol(value, firstValue.currencyId)}</span>` : ``) + '</td><td>';
-            html += (budgetValue != null ? `<span style="float: right; margin-left: 20px; color: ${Util.currencyColor(budgetValue.value)};">${Util.currencyFormatWithSymbol(budgetValue.value, budgetValue.currencyId)}</span>` : ``) + '</td>';
-            html += '</tr>';
+            if(value != null && !isCurrency) {
+              totalCashValue += value;
+            } else if(budgetValue != null) {
+              totalBudgeted += budgetValue.value;
+              console.log(budgetValue);
+            }
+            let fontStyle = isCurrency ? 'italic' : 'normal';
+            let htmlToAdd = '';
+            htmlToAdd += `<tr><td>${getMarker(params, groupName.toString())}</td><td style="font-style: ${fontStyle};">${Util.maxDisplayString(groupName, 25)}</td><td>`;
+            htmlToAdd += (firstValue != null ? `<span style="float: right; margin-left: 20px; color: ${Util.currencyColor(value)};">${Util.currencyFormatWithSymbol(value, firstValue.currencyId)}</span>` : ``) + '</td><td>';
+            htmlToAdd += (budgetValue != null ? `<span style="float: right; margin-left: 20px; color: ${Util.currencyColor(budgetValue.value)};">${Util.currencyFormatWithSymbol(budgetValue.value, budgetValue.currencyId)}</span>` : ``) + '</td>';
+            htmlToAdd += '</tr>';
+
+            if(isCurrency) {
+              htmlForCurrencies += htmlToAdd;
+            } else {
+              otherHtml += htmlToAdd;
+            }
           }
-        }
 
+        }
+        html += otherHtml;
+        html += `<tr style="border-top: 1px solid #000""><td></td><td>${translateService.translate('total')}</td><td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(totalCashValue)};">${Util.currencyFormat(totalCashValue)}</span></td><td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(totalBudgeted)};">${Util.currencyFormat(totalBudgeted)}</span></td></tr>`
+        html += htmlForCurrencies;
         html += '</table>';
 
         return `${date}<br/>` + html;

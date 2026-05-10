@@ -12,6 +12,7 @@
   "loading": "Loading...",
   "snackbar/close": "close",
   "edit": "Edit",
+  "total": "Total",
 
   "exception.AccountNumberAlreadyExistsException": "The account number already exists on a different account",
   "exception.InvalidCredentialsException": "The supplied credentials are invalid",
@@ -178,6 +179,11 @@
 
   "security/isin": "Isin",
   "security/isin/symbol": "Symbol",
+
+  "--------------- ASSET ---------------------": "",
+  "asset/type/FIAT": "Fiat",
+  "asset/type/CRYPTO": "Crypto",
+  "asset/type/SECURITY": "Security",
 
 
   "--------------- MONEY ---------------------": "",
