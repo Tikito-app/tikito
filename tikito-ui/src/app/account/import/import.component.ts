@@ -130,7 +130,7 @@ export class ImportComponent implements OnInit {
         }
       });
     } else {
-      this.importFileState.assetType = AssetType.FIAT;
+      this.importFileState.assetType = AssetType.CASH;
       this.uploadFileToBackend(true);
 
     }

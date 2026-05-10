@@ -1,7 +1,7 @@
 package org.tikito.dto;
 
 public enum AssetType {
-    FIAT,
+    CASH,
     CRYPTO,
     SECURITY
 }

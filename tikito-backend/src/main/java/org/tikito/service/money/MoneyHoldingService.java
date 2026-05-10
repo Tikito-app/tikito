@@ -157,7 +157,7 @@ public class MoneyHoldingService implements JobProcessor {
         final Map<AssetType, AggregatedHistoricalMoneyHoldingValue> holdingValues = new HashMap<>();
 
         for (final HistoricalMoneyHoldingValue historicalSecurityHoldingValue : historicalSecurityHoldingValues) {
-            final AssetType assetType = cacheService.isCrypto(historicalSecurityHoldingValue.getCurrencyId()) ? AssetType.CRYPTO : AssetType.FIAT;
+            final AssetType assetType = cacheService.isCrypto(historicalSecurityHoldingValue.getCurrencyId()) ? AssetType.CRYPTO : AssetType.CASH;
             final AggregatedHistoricalMoneyHoldingValue aggregatedHistoricalMoneyHoldingValue = holdingValues.computeIfAbsent(assetType, (_) -> new AggregatedHistoricalMoneyHoldingValue(userId, assetType));
 
             aggregateHoldingValue(historicalSecurityHoldingValue, aggregatedHistoricalMoneyHoldingValue);
