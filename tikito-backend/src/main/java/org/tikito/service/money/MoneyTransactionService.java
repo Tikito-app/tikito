@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.tikito.controller.request.CreateOrUpdateMoneyTransactionRequest;
-import org.tikito.dto.AccountType;
 import org.tikito.dto.money.MoneyTransactionDto;
 import org.tikito.dto.money.MoneyTransactionFilter;
 import org.tikito.dto.security.SecurityType;
@@ -45,7 +44,7 @@ public class MoneyTransactionService {
     @Transactional(propagation = Propagation.MANDATORY)
     public MoneyTransactionDto createOrUpdate(final long userId, final CreateOrUpdateMoneyTransactionRequest request) {
         final MoneyTransaction transaction = request.isNew() ? new MoneyTransaction(userId) : moneyTransactionRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
-        accountRepository.findByUserIdAndIdAndAccountType(userId, request.getAccountId(), AccountType.DEBIT).orElseThrow();
+        accountRepository.findByUserIdAndId(userId, request.getAccountId()).orElseThrow();
         securityRepository.findByIdAndSecurityTypes(request.getCurrencyId(), Set.of(SecurityType.CURRENCY, SecurityType.CRYPTO)).orElseThrow();
         if (request.getGroupId() != null) {
             moneyTransactionGroupRepository.findByUserIdAndId(userId, request.getGroupId()).orElseThrow();

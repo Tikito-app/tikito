@@ -1,7 +1,6 @@
 package org.tikito.entity;
 
 import org.tikito.dto.AccountDto;
-import org.tikito.dto.AccountType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,8 +24,6 @@ public class Account {
     private String name;
     private String accountNumber;
 
-    @Enumerated(EnumType.STRING)
-    private AccountType accountType;
     private long currencyId;
 
     public Account(final long userId) {
@@ -36,7 +33,6 @@ public class Account {
     public Account(final long userId, final AccountExportDto export, final Map<String, Security> currenciesByIsin) {
         this.userId = userId;
         this.name = export.getName();
-        this.accountType = export.getAccountType();
         this.accountNumber = export.getAccountNumber();
         this.currencyId = currenciesByIsin.get(export.getCurrency()).getId();
     }
@@ -46,7 +42,6 @@ public class Account {
                 id,
                 userId,
                 name,
-                accountType,
                 accountNumber,
                 currencyId);
     }
@@ -54,7 +49,6 @@ public class Account {
     public AccountExportDto toExportDto(final Map<Long, Security> currenciesById) {
         return new AccountExportDto(
                 name,
-                accountType,
                 accountNumber,
                 currenciesById.get(currencyId).getCurrentIsin());
     }

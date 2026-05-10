@@ -1,8 +1,10 @@
 package org.tikito.service;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.tikito.controller.request.CreateOrUpdateAccountRequest;
 import org.tikito.dto.AccountDto;
-import org.tikito.dto.AccountType;
 import org.tikito.dto.DateRange;
 import org.tikito.dto.loan.LoanType;
 import org.tikito.dto.money.MoneyTransactionGroupQualifierType;
@@ -18,9 +20,6 @@ import org.tikito.entity.money.MoneyTransactionGroup;
 import org.tikito.entity.security.Isin;
 import org.tikito.entity.security.Security;
 import org.tikito.entity.security.SecurityPrice;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.tikito.repository.*;
 import org.tikito.service.export.ImportExportService;
 
@@ -175,9 +174,9 @@ public class BaseIntegrationTest extends BaseTest {
     }
 
     protected void withDefaultAccounts() {
-        DEFAULT_DEBIT_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_THREE, ACCOUNT_NUMBER_THREE, AccountType.DEBIT, CURRENCY_EURO_ID);
-        DEFAULT_SECURITY_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, ACCOUNT_NUMBER_ONE, AccountType.SECURITY, CURRENCY_EURO_ID);
-        DEBIT_DOLLAR_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_TWO, ACCOUNT_NUMBER_TWO, AccountType.DEBIT, CURRENCY_DOLLAR_ID);
+        DEFAULT_DEBIT_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_THREE, ACCOUNT_NUMBER_THREE, CURRENCY_EURO_ID);
+        DEFAULT_SECURITY_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, ACCOUNT_NUMBER_ONE, CURRENCY_EURO_ID);
+        DEBIT_DOLLAR_ACCOUNT = withExistingAccounts(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_TWO, ACCOUNT_NUMBER_TWO, CURRENCY_DOLLAR_ID);
 
         DEFAULT_DEBIT_ACCOUNT_DTO = DEFAULT_DEBIT_ACCOUNT.toDto();
         DEFAULT_SECURITY_ACCOUNT_DTO = DEFAULT_SECURITY_ACCOUNT.toDto();
@@ -233,13 +232,13 @@ public class BaseIntegrationTest extends BaseTest {
 
 
     protected MoneyTransaction withExistingMoneyTransaction(final long userId,
-                                                           final long accountId,
-                                                           final Instant timestamp,
-                                                           final long currencyId,
-                                                           final double amount,
-                                                           final Double finalBalance,
-                                                           final String counterpartyAccountNumber,
-                                                           final String counterpartyAccountName) {
+                                                            final long accountId,
+                                                            final Instant timestamp,
+                                                            final long currencyId,
+                                                            final double amount,
+                                                            final Double finalBalance,
+                                                            final String counterpartyAccountNumber,
+                                                            final String counterpartyAccountName) {
         return moneyTransactionRepository.saveAndFlush(moneyTransaction(userId, accountId, timestamp, currencyId, amount, finalBalance, counterpartyAccountNumber, counterpartyAccountName, ""));
     }
 
@@ -269,12 +268,11 @@ public class BaseIntegrationTest extends BaseTest {
         return loanRepository.saveAndFlush(loan);
     }
 
-    protected Account withExistingAccounts(final long userId, final String name, final String accountNumber, final AccountType accountType, final long currencyId) {
+    protected Account withExistingAccounts(final long userId, final String name, final String accountNumber, final long currencyId) {
         final CreateOrUpdateAccountRequest request = new CreateOrUpdateAccountRequest();
 
         request.setName(name);
         request.setAccountNumber(accountNumber);
-        request.setAccountType(accountType);
         request.setCurrencyId(currencyId);
 
         final AccountDto dto = accountService.createOrUpdate(userId, request);

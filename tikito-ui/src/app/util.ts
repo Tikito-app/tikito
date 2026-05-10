@@ -4,7 +4,6 @@ import {ActivatedRoute} from "@angular/router";
 import {MoneyTransactionGroupQualifierType} from "./dto/money/money-transaction-group-qualifier-type";
 import {MoneyTransactionField} from "./dto/money/money-transaction-field";
 import {CurrencyPipe, DatePipe, PercentPipe} from "@angular/common";
-import {AccountType} from "./dto/account-type";
 import {SecurityHoldingGraphDisplayField} from "./dto/security/security-holding-graph-display-field";
 import {SecurityType} from "./dto/security/security-type";
 import {MoneyTransactionGroupType} from "./dto/money-transaction-group-type";
@@ -132,12 +131,6 @@ export class Util {
   static getMoneyTransactionFields(): string[] {
     return Object
       .keys(MoneyTransactionField)
-      .filter((v) => isNaN(Number(v)));
-  }
-
-  static getAccountTypes(): string[] {
-    return Object
-      .keys(AccountType)
       .filter((v) => isNaN(Number(v)));
   }
 

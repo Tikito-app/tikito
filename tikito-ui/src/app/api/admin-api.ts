@@ -7,8 +7,6 @@ import {Security} from "../dto/security/security";
 import {SecurityType} from "../dto/security/security-type";
 import {Account} from "../dto/account";
 import {Isin} from "../dto/isin";
-import {AccountApi} from "./account-api";
-import {AccountType} from "../dto/account-type";
 import {HttpRequestMethod} from "../dto/http-request-method";
 
 @Injectable({
@@ -16,21 +14,12 @@ import {HttpRequestMethod} from "../dto/http-request-method";
 })
 export class AdminApi {
 
-  constructor(private http: HttpService,
-              private accountApi: AccountApi) {
+  constructor(private http: HttpService) {
   }
 
   getUsers(): Observable<UserAccount[]> {
     return this.http.httpGetList(UserAccount, new HttpRequestData()
       .withUrl('/api/admin/users'))
-  }
-
-  getMoneyAccounts(): Observable<Account[]> {
-    return new Observable(observer => {
-      this.accountApi.getAccounts().subscribe(accounts => {
-        observer.next(accounts.filter(account => account.accountType === AccountType.DEBIT));
-      })
-    })
   }
 
   getSecurities(): Observable<Security[]> {
@@ -87,7 +76,7 @@ export class AdminApi {
       }));
   }
 
-  getIsin(isin: string) : Observable<Isin> {
+  getIsin(isin: string): Observable<Isin> {
     return this.http.httpGetSingle(Isin, new HttpRequestData()
       .withUrl('/api/admin/securities/isin/' + isin));
   }

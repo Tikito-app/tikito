@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.tikito.controller.request.CreateOrUpdateAccountRequest;
 import org.tikito.dto.AccountDto;
-import org.tikito.dto.AccountType;
 import org.tikito.entity.money.MoneyHolding;
 
 import java.util.List;
@@ -25,7 +24,7 @@ class AccountServiceTest extends BaseIntegrationTest {
 
     @Test
     void testCreateNewDebitAccount() {
-        final AccountDto dto = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, AccountType.DEBIT);
+        final AccountDto dto = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE);
 
         final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), dto.getId()).getFirst();
         assertEquals(CURRENCY_EURO_ID, moneyHolding.getCurrencyId());
@@ -33,8 +32,7 @@ class AccountServiceTest extends BaseIntegrationTest {
 
     @Test
     void testCreateNewCreditAccount() {
-        final AccountDto dto = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, AccountType.CREDIT);
-        assertEquals(AccountType.CREDIT, dto.getAccountType());
+        final AccountDto dto = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE);
 
         final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), dto.getId()).getFirst();
         assertEquals(CURRENCY_EURO_ID, moneyHolding.getCurrencyId());
@@ -42,15 +40,15 @@ class AccountServiceTest extends BaseIntegrationTest {
 
     @Test
     void shouldHaveSingleHolding_givenDeletedAccount() {
-        final AccountDto deleted = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, AccountType.CREDIT);
+        final AccountDto deleted = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE);
         assertEquals(1, moneyHoldingRepository.count());
         accountService.deleteAccount(deleted.getUserId(), deleted.getId());
 
-        final AccountDto securityAccount = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, AccountType.SECURITY);
+        final AccountDto securityAccount = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE);
         assertEquals(0, moneyHoldingRepository.count());
         accountService.deleteAccount(securityAccount.getUserId(), securityAccount.getId());
 
-        final AccountDto newDto = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, AccountType.DEBIT);
+        final AccountDto newDto = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE);
         final List<MoneyHolding> all = moneyHoldingRepository.findAll();
         assertEquals(1, all.size());
 
@@ -60,15 +58,15 @@ class AccountServiceTest extends BaseIntegrationTest {
 
     @Test
     void shouldSetProperHolding_given_updatedAccount() {
-        final AccountDto account = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE, AccountType.CREDIT);
+        final AccountDto account = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE);
         final long holdingId = moneyHoldingRepository.findAll().getFirst().getId();
 
-        accountService.createOrUpdate(account.getUserId(), request("new", AccountType.DEBIT, account.getId()));
+        accountService.createOrUpdate(account.getUserId(), request("new", account.getId()));
         final List<MoneyHolding> allHoldings = moneyHoldingRepository.findAll();
         assertEquals(1, allHoldings.size());
         assertEquals(holdingId, allHoldings.getFirst().getId().longValue());
 
-        accountService.createOrUpdate(account.getUserId(), request("new-new", AccountType.SECURITY, account.getId()));
+        accountService.createOrUpdate(account.getUserId(), request("new-new", account.getId()));
         assertEquals(0, moneyHoldingRepository.count());
     }
 
@@ -78,24 +76,22 @@ class AccountServiceTest extends BaseIntegrationTest {
         assertEquals(account.getUserId(), holding.getUserId());
     }
 
-    private AccountDto createAccount(final long userId, final String accountName, final AccountType accountType) {
-        final AccountDto dto = accountService.createOrUpdate(userId, request(accountName, accountType));
+    private AccountDto createAccount(final long userId, final String accountName) {
+        final AccountDto dto = accountService.createOrUpdate(userId, request(accountName));
         assertEquals(userId, dto.getUserId());
         assertEquals(accountName, dto.getName());
-        assertEquals(accountType, dto.getAccountType());
         assertEquals(CURRENCY_EURO_ID, dto.getCurrencyId());
         assertEquals(ACCOUNT_NUMBER_ONE, dto.getAccountNumber());
         return dto;
     }
 
-    private CreateOrUpdateAccountRequest request(final String name, final AccountType accountType) {
-        return request(name, accountType, null);
+    private CreateOrUpdateAccountRequest request(final String name) {
+        return request(name, null);
     }
 
-    private CreateOrUpdateAccountRequest request(final String name, final AccountType accountType, final Long id) {
+    private CreateOrUpdateAccountRequest request(final String name, final Long id) {
         final CreateOrUpdateAccountRequest request = new CreateOrUpdateAccountRequest();
         request.setId(id);
-        request.setAccountType(accountType);
         request.setCurrencyId(CURRENCY_EURO_ID);
         request.setAccountNumber(ACCOUNT_NUMBER_ONE);
         request.setName(name);

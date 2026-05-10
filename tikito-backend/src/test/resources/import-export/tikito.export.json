@@ -2,7 +2,6 @@
   "accounts": [
     {
       "name": "DeGiro",
-      "accountType": "SECURITY",
       "accountNumber": "123",
       "currency": "EUR",
       "securityTransactions": [
@@ -35,7 +34,6 @@
     },
     {
       "name": "Other",
-      "accountType": "SECURITY",
       "accountNumber": "other",
       "currency": "EUR",
       "securityTransactions": [
@@ -68,7 +66,6 @@
     },
     {
       "name": "ING",
-      "accountType": "DEBIT",
       "accountNumber": "sfsdf",
       "currency": "EUR",
       "securityTransactions": [],

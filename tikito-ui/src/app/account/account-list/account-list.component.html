@@ -19,11 +19,6 @@
             <td mat-cell *matCellDef="let element"> {{element.accountNumber}} </td>
           </ng-container>
 
-          <ng-container matColumnDef="account-type">
-            <th mat-header-cell *matHeaderCellDef>{{'account/type' | translatePipe}}</th>
-            <td mat-cell *matCellDef="let element"> {{'account/type/' + element.accountType | translatePipe}} </td>
-          </ng-container>
-
           <ng-container matColumnDef="currency">
             <th mat-header-cell *matHeaderCellDef>{{'currency' | translatePipe}}</th>
             <td mat-cell *matCellDef="let element"> {{getCurrencyName(element)}} </td>

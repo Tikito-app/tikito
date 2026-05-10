@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Modifying;
-import org.tikito.dto.AccountType;
 import org.tikito.entity.Account;
 
 import java.util.List;
@@ -21,10 +20,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query("select a from Account a where a.userId = :userId and a.id in :accountIds")
     List<Account> findByUserIdAndIdIn(long userId, Set<Long> accountIds);
-
-    List<Account> findByUserIdAndAccountType(long userId, AccountType accountType);
-
-    Optional<Account> findByUserIdAndIdAndAccountType(long userId, long id, AccountType accountType);
 
     @Query("select a from Account a where a.userId = :userId AND a.name in :names")
     List<Account> findByUserIdAndName(long userId, Set<String> names);

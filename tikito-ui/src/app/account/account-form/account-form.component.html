@@ -26,18 +26,6 @@
           </mat-form-field>
           &nbsp;
           <mat-form-field>
-            <mat-label>{{ 'account/type' | translatePipe }}</mat-label>
-            <mat-select formControlName="accountType" [attr.data-cy]="'account-type'">
-              @for (accountType of Util.getAccountTypes(); track accountType) {
-                <mat-option [value]="accountType">{{ 'account/type/' + accountType | translatePipe }}</mat-option>
-              }
-            </mat-select>
-            <mat-error *ngIf="form.get('accountType')?.hasError('required')">
-              {{'user-account/form/account-type-required' | translatePipe}}
-            </mat-error>
-          </mat-form-field>
-          &nbsp;
-          <mat-form-field>
             <mat-label>{{ 'currency' | translatePipe }}</mat-label>
             <mat-select formControlName="currencyId" [attr.data-cy]="'currency'" required>
               @for (currency of CacheService.getCurrencies(); track currency) {

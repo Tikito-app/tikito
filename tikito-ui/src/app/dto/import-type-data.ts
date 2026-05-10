@@ -1,6 +1,6 @@
-import {AccountType} from "./account-type";
+import {AssetType} from "./asset-type";
 
 export class ImportTypeData {
-  accountType: AccountType;
+  assetType: AssetType;
   headers: string[];
 }

@@ -2,7 +2,6 @@ package org.tikito.service.money;
 
 import org.tikito.controller.request.CreateOrUpdateMoneyTransactionGroupRequest;
 import org.tikito.dto.AccountDto;
-import org.tikito.dto.AccountType;
 import org.tikito.dto.money.HistoricalBudgetValueDto;
 import org.tikito.dto.money.MoneyTransactionGroupDto;
 import org.tikito.entity.Account;
@@ -110,7 +109,7 @@ public class MoneyTransactionGroupService implements JobProcessor {
 
     public void groupTransactions(final long userId) {
         accountRepository
-                .findByUserIdAndAccountType(userId, AccountType.DEBIT)
+                .findByUserId(userId)
                 .forEach(account -> groupTransactions(userId, account.getId()));
     }
 

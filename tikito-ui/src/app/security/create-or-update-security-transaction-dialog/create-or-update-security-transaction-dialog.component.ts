@@ -22,7 +22,6 @@ import {NgIf} from "@angular/common";
 import {SecurityApi} from "../../api/security-api";
 import {AccountApi} from "../../api/account-api";
 import {Account} from "../../dto/account";
-import {AccountType} from "../../dto/account-type";
 import {TranslatePipe} from "../../service/translate-pipe.pipe";
 
 export interface MyData {
@@ -94,9 +93,7 @@ export class CreateOrUpdateSecurityTransactionDialogComponent implements OnInit 
     this.form.controls['exchangeRate'].setValue(this.data.transaction.exchangeRate);
     this.form.controls['transactionType'].setValue(this.data.transaction.transactionType);
 
-    this.accountApi.getAccounts().subscribe(accounts => {
-      this.accounts = accounts.filter(account => account.accountType == AccountType.SECURITY);
-    });
+    this.accountApi.getAccounts().subscribe(accounts => this.accounts = accounts);
   }
 
   onSave() {

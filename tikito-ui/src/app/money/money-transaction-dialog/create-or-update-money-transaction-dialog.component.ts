@@ -21,7 +21,6 @@ import {NgIf} from "@angular/common";
 import {MoneyApi} from "../../api/money-api";
 import {AccountApi} from "../../api/account-api";
 import {Account} from "../../dto/account";
-import {AccountType} from "../../dto/account-type";
 import MoneyTransaction from "../../dto/money/money-transaction";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
 import {Loan} from "../../dto/loan";
@@ -108,7 +107,7 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
     this.form.controls['loanId'].setValue(this.data.transaction.loanId);
 
     this.accountApi.getAccounts().subscribe(accounts => {
-      this.accounts = accounts.filter(account => account.accountType == AccountType.DEBIT);
+      this.accounts = accounts;
     });
 
     this.api.getMoneyTransactionGroups().subscribe(groups => this.groups = groups)

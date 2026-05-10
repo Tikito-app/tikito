@@ -31,7 +31,6 @@ import {PopoverComponent} from "../../components/popover/popover.component";
 import {NgIf} from "@angular/common";
 import {AccountApi} from "../../api/account-api";
 import {Account} from "../../dto/account";
-import {AccountType} from "../../dto/account-type";
 import {MatChipInputEvent, MatChipsModule} from "@angular/material/chips";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
@@ -132,7 +131,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
     filter.dateRange = this.form.value.dateRange;
 
     this.accountApi.getAccounts().subscribe(accounts => {
-      this.accounts = accounts.filter(account => account.accountType == AccountType.DEBIT);
+      this.accounts = accounts;
       this.api.getMoneyTransactionGroups().subscribe(groups => {
         this.groups = groups;
         this.allGroups = this.groups.map(group => group.name);

@@ -52,9 +52,6 @@
   "--------------- ACCOUNT ---------------------": "",
 
   "account": "Account",
-  "account/type": "Account type",
-  "account/type/DEBIT": "Debit/credit",
-  "account/type/SECURITY": "Security",
   "account/introduction-text": "Here you can create accounts such as a debit account, or an account that holds your stock portfolio. Click on the plus button right to add an account.",
   "account/import": "Import",
   "import/introduction-text": "You need to create an account first, before you can import anything. Click on accounts in the top menu to create an account.",
@@ -92,11 +89,9 @@
   "user-account/name": "Name",
   "user-account/accounts": "Accounts",
   "user-account/account-number": "Account number",
-  "user-account/account-type": "Account type",
   "user-account/create-account": "Create account",
   "user-account/select-account": "Select account",
   "user-account/form/name-required": "Name is required",
-  "user-account/form/account-type-required": "Account type is required",
   "user-account/form/account-number-required": "Account number is required",
   "user-account/form/currency-required": "Currency is required",
 

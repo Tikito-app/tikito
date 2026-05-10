@@ -5,7 +5,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.tikito.controller.request.CreateOrUpdateAccountRequest;
 import org.tikito.dto.AccountDto;
-import org.tikito.dto.AccountType;
 import org.tikito.entity.Account;
 import org.tikito.entity.Job;
 import org.tikito.entity.money.MoneyHolding;
@@ -73,7 +72,6 @@ public class AccountService {
     @Transactional(propagation = Propagation.MANDATORY)
     public AccountDto createOrUpdate(final long userId, final CreateOrUpdateAccountRequest request) {
         final Account account = request.isNew() ? new Account(userId) : accountRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
-        final AccountType previousAccountType = account.getAccountType();
 
         if (!securityRepository.existsById(request.getCurrencyId())) {
             throw new NoSuchElementException();
@@ -83,40 +81,32 @@ public class AccountService {
         }
         account.setName(request.getName());
         account.setAccountNumber(request.getAccountNumber());
-        account.setAccountType(request.getAccountType());
         account.setCurrencyId(request.getCurrencyId());
 
         final AccountDto dto = accountRepository
                 .saveAndFlush(account)
                 .toDto();
 
-        processChangesForMoneyAccount(userId, request, previousAccountType, dto, account);
+        processChangesForMoneyAccount(userId, request, dto, account);
 
         return dto;
     }
 
-    private void processChangesForMoneyAccount(final long userId, final CreateOrUpdateAccountRequest request, final AccountType previousAccountType, final AccountDto dto, final Account account) {
-        final boolean previousAccountWasNotMoney = previousAccountType != AccountType.DEBIT && previousAccountType != AccountType.CREDIT;
-        final boolean shouldCreateMoneyHolding = request.isNew() || previousAccountWasNotMoney;
-        final boolean shouldDeleteMoneyHolding = !previousAccountWasNotMoney && request.getAccountType() != AccountType.DEBIT && request.getAccountType() != AccountType.CREDIT;
-
-        if (shouldCreateMoneyHolding) {
-            createMoneyHolding(userId, request, dto.getId(), request.getAccountType());
-        } else if (shouldDeleteMoneyHolding) {
-            moneyHoldingRepository.deleteByUserIdAndAccountId(userId, account.getId());
-        }
+    private void processChangesForMoneyAccount(final long userId, final CreateOrUpdateAccountRequest request, final AccountDto dto, final Account account) {
+//        if (shouldCreateMoneyHolding) {
+        createMoneyHolding(userId, request, dto.getId());
+//        } else if (shouldDeleteMoneyHolding) {
+//            moneyHoldingRepository.deleteByUserIdAndAccountId(userId, account.getId());
+//        }
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void deleteAccount(final long userId, final long accountId) {
         final Optional<Account> maybeAccount = accountRepository.findByUserIdAndId(userId, accountId);
         maybeAccount.ifPresent((account -> {
-            if (account.getAccountType() == AccountType.SECURITY) {
-                deleteSecuritiesUnderAccount(userId, account.getId());
-            } else {
-                deleteMoneyHoldingUnderAccount(userId, account.getId());
-                moneyHoldingRepository.deleteByUserIdAndAccountId(userId, account.getId());
-            }
+            deleteSecuritiesUnderAccount(userId, account.getId());
+            deleteMoneyHoldingUnderAccount(userId, account.getId());
+            moneyHoldingRepository.deleteByUserIdAndAccountId(userId, account.getId());
             accountRepository.deleteByUserIdAndId(userId, accountId);
         }));
     }
@@ -136,13 +126,11 @@ public class AccountService {
         jobService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
     }
 
-    private void createMoneyHolding(final long userId, final CreateOrUpdateAccountRequest request, final long accountId, final AccountType accountType) {
-        if (accountType == AccountType.DEBIT || accountType == AccountType.CREDIT) {
-            final MoneyHolding moneyHolding = new MoneyHolding();
-            moneyHolding.setUserId(userId);
-            moneyHolding.setAccountId(accountId);
-            moneyHolding.setCurrencyId(request.getCurrencyId());
-            moneyHoldingRepository.save(moneyHolding);
-        }
+    private void createMoneyHolding(final long userId, final CreateOrUpdateAccountRequest request, final long accountId) {
+        final MoneyHolding moneyHolding = new MoneyHolding();
+        moneyHolding.setUserId(userId);
+        moneyHolding.setAccountId(accountId);
+        moneyHolding.setCurrencyId(request.getCurrencyId());
+        moneyHoldingRepository.save(moneyHolding);
     }
 }

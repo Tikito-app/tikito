@@ -57,7 +57,7 @@ import {MatCard, MatCardContent} from "@angular/material/card";
   styleUrl: './account-list.component.scss'
 })
 export class AccountListComponent implements AfterViewInit {
-  displayedColumns: string[] = ['name', 'account-type', 'account-number', 'currency', 'options'];
+  displayedColumns: string[] = ['name', 'account-number', 'currency', 'options'];
   dataSource: MatTableDataSource<Account>;
   accounts: Account[] = [];
 
