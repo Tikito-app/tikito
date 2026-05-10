@@ -14,6 +14,7 @@ import {DateRange} from "../dto/date-range";
 import moment from "moment";
 import {HistoricalBudgetValue} from "../dto/money/historical-budget-value";
 import {Util} from "../util";
+import {HistoricalMoneyHoldingValue} from "../dto/money/historical-money-holding-value";
 
 @Injectable({
   providedIn: 'root'
@@ -79,13 +80,12 @@ export class MoneyApi {
     return this.http.httpDelete(new HttpRequestData().withUrl('/api/money/transactions-group/' + id))
   }
 
-  importFile(accountId: number, file: File, dryRun: boolean, customHeaderConfig: any, debitCreditValue: string, timestampFormat: string, dateFormat: string, timeFormat: string, csvSeparator: string): Observable<MoneyTransactionImportLine[]> {
+  importFile(accountId: number, file: File, dryRun: boolean, customHeaderConfig: any, debitCreditValue: string, timestampFormat: string, timeFormat: string, csvSeparator: string): Observable<MoneyTransactionImportLine[]> {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("csv-separator", csvSeparator);
     formData.append("timestamp-format", timestampFormat);
     formData.append("time-format", timeFormat);
-    formData.append("date-format", dateFormat);
     formData.append("debit-credit-value", debitCreditValue);
     formData.append("header-config", JSON.stringify(customHeaderConfig));
     formData.append('dryRun', dryRun ? 'true' : 'false')
@@ -116,8 +116,8 @@ export class MoneyApi {
 
   createOrUpdateTransaction(transactionId: number,
                             accountId: number,
-                            counterpartAccountName: string,
-                            counterpartAccountNumber: string,
+                            counterpartyAccountName: string,
+                            counterpartyAccountNumber: string,
                             timestamp: string,
                             amount: number,
                             finalBalance: number,
@@ -131,8 +131,8 @@ export class MoneyApi {
       body.id = transactionId;
     }
     body.accountId = accountId;
-    body.counterpartAccountName = counterpartAccountName;
-    body.counterpartAccountNumber = counterpartAccountNumber;
+    body.counterpartyAccountName = counterpartyAccountName;
+    body.counterpartyAccountNumber = counterpartyAccountNumber;
     body.timestamp = timestamp;
     body.amount = amount;
     body.finalBalance = finalBalance;
@@ -161,4 +161,10 @@ export class MoneyApi {
           endDate: endDateFormatted
         }));
   }
+
+  getHistoricalMoneyValues(filter: MoneyTransactionsFilter): Observable<HistoricalMoneyHoldingValue[]> {
+      return this.http.httpPostList<HistoricalMoneyHoldingValue>(HistoricalMoneyHoldingValue, new HttpRequestData()
+        .withUrl('/api/money/historical-values')
+        .withBody(filter));
+    }
 }

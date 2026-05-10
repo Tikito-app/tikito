@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.tikito.TestUtil.randomString;
@@ -111,11 +112,11 @@ class UserAccountServiceTest extends BaseIntegrationTest {
     @Test
     void register_shouldInitialiseData_givenFirstEverUser() throws PasswordNotLongEnoughException, EmailAlreadyExistsException, IOException {
         final String email = randomEmail();
-        assertTrue(securityRepository.findBySecurityType(SecurityType.CURRENCY).isEmpty());
+        assertTrue(securityRepository.findBySecurityTypes(Set.of(SecurityType.CURRENCY, SecurityType.CRYPTO)).isEmpty());
         service.register(email, randomString(20));
         final UserAccount userAccount = userAccountRepository.findByEmail(email).get();
         assertTrue(userAccount.isActivated());
-        assertEquals(168, securityRepository.findBySecurityType(SecurityType.CURRENCY).size());
+        assertEquals(168, securityRepository.findBySecurityTypes(Set.of(SecurityType.CURRENCY, SecurityType.CRYPTO)).size());
         assertFalse(cacheService.isFirstEverUser());
     }
 }

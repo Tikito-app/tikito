@@ -2,8 +2,8 @@ import {DebitCredit} from "../debit-credit";
 import {MT940Transaction} from "./mt940-transaction";
 
 export class MoneyTransactionImportLine {
-  counterpartAccountNumber: string;
-  counterpartAccountName: string;
+  counterpartyAccountNumber: string;
+  counterpartyAccountName: string;
   timestamp: string;
   debitCredit: DebitCredit;
   code: string;

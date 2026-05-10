@@ -24,11 +24,11 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
-import {NgIf} from "@angular/common";
 import {Account} from "../../../dto/account";
 import {TranslateService} from "../../../service/translate.service";
 import {TranslatePipe} from "../../../service/translate-pipe.pipe";
 import {MatCard, MatCardHeader} from "@angular/material/card";
+import {AccountApi} from "../../../api/account-api";
 
 @Component({
   selector: 'app-admin-money-list',
@@ -72,12 +72,13 @@ export class AdminMoneyListComponent implements AfterViewInit {
     private authService: AuthService,
     private translateService: TranslateService,
     private dialogService: DialogService,
+    private accountApi: AccountApi,
     private api: AdminApi) {
   }
 
   ngAfterViewInit() {
     this.authService.onSystemReady((loggedInUser: any) => {
-      this.api.getMoneyAccounts().subscribe(moneyAccounts => {
+      this.accountApi.getAccounts().subscribe(moneyAccounts => {
         this.moneyAccounts = moneyAccounts;
 
         this.dataSource = new MatTableDataSource<Account>(moneyAccounts);

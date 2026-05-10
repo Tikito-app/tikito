@@ -41,8 +41,8 @@ public class MoneyTransaction {
         this.counterpartyAccountName = line.getCounterpartyAccountName();
         this.counterpartyAccountNumber = line.getCounterpartyAccountNumber();
         this.timestamp = line.getTimestamp();
-        this.amount = line.getAmount() * line.getExchangeRate();
-        this.finalBalance = line.getFinalBalance() * line.getExchangeRate();
+        this.amount = line.getAmount();
+        this.finalBalance = line.getFinalBalance() == null ? null : line.getFinalBalance() * line.getExchangeRate();
         this.description = line.getDescription();
         this.currencyId = line.getCurrencyId();
         this.exchangeRate = line.getExchangeRate();
@@ -96,5 +96,9 @@ public class MoneyTransaction {
 //                groupId, // todo
 //                loanId
         );
+    }
+
+    public double getNormalizedAmount() {
+        return amount * exchangeRate;
     }
 }

@@ -26,11 +26,6 @@
                   <input type="text" [attr.data-cy]="'timestamp-format'" matInput formControlName="timestamp-format">
                 </mat-form-field>
 
-                <mat-form-field appearance="fill" *ngIf="displayDateFormatFieldOnColumn == i">
-                  <mat-label>{{ 'account/import/date-format' | translatePipe }}</mat-label>
-                  <input type="text" [attr.data-cy]="'date-format'" matInput formControlName="date-format" (change)="UserPreferenceService.onInputChange(UserPreference.IMPORT_DATE_FORMAT, $event)">
-                </mat-form-field>
-
                 <mat-form-field appearance="fill" *ngIf="displayTimeFormatFieldOnColumn == i">
                   <mat-label>{{ 'account/import/time-format' | translatePipe }}</mat-label>
                   <input type="text" [attr.data-cy]="'time-format'" matInput formControlName="time-format">

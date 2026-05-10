@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -84,7 +85,18 @@ public final class MoneySettingsService {
     private static void applyTimestamp(final MoneyTransactionImportSettings settings, final MoneyTransactionImportLine line) {
         if (settings.getTimestampColumnIndex() != -1 && StringUtils.hasText(settings.getTimestampFormat())) {
             final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(settings.getTimestampFormat());
-            final LocalDateTime dateTime = getLocalDateTime(settings, line, formatter);
+            final LocalDateTime dateTime;
+
+            if (settings.getTimeColumnIndex() != -1 && StringUtils.hasText(settings.getTimeFormat())) {
+                final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(settings.getTimeFormat());
+                final LocalTime time = getLocalTime(settings, line, timeFormatter);
+                dateTime = LocalDateTime.of(
+                        getLocalDateTime(settings, line, formatter).toLocalDate(),
+                        time);
+            } else {
+                dateTime = getLocalDateTime(settings, line, formatter);
+            }
+
             if (dateTime != null) {
                 line.setTimestamp(dateTime.toInstant(ZoneOffset.UTC));
             }
@@ -103,6 +115,16 @@ public final class MoneySettingsService {
             }
         }
         return dateTime;
+    }
+
+    private static LocalTime getLocalTime(final MoneyTransactionImportSettings settings, final MoneyTransactionImportLine line, final DateTimeFormatter formatter) {
+        LocalTime time = null;
+        try {
+            time = LocalTime.parse(line.getCells().get(settings.getTimeColumnIndex()), formatter);
+        } catch (final DateTimeParseException e) {
+            // do nothing
+        }
+        return time;
     }
 
     private static void applyAmount(final MoneyTransactionImportSettings settings, final MoneyTransactionImportLine line) {

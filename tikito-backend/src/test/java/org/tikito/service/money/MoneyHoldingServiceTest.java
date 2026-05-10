@@ -43,7 +43,7 @@ class MoneyHoldingServiceTest extends BaseIntegrationTest {
         defaultTransactions = withDefaultMoneyTransactions(DEFAULT_DEBIT_ACCOUNT_DTO, true);
         service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId());
         final List<HistoricalMoneyHoldingValue> all = historicalMoneyHoldingValueRepository.findAll();
-        final MoneyHolding holding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId()).orElseThrow();
+        final MoneyHolding holding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId()).getFirst();
 
         final double v1 = defaultTransactions.getFirst().getFinalBalance();
         final double v2 = defaultTransactions.get(2).getFinalBalance();
@@ -80,7 +80,7 @@ class MoneyHoldingServiceTest extends BaseIntegrationTest {
         defaultTransactions = withDefaultMoneyTransactions(DEFAULT_DEBIT_ACCOUNT_DTO, false);
         service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId());
         final List<HistoricalMoneyHoldingValue> all = historicalMoneyHoldingValueRepository.findAll();
-        final MoneyHolding holding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId()).orElseThrow();
+        final MoneyHolding holding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId()).getFirst();
 
         final Double v1 = defaultTransactions.getFirst().getFinalBalance();
         final Double v2 = defaultTransactions.get(2).getFinalBalance();
@@ -95,8 +95,8 @@ class MoneyHoldingServiceTest extends BaseIntegrationTest {
         assertNull(v2);
         assertNull(v3);
 
-        assertEquals(holding.getAmountOffset() + defaultTransactions.getFirst().getAmount(), historicalHolding1.getAmount());
-        assertEquals(holding.getAmountOffset() + defaultTransactions.stream().mapToDouble(MoneyTransaction::getAmount).sum(), historicalHolding3.getAmount());
+        assertEquals(holding.getAmountOffset() + defaultTransactions.getFirst().getNormalizedAmount(), historicalHolding1.getAmount());
+        assertEquals(holding.getAmountOffset() + defaultTransactions.stream().mapToDouble(MoneyTransaction::getNormalizedAmount).sum(), historicalHolding3.getAmount());
 
         assertEquals(holding.getAmount(), all.getLast().getAmount());
     }

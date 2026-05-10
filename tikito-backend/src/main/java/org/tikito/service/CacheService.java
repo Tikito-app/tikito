@@ -30,6 +30,7 @@ public class CacheService {
     private final Map<Long, Map<LocalDate, Double>> currencyToEuroMultiplier = new HashMap<>();
     private final List<SecurityDto> currencies = new ArrayList<>();
     private Boolean firstEverUser;
+    private Map<Long, Boolean> isCryptoCache = new HashMap<>();
 
     public CacheService(final SecurityRepository securityRepository,
                         final IsinRepository isinRepository,
@@ -67,7 +68,7 @@ public class CacheService {
         refreshSecurities();
         currencies.clear();
         currencies.addAll(securityRepository
-                .findBySecurityType(SecurityType.CURRENCY)
+                .findBySecurityTypes(Set.of(SecurityType.CURRENCY, SecurityType.CRYPTO))
                 .stream()
                 .map(Security::toDto)
                 .toList());
@@ -95,6 +96,14 @@ public class CacheService {
                                 .stream()
                                 .anyMatch(isinDto -> isinDto.getIsin().equals(isin) && IsinHelper.isValid(isinDto, date, null)))
                 .findFirst();
+    }
+
+    public boolean isCrypto(final long currencyId) {
+        if(!isCryptoCache.containsKey(currencyId)) {
+            final SecurityDto security = getSecurity(currencyId);
+            isCryptoCache.put(currencyId, security != null && security.getSecurityType() == SecurityType.CRYPTO);
+        }
+        return isCryptoCache.get(currencyId);
     }
 
     public SecurityDto getSecurity(final long securityId) {

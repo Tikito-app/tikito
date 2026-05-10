@@ -3,7 +3,6 @@ import {HttpService} from "../service/http.service";
 import {HttpRequestData} from "../dto/http-request-data";
 import {Injectable} from "@angular/core";
 import {Account} from "../dto/account";
-import {AccountType} from "../dto/account-type";
 import {HttpRequestMethod} from "../dto/http-request-method";
 
 @Injectable({
@@ -24,14 +23,13 @@ export class AccountApi {
       .withUrl('/api/account/' + id))
   }
 
-  createOrUpdateAccount(accountId: number | null, name: string, accountNumber: string, accountType: AccountType, currencyId: number) {
+  createOrUpdateAccount(accountId: number | null, name: string, accountNumber: string, currencyId: number) {
     return this.http.httpPost<Account>(new HttpRequestData()
       .withUrl('/api/account')
       .withBody({
         id: accountId,
         name: name,
         accountNumber: accountNumber,
-        accountType: accountType,
         currencyId: currencyId,
       }));
   }

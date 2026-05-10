@@ -4,14 +4,13 @@ import {ActivatedRoute} from "@angular/router";
 import {MoneyTransactionGroupQualifierType} from "./dto/money/money-transaction-group-qualifier-type";
 import {MoneyTransactionField} from "./dto/money/money-transaction-field";
 import {CurrencyPipe, DatePipe, PercentPipe} from "@angular/common";
-import {AccountType} from "./dto/account-type";
 import {SecurityHoldingGraphDisplayField} from "./dto/security/security-holding-graph-display-field";
 import {SecurityType} from "./dto/security/security-type";
 import {MoneyTransactionGroupType} from "./dto/money-transaction-group-type";
 import {LoanType} from "./dto/loan-type";
 import {CacheService} from "./service/cache-service";
 import {SecurityTransactionType} from "./dto/security/security-transaction-type";
-import {TransactionDateRange} from "./dto/money/money-transactions-filter";
+import {AssetType} from "./dto/asset-type";
 
 export class Util {
   public static DATE_FORMAT: string = 'dd-MM-YYYY';
@@ -135,12 +134,6 @@ export class Util {
       .filter((v) => isNaN(Number(v)));
   }
 
-  static getAccountTypes(): string[] {
-    return Object
-      .keys(AccountType)
-      .filter((v) => isNaN(Number(v)));
-  }
-
   static getSecurityTypes(): string[] {
     return Object
       .keys(SecurityType)
@@ -168,6 +161,12 @@ export class Util {
   static getLoanTypes(): string[] {
     return Object
       .keys(LoanType)
+      .filter((v) => isNaN(Number(v)));
+  }
+
+  static getAssetTypes(): string[] {
+    return Object
+      .keys(AssetType)
       .filter((v) => isNaN(Number(v)));
   }
 

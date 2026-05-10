@@ -3,9 +3,9 @@ import {NgxCsvParser} from "ngx-csv-parser";
 import {Observable} from "rxjs";
 import {AccountApi} from "../api/account-api";
 import {ImportTypeData} from "../dto/import-type-data";
-import {AccountType} from "../dto/account-type";
 import {ImportFileProcessState} from "../dto/import-file-process-state";
 import {FileType} from "../dto/file-type";
+import {AssetType} from "../dto/asset-type";
 
 @Injectable({
   providedIn: 'root',
@@ -71,7 +71,7 @@ export class FileImportService {
     return null;
   }
 
-  determineAccountTypeOnHeaders(state: ImportFileProcessState): void {
+  determineAssetTypeOnHeaders(state: ImportFileProcessState): void {
     let headerLine = state.parsedContent[0];
     let types: string[] = Object.keys(this.supportedHeaders);
 
@@ -88,7 +88,7 @@ export class FileImportService {
         }
 
         if (!misMatch) {
-          state.accountType = this.supportedHeaders[type].accountType as AccountType;
+          state.assetType = header.assetType as AssetType;
           return;
         }
       }

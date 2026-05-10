@@ -67,7 +67,7 @@ public class BudgetValueService {
     }
 
     private void apply(final HistoricalBudgetValue value, final MoneyTransaction transaction) {
-        value.setSpent(value.getSpent() + transaction.getAmount());
+        value.setSpent(value.getSpent() + transaction.getNormalizedAmount());
     }
 
     private LocalDate incrementByDateRange(final LocalDate date, final DateRange dateRange, final int amount) {

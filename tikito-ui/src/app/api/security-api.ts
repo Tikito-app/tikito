@@ -11,6 +11,7 @@ import {Security} from "../dto/security/security";
 import {SecurityType} from "../dto/security/security-type";
 import {SecurityTransactionImportLine} from "../dto/security/security-transaction-import-line";
 import {SecurityTransactionType} from "../dto/security/security-transaction-type";
+import SecurityPrice from "../dto/security/security-price";
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class SecurityApi {
 
   getSecurities(type: SecurityType): Observable<Security[]> {
     return this.http.httpGetList<Security>(Security, new HttpRequestData()
-      .withUrl('/api/security' + (type == null ? '' : '?type=' + type)));
+      .withUrl('/api/security' + (type == null ? '' : '?types=' + type)));
   }
 
   getSecurityHoldings(): Observable<SecurityHolding[]> {
@@ -108,5 +109,13 @@ export class SecurityApi {
   deleteSecurityTransaction(transactionId: number) {
     return this.http.httpDelete(new HttpRequestData()
       .withUrl('/api/security/transaction/' + transactionId));
+  }
+
+  getSecurityPrices(securityIds: number[]): Observable<SecurityPrice[]> {
+    return this.http.httpPostList(SecurityPrice, new HttpRequestData()
+      .withBody({
+        securityIds: securityIds
+      })
+      .withUrl('/api/security/prices'));
   }
 }

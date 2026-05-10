@@ -57,7 +57,6 @@ export class AccountFormComponent implements OnInit {
     let group: any = {
       name: new FormControl('', Validators.required),
       accountNumber: new FormControl('', Validators.required),
-      accountType: new FormControl('', Validators.required),
       currencyId: new FormControl('', Validators.required),
     };
     this.form = new FormGroup(group);
@@ -66,7 +65,6 @@ export class AccountFormComponent implements OnInit {
       this.api.getAccount(this.accountId).subscribe(account => {
         this.form.controls['name'].setValue(account.name);
         this.form.controls['accountNumber'].setValue(account.accountNumber);
-        this.form.controls['accountType'].setValue(account.accountType);
         this.form.controls['currencyId'].setValue(account.currencyId);
       });
     }
@@ -80,7 +78,6 @@ export class AccountFormComponent implements OnInit {
       this.accountId,
       this.form.value.name,
       this.form.value.accountNumber,
-      this.form.value.accountType,
       this.form.value.currencyId).subscribe(account => {
       this.router.navigate(['/account']);
     })

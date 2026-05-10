@@ -10,7 +10,6 @@ import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {NgIf} from "@angular/common";
 import {FileImportService} from "../../service/file-import-service";
-import {AccountType} from "../../dto/account-type";
 import {SecurityApi} from "../../api/security-api";
 import {AuthService} from "../../service/auth.service";
 import {DialogService} from "../../service/dialog.service";
@@ -27,6 +26,7 @@ import {Observable, Observer} from "rxjs";
 import {CsvService} from "../../service/csv.service";
 import {ExcelService} from "../../service/excel.service";
 import {TranslateService} from "../../service/translate.service";
+import {AssetType} from "../../dto/asset-type";
 
 @Component({
   selector: 'app-import',
@@ -81,7 +81,7 @@ export class ImportComponent implements OnInit {
       let group: any = {
         account: new FormControl(''),
         csvSeparator: new FormControl(''),
-
+        assetType: new FormControl('')
       };
       this.form = new FormGroup(group);
       this.form.controls['csvSeparator'].setValue(';');
@@ -117,22 +117,20 @@ export class ImportComponent implements OnInit {
 
   processImportFileContent() {
     this.showCustomHeaderConfig = false;
-    this.importFileState.accountType = null;
+    this.importFileState.assetType = null;
     if (this.importFileState.fileType != FileType.MT940) {
       this.parseImportFileContent().subscribe(() => {
-        this.fileImportService.determineAccountTypeOnHeaders(this.importFileState);
+        this.fileImportService.determineAssetTypeOnHeaders(this.importFileState);
 
-        if (this.importFileState.accountType == null) {
-          this.importFileState.accountType = this.form.value.account.accountType;
+        if (this.importFileState.assetType == null) {
+          this.importFileState.assetType = this.form.value.assetType;
           this.showCustomHeaderConfig = true;
-        } else if (this.importFileState.accountType != this.form.value.account.accountType) {
-          this.dialogService.snackbar(this.translateService.translate('account/import/wrong-account-type'), this.translateService.translate('account/import/wrong-account-type'));
         } else {
           this.uploadFileToBackend(true);
         }
       });
     } else {
-      this.importFileState.accountType = AccountType.DEBIT;
+      this.importFileState.assetType = AssetType.CASH;
       this.uploadFileToBackend(true);
 
     }
@@ -164,14 +162,14 @@ export class ImportComponent implements OnInit {
     let timeFormat = this.selectColumnsComponent == null ? null : this.selectColumnsComponent.getTimeFormatValue();
     let csvSeparator = this.form.value.csvSeparator;
 
-    if (this.importFileState.accountType == AccountType.SECURITY) {
+    if (this.importFileState.assetType == AssetType.SECURITY) {
       this.securityApi.importFile(this.form.value.account.id, this.importFileState.file, dryRun, headers, buyValue, timestampFormat, dateFormat, timeFormat, csvSeparator).subscribe(transactions => {
         this.securityImportResult = transactions;
         this.showLoadingText = false;
         this.dialogService.snackbar(this.translateService.translate('account/import/file-import-success'));
       });
-    } else if (this.importFileState.accountType == AccountType.DEBIT) {
-      this.moneyApi.importFile(this.form.value.account.id, this.importFileState.file, dryRun, headers, debitCreditValue, timestampFormat, dateFormat, timeFormat, csvSeparator).subscribe(transactions => {
+    } else {
+      this.moneyApi.importFile(this.form.value.account.id, this.importFileState.file, dryRun, headers, debitCreditValue, timestampFormat, timeFormat, csvSeparator).subscribe(transactions => {
         this.moneyImportResult = transactions;
         this.showLoadingText = false;
         this.dialogService.snackbar(this.translateService.translate('account/import/file-import-success'));

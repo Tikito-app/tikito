@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import org.tikito.controller.request.CreateOrUpdateMoneyTransactionGroupRequest;
-import org.tikito.dto.AccountType;
 import org.tikito.dto.money.MoneyTransactionField;
 import org.tikito.dto.money.MoneyTransactionGroupQualifierDto;
 import org.tikito.dto.money.MoneyTransactionGroupQualifierType;
@@ -129,7 +128,6 @@ public class DataGenerator {
     public void generateAccounts() {
         SAVINGS_ACCOUNT = new Account();
         SAVINGS_ACCOUNT.setAccountNumber("1234");
-        SAVINGS_ACCOUNT.setAccountType(AccountType.DEBIT);
         SAVINGS_ACCOUNT.setUserId(USER_ID);
         SAVINGS_ACCOUNT.setName("Savings");
         SAVINGS_ACCOUNT.setCurrencyId(EURO_ID);
@@ -137,7 +135,6 @@ public class DataGenerator {
 
         DEBIT_ACCOUNT = new Account();
         DEBIT_ACCOUNT.setAccountNumber("5678");
-        DEBIT_ACCOUNT.setAccountType(AccountType.DEBIT);
         DEBIT_ACCOUNT.setUserId(USER_ID);
         DEBIT_ACCOUNT.setName("Debit");
         DEBIT_ACCOUNT.setCurrencyId(EURO_ID);
@@ -145,7 +142,6 @@ public class DataGenerator {
 
         STOCK_ACCOUNT = new Account();
         STOCK_ACCOUNT.setAccountNumber("9876");
-        STOCK_ACCOUNT.setAccountType(AccountType.SECURITY);
         STOCK_ACCOUNT.setUserId(USER_ID);
         STOCK_ACCOUNT.setName("Stock portfolio");
         STOCK_ACCOUNT.setCurrencyId(EURO_ID);
@@ -228,7 +224,7 @@ public class DataGenerator {
             transaction.setTransactionType(amount < 0 ? SecurityTransactionType.SELL : SecurityTransactionType.BUY);
             transaction.setAmount(Math.abs(amount));
 
-            if(transaction.getAmount() > 0) {
+            if (transaction.getAmount() > 0) {
                 transactions.add(transaction);
             }
             currentDate = currentDate.plusDays(randomInt(100, 200));

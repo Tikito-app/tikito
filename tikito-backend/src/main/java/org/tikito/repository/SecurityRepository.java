@@ -9,11 +9,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface SecurityRepository extends JpaRepository<Security, Long> {
-    List<Security> findBySecurityType(SecurityType securityType);
+    @Query("select s from Security s where s.securityType in :securityTypes")
+    List<Security> findBySecurityTypes(Set<SecurityType> securityTypes);
 
-    Optional<Security> findByIdAndSecurityType(Long id, SecurityType securityType);
+    @Query("select s from Security s where s.id = :id and s.securityType in :securityTypes")
+    Optional<Security> findByIdAndSecurityTypes(Long id, Set<SecurityType> securityTypes);
 
     @Modifying
     @Query("update Security s set s.lastPriceDate = :lastPriceDate where s.id = :id")

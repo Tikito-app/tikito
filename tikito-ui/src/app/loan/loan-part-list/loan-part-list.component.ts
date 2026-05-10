@@ -66,13 +66,6 @@ export class LoanPartListComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-
-    // this.authService.onSystemReady((loggedInUser: any) => {
-    //   this.loanId = Util.getIdFromRoute(this.route, 'loanId') as number;
-    //   console.log(l)
-    //   this.api.getLoan(this.loanId).subscribe(loan => {
-    //     this.loan = loan;
-
     this.dataSource = new MatTableDataSource<LoanPart>(this.loanParts);
     setTimeout(() => {
       if (this.paginator) {

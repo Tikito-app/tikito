@@ -22,6 +22,9 @@ public class MoneyTransactionImportSettings {
     private final int timestampColumnIndex = -1;
     private final String timestampFormat;
     @Builder.Default
+    private final int timeColumnIndex = -1;
+    private final String timeFormat;
+    @Builder.Default
     private final int currencyColumnIndex = -1;
     @Builder.Default
     private final int finalBalanceColumnIndex = -1;

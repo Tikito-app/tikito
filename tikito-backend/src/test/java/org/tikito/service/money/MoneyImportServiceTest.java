@@ -61,7 +61,7 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
                 builder.getCounterpartyAccountName() + ";";
         try {
             service.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId(), new MockMultipartFile("Abn.csv", csv.getBytes()), false,
-                    Map.of(), "debit", "dd-MM-yyyy", "dd-MM-yyyy", null, ";");
+                    Map.of(), "debit", "dd-MM-yyyy", null, ";");
         } catch (final CannotReadFileException e) {
             Assertions.fail();
         }
@@ -72,7 +72,7 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
         final MockMultipartFile file = getClassPathResourceToImport("bank-transaction/abn.csv", "Abn.csv");
 
         final MoneyTransactionImportResultDto result = service.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId(), file, false,
-                Map.of(), "debit", "dd-MM-yyyy", "dd-MM-yyyy", null, ";");
+                Map.of(), "debit", "dd-MM-yyyy", null, ";");
 
         validateResults(result);
     }
@@ -84,13 +84,13 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
         final MockMultipartFile file = getClassPathResourceToImport("bank-transaction/abn-duplicate.csv", "Abn.csv");
 
         final MoneyTransactionImportResultDto result = service.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId(), file, false,
-                Map.of(), "debit", "dd-MM-yyyy", "dd-MM-yyyy", null, ";");
+                Map.of(), "debit", "dd-MM-yyyy", null, ";");
         assertEquals(4, result.getLines().size());
         assertEquals(3, result.getImportedTransactions().size());
         assertEquals(1, result.getLines().stream().filter(line -> FAILED_DUPLICATE_TRANSACTION.equals(line.getFailedReason())).count());
 
         final MoneyTransactionImportResultDto newResult = service.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId(), file, false,
-                Map.of(), "debit", "dd-MM-yyyy", "dd-MM-yyyy", null, ";");
+                Map.of(), "debit", "dd-MM-yyyy", null, ";");
         assertEquals(4, newResult.getLines().size());
         assertEquals(0, newResult.getImportedTransactions().size());
     }
@@ -104,7 +104,7 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
                         TIMESTAMP, 2,
                         FINAL_BALANCE, 5,
                         AMOUNT, 6,
-                        DESCRIPTION, 7), "debit", "yyyyMMdd", "yyyyMMdd", null, ";");
+                        DESCRIPTION, 7), "debit", "yyyyMMdd", null, ";");
 
         validateResults(result);
     }

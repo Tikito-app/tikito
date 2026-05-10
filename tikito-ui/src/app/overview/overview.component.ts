@@ -6,22 +6,21 @@ import {Overview} from "../dto/overview";
 import AggregatedHistoricalHoldingsValue from "../dto/security/aggregated-historical-holdings-value";
 import {NgxEchartsDirective, provideEchartsCore} from "ngx-echarts";
 import {Util} from "../util";
-import {SecurityHoldingGraphDisplayField} from "../dto/security/security-holding-graph-display-field";
 import * as echarts from "echarts/core";
 import {MoneyApi} from "../api/money-api";
 import {AggregatedHistoricalMoneyHoldingValue} from "../dto/money/aggregated-historical-money-holding-value";
 import moment from "moment/moment";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
-import {UserPreferenceService} from "../service/user-preference-service";
-import {UserPreference} from "../dto/user-preference";
-import {DurationInputArg2} from "moment";
+import {Moment} from "moment";
 import {LoanApi} from "../api/loan-api";
 import {OverviewLoanComponent} from "./overview-loan/overview-loan.component";
 import {LoanValue} from "../dto/loan-value";
 import {TranslatePipe} from "../service/translate-pipe.pipe";
 import {MoneyHolding} from "../dto/money-holding";
 import {CurrencyComponent} from "../components/currency/currency.component";
+import {AssetType} from "../dto/asset-type";
+import {TranslateService} from "../service/translate.service";
 
 @Component({
   selector: 'app-overview',
@@ -45,11 +44,12 @@ import {CurrencyComponent} from "../components/currency/currency.component";
 export class OverviewComponent implements OnInit {
   overview: Overview;
 
+  aggregatedValuesPerAssetType: any = {};
+
   aggregatedHistoricalSecurityValues: AggregatedHistoricalHoldingsValue[];
   aggregatedHistoricalMoneyHoldingValues: AggregatedHistoricalMoneyHoldingValue[] = [];
   chartOption: any;
   initOptions: any = {};
-  heightCss: string;
   loansById: any = {};
   loanValuesPerLoanId: any = {};
   holdings: MoneyHolding[];
@@ -58,6 +58,7 @@ export class OverviewComponent implements OnInit {
               private securityApi: SecurityApi,
               private moneyApi: MoneyApi,
               private loanApi: LoanApi,
+              private translateService: TranslateService,
               private authService: AuthService) {
   }
 
@@ -69,10 +70,18 @@ export class OverviewComponent implements OnInit {
 
   reset(): void {
     this.securityApi.getAggregatedHistoricalValues().subscribe(historicalSecurityValues => {
+      this.aggregatedValuesPerAssetType[AssetType.SECURITY] = historicalSecurityValues;
+
       this.aggregatedHistoricalSecurityValues = historicalSecurityValues;
       this.moneyApi.getAggregatedHistoricalMoneyHoldingValues().subscribe(historicalMoneyHoldings => {
-        this.aggregatedHistoricalMoneyHoldingValues = historicalMoneyHoldings;
-        this.interpolateHistoricalSecurityOrMoneyValues();
+        historicalMoneyHoldings.forEach(value => {
+          if (this.aggregatedValuesPerAssetType[value.assetType] == null) {
+            this.aggregatedValuesPerAssetType[value.assetType] = [];
+          }
+          this.aggregatedValuesPerAssetType[value.assetType].push(value);
+        })
+
+        this.interpolateValues();
         this.generateGraph();
       });
     });
@@ -85,7 +94,6 @@ export class OverviewComponent implements OnInit {
     });
 
     this.moneyApi.getHoldings().subscribe(holdings => this.holdings = holdings);
-
     this.api.getOverview().subscribe(overview => this.overview = overview);
   }
 
@@ -102,39 +110,45 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  interpolateHistoricalSecurityOrMoneyValues() {
-    let moneyStartDate = moment(this.aggregatedHistoricalMoneyHoldingValues[0].date);
-    let moneyEndDate = moment(this.aggregatedHistoricalMoneyHoldingValues.slice(-1)[0].date);
-    let securityStartDate = moment(this.aggregatedHistoricalSecurityValues[0].date);
-    let securityEndDate = moment(this.aggregatedHistoricalMoneyHoldingValues.slice(-1)[0].date);
+  interpolateValues() {
+    let startDate: Moment | null = null;
+    let endDate: Moment | null = null;
 
-    if (moneyStartDate.isBefore(securityStartDate)) {
-      this.aggregatedHistoricalSecurityValues = this.interpolateValuesStartOf(moneyStartDate, this.aggregatedHistoricalSecurityValues, {positionValue: 0});
-    } else {
-      this.aggregatedHistoricalMoneyHoldingValues = this.interpolateValuesStartOf(securityStartDate, this.aggregatedHistoricalMoneyHoldingValues, {amount: 0});
+    for (let type of Object.keys(this.aggregatedValuesPerAssetType)) {
+      let assetStartDate = moment(this.aggregatedValuesPerAssetType[type][0].date);
+      let assetEndDate = moment(this.aggregatedValuesPerAssetType[type][this.aggregatedValuesPerAssetType[type].length - 1].date);
+      if (startDate == null || assetStartDate.isBefore(startDate)) {
+        startDate = assetStartDate;
+      }
+      if (endDate == null || assetEndDate.isAfter(endDate)) {
+        endDate = assetEndDate;
+      }
     }
-    if (moneyEndDate.isBefore(securityEndDate)) {
-      this.aggregatedHistoricalMoneyHoldingValues = this.interpolateValuesEndOf(securityEndDate, this.aggregatedHistoricalMoneyHoldingValues, {amount: 0});
-    } else {
-      this.aggregatedHistoricalSecurityValues = this.interpolateValuesEndOf(moneyStartDate, this.aggregatedHistoricalSecurityValues, {positionValue: 0});
+
+    for (let type of Object.keys(this.aggregatedValuesPerAssetType)) {
+      this.aggregatedValuesPerAssetType[type] = this.interpolateValuesStartOf(startDate as Moment, this.aggregatedValuesPerAssetType[type]);
+      this.aggregatedValuesPerAssetType[type] = this.interpolateValuesEndOf(endDate as Moment, this.aggregatedValuesPerAssetType[type]);
     }
   }
 
-  interpolateValuesStartOf(startDate: moment.Moment, values: any[], dto: any): any[] {
+  interpolateValuesStartOf(initialDate: moment.Moment, values: any[]): any[] {
     let endDate = moment(values[0].date);
+    let newValues: any[] = [];
+    let startDate = initialDate.clone();
     while (startDate.isBefore(endDate)) {
-      let newDto = dto;
+      let newDto: any = {positionValue: 0, amount: 0, date: null}
       newDto.date = startDate.format('YYYY-MM-DD');
-      values.unshift(newDto);
       startDate = startDate.add(1, 'day');
+      newValues.push(newDto);
     }
-    return values;
+    return newValues.concat(values);
   }
 
-  interpolateValuesEndOf(endDate: moment.Moment, values: any[], dto: any): any[] {
+  interpolateValuesEndOf(initialDate: moment.Moment, values: any[]): any[] {
     let currentDate = moment(values.slice(-1)[0].date);
+    let endDate = initialDate.clone();
     while (currentDate.isBefore(endDate)) {
-      let newDto = dto;
+      let newDto: any = {positionValue: 0, amount: 0, date: null}
       newDto.date = currentDate.format('YYYY-MM-DD');
       values.push(newDto);
       currentDate = currentDate.add(1, 'day');
@@ -144,65 +158,40 @@ export class OverviewComponent implements OnInit {
 
   generateGraph() {
     let dates: string[] = [];
-    let moneyHoldingValuePerDate: any = {};
-    let securityHoldingValuePerDate: any = {};
-    let positionValues: number[] = [];
-    let moneyPositionValues: number[] = [];
-    let amountToSubtract: number = UserPreferenceService.get<number>(UserPreference.OVERVIEW_START_DATE_MINUS_AMOUNT, 1);
-    let unitToSubtract = UserPreferenceService.get<string>(UserPreference.OVERVIEW_START_DATE_MINUS_UNIT, 'YEAR');
-    let atStartOf = UserPreferenceService.get<boolean>(UserPreference.OVERVIEW_START_DATE_AT_BEGINNING_OF_RANGE, true);
-
-    let momentPeriod: DurationInputArg2 = unitToSubtract.toLowerCase() as DurationInputArg2;
-    let startDate = moment().subtract(amountToSubtract, momentPeriod);
-
-    if (atStartOf) {
-      startDate = startDate.startOf(momentPeriod);
-    }
-
-    for (let holdingValue of this.aggregatedHistoricalSecurityValues) {
-      let currentDate = new Date(holdingValue.date);
-      let formattedDate = Util.formatDate(currentDate, Util.DATE_FORMAT);
-      if (moment(currentDate).isAfter(startDate)) {
-        securityHoldingValuePerDate[formattedDate] = holdingValue;
-        positionValues.push(holdingValue.positionValue);
-      }
-    }
-
-    for (let holdingValue of this.aggregatedHistoricalMoneyHoldingValues) {
-      let currentDate = new Date(holdingValue.date);
-      if (moment(currentDate).isAfter(startDate)) {
-        let formattedDate = Util.formatDate(currentDate, Util.DATE_FORMAT);
-        dates.push(formattedDate);
-        moneyHoldingValuePerDate[formattedDate] = holdingValue;
-        moneyPositionValues.push(holdingValue.amount);
-      }
-    }
-
     let series = [];
+    let processedDates = false;
+    let valuesPerTypeAndDate: any = {}
 
-    series.push({
-      data: moneyPositionValues,
-      stack: 'y',
-      name: SecurityHoldingGraphDisplayField.WORTH,
-      areaStyle: {},
-      type: 'line',
-      showSymbol: false,
-      color: Util.getColor(1),
-      lineStyle: {color: Util.getColor(1)}
-    });
+    for (let type of Object.keys(this.aggregatedValuesPerAssetType)) {
+      let values = [];
+      valuesPerTypeAndDate[type] = {};
 
-    series.push({
-      data: positionValues,
-      stack: 'y',
-      name: SecurityHoldingGraphDisplayField.HOLDING_VALUE,
-      areaStyle: {},
-      type: 'line',
-      showSymbol: false,
-      color: Util.getColor(0),
-      lineStyle: {color: Util.getColor(0)}
-    });
+      for (let value of this.aggregatedValuesPerAssetType[type]) {
+        let currentDate = new Date(value.date);
+        let formattedDate = Util.formatDate(currentDate, Util.DATE_FORMAT);
 
-    let options: any = {
+        if (!processedDates) {
+          dates.push(formattedDate);
+        }
+
+        values.push(value.amount ? value.amount : value.positionValue);
+        valuesPerTypeAndDate[type][formattedDate] = value;
+      }
+      processedDates = true;
+
+      series.push({
+        data: values,
+        stack: 'y',
+        name: type,
+        areaStyle: {},
+        type: 'line',
+        showSymbol: false,
+        color: Util.getColor(series.length),
+        lineStyle: {color: Util.getColor(series.length)}
+      })
+    }
+
+    this.chartOption = {
       xAxis: {
         type: 'category',
         data: dates
@@ -214,19 +203,17 @@ export class OverviewComponent implements OnInit {
         },
       ],
       series: series,
-      tooltip: this.getTooltip(securityHoldingValuePerDate, moneyHoldingValuePerDate),
+      tooltip: this.getTooltip(valuesPerTypeAndDate, this.translateService),
       dataZoom: [
         {
           type: 'inside',
         },
       ],
     };
-
-    this.chartOption = options;
   }
 
 
-  private getTooltip(holdingValuePerDate: any, moneyHoldingValuePerDate: any) {
+  private getTooltip(valuesPerTypeAndDate: any, translateService: TranslateService) {
     return {
       trigger: 'axis',
       axisPointer: {
@@ -237,10 +224,8 @@ export class OverviewComponent implements OnInit {
       },
       formatter(params: any): any {
         let date = params[0].axisValue;
-        let securityValue = holdingValuePerDate[date];
-        let moneyValue = moneyHoldingValuePerDate[date];
 
-        function getMarker(params: any, field: SecurityHoldingGraphDisplayField) {
+        function getMarker(params: any, field: string) {
           for (let param of params) {
             if (param.seriesName == field) {
               return param.marker;
@@ -249,16 +234,22 @@ export class OverviewComponent implements OnInit {
           return '';
         }
 
-        let securityTooltip = '';
-        let moneyTooltip = '';
-        if (securityValue != null) {
-          securityTooltip = `${getMarker(params, SecurityHoldingGraphDisplayField.HOLDING_VALUE)} Security <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(securityValue.positionValue)};">${Util.currencyFormatWithSymbol(securityValue.positionValue, 47)}</span><br/>`;
-        }
-        if (moneyValue != null) {
-          moneyTooltip = `${getMarker(params, SecurityHoldingGraphDisplayField.WORTH)} Money <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(moneyValue.amount)};">${Util.currencyFormatWithSymbol(moneyValue.amount, 47)}</span>`;
+        let html = '';
+        let total = 0;
+
+        for (let type of Object.keys(valuesPerTypeAndDate)) {
+          let asset = valuesPerTypeAndDate[type][date];
+          let value = asset.amount ? asset.amount : asset.positionValue;
+
+          if (value != null && value != 0) {
+            html += `${getMarker(params, type)} ${translateService.translate('asset/type/' + type)} <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(value)};">${Util.currencyFormatWithSymbol(value, 47)}</span><br/>`;
+            total += value;
+          }
         }
 
-        return `${date}<br/>` + securityTooltip + moneyTooltip;
+        html += `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;"></span> ${translateService.translate('total')} <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(total)};">${Util.currencyFormatWithSymbol(total, 47)}</span><br/>`;
+
+        return `${date}<br/>` + html;
       },
     }
   }

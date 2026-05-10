@@ -1,7 +1,6 @@
 package org.tikito.controller.request;
 
 import jakarta.validation.constraints.NotBlank;
-import org.tikito.dto.AccountType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +12,6 @@ public class CreateOrUpdateAccountRequest extends CreateOrUpdateRequest {
     private String name;
     @NotBlank
     private String accountNumber;
-    @NotNull
-    private AccountType accountType;
     @NotNull
     private Long currencyId;
 }

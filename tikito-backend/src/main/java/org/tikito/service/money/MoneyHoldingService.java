@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.tikito.dto.AccountDto;
+import org.tikito.dto.AssetType;
 import org.tikito.dto.money.AggregatedHistoricalMoneyHoldingValueDto;
 import org.tikito.dto.money.HistoricalMoneyHoldingValueDto;
 import org.tikito.dto.money.MoneyHoldingDto;
+import org.tikito.dto.money.MoneyTransactionFilter;
 import org.tikito.entity.Account;
 import org.tikito.entity.Job;
 import org.tikito.entity.money.AggregatedHistoricalMoneyHoldingValue;
@@ -41,7 +43,7 @@ public class MoneyHoldingService implements JobProcessor {
                                final AccountRepository accountRepository,
                                final MoneyTransactionRepository moneyTransactionRepository,
                                final CacheService cacheService,
-                               final AggregatedHistoricalMoneyHoldingValueRepository aggregatedHistoricalMoneyHoldingValueRepository, 
+                               final AggregatedHistoricalMoneyHoldingValueRepository aggregatedHistoricalMoneyHoldingValueRepository,
                                final MoneyHoldingRepository moneyHoldingRepository) {
         this.historicalMoneyHoldingValueRepository = historicalMoneyHoldingValueRepository;
         this.accountRepository = accountRepository;
@@ -60,31 +62,51 @@ public class MoneyHoldingService implements JobProcessor {
                 .toList();
     }
 
+    public List<HistoricalMoneyHoldingValueDto> getHistoricalMoneyHoldingValue(final long userId, final MoneyTransactionFilter filter) {
+        return historicalMoneyHoldingValueRepository.
+                findByFilter(
+                        userId,
+                        filter.getAccountIds(),
+                        filter.getCurrencies(),
+                        filter.getNonGrouped() != null && filter.getNonGrouped(),// todo: add showOther
+                        filter.getStartDate(),
+                        filter.getEndDate())
+                .stream()
+                .map(HistoricalMoneyHoldingValue::toDto)
+                .toList();
+    }
+
     @Transactional(propagation = Propagation.MANDATORY)
     public void recalculateHistoricalHoldingValues(final long userId, final long accountId) {
-        final AccountDto account = accountRepository.findById(accountId).orElseThrow().toDto();
-        final MoneyHolding holding = moneyHoldingRepository.findByUserIdAndAccountId(userId, accountId).orElseThrow();
-        final Map<LocalDate, List<MoneyTransaction>> transactionsPerTimestamp = getTransactionsPerTimestamp(accountId);
+        final List<MoneyHolding> holdings = moneyHoldingRepository.findByUserIdAndAccountId(userId, accountId);
+
+        historicalMoneyHoldingValueRepository.deleteByAccountId(accountId);
+
+        holdings.forEach(holding ->
+                recalculateHistoricalHoldingValues(userId, accountId, holding));
+
+        // todo: move to async job, but now we have circular dependency :(
+        recalculateAggregatedHistoricalHoldingValues(userId);
+    }
+
+    private void recalculateHistoricalHoldingValues(final long userId, final long accountId, final MoneyHolding holding) {
+        final Map<LocalDate, List<MoneyTransaction>> transactionsPerTimestamp = getTransactionsPerTimestamp(accountId, holding.getCurrencyId());
         if (transactionsPerTimestamp.isEmpty()) {
             return;
         }
         holding.setAmount(holding.getAmountOffset());
 
         final List<HistoricalMoneyHoldingValue> historicalMoneyHoldingValues = generateHistoricalHoldingValues(
-                userId, 
-                accountId, 
-                account.getCurrencyId(),
+                userId,
+                accountId,
+                holding.getCurrencyId(),
                 holding,
                 transactionsPerTimestamp);
 
-        log.info("Storing {} historical money holding values for account id {}", historicalMoneyHoldingValues.size(), accountId);
-        
-        historicalMoneyHoldingValueRepository.deleteByAccountId(accountId);
+        log.info("Storing {} historical money holding values for account id {} and holding {}", historicalMoneyHoldingValues.size(), accountId, holding.getId());
+
         historicalMoneyHoldingValueRepository.saveAllAndFlush(historicalMoneyHoldingValues);
         moneyHoldingRepository.saveAndFlush(holding);
-
-        // todo: move to async job, but now we have circular dependency :(
-        recalculateAggregatedHistoricalHoldingValues(userId);
     }
 
     /**
@@ -104,6 +126,7 @@ public class MoneyHoldingService implements JobProcessor {
                 .values()
                 .stream()
                 .map(value -> aggregateHoldingValues(userId, value))
+                .flatMap(map -> map.values().stream())
                 .toList();
 
         log.info("Storing {} aggregated  holding values", aggregatedValues.size());
@@ -130,22 +153,28 @@ public class MoneyHoldingService implements JobProcessor {
                 .toList();
     }
 
-    private AggregatedHistoricalMoneyHoldingValue aggregateHoldingValues(final long userId, final List<HistoricalMoneyHoldingValue> historicalSecurityHoldingValues) {
-        final AggregatedHistoricalMoneyHoldingValue aggregatedValue = new AggregatedHistoricalMoneyHoldingValue(userId);
+    private Map<AssetType, AggregatedHistoricalMoneyHoldingValue> aggregateHoldingValues(final long userId, final List<HistoricalMoneyHoldingValue> historicalSecurityHoldingValues) {
+        final Map<AssetType, AggregatedHistoricalMoneyHoldingValue> holdingValues = new HashMap<>();
 
         for (final HistoricalMoneyHoldingValue historicalSecurityHoldingValue : historicalSecurityHoldingValues) {
-            final double currencyMultiplier = historicalSecurityHoldingValue.getCurrencyMultiplier();
+            final AssetType assetType = cacheService.isCrypto(historicalSecurityHoldingValue.getCurrencyId()) ? AssetType.CRYPTO : AssetType.CASH;
+            final AggregatedHistoricalMoneyHoldingValue aggregatedHistoricalMoneyHoldingValue = holdingValues.computeIfAbsent(assetType, (_) -> new AggregatedHistoricalMoneyHoldingValue(userId, assetType));
 
-            aggregatedValue.setDate(historicalSecurityHoldingValue.getDate());
-            aggregatedValue.setAmount(aggregatedValue.getAmount() + (historicalSecurityHoldingValue.getAmount() * currencyMultiplier));
+            aggregateHoldingValue(historicalSecurityHoldingValue, aggregatedHistoricalMoneyHoldingValue);
         }
+        return holdingValues;
+    }
 
-        return aggregatedValue;
+    private static void aggregateHoldingValue(final HistoricalMoneyHoldingValue historicalSecurityHoldingValue, final AggregatedHistoricalMoneyHoldingValue aggregatedMoneyValue) {
+        final double currencyMultiplier = historicalSecurityHoldingValue.getCurrencyMultiplier();
+
+        aggregatedMoneyValue.setDate(historicalSecurityHoldingValue.getDate());
+        aggregatedMoneyValue.setAmount(aggregatedMoneyValue.getAmount() + (historicalSecurityHoldingValue.getAmount() * currencyMultiplier));
     }
 
     /**
      * This method generates a list of HistoricalHoldingValue that is the complete historical list of the specified holding.
-     * It first finds the first timestamp of the transactions and company prices to know where to start. It then loops
+     * It first finds the first timestamp of the transactions to know where to start. It then loops
      * over the days until now() and creates a new HistoricalHoldingValue for that specific day.
      */
     private List<HistoricalMoneyHoldingValue> generateHistoricalHoldingValues(final long userId,
@@ -205,11 +234,11 @@ public class MoneyHoldingService implements JobProcessor {
     /**
      * Returns a map of transactions per date. A single date holds a list of transactions.
      */
-    private Map<LocalDate, List<MoneyTransaction>> getTransactionsPerTimestamp(final Long securityId) {
+    private Map<LocalDate, List<MoneyTransaction>> getTransactionsPerTimestamp(final long securityId, final long currencyId) {
         final Map<LocalDate, List<MoneyTransaction>> transactionsPerTimestamp = new HashMap<>();
 
         moneyTransactionRepository
-                .findByAccountId(securityId)
+                .findByAccountIdAndCurrencyId(securityId, currencyId)
                 .forEach(transaction -> {
                     final LocalDate date = LocalDate.ofInstant(transaction.getTimestamp(), ZoneOffset.UTC);
                     transactionsPerTimestamp.putIfAbsent(date, new ArrayList<>());

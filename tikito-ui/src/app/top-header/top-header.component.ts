@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {HeaderItemComponent} from "../header-item/header-item.component";
 import {NgIf} from "@angular/common";
 import {Util} from "../util";
-import {AccountType} from "../dto/account-type";
 import {AuthService} from "../service/auth.service";
 import {TranslatePipe} from "../service/translate-pipe.pipe";
 
@@ -36,5 +35,4 @@ export class TopHeaderComponent implements OnInit {
   }
 
   protected readonly Util = Util;
-  protected readonly AccountType = AccountType;
 }

@@ -13,16 +13,19 @@ import java.util.Set;
 public interface MoneyTransactionRepository extends JpaRepository<MoneyTransaction, Long> {
     List<MoneyTransaction> findByAccountId(long accountId);
 
+    List<MoneyTransaction> findByAccountIdAndCurrencyId(long accountId, long currencyId);
+
     @Query("""
             select t from MoneyTransaction t where
                 t.userId = :userId and
                 (:accountIds is null or t.accountId in :accountIds) and
+                (:currencies is null or t.currencyId in :currencies) and
                 (:startDate is null or t.timestamp >= :startDate) and
                 (:endDate is null or t.timestamp < :endDate) and
                 (:groupIds is null or t.groupId in :groupIds)
                 order by t.timestamp asc
             """)
-    List<MoneyTransaction> findByFilter(final long userId, Set<Long> accountIds, Set<Long> groupIds, final boolean nonGrouped, Instant startDate, Instant endDate);
+    List<MoneyTransaction> findByFilter(final long userId, Set<Long> accountIds, Set<Long> currencies, Set<Long> groupIds, final boolean nonGrouped, Instant startDate, Instant endDate);
 
     @Modifying
     void deleteByUserIdAndId(long userId, long transactionId);

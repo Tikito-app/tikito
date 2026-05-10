@@ -64,11 +64,11 @@ public class SecurityService implements JobProcessor {
                 .toList();
     }
 
-    public List<SecurityDto> getSecurities(final SecurityType type) {
+    public List<SecurityDto> getSecurities(final Set<SecurityType> types) {
         return securityRepository
                 .findAll()
                 .stream()
-                .filter(security -> type != null && type == security.getSecurityType())
+                .filter(security -> types == null || types.contains(security.getSecurityType()))
                 .map(Security::toDto)
                 .toList();
     }
@@ -151,7 +151,7 @@ public class SecurityService implements JobProcessor {
                         .map(SecurityPrice::new)
                         .toList());
 
-        if(security.getSecurityType() == SecurityType.CURRENCY) {
+        if(security.getSecurityType() == SecurityType.CURRENCY || security.getSecurityType() == SecurityType.CRYPTO) {
             cacheService.refreshCurrencies();
         }
     }
@@ -212,6 +212,15 @@ public class SecurityService implements JobProcessor {
     public List<SecurityPriceDto> getPrices(final long id) {
         return securityPriceRepository
                 .findAllBySecurityId(id)
+                .stream()
+                .map(SecurityPrice::toDto)
+                .sorted(Comparator.comparing(SecurityPriceDto::getDate))
+                .toList();
+    }
+
+    public List<SecurityPriceDto> getPrices(final Set<Long> securityIds) {
+        return securityPriceRepository
+                .findAllBySecurityIdIn(securityIds)
                 .stream()
                 .map(SecurityPrice::toDto)
                 .sorted(Comparator.comparing(SecurityPriceDto::getDate))

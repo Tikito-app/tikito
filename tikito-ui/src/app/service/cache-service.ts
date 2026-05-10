@@ -27,29 +27,35 @@ export class CacheService implements OnInit {
   static init(): Observable<void> {
     return new Observable(observer => {
       CacheService.securityApi.getSecurities(SecurityType.CURRENCY).subscribe(currencies => {
-        CacheService.currenciesByIsin = [];
-        CacheService.currenciesById = [];
+        CacheService.securityApi.getSecurities(SecurityType.CRYPTO).subscribe(cryptos => {
+          CacheService.currenciesByIsin = [];
+          CacheService.currenciesById = [];
 
-        currencies.forEach(currency => {
-          CacheService.currenciesByIsin[currency.currentIsin] = currency;
-          CacheService.currenciesById[currency.id] = currency;
-        });
+          currencies.forEach(currency => {
+            CacheService.currenciesByIsin[currency.currentIsin] = currency;
+            CacheService.currenciesById[currency.id] = currency;
+          });
+          cryptos.forEach(currency => {
+            CacheService.currenciesByIsin[currency.currentIsin] = currency;
+            CacheService.currenciesById[currency.id] = currency;
+          });
 
-        CacheService.accountApi.getAccounts().subscribe(accounts => {
-          accounts.forEach(account => CacheService.accounts[account.id] = account);
-          CacheService.currencies = currencies
-            .sort((a, b) => {
-              let isinA = a.currentIsin;
-              let isinB = b.currentIsin;
+          CacheService.accountApi.getAccounts().subscribe(accounts => {
+            accounts.forEach(account => CacheService.accounts[account.id] = account);
+            CacheService.currencies = currencies.concat(cryptos)
+              .sort((a, b) => {
+                let isinA = a.currentIsin;
+                let isinB = b.currentIsin;
 
-              if (isinB == 'EUR') {
-                return 1;
-              } else if(isinB == 'USD' && isinA != 'EUR') {
-                return 1;
-              }
-              return isinA.localeCompare(b.currentIsin);
-            });
-          observer.next();
+                if (isinB == 'EUR') {
+                  return 1;
+                } else if (isinB == 'USD' && isinA != 'EUR') {
+                  return 1;
+                }
+                return isinA.localeCompare(b.currentIsin);
+              });
+            observer.next();
+          });
         });
       });
     });

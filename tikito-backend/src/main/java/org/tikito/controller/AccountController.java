@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.CreateOrUpdateAccountRequest;
 import org.tikito.dto.AccountDto;
-import org.tikito.dto.AccountType;
+import org.tikito.dto.AssetType;
 import org.tikito.service.AccountService;
 import org.tikito.service.importer.money.ABNFileParser;
+import org.tikito.service.importer.money.BitvavoFileParser;
 import org.tikito.service.importer.money.INGFileParser;
 import org.tikito.service.importer.security.DeGiroAccountImporter;
 
@@ -53,16 +54,17 @@ public class AccountController {
     @GetMapping("/importer-types-headers")
     public ResponseEntity<Map<String, ImportTypeData>> getImporterTypesHeaders() {
         final Map<String, ImportTypeData> map = new HashMap<>();
-        map.put("ABN", ImportTypeData.builder().accountType(AccountType.DEBIT).headers(new ABNFileParser().getHeaders()).build());
-        map.put("ING", ImportTypeData.builder().accountType(AccountType.DEBIT).headers(new INGFileParser().getHeaders()).build());
-        map.put("DE_GIRO", ImportTypeData.builder().accountType(AccountType.SECURITY).headers(new DeGiroAccountImporter().getHeaders()).build());
+        map.put("ABN", ImportTypeData.builder().assetType(AssetType.CASH).headers(new ABNFileParser().getHeaders()).build());
+        map.put("ING", ImportTypeData.builder().assetType(AssetType.CASH).headers(new INGFileParser().getHeaders()).build());
+        map.put("DE_GIRO", ImportTypeData.builder().assetType(AssetType.SECURITY).headers(new DeGiroAccountImporter().getHeaders()).build());
+        map.put("BITVAVO", ImportTypeData.builder().assetType(AssetType.CRYPTO).headers(new BitvavoFileParser().getHeaders()).build());
         return ResponseEntity.ok(map);
     }
 
     @Builder
     @Getter
     public static class ImportTypeData {
-        private AccountType accountType;
+        private AssetType assetType;
         private List<String> headers;
     }
 }

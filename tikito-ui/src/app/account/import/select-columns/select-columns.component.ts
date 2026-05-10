@@ -20,10 +20,10 @@ import {
 } from "@angular/material/table";
 import {MatInput} from "@angular/material/input";
 import {ImportFileProcessState} from "../../../dto/import-file-process-state";
-import {AccountType} from "../../../dto/account-type";
 import {UserPreferenceService} from "../../../service/user-preference-service";
 import {UserPreference} from "../../../dto/user-preference";
 import {MatCard, MatCardHeader} from "@angular/material/card";
+import {AssetType} from "../../../dto/asset-type";
 
 @Component({
   selector: 'app-select-columns',
@@ -76,7 +76,7 @@ export class SelectColumnsComponent implements OnInit {
   ngOnInit(): void {
     let group: any = {};
 
-    if (this.state.accountType == AccountType.SECURITY) {
+    if (this.state.assetType == AssetType.SECURITY) {
       this.requiredColumns = this.securityColumns;
     } else {
       this.requiredColumns = this.moneyColumns;
@@ -90,13 +90,10 @@ export class SelectColumnsComponent implements OnInit {
 
     group['buy-value'] = new FormControl();
     group['timestamp-format'] = new FormControl();
-    group['date-format'] = new FormControl();
     group['time-format'] = new FormControl();
 
     this.form = new FormGroup(group);
     this.dataSource = new MatTableDataSource<any>(this.state.parsedContent);
-
-    this.form.controls['date-format'].setValue(UserPreferenceService.get(UserPreference.IMPORT_DATE_FORMAT, 'dd-MM-yyyy'));
   }
 
   getHeaderConfig() {

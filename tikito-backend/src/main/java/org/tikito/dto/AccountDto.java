@@ -13,7 +13,6 @@ public class AccountDto {
     private Long id;
     private long userId;
     private String name;
-    private AccountType accountType;
     private String accountNumber;
     private long currencyId;
 }

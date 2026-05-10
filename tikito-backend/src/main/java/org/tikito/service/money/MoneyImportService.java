@@ -13,10 +13,13 @@ import org.tikito.dto.money.MoneyTransactionDto;
 import org.tikito.dto.money.MoneyTransactionImportLine;
 import org.tikito.dto.money.MoneyTransactionImportResultDto;
 import org.tikito.dto.security.SecurityDto;
+import org.tikito.dto.security.SecurityType;
 import org.tikito.entity.Job;
+import org.tikito.entity.money.MoneyHolding;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.exception.CannotReadFileException;
 import org.tikito.repository.AccountRepository;
+import org.tikito.repository.MoneyHoldingRepository;
 import org.tikito.repository.MoneyTransactionRepository;
 import org.tikito.service.CacheService;
 import org.tikito.service.JobService;
@@ -30,10 +33,11 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.tikito.dto.money.MoneyTransactionImportResultDto.*;
-import static org.tikito.dto.money.MoneyTransactionImportResultDto.FAILED_DUPLICATE_TRANSACTION;
 
 @Service
 @Slf4j
@@ -45,38 +49,52 @@ public class MoneyImportService {
     private final AccountRepository accountRepository;
     private final CacheService cacheService;
     private final JobService jobService;
+    private final MoneyHoldingRepository moneyHoldingRepository;
 
     public MoneyImportService(final MoneyTransactionRepository moneyTransactionRepository,
                               final ABNFileParser abnFileParser,
-//                              final CustomMoneyFileParser customMoneyFileParser,
                               final INGFileParser ingFileParser,
-                              final ABNExcelImporter abnExcelImporter,
-                              final ABNMT940Importer abnmt940Importer,
-                              final CustomHeaderListImporter customHeaderListImporter,
-                              final INGExcelImporter ingExcelImporter,
-                              final List<MoneyTransactionFileParser> fileParsers,
+                              final BitvavoFileParser bitvavoFileParser,
                               final List<MoneyTransactionImporter> importers,
                               final AccountRepository accountRepository,
                               final CacheService cacheService,
-                              final JobService jobService) {
+                              final JobService jobService,
+                              final MoneyHoldingRepository moneyHoldingRepository) {
         this.moneyTransactionRepository = moneyTransactionRepository;
-        this.fileParsers = List.of(abnFileParser, ingFileParser);
-        this.importers = List.of(abnExcelImporter, abnmt940Importer, customHeaderListImporter, ingExcelImporter);
+        this.moneyHoldingRepository = moneyHoldingRepository;
+        this.fileParsers = List.of(abnFileParser, ingFileParser, bitvavoFileParser);
+        this.importers = new ArrayList<>(importers);
         this.accountRepository = accountRepository;
         this.cacheService = cacheService;
         this.jobService = jobService;
     }
 
-    public MoneyTransactionImportResultDto importTransactions(final long userId, final long accountId, final MultipartFile file, final boolean dryRun, final String customHeaderConfigString, final String debitIndication, final String timestampFormat, final String dateFormat, final String timeFormat, final String csvSeparator) throws CannotReadFileException, JsonProcessingException {
+    public MoneyTransactionImportResultDto importTransactions(final long userId,
+                                                              final long accountId,
+                                                              final MultipartFile file,
+                                                              final boolean dryRun,
+                                                              final String customHeaderConfigString,
+                                                              final String debitIndication,
+                                                              final String timestampFormat,
+                                                              final String timeFormat,
+                                                              final String csvSeparator) throws CannotReadFileException, JsonProcessingException {
         final ObjectMapper mapper = new ObjectMapper();
         final TypeReference<HashMap<String, Integer>> typeRef = new TypeReference<>() {
         };
 
         final HashMap<String, Integer> headerConfig = mapper.readValue(customHeaderConfigString, typeRef);
-        return importTransactions(userId, accountId, file, dryRun, headerConfig, debitIndication, timestampFormat, dateFormat, timeFormat, csvSeparator);
+        return importTransactions(userId, accountId, file, dryRun, headerConfig, debitIndication, timestampFormat, timeFormat, csvSeparator);
     }
 
-    public MoneyTransactionImportResultDto importTransactions(final long userId, final long accountId, final MultipartFile file, final boolean dryRun, final Map<String, Integer> customHeaderConfig, final String debitIndication, final String timestampFormat, final String dateFormat, final String timeFormat, final String csvSeparator) throws CannotReadFileException {
+    public MoneyTransactionImportResultDto importTransactions(final long userId,
+                                                              final long accountId,
+                                                              final MultipartFile file,
+                                                              final boolean dryRun,
+                                                              final Map<String, Integer> customHeaderConfig,
+                                                              final String debitIndication,
+                                                              final String timestampFormat,
+                                                              final String timeFormat,
+                                                              final String csvSeparator) throws CannotReadFileException {
         try {
             final ImportFileType importFileType = FileReader.getImportFileType(file);
             final AccountDto account = accountRepository.findByUserIdAndId(userId, accountId).orElseThrow().toDto();
@@ -84,9 +102,9 @@ public class MoneyImportService {
             if (importFileType == ImportFileType.MT940) {
                 return importTransactionsFromMT940(account, file, dryRun);
             } else if (importFileType == ImportFileType.CSV) {
-                return importTransactionsFromCsv(account, file, dryRun, getSeparator(csvSeparator), '"', customHeaderConfig, debitIndication, timestampFormat, dateFormat, timeFormat);
+                return importTransactionsFromCsv(account, file, dryRun, getSeparator(csvSeparator), '"', customHeaderConfig, debitIndication, timestampFormat, timeFormat);
             } else if (importFileType == ImportFileType.EXCEL) {
-                return importTransactionsFromExcel(account, file, dryRun, customHeaderConfig, debitIndication, timestampFormat, dateFormat, timeFormat);
+                return importTransactionsFromExcel(account, file, dryRun, customHeaderConfig, debitIndication, timestampFormat, timeFormat);
             }
         } catch (final IOException e) {
             log.error(e.getMessage(), e);
@@ -105,14 +123,28 @@ public class MoneyImportService {
         }
     }
 
-    private MoneyTransactionImportResultDto importTransactionsFromCsv(final AccountDto account, final MultipartFile file, final boolean dryRun, final char separatorChar, final char quoteChar, final Map<String, Integer> customHeaderConfig, final String debitIndication, final String timestampFormat, final String dateFormat, final String timeFormat) throws CannotReadFileException {
+    private MoneyTransactionImportResultDto importTransactionsFromCsv(final AccountDto account,
+                                                                      final MultipartFile file,
+                                                                      final boolean dryRun,
+                                                                      final char separatorChar,
+                                                                      final char quoteChar,
+                                                                      final Map<String, Integer> customHeaderConfig,
+                                                                      final String debitIndication,
+                                                                      final String timestampFormat,
+                                                                      final String timeFormat) throws CannotReadFileException {
         final List<List<String>> csv = FileReader.readCsv(file, separatorChar, quoteChar);
-        return importTransactionsFromParsedFileLines(account, file, csv, dryRun, customHeaderConfig, debitIndication, timestampFormat, dateFormat, timeFormat);
+        return importTransactionsFromParsedFileLines(account, file, csv, dryRun, customHeaderConfig, debitIndication, timestampFormat, timeFormat);
     }
 
-    private MoneyTransactionImportResultDto importTransactionsFromExcel(final AccountDto account, final MultipartFile file, final boolean dryRun, final Map<String, Integer> customHeaderConfig, final String debitIndication, final String timestampFormat, final String dateFormat, final String timeFormat) throws IOException {
+    private MoneyTransactionImportResultDto importTransactionsFromExcel(final AccountDto account,
+                                                                        final MultipartFile file,
+                                                                        final boolean dryRun,
+                                                                        final Map<String, Integer> customHeaderConfig,
+                                                                        final String debitIndication,
+                                                                        final String timestampFormat,
+                                                                        final String timeFormat) throws IOException {
         final List<List<String>> csv = FileReader.readExcel(file.getInputStream(), Util.getFileExtension(file.getOriginalFilename()));
-        return importTransactionsFromParsedFileLines(account, file, csv, dryRun, customHeaderConfig, debitIndication, timestampFormat, dateFormat, timeFormat);
+        return importTransactionsFromParsedFileLines(account, file, csv, dryRun, customHeaderConfig, debitIndication, timestampFormat, timeFormat);
     }
 
     private MoneyTransactionImportResultDto importTransactionsFromParsedFileLines(final AccountDto account,
@@ -122,15 +154,14 @@ public class MoneyImportService {
                                                                                   final Map<String, Integer> customHeaderConfig,
                                                                                   final String debitIndication,
                                                                                   final String timestampFormat,
-                                                                                  final String dateFormat,
                                                                                   final String timeFormat) throws CannotReadFileException {
         final MoneyTransactionFileParser importer =
                 customHeaderConfig != null && !customHeaderConfig.isEmpty() ?
-                        new CustomMoneyFileParser(customHeaderConfig, debitIndication, timestampFormat, dateFormat, timeFormat) :
+                        new CustomMoneyFileParser(customHeaderConfig, debitIndication, timestampFormat, timeFormat) :
                         fileParsers.stream()
-                                .filter(i -> i.matchesHeader(lines.getFirst()))
-                                .findAny()
-                                .orElseThrow(CannotReadFileException::new);// todo
+                        .filter(i -> i.matchesHeader(lines.getFirst()))
+                        .findAny()
+                        .orElseThrow(CannotReadFileException::new);// todo
         lines.removeFirst(); // remove headers
 
         final MoneyTransactionImportSettings settings = importer.getSettings();
@@ -163,6 +194,7 @@ public class MoneyImportService {
                 .toList();
 
         if (!dryRun) {
+            assertMoneyHoldings(account.getUserId(), account.getId(), transactions);
             result.getImportedTransactions().addAll(moneyTransactionRepository
                     .saveAllAndFlush(transactions)
                     .stream()
@@ -173,6 +205,37 @@ public class MoneyImportService {
         }
 
         return result;
+    }
+
+    /**
+     * For crypto, we need to create a money holding per crypto. Unlike debit/credit, which
+     * are created per account.
+     */
+    private void assertMoneyHoldings(final long userId, final long accountId, final List<MoneyTransaction> transactionsToImport) {
+        final Map<Long, MoneyHolding> existingCryptoHoldingsBySecurityId = moneyHoldingRepository.findByUserIdAndAccountId(userId, accountId)
+                .stream()
+                .filter(holding -> isCrypto(holding.getCurrencyId()))
+                .collect(Collectors.toMap(
+                        MoneyHolding::getCurrencyId,
+                        Function.identity()
+                ));
+        final List<MoneyHolding> newHoldings = new ArrayList<>();
+
+        transactionsToImport.forEach(transaction -> {
+            if(isCrypto(transaction.getCurrencyId()) && !existingCryptoHoldingsBySecurityId.containsKey(transaction.getCurrencyId())) {
+                final MoneyHolding holding = new MoneyHolding();
+                holding.setUserId(userId);
+                holding.setAccountId(accountId);
+                holding.setCurrencyId(transaction.getCurrencyId());
+                newHoldings.add(holding);
+                existingCryptoHoldingsBySecurityId.put(transaction.getCurrencyId(), holding);
+            }
+        });
+        moneyHoldingRepository.saveAllAndFlush(newHoldings);
+    }
+
+    private boolean isCrypto(final long currencyId) {
+        return cacheService.getSecurity(currencyId).getSecurityType() == SecurityType.CRYPTO;
     }
 
     private void generateJobsAfterImport(final long userId, final long accountId, final MoneyTransactionImportResultDto result) {

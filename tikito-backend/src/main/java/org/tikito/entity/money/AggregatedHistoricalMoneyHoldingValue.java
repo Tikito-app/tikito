@@ -1,5 +1,6 @@
 package org.tikito.entity.money;
 
+import org.tikito.dto.AssetType;
 import org.tikito.dto.money.AggregatedHistoricalMoneyHoldingValueDto;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class AggregatedHistoricalMoneyHoldingValue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private long userId;
+
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(
             name = "aggregated_historical_money_holding_account",
@@ -28,14 +30,19 @@ public class AggregatedHistoricalMoneyHoldingValue {
     private LocalDate date;
     private double amount;
 
-    public AggregatedHistoricalMoneyHoldingValue(final long userId) {
+    @Enumerated(EnumType.STRING)
+    private AssetType assetType;
+
+    public AggregatedHistoricalMoneyHoldingValue(final long userId, final AssetType assetType) {
         this.userId = userId;
+        this.assetType = assetType;
     }
 
     public AggregatedHistoricalMoneyHoldingValueDto toDto() {
         return new AggregatedHistoricalMoneyHoldingValueDto(
                 accountIds,
                 date,
-                amount);
+                amount,
+                assetType);
     }
 }

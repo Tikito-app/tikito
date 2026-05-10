@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.tikito.controller.request.CreateOrUpdateSecurityTransactionRequest;
-import org.tikito.dto.AccountType;
 import org.tikito.dto.security.SecurityHoldingFilter;
 import org.tikito.dto.security.SecurityTransactionDto;
 import org.tikito.dto.security.SecurityType;
@@ -52,10 +51,10 @@ public class SecurityTransactionService {
     @Transactional(propagation = Propagation.MANDATORY)
     public SecurityTransactionDto createOrUpdate(final long userId, final CreateOrUpdateSecurityTransactionRequest request) {
         final Isin isin = isinRepository.findById(request.getIsin()).orElseThrow();
-        final SecurityTransaction transaction = request.isNew() ? new SecurityTransaction(userId) :  securityTransactionRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
+        final SecurityTransaction transaction = request.isNew() ? new SecurityTransaction(userId) : securityTransactionRepository.findByUserIdAndId(userId, request.getId()).orElseThrow();
 
-        accountRepository.findByUserIdAndIdAndAccountType(userId, request.getAccountId(), AccountType.SECURITY).orElseThrow();
-        securityRepository.findByIdAndSecurityType(request.getCurrencyId(), SecurityType.CURRENCY).orElseThrow();
+        accountRepository.findByUserIdAndId(userId, request.getAccountId()).orElseThrow();
+        securityRepository.findByIdAndSecurityTypes(request.getCurrencyId(), Set.of(SecurityType.CURRENCY, SecurityType.CRYPTO)).orElseThrow();
 
         transaction.updateFrom(request, isin.getSecurityId());
         return securityTransactionRepository.saveAndFlush(transaction).toDto();
