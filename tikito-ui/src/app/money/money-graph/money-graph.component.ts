@@ -111,7 +111,6 @@ export class MoneyGraphComponent implements OnInit {
     let series = this.generateSeriesJson();
 
     this.chartOption = this.generateGraphOptions(series);
-    console.log(this.dataDto);
   }
 
   processDates() {
@@ -257,13 +256,12 @@ export class MoneyGraphComponent implements OnInit {
           if(firstValue != null || budgetValue != null) {
             // todo: convert amount to value?
             let value = firstValue != null ? firstValue.value ? firstValue.value : firstValue.amount : null;
-            let isCurrency = firstValue.groupKey == null;
+            let isCurrency = firstValue != null && firstValue.groupKey == null;
 
             if(value != null && !isCurrency) {
               totalCashValue += value;
             } else if(budgetValue != null) {
               totalBudgeted += budgetValue.value;
-              console.log(budgetValue);
             }
             let fontStyle = isCurrency ? 'italic' : 'normal';
             let htmlToAdd = '';

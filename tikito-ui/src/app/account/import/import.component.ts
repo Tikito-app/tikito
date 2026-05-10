@@ -121,7 +121,7 @@ export class ImportComponent implements OnInit {
     if (this.importFileState.fileType != FileType.MT940) {
       this.parseImportFileContent().subscribe(() => {
         this.fileImportService.determineAssetTypeOnHeaders(this.importFileState);
-      console.log(this.importFileState, this.form.value.assetType)
+
         if (this.importFileState.assetType == null) {
           this.importFileState.assetType = this.form.value.assetType;
           this.showCustomHeaderConfig = true;

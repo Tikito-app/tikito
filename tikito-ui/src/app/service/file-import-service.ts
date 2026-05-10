@@ -86,10 +86,9 @@ export class FileImportService {
             misMatch = true;
           }
         }
-console.log(misMatch);
+
         if (!misMatch) {
           state.assetType = header.assetType as AssetType;
-          console.log(header);
           return;
         }
       }
