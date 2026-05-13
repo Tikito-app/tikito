@@ -18,6 +18,7 @@ public interface MoneyTransactionRepository extends JpaRepository<MoneyTransacti
     @Query("""
             select t from MoneyTransaction t where
                 t.userId = :userId and
+                (:transactionFilter is null or :transactionFilter = '' or t.counterpartyAccountNumber like %:transactionFilter%  or t.counterpartyAccountName like %:transactionFilter% or t.description like %:transactionFilter%) and
                 (:accountIds is null or t.accountId in :accountIds) and
                 (:currencies is null or t.currencyId in :currencies) and
                 (:startDate is null or t.timestamp >= :startDate) and
@@ -25,7 +26,7 @@ public interface MoneyTransactionRepository extends JpaRepository<MoneyTransacti
                 (:groupIds is null or t.groupId in :groupIds)
                 order by t.timestamp asc
             """)
-    List<MoneyTransaction> findByFilter(final long userId, Set<Long> accountIds, Set<Long> currencies, Set<Long> groupIds, final boolean nonGrouped, Instant startDate, Instant endDate);
+    List<MoneyTransaction> findByFilter(final long userId, final String transactionFilter, Set<Long> accountIds, Set<Long> currencies, Set<Long> groupIds, final boolean nonGrouped, Instant startDate, Instant endDate);
 
     @Modifying
     void deleteByUserIdAndId(long userId, long transactionId);
