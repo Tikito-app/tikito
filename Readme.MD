@@ -43,8 +43,8 @@
 | Backup and restore                      | Yes         |
 | Budgeting                               | Yes         |
 | Manually add/edit transactions          | Yes         |
+| Crypto                                  | Yes         |
 | More options to import data             | Comnig soon |
 | Translations                            | Comnig soon |
 | Generic loans                           | Comnig soon |
-| Crypto                                  | Comnig soon |
 
