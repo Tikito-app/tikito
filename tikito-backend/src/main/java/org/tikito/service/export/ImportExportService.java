@@ -64,17 +64,17 @@ public class ImportExportService {
                         .toList()));
 
         export.getAccounts().forEach(account -> {
-            if (settings.isSecurityTransactions()) {
+            if (settings.getSecurityTransactions()) {
                 exportSecurityTransactions(accountsByName.get(account.getName()), account, currenciesById);
             }
-            if (settings.isMoneyTransactions()) {
+            if (settings.getMoneyTransactions()) {
                 exportMoneyTransactions(accountsByName.get(account.getName()), account, currenciesById);
             }
         });
-        if (settings.isMoneyTransactionGroups()) {
+        if (settings.getMoneyTransactionGroups()) {
             exportMoneyGroups(userId, export, accountsById);
         }
-        if (settings.isLoans()) {
+        if (settings.getLoans()) {
             exportLoans(userId, export, currenciesById);
         }
 
@@ -83,25 +83,25 @@ public class ImportExportService {
 
     public void importFrom(final long userId, final TikitoExportDto dto, final ImportExportSettings settings) {
         final Map<String, Security> currenciesByIsin = getCurrenciesByIsin();
-        if (settings.isAccounts()) {
+        if (settings.getAccounts()) {
             importAccounts(userId, dto, currenciesByIsin);
         }
 
         final Map<String, Account> accountsByName = getAccountsByName(userId);
-        if (settings.isMoneyTransactionGroups()) {
+        if (settings.getMoneyTransactionGroups()) {
             importMoneyTransactionGroups(userId, dto);
         }
 
         final Map<String, MoneyTransactionGroup> moneyTransactionGroupsByName = getMoneyTransactionGroupsByName(userId);
         // todo add group information to imported transactions
 
-        if (settings.isMoneyTransactions()) {
+        if (settings.getMoneyTransactions()) {
             importMoneyTransactions(dto, accountsByName);
         }
-        if (settings.isSecurityTransactions()) {
+        if (settings.getSecurityTransactions()) {
             importSecurityTransactions(dto, accountsByName);
         }
-        if (settings.isLoans()) {
+        if (settings.getLoans()) {
             importLoans(userId, dto, moneyTransactionGroupsByName, currenciesByIsin);
         }
     }
