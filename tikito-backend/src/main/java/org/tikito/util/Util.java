@@ -13,7 +13,14 @@ public final class Util {
     public static Double getDoubleOrDefault(final String value, final Double defaultValue) {
         try {
             if (value.contains(",") && value.contains(".")) {
-                return Double.parseDouble(value.replaceAll("\\.", "").replace(',', '.'));
+                final int lastCommaIndex = value.lastIndexOf(',');
+                final int lastPeriodIndex = value.lastIndexOf('.');
+
+                if(lastPeriodIndex < lastCommaIndex) {
+                    return Double.parseDouble(value.replaceAll("\\.", "").replace(',', '.'));
+                } else {
+                    return Double.parseDouble(value.replace(",", ""));
+                }
             }
             return Double.parseDouble(value.replace(',', '.'));
         } catch (final Exception e) {
