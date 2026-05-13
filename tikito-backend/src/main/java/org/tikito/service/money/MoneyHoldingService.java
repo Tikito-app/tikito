@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.tikito.dto.AccountDto;
-import org.tikito.dto.AssetType;
 import org.tikito.dto.money.AggregatedHistoricalMoneyHoldingValueDto;
 import org.tikito.dto.money.HistoricalMoneyHoldingValueDto;
 import org.tikito.dto.money.MoneyHoldingDto;
@@ -114,7 +113,7 @@ public class MoneyHoldingService implements JobProcessor {
      */
     @Transactional(propagation = Propagation.MANDATORY)
     public void recalculateAggregatedHistoricalHoldingValues(final long userId) {
-        log.info("Recalculating aggregated historical  values");
+        log.info("Recalculating aggregated historical values");
         final List<HistoricalMoneyHoldingValue> allHistoricalValues = historicalMoneyHoldingValueRepository.findAll();
         final Map<LocalDate, List<HistoricalMoneyHoldingValue>> historicalValuesByDate = new HashMap<>();
         allHistoricalValues.forEach(historicalSecurityHoldingValue -> {
@@ -153,12 +152,12 @@ public class MoneyHoldingService implements JobProcessor {
                 .toList();
     }
 
-    private Map<AssetType, AggregatedHistoricalMoneyHoldingValue> aggregateHoldingValues(final long userId, final List<HistoricalMoneyHoldingValue> historicalSecurityHoldingValues) {
-        final Map<AssetType, AggregatedHistoricalMoneyHoldingValue> holdingValues = new HashMap<>();
+    private Map<MoneyType, AggregatedHistoricalMoneyHoldingValue> aggregateHoldingValues(final long userId, final List<HistoricalMoneyHoldingValue> historicalSecurityHoldingValues) {
+        final Map<MoneyType, AggregatedHistoricalMoneyHoldingValue> holdingValues = new HashMap<>();
 
         for (final HistoricalMoneyHoldingValue historicalSecurityHoldingValue : historicalSecurityHoldingValues) {
-            final AssetType assetType = cacheService.isCrypto(historicalSecurityHoldingValue.getCurrencyId()) ? AssetType.CRYPTO : AssetType.CASH;
-            final AggregatedHistoricalMoneyHoldingValue aggregatedHistoricalMoneyHoldingValue = holdingValues.computeIfAbsent(assetType, (_) -> new AggregatedHistoricalMoneyHoldingValue(userId, assetType));
+            final MoneyType moneyType = cacheService.isCrypto(historicalSecurityHoldingValue.getCurrencyId()) ? MoneyType.CRYPTO : MoneyType.FIAT;
+            final AggregatedHistoricalMoneyHoldingValue aggregatedHistoricalMoneyHoldingValue = holdingValues.computeIfAbsent(moneyType, (_) -> new AggregatedHistoricalMoneyHoldingValue(userId, moneyType));
 
             aggregateHoldingValue(historicalSecurityHoldingValue, aggregatedHistoricalMoneyHoldingValue);
         }

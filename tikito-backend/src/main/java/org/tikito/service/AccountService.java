@@ -7,7 +7,6 @@ import org.tikito.controller.request.CreateOrUpdateAccountRequest;
 import org.tikito.dto.AccountDto;
 import org.tikito.entity.Account;
 import org.tikito.entity.Job;
-import org.tikito.entity.money.MoneyHolding;
 import org.tikito.exception.AccountNumberAlreadyExistsException;
 import org.tikito.repository.*;
 import org.tikito.service.job.JobType;
@@ -83,21 +82,9 @@ public class AccountService {
         account.setAccountNumber(request.getAccountNumber());
         account.setCurrencyId(request.getCurrencyId());
 
-        final AccountDto dto = accountRepository
+        return accountRepository
                 .saveAndFlush(account)
                 .toDto();
-
-        processChangesForMoneyAccount(userId, request, dto, account);
-
-        return dto;
-    }
-
-    private void processChangesForMoneyAccount(final long userId, final CreateOrUpdateAccountRequest request, final AccountDto dto, final Account account) {
-//        if (shouldCreateMoneyHolding) {
-        createMoneyHolding(userId, request, dto.getId());
-//        } else if (shouldDeleteMoneyHolding) {
-//            moneyHoldingRepository.deleteByUserIdAndAccountId(userId, account.getId());
-//        }
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -124,13 +111,5 @@ public class AccountService {
         historicalSecurityHoldingValueRepository.deleteByAccountIds(accountId);
         aggregatedHistoricalSecurityHoldingValueRepository.deleteByAccountIds(accountId);
         jobService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
-    }
-
-    private void createMoneyHolding(final long userId, final CreateOrUpdateAccountRequest request, final long accountId) {
-        final MoneyHolding moneyHolding = new MoneyHolding();
-        moneyHolding.setUserId(userId);
-        moneyHolding.setAccountId(accountId);
-        moneyHolding.setCurrencyId(request.getCurrencyId());
-        moneyHoldingRepository.save(moneyHolding);
     }
 }

@@ -1,11 +1,11 @@
 package org.tikito.entity.money;
 
-import org.tikito.dto.AssetType;
 import org.tikito.dto.money.AggregatedHistoricalMoneyHoldingValueDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.service.money.MoneyType;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -31,11 +31,11 @@ public class AggregatedHistoricalMoneyHoldingValue {
     private double amount;
 
     @Enumerated(EnumType.STRING)
-    private AssetType assetType;
+    private MoneyType moneyType;
 
-    public AggregatedHistoricalMoneyHoldingValue(final long userId, final AssetType assetType) {
+    public AggregatedHistoricalMoneyHoldingValue(final long userId, final MoneyType moneyType) {
         this.userId = userId;
-        this.assetType = assetType;
+        this.moneyType = moneyType;
     }
 
     public AggregatedHistoricalMoneyHoldingValueDto toDto() {
@@ -43,6 +43,6 @@ public class AggregatedHistoricalMoneyHoldingValue {
                 accountIds,
                 date,
                 amount,
-                assetType);
+                moneyType);
     }
 }

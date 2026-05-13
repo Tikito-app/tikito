@@ -13,7 +13,6 @@ import org.tikito.dto.money.MoneyTransactionDto;
 import org.tikito.dto.money.MoneyTransactionImportLine;
 import org.tikito.dto.money.MoneyTransactionImportResultDto;
 import org.tikito.dto.security.SecurityDto;
-import org.tikito.dto.security.SecurityType;
 import org.tikito.entity.Job;
 import org.tikito.entity.money.MoneyHolding;
 import org.tikito.entity.money.MoneyTransaction;
@@ -209,13 +208,11 @@ public class MoneyImportService {
     }
 
     /**
-     * For crypto, we need to create a money holding per crypto. Unlike debit/credit, which
-     * are created per account.
+     * For money (debit/crypto), we need to create a money holding per currency.
      */
     private void assertMoneyHoldings(final long userId, final long accountId, final List<MoneyTransaction> transactionsToImport) {
-        final Map<Long, MoneyHolding> existingCryptoHoldingsBySecurityId = moneyHoldingRepository.findByUserIdAndAccountId(userId, accountId)
+        final Map<Long, MoneyHolding> existingHoldingsPerCurrencyId = moneyHoldingRepository.findByUserIdAndAccountId(userId, accountId)
                 .stream()
-                .filter(holding -> isCrypto(holding.getCurrencyId()))
                 .collect(Collectors.toMap(
                         MoneyHolding::getCurrencyId,
                         Function.identity()
@@ -223,20 +220,16 @@ public class MoneyImportService {
         final List<MoneyHolding> newHoldings = new ArrayList<>();
 
         transactionsToImport.forEach(transaction -> {
-            if(isCrypto(transaction.getCurrencyId()) && !existingCryptoHoldingsBySecurityId.containsKey(transaction.getCurrencyId())) {
+            if(!existingHoldingsPerCurrencyId.containsKey(transaction.getCurrencyId())) {
                 final MoneyHolding holding = new MoneyHolding();
                 holding.setUserId(userId);
                 holding.setAccountId(accountId);
                 holding.setCurrencyId(transaction.getCurrencyId());
                 newHoldings.add(holding);
-                existingCryptoHoldingsBySecurityId.put(transaction.getCurrencyId(), holding);
+                existingHoldingsPerCurrencyId.put(transaction.getCurrencyId(), holding);
             }
         });
         moneyHoldingRepository.saveAllAndFlush(newHoldings);
-    }
-
-    private boolean isCrypto(final long currencyId) {
-        return cacheService.getSecurity(currencyId).getSecurityType() == SecurityType.CRYPTO;
     }
 
     private void generateJobsAfterImport(final long userId, final long accountId, final MoneyTransactionImportResultDto result) {

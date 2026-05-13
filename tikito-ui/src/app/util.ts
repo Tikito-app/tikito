@@ -11,6 +11,7 @@ import {LoanType} from "./dto/loan-type";
 import {CacheService} from "./service/cache-service";
 import {SecurityTransactionType} from "./dto/security/security-transaction-type";
 import {AssetType} from "./dto/asset-type";
+import {MoneyType} from "./dto/money/money-type";
 
 export class Util {
   public static DATE_FORMAT: string = 'dd-MM-YYYY';
@@ -167,6 +168,12 @@ export class Util {
   static getAssetTypes(): string[] {
     return Object
       .keys(AssetType)
+      .filter((v) => isNaN(Number(v)));
+  }
+
+  static getMoneyTypes(): string[] {
+    return Object
+      .keys(MoneyType)
       .filter((v) => isNaN(Number(v)));
   }
 

@@ -131,9 +131,8 @@ export class ImportComponent implements OnInit {
         }
       });
     } else {
-      this.importFileState.assetType = AssetType.CASH;
+      this.importFileState.assetType = AssetType.MONEY;
       this.uploadFileToBackend(true);
-
     }
   }
 

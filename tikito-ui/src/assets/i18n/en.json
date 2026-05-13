@@ -177,8 +177,8 @@
 
   "--------------- ASSET ---------------------": "",
   "asset/type": "Asset type",
-  "asset/type/CASH": "Cash",
-  "asset/type/CRYPTO": "Crypto",
+  "asset/type/MONEY": "Money",
+  "asset/type/LOAN": "LOAN",
   "asset/type/SECURITY": "Security",
 
 
@@ -199,6 +199,10 @@
   "money/create-transaction": "Create transaction",
   "money/account": "Account",
   "money/currency-filter": "Currency filter",
+
+  "money/type": "Money type",
+  "money/type/CRYPTO": "Crypto",
+  "money/type/fIAT": "Fiat",
 
   "money/graph/start-at-zero-from-beginning": "Start at 0",
   "money/graph/start-at-zero-from-beginning-tooltip": "When selected, the start value of the series will be set <br/>to the first value present. When not selected, the series <br/>will start at 0 from the selected date.",

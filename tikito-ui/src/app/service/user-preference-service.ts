@@ -1,10 +1,6 @@
 import {Injectable, OnInit} from "@angular/core";
 import {UserApi} from "../api/user-api";
 import {UserPreference} from "../dto/user-preference";
-import {MatCheckboxChange} from "@angular/material/checkbox";
-import {MatSelectChange} from "@angular/material/select";
-import {MatRadioChange} from "@angular/material/radio";
-import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +36,7 @@ export class UserPreferenceService implements OnInit {
   }
 
   static onSelectChange(key: UserPreference, values: any) {
-    if(Array.isArray(values)) {
+    if (Array.isArray(values)) {
       UserPreferenceService.set<string>(key.valueOf(), values.join(','));
     } else {
       UserPreferenceService.set<string>(key.valueOf(), values);
