@@ -107,6 +107,7 @@ export class ImportComponent implements OnInit {
         }
 
         if (this.importFileState.fileType == FileType.CSV) {
+          this.determineCsvSeparator();
           this.showCsvImportOptions = true;
         } else {
           this.processImportFileContent();
@@ -174,6 +175,17 @@ export class ImportComponent implements OnInit {
         this.showLoadingText = false;
         this.dialogService.snackbar(this.translateService.translate('account/import/file-import-success'));
       });
+    }
+  }
+
+  determineCsvSeparator() {
+    let lines = (this.importFileState.content as string).split('\n');
+    if(lines.length > 0) {
+      let commaCount = lines[0].split(',').length;
+      let semicolonCount = lines[0].split(';').length;
+
+      this.importFileState.csvSeparator = commaCount > semicolonCount ? ',' : '';
+      this.form.controls['csvSeparator'].setValue(this.importFileState.csvSeparator);
     }
   }
 

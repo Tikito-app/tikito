@@ -23,7 +23,7 @@
       </mat-select>
     </mat-form-field>
     <br/>
-    <input type="file" class="file-input" [attr.data-cy]="'file'" *ngIf="form.value.account" (change)="onFileSelected($event)" #fileUpload/>
+    <input type="file" class="file-input" [attr.data-cy]="'file'" *ngIf="form.value.account && form.value.assetType" (change)="onFileSelected($event)" #fileUpload/>
     <br/>
     <br/>
     <ng-container *ngIf="showCsvImportOptions">
