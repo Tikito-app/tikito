@@ -92,7 +92,8 @@ public class MoneyTransaction {
                 amount,
                 finalBalance,
                 description,
-                currency
+                currency,
+                exchangeRate
 //                groupId, // todo
 //                loanId
         );

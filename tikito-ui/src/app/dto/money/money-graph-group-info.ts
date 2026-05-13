@@ -6,7 +6,6 @@ export class MoneyGraphGroupInfo {
   isBudget: boolean;
   isHolding: boolean;
   key: string;
-  normalizedAggregatedValue: number = 0;
   normalizedMutatedAmount: number = 0;
   currencyId: number;
 

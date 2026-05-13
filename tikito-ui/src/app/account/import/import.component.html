@@ -18,7 +18,7 @@
       <mat-label>{{ 'asset/type' | translatePipe }}</mat-label>
       <mat-select formControlName="assetType" [attr.data-cy]="'asset-type'">
         @for (assetType of Util.getAssetTypes(); track assetType) {
-          <mat-option [value]="assetType">{{ assetType }}</mat-option>
+          <mat-option [value]="assetType">{{ 'asset/type/' + assetType | translatePipe }}</mat-option>
         }
       </mat-select>
     </mat-form-field>

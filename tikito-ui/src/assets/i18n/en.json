@@ -176,6 +176,7 @@
   "security/isin/symbol": "Symbol",
 
   "--------------- ASSET ---------------------": "",
+  "asset/type": "Asset type",
   "asset/type/CASH": "Cash",
   "asset/type/CRYPTO": "Crypto",
   "asset/type/SECURITY": "Security",

@@ -19,6 +19,7 @@ public class MoneyTransactionExportDto {
     private Double finalBalance;
     private String description;
     private String currency;
+    private double exchangeRate;
 
     public MoneyTransactionExportDto(final String accountName,
                                      final String counterpartyAccountName,
@@ -27,7 +28,8 @@ public class MoneyTransactionExportDto {
                                      final double amount,
                                      final Double finalBalance,
                                      final String description,
-                                     final String currency) {
+                                     final String currency,
+                                     final double exchangeRate) {
         this.accountName = accountName;
         this.counterpartyAccountName = counterpartyAccountName;
         this.counterpartyAccountNumber = counterpartyAccountNumber;
@@ -36,6 +38,7 @@ public class MoneyTransactionExportDto {
         this.finalBalance = finalBalance;
         this.description = description;
         this.currency = currency;
+        this.exchangeRate = exchangeRate;
     }
 
     public MoneyTransactionImportLine toImportLine() {
@@ -48,6 +51,7 @@ public class MoneyTransactionExportDto {
                 .finalBalance(finalBalance)
                 .description(description)
                 .currency(currency)
+                .exchangeRate(exchangeRate)
                 .build();
     }
 }
