@@ -13,6 +13,7 @@ import org.tikito.dto.AssetType;
 import org.tikito.service.AccountService;
 import org.tikito.service.importer.money.ABNFileParser;
 import org.tikito.service.importer.money.BitvavoFileParser;
+import org.tikito.service.importer.money.BunqFileParser;
 import org.tikito.service.importer.money.INGFileParser;
 import org.tikito.service.importer.security.DeGiroAccountImporter;
 
@@ -58,6 +59,7 @@ public class AccountController {
         map.put("ING", ImportTypeData.builder().assetType(AssetType.CASH).headers(new INGFileParser().getHeaders()).build());
         map.put("DE_GIRO", ImportTypeData.builder().assetType(AssetType.SECURITY).headers(new DeGiroAccountImporter().getHeaders()).build());
         map.put("BITVAVO", ImportTypeData.builder().assetType(AssetType.CRYPTO).headers(new BitvavoFileParser().getHeaders()).build());
+        map.put("BUNQ", ImportTypeData.builder().assetType(AssetType.CASH).headers(new BunqFileParser().getHeaders()).build());
         return ResponseEntity.ok(map);
     }
 
