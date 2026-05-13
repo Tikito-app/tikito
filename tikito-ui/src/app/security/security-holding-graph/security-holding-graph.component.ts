@@ -452,7 +452,7 @@ export class SecurityHoldingGraphComponent implements OnInit {
     this.performanceTimes[name] = now;
 
     if (this.lastPerformanceName != null) {
-      console.log(this.lastPerformanceName + ' took ' + (now - this.performanceTimes[this.lastPerformanceName]));
+      // console.log(this.lastPerformanceName + ' took ' + (now - this.performanceTimes[this.lastPerformanceName]));
     }
 
     this.lastPerformanceName = name;

@@ -8,7 +8,6 @@ import {MoneyGraphDataFetcher} from "./money-graph-data-fetcher";
 import {MoneyGraphDto} from "./money-graph-dto";
 import {Moment} from "moment/moment";
 import moment from "moment";
-import {MoneyGraphService} from "../../service/money-graph-service";
 import {EChartModule} from "../../echart-module";
 import * as echarts from "echarts/core";
 import {MoneyGraphGroupKey} from "../../dto/money/money-graph-group-key";
@@ -109,7 +108,6 @@ export class MoneyGraphComponent implements OnInit {
     this.processDates();
 
     let series = this.generateSeriesJson();
-
     this.chartOption = this.generateGraphOptions(series);
   }
 
@@ -119,7 +117,7 @@ export class MoneyGraphComponent implements OnInit {
     let firstDateToRender = this.getFirstDateToRender();
     let lastDateToRender = this.getEndDateToRender();
     let currentDate = firstDateToRender.clone();
-    let dateRangeFormat = MoneyGraphService.getDateRangeFormat(this.transactionFilter);
+    let dateRangeFormat = MoneyGraphProcessor.getDateRangeFormat(this.transactionFilter);
 
     Object.keys(this.dataDto.moneyValuesPerGroupAndDateRange).forEach(key => {
       this.dataDto.seriesPerGroupKey[key] = [];
@@ -199,7 +197,7 @@ export class MoneyGraphComponent implements OnInit {
         type: 'value',
       },
       series: series,
-      tooltip: this.getTooltip(this.dataDto, MoneyGraphService.getDateRangeFormat(this.transactionFilter), this.translateService),
+      tooltip: this.getTooltip(this.dataDto, MoneyGraphProcessor.getDateRangeFormat(this.transactionFilter), this.translateService),
       legend: {
         position: "top",
       },
@@ -239,6 +237,7 @@ export class MoneyGraphComponent implements OnInit {
           .map(key => key.name);
         let uniqueGroupNames = [...new Set(groupNames)].sort();
         let totalCashValue = 0;
+        let totalCurrencyValue = 0;
         let totalBudgeted = 0;
         let htmlForCurrencies = '';
         let otherHtml = '';
@@ -262,7 +261,16 @@ export class MoneyGraphComponent implements OnInit {
               totalCashValue += value;
             } else if(budgetValue != null) {
               totalBudgeted += budgetValue.value;
+            } else if(isCurrency) {
+              totalCurrencyValue += firstValue.amount * firstValue.currencyMultiplier;
             }
+
+            // set the value when only budget is selected: we still want to show the spent amount
+            if(totalBudgeted != 0 && firstValue == null) {
+              firstValue = {currencyId: budgetValue.currencyId};
+              value = budgetValue.spent;
+            }
+
             let fontStyle = isCurrency ? 'italic' : 'normal';
             let htmlToAdd = '';
             htmlToAdd += `<tr><td>${getMarker(params, groupName.toString())}</td><td style="font-style: ${fontStyle};">${Util.maxDisplayString(groupName, 25)}</td><td>`;
@@ -279,8 +287,13 @@ export class MoneyGraphComponent implements OnInit {
 
         }
         html += otherHtml;
-        html += `<tr style="border-top: 1px solid #000""><td></td><td>${translateService.translate('total')}</td><td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(totalCashValue)};">${Util.currencyFormat(totalCashValue)}</span></td><td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(totalBudgeted)};">${Util.currencyFormat(totalBudgeted)}</span></td></tr>`
+        if(totalCashValue != 0) {
+          html += `<tr style="border-top: 1px solid #000""><td></td><td>${translateService.translate('total')}</td><td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(totalCashValue)};">${Util.currencyFormat(totalCashValue)}</span></td><td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(totalBudgeted)};">${Util.currencyFormat(totalBudgeted)}</span></td></tr>`
+        }
         html += htmlForCurrencies;
+        if(totalCurrencyValue != 0) {
+          html += `<tr style="border-top: 1px solid #000""><td></td><td>${translateService.translate('total')}</td><td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(totalCurrencyValue)};">${Util.currencyFormat(totalCurrencyValue)}</span></td><td></td></tr>`
+        }
         html += '</table>';
 
         return `${date}<br/>` + html;
@@ -299,12 +312,12 @@ export class MoneyGraphComponent implements OnInit {
 
   getFirstDateToRender() {
     let firstDateOfGraph = this.transactionFilter.startDate == null ? this.getFirstDateOfData() : this.transactionFilter.getStartDate();
-    return MoneyGraphService.getDateByDateRange(firstDateOfGraph as Moment, this.transactionFilter);
+    return MoneyGraphProcessor.getDateByDateRange(firstDateOfGraph as Moment, this.transactionFilter);
   }
 
   getEndDateToRender() {
     let endDateOfGraph = this.transactionFilter.endDate == null ? moment() : this.transactionFilter.getEndDate();
-    return MoneyGraphService.getDateByDateRange(endDateOfGraph as Moment, this.transactionFilter);
+    return MoneyGraphProcessor.getDateByDateRange(endDateOfGraph as Moment, this.transactionFilter);
   }
 
   getFirstDateOfData(): Moment | null {

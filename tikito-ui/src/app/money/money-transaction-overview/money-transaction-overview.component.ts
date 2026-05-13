@@ -1,8 +1,7 @@
-import {Component, computed, EventEmitter, inject, model, OnInit, Output, signal} from '@angular/core';
+import {Component, computed, EventEmitter, model, OnInit, Output, signal} from '@angular/core';
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {MoneyTransactionListComponent} from "../money-transaction-list/money-transaction-list.component";
-import {MoneyTransactionGraphComponent} from "../money-transaction-graph/money-transaction-graph.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Util} from "../../util";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
@@ -31,10 +30,8 @@ import {PopoverComponent} from "../../components/popover/popover.component";
 import {NgIf} from "@angular/common";
 import {AccountApi} from "../../api/account-api";
 import {Account} from "../../dto/account";
-import {MatChipInputEvent, MatChipsModule} from "@angular/material/chips";
+import {MatChipsModule} from "@angular/material/chips";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
-import {LiveAnnouncer} from "@angular/cdk/a11y";
-import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {AuthService} from "../../service/auth.service";
 import {Security} from "../../dto/security/security";
 import {CacheService} from "../../service/cache-service";
@@ -48,7 +45,6 @@ import moment from "moment";
     MatTabGroup,
     MatTab,
     MoneyTransactionListComponent,
-    MoneyTransactionGraphComponent,
     MatCard,
     MatCardTitle,
     MatCardContent,
@@ -90,6 +86,11 @@ export class MoneyTransactionOverviewComponent implements OnInit {
 
   form: FormGroup;
   includeBudgetDisabled: boolean = false;
+
+  readonly currentGroup = model('');
+  readonly selectedGroups = signal(['Lemon']);
+  allGroups: string[] = [];
+  filteredGroups: any;
 
   @Output()
   onFilterUpdateCallback: EventEmitter<MoneyTransactionsFilter> = new EventEmitter();
@@ -155,7 +156,6 @@ export class MoneyTransactionOverviewComponent implements OnInit {
         this.form.controls['includeBudget'].setValue(UserPreferenceService.get(UserPreference.START_AT_ZERO_AFTER_DATE_RANGE, true) && UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_BUDGET, true));
         this.form.controls['includeMoney'].setValue(UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_MONEY, true));
         this.form.controls['includeMoneyHolding'].setValue(UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_MONEY_HOLDING, true));
-        // this.includeBudgetDisabled = !this.form.value['startAtZeroAfterDateAggregation'];
 
         if (this.form.value.nonGrouped) {
           this.form.get('startAtZeroFromBeginning')?.disable();
@@ -179,7 +179,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
     filter.nonGrouped = this.form.value.nonGrouped;
     filter.dateRange = this.form.value.dateRange;
     filter.startDate = this.form.value.startDate == null ? null : moment(this.form.value.startDate).format("yyyy-MM-DD");
-    filter.endDate = this.form.value.endDate == null ? null :  moment(this.form.value.endDate).format("yyyy-MM-DD");
+    filter.endDate = this.form.value.endDate == null ? null : moment(this.form.value.endDate).format("yyyy-MM-DD");
     filter.amountOfOtherGroups = this.form.value.amountOfOtherGroups;
     filter.includeBudget = this.form.value.includeBudget;
     filter.includeMoney = this.form.value.includeMoney;
@@ -216,43 +216,6 @@ export class MoneyTransactionOverviewComponent implements OnInit {
     UserPreferenceService.onSelectChange(UserPreference.CURRENCY_FILTER, value);
   }
 
-  protected readonly UserPreferenceService = UserPreferenceService;
-  protected readonly UserPreference = UserPreference;
-
-
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  readonly currentGroup = model('');
-  readonly selectedGroups = signal(['Lemon']);
-  allGroups: string[] = [];
-  filteredGroups: any;
-
-  readonly announcer = inject(LiveAnnouncer);
-
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-
-    // Add our fruit
-    if (value) {
-      this.selectedGroups.update(fruits => [...fruits, value]);
-    }
-
-    // Clear the input value
-    this.currentGroup.set('');
-  }
-
-  remove(fruit: string): void {
-    this.selectedGroups.update(fruits => {
-      const index = fruits.indexOf(fruit);
-      if (index < 0) {
-        return fruits;
-      }
-
-      fruits.splice(index, 1);
-      this.announcer.announce(`Removed ${fruit}`);
-      return [...fruits];
-    });
-  }
-
   selected(event: MatAutocompleteSelectedEvent): void {
     this.selectedGroups.update(fruits => [...fruits, event.option.viewValue]);
     this.currentGroup.set('');
@@ -262,17 +225,17 @@ export class MoneyTransactionOverviewComponent implements OnInit {
   onIncludeMoneyChanged($event: any) {
     UserPreferenceService.onCheckboxChange(UserPreference.MONEY_GRAPH_INCLUDE_MONEY, $event.checked);
 
-    if(!$event.checked) {
+    if (!$event.checked) {
       this.form.controls['includeBudget'].setValue(false);
       UserPreferenceService.onCheckboxChange(UserPreference.MONEY_GRAPH_INCLUDE_BUDGET, false);
 
     }
   }
 
-  protected onStartAtZeroAfterDateAggregationChanged($event: MatCheckboxChange) {
+  onStartAtZeroAfterDateAggregationChanged($event: MatCheckboxChange) {
     UserPreferenceService.onCheckboxChange(UserPreference.START_AT_ZERO_AFTER_DATE_RANGE, $event.checked);
     this.includeBudgetDisabled = !$event.checked;
-    if($event.checked) {
+    if ($event.checked) {
       this.form.controls['startAtZeroFromBeginning'].setValue(true);
     } else {
       this.form.controls['includeBudget'].setValue(false);
@@ -285,4 +248,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
 
   protected readonly Util = Util;
   protected readonly CacheService = CacheService;
+  protected readonly UserPreferenceService = UserPreferenceService;
+  protected readonly UserPreference = UserPreference;
+
 }
