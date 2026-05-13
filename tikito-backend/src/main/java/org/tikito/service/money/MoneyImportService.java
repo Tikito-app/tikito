@@ -54,6 +54,7 @@ public class MoneyImportService {
     public MoneyImportService(final MoneyTransactionRepository moneyTransactionRepository,
                               final ABNFileParser abnFileParser,
                               final INGFileParser ingFileParser,
+                              final BunqFileParser bunqFileParser,
                               final BitvavoFileParser bitvavoFileParser,
                               final List<MoneyTransactionImporter> importers,
                               final AccountRepository accountRepository,
@@ -62,7 +63,7 @@ public class MoneyImportService {
                               final MoneyHoldingRepository moneyHoldingRepository) {
         this.moneyTransactionRepository = moneyTransactionRepository;
         this.moneyHoldingRepository = moneyHoldingRepository;
-        this.fileParsers = List.of(abnFileParser, ingFileParser, bitvavoFileParser);
+        this.fileParsers = List.of(abnFileParser, ingFileParser, bitvavoFileParser, bunqFileParser);
         this.importers = new ArrayList<>(importers);
         this.accountRepository = accountRepository;
         this.cacheService = cacheService;
@@ -282,7 +283,7 @@ public class MoneyImportService {
             return;
         }
         if (StringUtils.hasText(line.getCounterpartyAccountNumber())) {
-            line.setCounterpartyAccountNumber(line.getCounterpartyAccountNumber().replaceAll(" ", ""));
+            line.setCounterpartyAccountNumber(line.getCounterpartyAccountNumber().replace(" ", ""));
         }
     }
 
