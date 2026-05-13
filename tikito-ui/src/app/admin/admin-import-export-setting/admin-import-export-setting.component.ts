@@ -32,11 +32,15 @@ export class AdminImportExportSettingComponent {
 
   getSettings(): ImportExportSettings {
     return new ImportExportSettings(
-      this.form.value.accounts as boolean,
-      this.form.value.moneyTransactions,
-      this.form.value.moneyTransactionGroups,
-      this.form.value.securityTransactions,
-      this.form.value.loans,
+      this.toBoolean(this.form.value.accounts),
+      this.toBoolean(this.form.value.moneyTransactions),
+      this.toBoolean(this.form.value.moneyTransactionGroups),
+      this.toBoolean(this.form.value.securityTransactions),
+      this.toBoolean(this.form.value.loans)
     )
+  }
+
+  toBoolean(value: any) {
+    return value == null ? false : value;
   }
 }
