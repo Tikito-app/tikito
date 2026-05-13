@@ -14,6 +14,11 @@
             }
           </mat-select>
         </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>{{ 'money/graph/transaction-filter' | translatePipe }}</mat-label>
+          <input matInput formControlName="transactionFilter" (change)="UserPreferenceService.onInputChange(UserPreference.TRANSACTION_FILTER, $event)">
+        </mat-form-field>
+        <br/>
 
         <mat-form-field class="full-width">
           <mat-label>{{'money/currency-filter' | translatePipe}}</mat-label>

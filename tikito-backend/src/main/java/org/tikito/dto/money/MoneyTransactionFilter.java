@@ -25,6 +25,7 @@ public class MoneyTransactionFilter {
     private Boolean nonGrouped;
     private Boolean showOther;
     private Boolean aggregateDateRange;
+    private String transactionFilter;
 
     public Set<Long> getAccountIds() {
         if (accountIds != null) {

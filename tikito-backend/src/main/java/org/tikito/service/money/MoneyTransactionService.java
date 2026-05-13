@@ -71,6 +71,7 @@ public class MoneyTransactionService {
         return moneyTransactionRepository
                 .findByFilter(
                         userId,
+                        filter.getTransactionFilter(),
                         filter.getAccountIds(),
                         filter.getCurrencies(),
                         filter.getGroupIds(),

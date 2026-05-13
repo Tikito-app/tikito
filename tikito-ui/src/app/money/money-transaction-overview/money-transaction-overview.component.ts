@@ -120,7 +120,8 @@ export class MoneyTransactionOverviewComponent implements OnInit {
         endDate: new FormControl,
         includeBudget: new FormControl(),
         includeMoney: new FormControl(),
-        includeMoneyHolding: new FormControl()
+        includeMoneyHolding: new FormControl(),
+        transactionFilter: new FormControl()
       });
       this.reset();
     });
@@ -156,6 +157,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
         this.form.controls['includeBudget'].setValue(UserPreferenceService.get(UserPreference.START_AT_ZERO_AFTER_DATE_RANGE, true) && UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_BUDGET, true));
         this.form.controls['includeMoney'].setValue(UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_MONEY, true));
         this.form.controls['includeMoneyHolding'].setValue(UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_MONEY_HOLDING, true));
+        this.form.controls['transactionFilter'].setValue(UserPreferenceService.get(UserPreference.TRANSACTION_FILTER, ''));
 
         if (this.form.value.nonGrouped) {
           this.form.get('startAtZeroFromBeginning')?.disable();
@@ -184,6 +186,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
     filter.includeBudget = this.form.value.includeBudget;
     filter.includeMoney = this.form.value.includeMoney;
     filter.includeMoneyHolding = this.form.value.includeMoneyHolding;
+    filter.transactionFilter = this.form.value.transactionFilter;
     return filter;
   }
 
@@ -250,5 +253,4 @@ export class MoneyTransactionOverviewComponent implements OnInit {
   protected readonly CacheService = CacheService;
   protected readonly UserPreferenceService = UserPreferenceService;
   protected readonly UserPreference = UserPreference;
-
 }
