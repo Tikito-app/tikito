@@ -1,0 +1,5 @@
+Timezone,Date,Time,Type,Currency,Amount,Quote Currency,Quote Price,Received / Paid Currency,Received / Paid Amount,Fee currency,Fee amount,Status,Transaction ID,Address
+Europe/Amsterdam,2025-04-22,18:53:07,staking,ETH,0.00012345,,,,,,,Distributed,805beca5-cf7e-40b9-9172-4ab98d818035,
+Europe/Amsterdam,2025-04-21,19:12:55,staking,ETH,0.00023456,,,,,,,Distributed,6f1d87d8-21ed-47ed-a69b-a2f2d62c7840,
+Europe/Amsterdam,2023-11-22,21:03:17,deposit,BCH,0.1234567,,,,,,,Completed,7d0551f5-ab97-41b6-acb1-743e3d06ba99,
+Europe/Amsterdam,2023-11-22,16:40:24,deposit,EUR,1,,,,,EUR,0,Completed,9ea762ac-8634-44de-96ed-60078781f451,

@@ -1,27 +1,33 @@
 import {expect, Page, test} from '@playwright/test';
-import {DEBIT_ACCOUNT_NAME, SECURITY_ACCOUNT_NAME, TIKITO_URL} from "./constant";
-import {
-  performLogin,
-} from "./auth.setup";
+import {CRYPTO_ACCOUNT_NAME, DEBIT_ACCOUNT_NAME, SECURITY_ACCOUNT_NAME, TIKITO_URL} from "./constant";
+import {performLogin,} from "./auth.setup";
 import {
   click,
-  clickButton, clickOnTable,
-  clickPlusButton, clickSaveButton,
+  clickButton,
+  clickOnTable,
+  clickPlusButton,
+  clickSaveButton,
   createInterest,
   createLoan,
   createLoanPart,
   createMoneyGroup,
-  createMoneyGroupQualifier, goto, gotoAccounts, gotoGroupsAndBudget, gotoImport, gotoLoans,
-  importFile, selectOption, setText
+  createMoneyGroupQualifier,
+  goto,
+  gotoAccounts,
+  gotoGroupsAndBudget,
+  gotoImport,
+  gotoLoans,
+  importFile,
+  selectOption,
+  setText
 } from "./helpers";
 
-async function createAccount(page: Page, name: string, accountNumber: string, accountType: string, currency: string) {
+async function createAccount(page: Page, name: string, accountNumber: string, currency: string) {
   await clickPlusButton(page);
 
   await setText(page, 'name', name);
   await setText(page, 'account-number', accountNumber);
 
-  await selectOption(page, 'account-type', accountType);
   await selectOption(page, 'currency', 'Euro');
 
   await clickSaveButton(page);
@@ -48,8 +54,8 @@ test.describe('Tikito Application Tests', () => {
     await performLogin(page);
     await gotoAccounts(page);
 
-    await createAccount(page, DEBIT_ACCOUNT_NAME, 'debit-123', 'Debit/credit', 'Euro');
-    await createAccount(page, SECURITY_ACCOUNT_NAME, 'security-456', 'Security', 'Euro');
+    await createAccount(page, DEBIT_ACCOUNT_NAME, 'debit-123', 'Euro');
+    await createAccount(page, SECURITY_ACCOUNT_NAME, 'security-456', 'Euro');
   });
 
 
@@ -96,6 +102,7 @@ test.describe('Tikito Application Tests', () => {
     await clickPlusButton(page);
     await createInterest(page, '01/01/2020', '12/31/2050', '5');
 
+    await clickPlusButton(page);
     // Annuity loan
     await createLoan(page, 'Annuity loan', 'Annuity loan group', 'MONTH');
     await clickPlusButton(page);
@@ -110,9 +117,11 @@ test.describe('Tikito Application Tests', () => {
     await performLogin(page);
     await gotoImport(page);
 
-    await importFile(page, DEBIT_ACCOUNT_NAME, '../resources/test_money_transactions.csv');
+    await importFile(page, DEBIT_ACCOUNT_NAME, 'Cash', '../resources/test_money_transactions.csv');
     await gotoImport(page);
-    await importFile(page, SECURITY_ACCOUNT_NAME, '../resources/test_security_transactions.csv');
+    await importFile(page, SECURITY_ACCOUNT_NAME, 'Security', '../resources/test_security_transactions.csv');
+    await gotoImport(page);
+    await importFile(page, CRYPTO_ACCOUNT_NAME, 'Crypto', '../resources/test_crypto_transactions.csv');
   });
 
   test('should update security symbol', async ({page}) => {
@@ -133,6 +142,29 @@ test.describe('Tikito Application Tests', () => {
     await expect(page.getByText('new-shell-symbol')).toBeVisible();
     await expect(page.getByText('2019-01-31')).toBeVisible();
     await expect(page.getByText('2026-01-31')).toBeVisible();
+  });
+
+  test('should export/import', async ({page}) => {
+    await performLogin(page);
+    await goto(page, '/admin/export');
+    const checkboxes = page.locator('input[type="checkbox"]');
+
+    const count = await checkboxes.count();
+
+    for (let i = 0; i < count; i++) {
+      const checkbox = checkboxes.nth(i);
+
+      // Skip hidden or disabled checkboxes
+      if (!(await checkbox.isVisible())) continue;
+      if (!(await checkbox.isEnabled())) continue;
+
+      // Only check unchecked boxes
+      if (!(await checkbox.isChecked())) {
+        await checkbox.check();
+      }
+    }
+
+    await clickButton(page, 'Export');
   });
 });
 

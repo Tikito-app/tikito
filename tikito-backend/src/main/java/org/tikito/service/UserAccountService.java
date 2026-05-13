@@ -1,7 +1,6 @@
 package org.tikito.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +12,8 @@ import org.tikito.controller.request.LoginRequest;
 import org.tikito.dto.DateRange;
 import org.tikito.dto.UserAccountDto;
 import org.tikito.dto.UserPreferenceKey;
-import org.tikito.dto.security.SecurityType;
 import org.tikito.entity.UserAccount;
 import org.tikito.entity.UserPreference;
-import org.tikito.entity.security.Isin;
-import org.tikito.entity.security.Security;
 import org.tikito.exception.EmailAlreadyExistsException;
 import org.tikito.exception.InvalidCredentialsException;
 import org.tikito.exception.PasswordNotLongEnoughException;
@@ -26,7 +22,6 @@ import org.tikito.repository.IsinRepository;
 import org.tikito.repository.SecurityRepository;
 import org.tikito.repository.UserAccountRepository;
 import org.tikito.repository.UserPreferenceRepository;
-import org.tikito.service.importer.FileReader;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -109,7 +104,6 @@ public class UserAccountService {
 
         if (firstEverUser) {
             userAccount.setActivated(true);
-            generateCurrencies();
         }
         final UserAccountDto dto = userAccountRepository.saveAndFlush(userAccount).toDto();
 
@@ -133,24 +127,6 @@ public class UserAccountService {
                 new UserPreference(userAccountId, UserPreferenceKey.START_AT_ZERO_AFTER_DATE_RANGE, "true"),
                 new UserPreference(userAccountId, UserPreferenceKey.SECURITY_START_AT_ZERO_AFTER_DATE_RANGE, "true"),
                 new UserPreference(userAccountId, UserPreferenceKey.LANGUAGE, "en")));
-    }
-
-    private void generateCurrencies() throws IOException {
-        final List<List<String>> lists = FileReader.readCsv(new ClassPathResource("initial_currencies.csv").getInputStream(), ';', '"');
-
-        lists.stream().skip(1).forEach(currency -> {
-            final Security security = new Security();
-            final Isin isin = new Isin();
-            security.setName(currency.get(1));
-            security.setSecurityType(SecurityType.CURRENCY);
-            security.setCurrentIsin(currency.get(0));
-            final Security persistedSecurity = securityRepository.saveAndFlush(security);
-
-            isin.setIsin(currency.get(0));
-            isin.setSymbol(currency.get(2));
-            isin.setSecurityId(persistedSecurity.getId());
-            isinRepository.saveAndFlush(isin);
-        });
     }
 
     private void assertPasswordStrongEnough(final String password) throws PasswordNotLongEnoughException {

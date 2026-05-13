@@ -8,7 +8,7 @@
 <p align="center">
 <img src="media/logo.png" width="300" title="Login With Custom URL">
 </p>
-<h3 align="center">Self-hosted solution to gain insights into your wealth</h3>
+<h3 align="center">Self-hosted solution to gain insights into your financial assets</h3>
 <br/>
 <a href="https://tikito.org" target="_blank">
 <img src="media/tikito_security_graph.png" title="Main Screenshot">

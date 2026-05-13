@@ -1,8 +1,9 @@
 import {expect, Page} from "@playwright/test";
 import {DEBIT_ACCOUNT_NAME, TIKITO_URL} from "./constant";
 
-export async function importFile(page: Page, accountName: string, filePath: string) {
+export async function importFile(page: Page, accountName: string, assetType: string, filePath: string) {
   await selectOption(page, 'account', accountName);
+  await selectOption(page, 'asset-type', assetType);
   await page.waitForTimeout(2000);
 
   await page.locator('[data-cy="file"]').click();
