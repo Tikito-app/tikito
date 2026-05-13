@@ -55,11 +55,11 @@ public class AccountController {
     @GetMapping("/importer-types-headers")
     public ResponseEntity<Map<String, ImportTypeData>> getImporterTypesHeaders() {
         final Map<String, ImportTypeData> map = new HashMap<>();
-        map.put("ABN", ImportTypeData.builder().assetType(AssetType.CASH).headers(new ABNFileParser().getHeaders()).build());
-        map.put("ING", ImportTypeData.builder().assetType(AssetType.CASH).headers(new INGFileParser().getHeaders()).build());
+        map.put("ABN", ImportTypeData.builder().assetType(AssetType.MONEY).headers(new ABNFileParser().getHeaders()).build());
+        map.put("ING", ImportTypeData.builder().assetType(AssetType.MONEY).headers(new INGFileParser().getHeaders()).build());
         map.put("DE_GIRO", ImportTypeData.builder().assetType(AssetType.SECURITY).headers(new DeGiroAccountImporter().getHeaders()).build());
-        map.put("BITVAVO", ImportTypeData.builder().assetType(AssetType.CRYPTO).headers(new BitvavoFileParser().getHeaders()).build());
-        map.put("BUNQ", ImportTypeData.builder().assetType(AssetType.CASH).headers(new BunqFileParser().getHeaders()).build());
+        map.put("BITVAVO", ImportTypeData.builder().assetType(AssetType.MONEY).headers(new BitvavoFileParser().getHeaders()).build());
+        map.put("BUNQ", ImportTypeData.builder().assetType(AssetType.MONEY).headers(new BunqFileParser().getHeaders()).build());
         return ResponseEntity.ok(map);
     }
 

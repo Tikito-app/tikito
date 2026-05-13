@@ -75,10 +75,10 @@ export class OverviewComponent implements OnInit {
       this.aggregatedHistoricalSecurityValues = historicalSecurityValues;
       this.moneyApi.getAggregatedHistoricalMoneyHoldingValues().subscribe(historicalMoneyHoldings => {
         historicalMoneyHoldings.forEach(value => {
-          if (this.aggregatedValuesPerAssetType[value.assetType] == null) {
-            this.aggregatedValuesPerAssetType[value.assetType] = [];
+          if (this.aggregatedValuesPerAssetType[value.moneyType] == null) {
+            this.aggregatedValuesPerAssetType[value.moneyType] = [];
           }
-          this.aggregatedValuesPerAssetType[value.assetType].push(value);
+          this.aggregatedValuesPerAssetType[value.moneyType].push(value);
         })
 
         this.interpolateValues();
@@ -242,7 +242,7 @@ export class OverviewComponent implements OnInit {
           let value = asset.amount ? asset.amount : asset.positionValue;
 
           if (value != null && value != 0) {
-            html += `${getMarker(params, type)} ${translateService.translate('asset/type/' + type)} <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(value)};">${Util.currencyFormatWithSymbol(value, 47)}</span><br/>`;
+            html += `${getMarker(params, type)} ${translateService.translate('money/type/' + type)} <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(value)};">${Util.currencyFormatWithSymbol(value, 47)}</span><br/>`;
             total += value;
           }
         }
