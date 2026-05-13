@@ -1,4 +1,4 @@
-FROM alpine/java:25-jdk
+FROM amazoncorretto:25-alpine3.23
 RUN addgroup -S tikito && adduser -S tikito -G tikito
 USER tikito:tikito
 ARG JAR_FILE=target/backend-0.0.1-SNAPSHOT.jar
