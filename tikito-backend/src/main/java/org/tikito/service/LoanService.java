@@ -14,7 +14,10 @@ import org.tikito.entity.loan.LoanInterest;
 import org.tikito.entity.loan.LoanPart;
 import org.tikito.entity.loan.LoanValue;
 import org.tikito.entity.money.MoneyTransactionGroup;
-import org.tikito.repository.*;
+import org.tikito.repository.LoanPartRepository;
+import org.tikito.repository.LoanRepository;
+import org.tikito.repository.LoanValueRepository;
+import org.tikito.repository.MoneyTransactionGroupRepository;
 import org.tikito.service.job.JobType;
 import org.tikito.util.Util;
 
@@ -29,18 +32,18 @@ public class LoanService {
     private final LoanPartRepository loanPartRepository;
     private final MoneyTransactionGroupRepository moneyTransactionGroupRepository;
     private final LoanValueRepository loanValueRepository;
-    private final JobService jobService;
+    private final JobFactoryService jobFactoryService;
 
     public LoanService(final LoanRepository loanRepository,
                        final LoanPartRepository loanPartRepository,
                        final MoneyTransactionGroupRepository moneyTransactionGroupRepository,
                        final LoanValueRepository loanValueRepository,
-                       final JobService jobService) {
+                       final JobFactoryService jobFactoryService) {
         this.loanRepository = loanRepository;
         this.loanPartRepository = loanPartRepository;
         this.moneyTransactionGroupRepository = moneyTransactionGroupRepository;
         this.loanValueRepository = loanValueRepository;
-        this.jobService = jobService;
+        this.jobFactoryService = jobFactoryService;
     }
 
     public List<LoanDto> getLoans(final long userId) {
@@ -102,7 +105,7 @@ public class LoanService {
 
         groups.forEach(group -> group.setLoan(loanPersisted)); // todo
         moneyTransactionGroupRepository.saveAllAndFlush(groups);
-        jobService.addJob(Job.loan(JobType.RECALCULATE_LOAN, loan.getId(), userId).build());
+        jobFactoryService.addJob(Job.loan(JobType.RECALCULATE_LOAN, loan.getId(), userId).build());
         return loanPersisted.toDto();
     }
 
@@ -137,7 +140,7 @@ public class LoanService {
 
         // todo: what about the unselected groups. We need to set the loan_id to null
         final LoanPart entity = loanPartRepository.saveAndFlush(loanPart);
-        jobService.addJob(Job.loan(JobType.RECALCULATE_LOAN, loan.getId(), userId).build());
+        jobFactoryService.addJob(Job.loan(JobType.RECALCULATE_LOAN, loan.getId(), userId).build());
         return entity.toDto();
     }
 

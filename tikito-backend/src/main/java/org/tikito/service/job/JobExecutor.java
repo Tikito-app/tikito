@@ -1,34 +1,19 @@
 package org.tikito.service.job;
 
-import org.tikito.entity.Job;
-import org.tikito.exception.InvalidJobException;
-import org.tikito.service.LoanValueService;
-import org.tikito.service.money.MoneyHoldingService;
-import org.tikito.service.money.MoneyTransactionGroupService;
-import org.tikito.service.security.SecurityHoldingService;
-import org.tikito.service.security.SecurityService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tikito.entity.Job;
+import org.tikito.exception.InvalidJobException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class JobExecutor {
-    private final List<JobProcessor> processors;
+    private final List<JobProcessor> processors = new ArrayList<>();
 
-    public JobExecutor(final SecurityService securityService,
-                       final SecurityHoldingService securityHoldingService,
-                       final MoneyHoldingService moneyHoldingService,
-                       final MoneyTransactionGroupService moneyTransactionGroupService,
-                       final LoanValueService loanValueService) {
-        processors = new ArrayList<>();
-        processors.add(securityService);
-        processors.add(securityHoldingService);
-        processors.add(moneyHoldingService);
-        processors.add(moneyTransactionGroupService);
-        processors.add(loanValueService);
-
+    public JobExecutor(final List<JobProcessor> processors) {
+        this.processors.addAll(processors);
     }
 
     @Transactional

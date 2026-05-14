@@ -12,6 +12,7 @@ import org.tikito.dto.security.IsinDto;
 import org.tikito.dto.security.SecurityDto;
 import org.tikito.entity.Job;
 import org.tikito.exception.PasswordNotLongEnoughException;
+import org.tikito.service.JobFactoryService;
 import org.tikito.service.export.ImportExportService;
 import org.tikito.service.JobService;
 import org.tikito.service.UserAccountService;
@@ -26,15 +27,18 @@ import java.util.List;
 public class AdminController {
     private final UserAccountService userAccountService;
     private final SecurityService securityService;
+    private final JobFactoryService jobFactoryService;
     private final JobService jobService;
     private final ImportExportService importExportService;
 
     public AdminController(final UserAccountService userAccountService,
                            final SecurityService securityService,
+                           final JobFactoryService jobFactoryService,
                            final JobService jobService,
                            final ImportExportService importExportService) {
         this.userAccountService = userAccountService;
         this.securityService = securityService;
+        this.jobFactoryService = jobFactoryService;
         this.jobService = jobService;
         this.importExportService = importExportService;
     }
@@ -84,25 +88,25 @@ public class AdminController {
 
     @PostMapping("/securities/{securityId}/recalculate-historical-value")
     public ResponseEntity<Void> recalculateHistoricalSecurityValue(final AuthUser authUser, @PathVariable("securityId") final long securityId) {
-        jobService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, securityId, authUser.getId()).build());
+        jobFactoryService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, securityId, authUser.getId()).build());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/securities/{securityId}/update-prices")
     public ResponseEntity<Void> updateSecurityPrices(final AuthUser authUser, @PathVariable("securityId") final long securityId) {
-        jobService.addJob(Job.security(JobType.UPDATE_SECURITY_PRICES, securityId, authUser.getId()).build());
+        jobFactoryService.addJob(Job.security(JobType.UPDATE_SECURITY_PRICES, securityId, authUser.getId()).build());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/securities/{securityId}/enrich")
     public ResponseEntity<Void> enrichSecurity(final AuthUser authUser, @PathVariable("securityId") final long securityId) {
-        jobService.addJob(Job.security(JobType.ENRICH_SECURITY, securityId, authUser.getId()).build());
+        jobFactoryService.addJob(Job.security(JobType.ENRICH_SECURITY, securityId, authUser.getId()).build());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/securities/{securityId}/delete-prices")
     public ResponseEntity<Void> deleteSecurityPrices(final AuthUser authUser, @PathVariable("securityId") final long securityId) {
-        jobService.addJob(Job.security(JobType.DELETE_SECURITY_PRICES, securityId, authUser.getId()).build());
+        jobFactoryService.addJob(Job.security(JobType.DELETE_SECURITY_PRICES, securityId, authUser.getId()).build());
         return ResponseEntity.ok().build();
     }
 
@@ -124,13 +128,13 @@ public class AdminController {
 
     @PostMapping("/money/{accountId}/recalculate-historical-value")
     public ResponseEntity<Void> recalculateHistoricalMoneyValue(final AuthUser authUser, @PathVariable("accountId") final long accountId) {
-        jobService.addJob(Job.account(JobType.RECALCULATE_HISTORICAL_MONEY_VALUES, accountId, authUser.getId()).build());
+        jobFactoryService.addJob(Job.account(JobType.RECALCULATE_HISTORICAL_MONEY_VALUES, accountId, authUser.getId()).build());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/money/group-transactions")
     public ResponseEntity<Void> groupMoneyTransaction(final AuthUser authUser) {
-        jobService.addJob(Job.account(JobType.GROUP_MONEY_TRANSACTIONS, authUser.getId()).build());
+        jobFactoryService.addJob(Job.account(JobType.GROUP_MONEY_TRANSACTIONS, authUser.getId()).build());
         return ResponseEntity.ok().build();
     }
 

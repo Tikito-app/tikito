@@ -11,7 +11,7 @@ import org.tikito.dto.security.SecurityType;
 import org.tikito.entity.Job;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.repository.*;
-import org.tikito.service.JobService;
+import org.tikito.service.JobFactoryService;
 import org.tikito.service.job.JobType;
 
 import java.util.List;
@@ -24,20 +24,20 @@ public class MoneyTransactionService {
     private final MoneyTransactionGroupRepository moneyTransactionGroupRepository;
     private final AccountRepository accountRepository;
     private final SecurityRepository securityRepository;
-    private final JobService jobService;
+    private final JobFactoryService jobFactoryService;
     private final LoanRepository loanRepository;
 
     public MoneyTransactionService(final MoneyTransactionRepository moneyTransactionRepository,
                                    final MoneyTransactionGroupRepository moneyTransactionGroupRepository,
                                    final AccountRepository accountRepository,
                                    final SecurityRepository securityRepository,
-                                   final JobService jobService,
+                                   final JobFactoryService jobFactoryService,
                                    final LoanRepository loanRepository) {
         this.moneyTransactionRepository = moneyTransactionRepository;
         this.moneyTransactionGroupRepository = moneyTransactionGroupRepository;
         this.accountRepository = accountRepository;
         this.securityRepository = securityRepository;
-        this.jobService = jobService;
+        this.jobFactoryService = jobFactoryService;
         this.loanRepository = loanRepository;
     }
 
@@ -106,7 +106,7 @@ public class MoneyTransactionService {
     public void deleteTransaction(final long userId, final long transactionId) {
         final MoneyTransaction transaction = moneyTransactionRepository.findByUserIdAndId(userId, transactionId).orElseThrow();
         moneyTransactionRepository.deleteByUserIdAndId(userId, transactionId);
-        jobService.addJob(Job.account(JobType.RECALCULATE_HISTORICAL_MONEY_VALUES, transaction.getAccountId(), userId).build());
-        jobService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_MONEY_VALUES, userId).build());
+        jobFactoryService.addJob(Job.account(JobType.RECALCULATE_HISTORICAL_MONEY_VALUES, transaction.getAccountId(), userId).build());
+        jobFactoryService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_MONEY_VALUES, userId).build());
     }
 }

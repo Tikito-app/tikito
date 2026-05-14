@@ -26,7 +26,7 @@ public class AccountService {
     private final MoneyTransactionRepository moneyTransactionRepository;
     private final HistoricalMoneyHoldingValueRepository historicalMoneyHoldingValueRepository;
     private final AggregatedHistoricalMoneyHoldingValueRepository aggregatedHistoricalMoneyHoldingValueRepository;
-    private final JobService jobService;
+    private final JobFactoryService jobFactoryService;
     private final MoneyHoldingRepository moneyHoldingRepository;
 
     public AccountService(final AccountRepository accountRepository,
@@ -38,7 +38,7 @@ public class AccountService {
                           final MoneyTransactionRepository moneyTransactionRepository,
                           final HistoricalMoneyHoldingValueRepository historicalMoneyHoldingValueRepository,
                           final AggregatedHistoricalMoneyHoldingValueRepository aggregatedHistoricalMoneyHoldingValueRepository,
-                          final JobService jobService,
+                          final JobFactoryService jobFactoryService,
                           final MoneyHoldingRepository moneyHoldingRepository) {
         this.accountRepository = accountRepository;
         this.securityRepository = securityRepository;
@@ -49,7 +49,7 @@ public class AccountService {
         this.moneyTransactionRepository = moneyTransactionRepository;
         this.historicalMoneyHoldingValueRepository = historicalMoneyHoldingValueRepository;
         this.aggregatedHistoricalMoneyHoldingValueRepository = aggregatedHistoricalMoneyHoldingValueRepository;
-        this.jobService = jobService;
+        this.jobFactoryService = jobFactoryService;
         this.moneyHoldingRepository = moneyHoldingRepository;
     }
 
@@ -102,7 +102,7 @@ public class AccountService {
         moneyTransactionRepository.deleteByAccountId(accountId);
         historicalMoneyHoldingValueRepository.deleteByAccountId(accountId);
         aggregatedHistoricalMoneyHoldingValueRepository.deleteByAccountIds(accountId);
-        jobService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_MONEY_VALUES, userId).build());
+        jobFactoryService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_MONEY_VALUES, userId).build());
     }
 
     private void deleteSecuritiesUnderAccount(final long userId, final long accountId) {
@@ -110,6 +110,6 @@ public class AccountService {
         securityHoldingRepository.deleteByAccountIds(accountId);
         historicalSecurityHoldingValueRepository.deleteByAccountIds(accountId);
         aggregatedHistoricalSecurityHoldingValueRepository.deleteByAccountIds(accountId);
-        jobService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
+        jobFactoryService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
     }
 }
