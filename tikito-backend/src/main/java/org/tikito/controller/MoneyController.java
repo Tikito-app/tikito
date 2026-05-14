@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.tikito.auth.AuthUser;
-import org.tikito.dto.money.AggregatedHistoricalMoneyHoldingValueDto;
 import org.tikito.dto.money.HistoricalMoneyHoldingValueDto;
 import org.tikito.dto.money.MoneyHoldingDto;
 import org.tikito.dto.money.MoneyTransactionFilter;
@@ -27,7 +26,7 @@ public class MoneyController {
     }
 
     @PostMapping("/historical-values")
-    public ResponseEntity<List<HistoricalMoneyHoldingValueDto>> getHistoricalMoneyHoldingValue(final AuthUser user, @Valid @RequestBody MoneyTransactionFilter filter) {
+    public ResponseEntity<List<HistoricalMoneyHoldingValueDto>> getHistoricalMoneyHoldingValue(final AuthUser user, @Valid @RequestBody final MoneyTransactionFilter filter) {
         return ResponseEntity.ok(moneyHoldingService.getHistoricalMoneyHoldingValue(user.getId(), filter));
     }
 }

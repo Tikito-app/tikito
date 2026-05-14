@@ -18,12 +18,9 @@ import org.tikito.exception.EmailAlreadyExistsException;
 import org.tikito.exception.InvalidCredentialsException;
 import org.tikito.exception.PasswordNotLongEnoughException;
 import org.tikito.exception.RequestNotAllowedException;
-import org.tikito.repository.IsinRepository;
-import org.tikito.repository.SecurityRepository;
 import org.tikito.repository.UserAccountRepository;
 import org.tikito.repository.UserPreferenceRepository;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,21 +29,15 @@ import java.util.List;
 public class UserAccountService {
     private final UserAccountRepository userAccountRepository;
     private final CacheService cacheService;
-    private final SecurityRepository securityRepository;
-    private final IsinRepository isinRepository;
     private final UserPreferenceRepository userPreferenceRepository;
     private final TikitoProperties tikitoProperties;
 
     public UserAccountService(final UserAccountRepository userAccountRepository,
                               final CacheService cacheService,
-                              final SecurityRepository securityRepository,
-                              final IsinRepository isinRepository,
                               final UserPreferenceRepository userPreferenceRepository,
                               final TikitoProperties tikitoProperties) {
         this.userAccountRepository = userAccountRepository;
         this.cacheService = cacheService;
-        this.securityRepository = securityRepository;
-        this.isinRepository = isinRepository;
         this.userPreferenceRepository = userPreferenceRepository;
         this.tikitoProperties = tikitoProperties;
     }
@@ -95,7 +86,7 @@ public class UserAccountService {
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public void register(final String email, final String password) throws EmailAlreadyExistsException, PasswordNotLongEnoughException, IOException {
+    public void register(final String email, final String password) throws EmailAlreadyExistsException, PasswordNotLongEnoughException {
         assertEmailNotExists(email);
         assertPasswordStrongEnough(password);
 

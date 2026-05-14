@@ -16,31 +16,31 @@ public final class MT940Reader {
         boolean foundSecondBic = false;
 
         for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            if (!line.startsWith(":")) {
-                if (line.startsWith("-")) {
+            final StringBuilder line = new StringBuilder(lines.get(i));
+            if (!line.toString().startsWith(":")) {
+                if (line.toString().startsWith("-")) {
                     // block is finished
                     blocks.add(new MT940Block(linesOfBlocks));
                     linesOfBlocks = new ArrayList<>();
                     bic = null;
                     foundSecondBic = false;
                 } else if (bic == null) {
-                    bic = line;
+                    bic = line.toString();
                 } else if (!foundSecondBic) {
                     foundSecondBic = true;
-                } else if (!bic.equals(line)) {
+                } else if (!bic.contentEquals(line)) {
                     log.error("Unexpected line {}", line);
                 }
             } else {
-                if (line.startsWith(":86:")) {
+                if (line.toString().startsWith(":86:")) {
                     i++;
                     while (i < lines.size() && !lines.get(i).startsWith(":")) {
-                        line = line + lines.get(i);
+                        line.append(lines.get(i));
                         i++;
                     }
                     i--;
                 }
-                linesOfBlocks.add(parseMT490Line(line));
+                linesOfBlocks.add(parseMT490Line(line.toString()));
             }
         }
 

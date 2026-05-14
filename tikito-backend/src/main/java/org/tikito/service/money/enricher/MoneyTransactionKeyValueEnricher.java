@@ -12,13 +12,13 @@ public class MoneyTransactionKeyValueEnricher implements MoneyTransactionEnriche
         map.forEach((key, value) -> {
             switch (key) {
                 case "NAAM":
-                    line.setCounterpartyAccountName(value.replaceAll("\r", ""));
+                    line.setCounterpartyAccountName(value.replace("\r", ""));
                     break;
                 case "IBAN":
-                    line.setCounterpartyAccountNumber(value.replaceAll("\r", ""));
+                    line.setCounterpartyAccountNumber(value.replace("\r", ""));
                     break;
                 case "OMSCHRIJVING":
-                    line.setDescription(value.replaceAll("\r", ""));
+                    line.setDescription(value.replace("\r", ""));
                     break;
             }
         });
