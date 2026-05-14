@@ -21,12 +21,12 @@ public class HistoricalSecurityHoldingValue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private long userId;
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(
-            name = "historical_security_holding_account",
-            joinColumns = @JoinColumn(name = "historical_security_holding_id"))
-    @Column(name = "account_id")
-    private Set<Long> accountIds = new HashSet<>();
+//    @ElementCollection(fetch = FetchType.LAZY)
+//    @CollectionTable(
+//            name = "historical_security_holding_account",
+//            joinColumns = @JoinColumn(name = "historical_security_holding_id"))
+//    @Column(name = "account_id")
+    private long accountId;
     private Long securityHoldingId;
     private Long securityId; // todo: can we remove this?
     private LocalDate date;
@@ -47,7 +47,7 @@ public class HistoricalSecurityHoldingValue {
     public HistoricalSecurityHoldingValue(final long userId, final HistoricalSecurityHoldingValueDto dto) {
         this.id = dto.getId();
         this.userId = userId;
-        this.accountIds = Arrays.stream(dto.getAccountIds()).collect(Collectors.toSet());
+        this.accountId = dto.getAccountId();
         this.securityHoldingId = dto.getSecurityHoldingId();
         this.securityId = dto.getSecurityId();
         this.currencyId = dto.getCurrencyId();
@@ -70,7 +70,7 @@ public class HistoricalSecurityHoldingValue {
         return new HistoricalSecurityHoldingValueDto(
                 id,
                 userId,
-                null,//accountIds.toArray(Long[]::new), // todo: speed up
+                accountId,
                 securityHoldingId,
                 securityId,
                 date,

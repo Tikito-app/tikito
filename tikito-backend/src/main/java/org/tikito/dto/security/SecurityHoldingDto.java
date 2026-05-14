@@ -12,7 +12,7 @@ import java.util.Set;
 public class SecurityHoldingDto {
     private Long id;
     private long userId;
-    private Set<Long> accountIds;
+    private long accountId;
     private Long securityId;
     private long currencyId;
     private int amount;

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tikito.entity.Job;
 import org.tikito.repository.JobRepository;
+import org.tikito.repository.SecurityHoldingRepository;
 import org.tikito.repository.SecurityTransactionRepository;
 import org.tikito.service.job.JobExecutor;
 import org.tikito.service.job.JobType;
@@ -22,14 +23,18 @@ public class JobService {
     private final JobExecutor jobExecutor;
     private final SecurityTransactionRepository securityTransactionRepository;
     private final JobFactoryService jobFactoryService;
+    private final SecurityHoldingRepository securityHoldingRepository;
 
     public JobService(final JobRepository jobRepository,
                       final JobExecutor jobExecutor,
                       final SecurityTransactionRepository securityTransactionRepository,
-                      final JobFactoryService jobFactoryService) {
+                      final JobFactoryService jobFactoryService,
+                      final SecurityTransactionRepository securityTransactionRepository,
+                      final SecurityHoldingRepository securityHoldingRepository) {
         this.jobRepository = jobRepository;
         this.jobExecutor = jobExecutor;
         this.securityTransactionRepository = securityTransactionRepository;
+        this.securityHoldingRepository = securityHoldingRepository;
         this.jobFactoryService = jobFactoryService;
     }
 
@@ -59,16 +64,18 @@ public class JobService {
                     jobFactoryService.addJobToUpdateCurrencyPrice(security, currencyIdsProcessed, securityId);
                     jobFactoryService.addJob(Job.security(JobType.ENRICH_SECURITY, securityId).build());
                     jobFactoryService.addJob(Job.security(JobType.UPDATE_SECURITY_PRICES, securityId).build());
-                    jobFactoryService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, securityId, userId).build());
+                    jobFactoryService.addJob(Job.account(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, security.getAccountId(), userId).build());
                 });
         jobFactoryService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
     }
 
     @Transactional
     public void updateAllSecurityValues(final long userId) {
-        securityTransactionRepository.findSecurityIdsByUserId(userId)
-                .forEach(securityId ->
-                        jobFactoryService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, securityId, userId).build()));
+        securityHoldingRepository.findByUserId(userId).forEach(holding ->
+                jobFactoryService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, holding.getAccountId(), userId).build()));
+
+        jobFactoryService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
+    }
 
         jobFactoryService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
     }

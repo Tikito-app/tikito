@@ -14,6 +14,7 @@ import {CurrencyComponent} from "../../components/currency/currency.component";
 import {CacheService} from "../../service/cache-service";
 import {SecurityHoldingFilter} from "../../dto/security/security-holding-filter";
 import {PercentageComponent} from "../../components/percentage/percentage.component";
+import {Account} from "../../dto/account";
 
 @Component({
   selector: 'app-security-holding-list-details',
@@ -63,8 +64,8 @@ export class SecurityHoldingListDetailsComponent implements OnChanges {
     this.router.navigate(['security-holding'], {fragment: 'holdingIds=' + this.holding.id});
   }
 
-  mapAccountIds(holding: SecurityHolding) {
-    return holding.accountIds.map(accountId => CacheService.getAccountById(accountId).name).join(',');
+  mapAccountIds(holding: SecurityHolding): string {
+    return CacheService.getAccountById(holding.accountId).name;
   }
 
   getSecurityHoldingFilter() {

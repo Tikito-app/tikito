@@ -143,8 +143,7 @@ public class SecurityImportServiceTest extends BaseIntegrationTest {
     @Test
     void testImportNewAndExistingSecurityHolding() throws IOException, UnsupportedImportFormatException {
         final SecurityHolding securityHolding = new SecurityHolding();
-        securityHolding.setAccountIds(new HashSet<>());
-        securityHolding.getAccountIds().add(DEFAULT_SECURITY_ACCOUNT.getId());
+        securityHolding.setAccountId(DEFAULT_SECURITY_ACCOUNT.getId());
         securityHolding.setSecurityType(SecurityType.STOCK);
         securityHolding.setSecurityId(WOLTER_KLUWER.getId());
         securityHolding.setAmount(5);

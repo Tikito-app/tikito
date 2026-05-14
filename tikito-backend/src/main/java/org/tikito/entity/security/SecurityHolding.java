@@ -18,12 +18,12 @@ public class SecurityHolding {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private long userId;
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(
-            name = "security_holding_account",
-            joinColumns = @JoinColumn(name = "security_holding_id"))
-    @Column(name = "account_id")
-    private Set<Long> accountIds = new HashSet<>();
+//    @ElementCollection(fetch = FetchType.LAZY)
+//    @CollectionTable(
+//            name = "security_holding_account",
+//            joinColumns = @JoinColumn(name = "security_holding_id"))
+//    @Column(name = "account_id")
+    private long accountId;
     private Long securityId;
     @Enumerated(EnumType.STRING)
     private SecurityType securityType;
@@ -40,9 +40,9 @@ public class SecurityHolding {
     private double maxCashInvested = 0;
     private double cashOnHand = 0;
 
-    public SecurityHolding(final long userId, final Set<Long> accountIds, final SecurityTransactionImportLine transaction) {
+    public SecurityHolding(final long userId, final long accountId, final SecurityTransactionImportLine transaction) {
         this.userId = userId;
-        this.accountIds = new HashSet<>(accountIds);
+        this.accountId = accountId;
         this.securityId = transaction.getSecurity().getId();
         this.amount = transaction.getAmount();
         this.securityType = SecurityType.STOCK;
@@ -57,7 +57,7 @@ public class SecurityHolding {
         return new SecurityHoldingDto(
                 id,
                 userId,
-                new HashSet<>(accountIds),
+                accountId,
                 securityId,
                 currencyId,
                 amount,

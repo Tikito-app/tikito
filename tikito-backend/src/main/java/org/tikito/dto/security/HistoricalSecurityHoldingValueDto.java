@@ -13,7 +13,7 @@ import java.util.Set;
 public class HistoricalSecurityHoldingValueDto {
     private Long id;
     private long userId;
-    private Long[] accountIds;
+    private long accountId;
     private Long securityHoldingId;
     private Long securityId;
     private LocalDate date;
@@ -34,7 +34,7 @@ public class HistoricalSecurityHoldingValueDto {
     public HistoricalSecurityHoldingValueDto(final LocalDate date, final HistoricalSecurityHoldingValueDto previousValue) {
         this.date = date;
         this.userId = previousValue.getUserId();
-        this.accountIds = previousValue.getAccountIds();
+        this.accountId = previousValue.getAccountId();
         this.securityHoldingId = previousValue.getSecurityHoldingId();
         this.securityId = previousValue.getSecurityId();
         this.currencyId = previousValue.getCurrencyId();
@@ -52,8 +52,8 @@ public class HistoricalSecurityHoldingValueDto {
         this.cashOnHand = previousValue.getCashOnHand();
     }
 
-    public HistoricalSecurityHoldingValueDto(final Set<Long> accountIds, final Long securityId, final Long securityHoldingId, final long currencyId) {
-        this.accountIds = accountIds.toArray(Long[]::new);
+    public HistoricalSecurityHoldingValueDto(final long accountId, final Long securityId, final Long securityHoldingId, final long currencyId) {
+        this.accountId = accountId;
         this.securityId = securityId;
         this.securityHoldingId = securityHoldingId;
         this.currencyId = currencyId;

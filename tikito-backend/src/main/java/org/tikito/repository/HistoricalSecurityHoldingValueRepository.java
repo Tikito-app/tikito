@@ -20,5 +20,5 @@ public interface HistoricalSecurityHoldingValueRepository extends JpaRepository<
     void deleteAllBySecurityHoldingId(Long securityHoldingId);
 
     @Modifying
-    void deleteByAccountIds(long accountIds);
+    void deleteByAccountId(long accountId);
 }

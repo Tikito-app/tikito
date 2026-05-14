@@ -1,5 +1,9 @@
 package org.tikito.service.security;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.tikito.dto.security.IsinDto;
 import org.tikito.dto.security.SecurityDto;
@@ -16,10 +20,6 @@ import org.tikito.service.CacheService;
 import org.tikito.service.importer.security.YahooImporter;
 import org.tikito.service.job.JobProcessor;
 import org.tikito.service.job.JobType;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -141,7 +141,7 @@ public class SecurityService implements JobProcessor {
         }
 
         fillInTheGaps(exchangeRateHistory);
-        if(!exchangeRateHistory.isEmpty()) {
+        if (!exchangeRateHistory.isEmpty()) {
             securityRepository.setLastPriceDate(security.getId(), exchangeRateHistory.getLast().getDate());
         }
 
@@ -151,7 +151,7 @@ public class SecurityService implements JobProcessor {
                         .map(SecurityPrice::new)
                         .toList());
 
-        if(security.getSecurityType() == SecurityType.CURRENCY || security.getSecurityType() == SecurityType.CRYPTO) {
+        if (security.getSecurityType() == SecurityType.CURRENCY || security.getSecurityType() == SecurityType.CRYPTO) {
             cacheService.refreshCurrencies();
         }
     }

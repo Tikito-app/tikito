@@ -86,9 +86,9 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/securities/{securityId}/recalculate-historical-value")
-    public ResponseEntity<Void> recalculateHistoricalSecurityValue(final AuthUser authUser, @PathVariable("securityId") final long securityId) {
-        jobFactoryService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, securityId, authUser.getId()).build());
+    @PostMapping("/securities/{accountId}/recalculate-historical-value")
+    public ResponseEntity<Void> recalculateHistoricalSecurityValue(final AuthUser authUser, @PathVariable("accountId") final long accountId) {
+        jobFactoryService.addJob(Job.account(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, accountId, authUser.getId()).build());
         return ResponseEntity.ok().build();
     }
 

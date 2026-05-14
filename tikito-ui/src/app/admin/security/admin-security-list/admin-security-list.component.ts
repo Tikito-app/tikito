@@ -139,7 +139,7 @@ export class AdminSecurityListComponent implements AfterViewInit {
   }
 
   onRecalculateHistoricalSecurityValue(security: Security) {
-    this.api.recalculateHistoricalSecurityValue(security.id).subscribe(() => {
+    this.api.recalculateHistoricalSecurityValue(1).subscribe(() => { // todo
       this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
     });
   }

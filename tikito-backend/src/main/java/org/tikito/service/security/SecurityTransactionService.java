@@ -64,7 +64,7 @@ public class SecurityTransactionService {
     public void deleteTransaction(final long userId, final long transactionId) {
         final SecurityTransaction transaction = securityTransactionRepository.findByUserIdAndId(userId, transactionId).orElseThrow();
         securityTransactionRepository.deleteByUserIdAndId(userId, transactionId);
-        jobFactoryService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, transaction.getSecurityId(), userId).build());
+        jobFactoryService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, transaction.getAccountId(), userId).build());
         jobFactoryService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
     }
 

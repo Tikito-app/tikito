@@ -60,9 +60,9 @@ class SecurityHoldingServiceTest extends BaseTest {
                 cacheService,
                 aggregatedHistoricalSecurityHoldingValueRepository);
 
-        final HistoricalSecurityHoldingValue value1 = new HistoricalSecurityHoldingValue(DEFAULT_USER_ACCOUNT.getId(), randomHistoricalHoldingValueDto(CURRENCY_EURO_ID));
-        final HistoricalSecurityHoldingValue value2 = new HistoricalSecurityHoldingValue(DEFAULT_USER_ACCOUNT.getId(), randomHistoricalHoldingValueDto(CURRENCY_EURO_ID));
-        final HistoricalSecurityHoldingValue value3 = new HistoricalSecurityHoldingValue(DEFAULT_USER_ACCOUNT.getId(), randomHistoricalHoldingValueDto(CURRENCY_DOLLAR_ID));
+        final HistoricalSecurityHoldingValue value1 = new HistoricalSecurityHoldingValue(DEFAULT_USER_ACCOUNT.getId(), randomHistoricalHoldingValueDto(CURRENCY_EURO_ID, DEFAULT_USER_ACCOUNT.getId()));
+        final HistoricalSecurityHoldingValue value2 = new HistoricalSecurityHoldingValue(DEFAULT_USER_ACCOUNT.getId(), randomHistoricalHoldingValueDto(CURRENCY_EURO_ID, DEFAULT_USER_ACCOUNT.getId()));
+        final HistoricalSecurityHoldingValue value3 = new HistoricalSecurityHoldingValue(DEFAULT_USER_ACCOUNT.getId(), randomHistoricalHoldingValueDto(CURRENCY_DOLLAR_ID, DEFAULT_USER_ACCOUNT.getId()));
 
         value1.setDate(LocalDate.now());
         value2.setDate(LocalDate.now().minusDays(randomInt(1, 10)));

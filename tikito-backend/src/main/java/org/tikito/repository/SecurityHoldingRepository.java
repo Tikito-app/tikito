@@ -15,8 +15,10 @@ public interface SecurityHoldingRepository extends JpaRepository<SecurityHolding
 
     List<SecurityHolding> findByUserIdAndIdIn(long userId, Set<Long> holdingIds);
 
-    List<SecurityHolding> findByUserIdAndSecurityId(long userId, long securityId);
+    List<SecurityHolding> findByUserIdAndAccountId(long userId, long accountId);
 
     @Modifying
-    void deleteByAccountIds(long accountIds);
+    void deleteByAccountId(long accountId);
+
+    List<SecurityHolding> findBySecurityId(long securityId);
 }

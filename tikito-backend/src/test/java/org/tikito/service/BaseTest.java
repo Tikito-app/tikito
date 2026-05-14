@@ -66,10 +66,10 @@ public class BaseTest {
     protected static MoneyTransaction DEFAULT_MONEY_TRANSACTION_TWO;
     protected static MoneyTransaction DEFAULT_MONEY_TRANSACTION_THREE;
 
-    protected static HistoricalSecurityHoldingValueDto randomHistoricalHoldingValueDto(final long currencyId) {
+    protected static HistoricalSecurityHoldingValueDto randomHistoricalHoldingValueDto(final long currencyId, final long accountId) {
         final HistoricalSecurityHoldingValueDto value = HistoricalSecurityHoldingValueDto
                 .builder()
-                .accountIds(new Long[]{})
+                .accountId(accountId)
                 .currencyId(currencyId)
                 .currencyMultiplier(randomDouble(1, 2))
                 .date(LocalDate.now().minusDays(randomInt(0, 1000)))

@@ -191,7 +191,7 @@ public class SecurityImportService {
         });
 
         result.getNewSecurityHoldings().forEach(securityHolding ->
-                jobFactoryService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, securityHolding.getSecurityId(), userId).build()));
+                jobFactoryService.addJob(Job.account(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, securityHolding.getAccountId(), userId).build()));
 
         if (!result.getNewSecurityHoldings().isEmpty()) {
             jobFactoryService.addJob(Job.create(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES).userId(userId).build());
@@ -230,9 +230,9 @@ public class SecurityImportService {
         });
     }
 
-    private void extractNewHoldingsFromTransactions(final long userId, final Long accountId, final SecurityTransactionImportResultDto result) {
+    private void extractNewHoldingsFromTransactions(final long userId, final long accountId, final SecurityTransactionImportResultDto result) {
         result.getExistingSecurityHoldings().putAll(securityHoldingRepository
-                .findAll()
+                .findByUserIdAndAccountId(userId, accountId)
                 .stream()
                 .collect(Collectors.toMap(SecurityHolding::getSecurityId, Function.identity())));
         final Map<Long, SecurityHolding> newHoldingsMap = new HashMap<>();
@@ -245,16 +245,14 @@ public class SecurityImportService {
                                 transaction.getTransactionType() == SecurityTransactionType.SELL)
                 .forEach(transaction -> {
                     if (!result.getExistingSecurityHoldings().containsKey(transaction.getSecurity().getId()) && !newHoldingsMap.containsKey(transaction.getSecurity().getId())) {
-                        final Set<Long> accountIds = new HashSet<>();
-                        accountIds.add(accountId);
-                        final SecurityHolding securityHolding = new SecurityHolding(userId, accountIds, transaction);
+                        final SecurityHolding securityHolding = new SecurityHolding(userId, accountId, transaction);
                         newHoldingsMap.put(transaction.getSecurity().getId(), securityHolding);
                         // also populate the existing one, otherwise we keep on creating new ones
                         // todo: merge the two collectons?
                         result.getExistingSecurityHoldings().put(securityHolding.getSecurityId(), securityHolding);
                     } else {
                         final SecurityHolding securityHolding = result.getExistingSecurityHoldings().get(transaction.getSecurity().getId());
-                        securityHolding.getAccountIds().add(accountId);
+                        securityHolding.setAccountId(accountId);
                         securityHolding.mutateAmount(transaction);
                     }
                 });
