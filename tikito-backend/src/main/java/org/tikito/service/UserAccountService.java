@@ -118,7 +118,6 @@ public class UserAccountService {
         userPreferenceRepository.saveAllAndFlush(List.of(
                 new UserPreference(userAccountId, UserPreferenceKey.AGGREGATE_DATE_RANGE, "true"),
                 new UserPreference(userAccountId, UserPreferenceKey.AMOUNT_OF_OTHER_GROUPS, "5"),
-                new UserPreference(userAccountId, UserPreferenceKey.MONEY_SHOW_OTHER, "true"),
                 new UserPreference(userAccountId, UserPreferenceKey.DATE_RANGE, DateRange.MONTH.name()),
                 new UserPreference(userAccountId, UserPreferenceKey.SECURITY_DATE_RANGE, DateRange.MONTH.name()),
                 new UserPreference(userAccountId, UserPreferenceKey.SHOW_CLOSED_POSITIONS, "true"),
