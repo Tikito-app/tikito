@@ -11,7 +11,6 @@ export class MoneyTransactionsFilter {
   nonGrouped: boolean;
   startDate: string | null;
   endDate: string | null;
-  showOther: boolean;
   amountOfOtherGroups: number;
   includeBudget: boolean;
   includeMoney: boolean;
@@ -27,7 +26,6 @@ export class MoneyTransactionsFilter {
     filter.startAtZeroFromBeginning = this.startAtZeroFromBeginning;
     filter.aggregateDateRange = this.aggregateDateRange;
     filter.nonGrouped = this.nonGrouped;
-    filter.showOther = this.showOther;
     filter.amountOfOtherGroups = this.amountOfOtherGroups;
     filter.includeBudget = this.includeBudget;
     filter.includeMoney = this.includeMoney;

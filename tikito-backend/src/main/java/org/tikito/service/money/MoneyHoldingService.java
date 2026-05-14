@@ -67,7 +67,7 @@ public class MoneyHoldingService implements JobProcessor {
                         userId,
                         filter.getAccountIds(),
                         filter.getCurrencies(),
-                        filter.getNonGrouped() != null && filter.getNonGrouped(),// todo: add showOther
+                        filter.getNonGrouped() != null && filter.getNonGrouped(),
                         filter.getStartDate(),
                         filter.getEndDate())
                 .stream()

@@ -23,7 +23,6 @@ public class MoneyTransactionFilter {
     private LocalDate startDate;
     private LocalDate endDate;
     private Boolean nonGrouped;
-    private Boolean showOther;
     private Boolean aggregateDateRange;
     private String transactionFilter;
 

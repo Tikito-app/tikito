@@ -111,7 +111,6 @@ export class MoneyTransactionOverviewComponent implements OnInit {
         groupIds: new FormControl(),
         startAtZeroFromBeginning: new FormControl(),
         startAtZeroAfterDateAggregation: new FormControl(),
-        showOther: new FormControl(),
         aggregateDateRange: new FormControl(),
         nonGrouped: new FormControl(),
         dateRange: new FormControl(),
@@ -145,7 +144,6 @@ export class MoneyTransactionOverviewComponent implements OnInit {
         });
         this.form.controls['startAtZeroFromBeginning'].setValue(UserPreferenceService.get(UserPreference.START_AT_ZERO_FROM_BEGINNING, true) || this.form.value.nonGrouped);
         this.form.controls['startAtZeroAfterDateAggregation'].setValue(UserPreferenceService.get(UserPreference.START_AT_ZERO_AFTER_DATE_RANGE, true));
-        this.form.controls['showOther'].setValue(UserPreferenceService.get(UserPreference.MONEY_SHOW_OTHER, true));
         this.form.controls['accountIds'].setValue(UserPreferenceService.get(UserPreference.ACCOUNT_IDS, '').toString().split(',').map(v => parseInt(v)));
         this.form.controls['currencies'].setValue(UserPreferenceService.get(UserPreference.CURRENCY_FILTER, '').toString().split(',').map(v => parseInt(v)));
         this.form.controls['groupIds'].setValue(UserPreferenceService.get(UserPreference.GROUP_IDS, '').toString().split(',').map(v => parseInt(v)));
@@ -177,7 +175,6 @@ export class MoneyTransactionOverviewComponent implements OnInit {
     filter.aggregateDateRange = this.form.value.aggregateDateRange;
     filter.startAtZeroFromBeginning = this.form.value.startAtZeroFromBeginning;// || this.form.value.aggregateDateRange;
     filter.startAtZeroAfterDateAggregation = this.form.value.startAtZeroAfterDateAggregation;
-    filter.showOther = this.form.value.showOther;
     filter.nonGrouped = this.form.value.nonGrouped;
     filter.dateRange = this.form.value.dateRange;
     filter.startDate = this.form.value.startDate == null ? null : moment(this.form.value.startDate).format("yyyy-MM-DD");
