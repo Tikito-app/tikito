@@ -144,4 +144,9 @@ public class AdminController {
         importExportService.importFrom(authUser.getId(), request.getData(), request.getSettings());
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/jobs-count")
+    public ResponseEntity<Long> getJobCount(final AuthUser authUser) {
+        return ResponseEntity.ok(jobService.getJobsCount(authUser.getId()));
+    }
 }

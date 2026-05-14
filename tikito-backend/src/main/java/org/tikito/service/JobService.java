@@ -90,6 +90,11 @@ public class JobService {
         addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
     }
 
+    @Transactional(readOnly = true)
+    public long getJobsCount(final long userId) {
+        return jobRepository.countByUserId(userId);
+    }
+
     private void addJobToUpdateCurrencyPrice(final SecurityTransaction security, final Set<Long> currencyIdsProcessed, final Long securityId) {
         // be sure to also update the currency prices, before recalculating the historical values
         if(!currencyIdsProcessed.contains(security.getCurrencyId())) {
