@@ -231,9 +231,9 @@ public class MoneyTransactionGroupService implements JobProcessor {
             return null;
         }
         return value
-                .replaceAll("\t", "")
-                .replaceAll("\r", "")
-                .replaceAll("\n", "");
+                .replace("\t", "")
+                .replace("\r", "")
+                .replace("\n", "");
     }
 
     private boolean includesAppliesToTransaction(final String value, final String qualifier) {

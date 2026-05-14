@@ -22,13 +22,13 @@ public final class MT940Enricher {
             switch (key) {
                 case "NAAM":
                 case "NAME":
-                    transaction.setToAccountName(value.replaceAll("\r", ""));
+                    transaction.setToAccountName(value.replace("\r", ""));
                     break;
                 case "IBAN":
-                    transaction.setToAccountNumber(value.replaceAll("\r", ""));
+                    transaction.setToAccountNumber(value.replace("\r", ""));
                     break;
                 case "OMSCHRIJVING":
-                    transaction.setDescription(value.replaceAll("\r", ""));
+                    transaction.setDescription(value.replace("\r", ""));
                     break;
             }
         });

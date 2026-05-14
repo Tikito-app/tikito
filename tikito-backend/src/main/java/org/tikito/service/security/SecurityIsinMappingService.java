@@ -44,9 +44,8 @@ public class SecurityIsinMappingService {
                 .collect(Collectors.toMap(Security::getId, Function.identity()));
         final Map<String, Security> knownSecuritiesByIsin = new HashMap<>();
 
-        knownIsins.values().forEach(isin -> {
-            knownSecuritiesByIsin.put(isin.getIsin(), knownSecuritiesById.get(isin.getSecurityId()));
-        });
+        knownIsins.values().forEach(isin ->
+                knownSecuritiesByIsin.put(isin.getIsin(), knownSecuritiesById.get(isin.getSecurityId())));
 
         // todo: create new job to enrich the trading companies
         final List<SecurityTransactionImportLine> lines = filterNonFailed(result).toList();
@@ -189,7 +188,6 @@ public class SecurityIsinMappingService {
 
         if (line.getExchangeRate() == null) {
             line.setFailedReason(FAILED_NO_EXCHANGE_RATE);
-            return;
         }
     }
 

@@ -30,7 +30,7 @@ public class MT940Line61Statement extends MT940Line {
         if (line.charAt(endPos - 1) == ',') {
             endPos--;
         }
-        amount = Double.parseDouble(line.substring(11, endPos).replaceAll(",", "."));
+        amount = Double.parseDouble(line.substring(11, endPos).replace(",", "."));
 
         if (!credit) {
             amount = -amount;

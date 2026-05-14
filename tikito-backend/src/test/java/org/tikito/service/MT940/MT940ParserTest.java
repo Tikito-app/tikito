@@ -11,18 +11,17 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class MT940ParserTest {
     @Test
     void testParseBlockSingleTransaction() {
-        final String block = "ABNANL2A\n" +
-                "940\n" +
-                "ABNANL2A\n" +
-                ":20:ABN AMRO BANK NV\n" +
-                ":25:234564321\n" +
-                ":28:31701/1\n" +
-                ":60F:C241111EUR0,\n" +
-                ":61:2411121112C250,N654NONREF\n" +
-                ":86:SEPA OVERBOEKING                 IBAN: NL13INGB0001234567\r" +
-                "BIC: INGBNL2A                    NAAM: HR TEST PERSON\r" +
-                "OMSCHRIJVING: RENT + DEPOSIT     KENMERK: NOTPROVIDED\n" +
-                ":62F:C241112EUR250,";
+        final String block = """
+                ABNANL2A
+                940
+                ABNANL2A
+                :20:ABN AMRO BANK NV
+                :25:234564321
+                :28:31701/1
+                :60F:C241111EUR0,
+                :61:2411121112C250,N654NONREF
+                :86:SEPA OVERBOEKING                 IBAN: NL13INGB0001234567 BIC: INGBNL2A                    NAAM: HR TEST PERSON     OMSCHRIJVING: RENT + DEPOSIT     KENMERK: NOTPROVIDED
+                :62F:C241112EUR250,""";
         final List<MT940Transaction> transactions = MT940Parser.parse(block);
 
         assertEquals(1, transactions.size());
@@ -35,20 +34,19 @@ class MT940ParserTest {
 
     @Test
     void testParseBlockTRTP() {
-        final String block = "ABNANL2A\n" +
-                "940\n" +
-                "ABNANL2A\n" +
-                ":20:ABN AMRO BANK NV\n" +
-                ":25:234564321\n" +
-                ":28:31701/1\n" +
-                ":60F:C241111EUR0,\n" +
-                ":61:2411121112C250,N654NONREF\n" +
-                ":86:/TRTP/SEPA INCASSO ALGEMEEN DOORLOPEND/CSID/NL98ZZZ27223450000\r" +
-                "/NAME/AEGON NEDERLAND/MARF/AEDE20241227H1437439/REMI/AEGON H14374\r" +
-                "39 - TEL 058-2446650 CONTRACTUELE RENTE EN AFLOSSING  TERMIJN 01-\r" +
-                "01 TOT 01-02/IBAN/NL96ABNA0450005678/OMSCHRIJVING/TEST/BIC/ABNANL2A/EREF/E2E/H /H14\n" +
-                "37439  /22-01-2025/PROL /" +
-                ":62F:C241112EUR250,";
+        final String block = """
+                ABNANL2A
+                940
+                ABNANL2A
+                :20:ABN AMRO BANK NV
+                :25:234564321
+                :28:31701/1
+                :60F:C241111EUR0,
+                :61:2411121112C250,N654NONREF
+                :86:/TRTP/SEPA INCASSO ALGEMEEN DOORLOPEND/CSID/NL98ZZZ27223450000/NAME/AEGON NEDERLAND/MARF/AEDE20241227H1437439/REMI/AEGON H14374\r\
+                39 - TEL 058-2446650 CONTRACTUELE RENTE EN AFLOSSING  TERMIJN 01-01 TOT 01-02/IBAN/NL96ABNA0450005678/OMSCHRIJVING/TEST/BIC/ABNANL2A/EREF/E2E/H /H14
+                37439  /22-01-2025/PROL /\
+                :62F:C241112EUR250,""";
         final List<MT940Transaction> transactions = MT940Parser.parse(block);
 
         assertEquals(1, transactions.size());
@@ -61,20 +59,19 @@ class MT940ParserTest {
 
     @Test
     void testParseBlockMultipleTransaction() {
-        final String block = "ABNANL2A\n" +
-                "940\n" +
-                "ABNANL2A\n" +
-                ":20:ABN AMRO BANK NV\n" +
-                ":25:234564321\n" +
-                ":28:32401/1\n" +
-                ":60F:C241118EUR221,75\n" +
-                ":61:2411191119D3,14N426NONREF\n" +
-                ":86:BEA, BETAALPAS                   ALBERT HEIJN 1234,PAS196\r" +
-                "NR:NQ9NRN, 19.11.24/10:42        Amsterdam\n" +
-                ":61:2411201119D11,01N426NONREF\n" +
-                ":86:BEA, BETAALPAS                   ALBERT HEIJN 1234,PAS196\r" +
-                "NR:DR04JS, 19.11.24/18:28        Amsterdam\n" +
-                ":62F:C241119EUR207,6";
+        final String block = """
+                ABNANL2A
+                940
+                ABNANL2A
+                :20:ABN AMRO BANK NV
+                :25:234564321
+                :28:32401/1
+                :60F:C241118EUR221,75
+                :61:2411191119D3,14N426NONREF
+                :86:BEA, BETAALPAS                   ALBERT HEIJN 1234,PAS196\r                NR:NQ9NRN, 19.11.24/10:42        Amsterdam
+                :61:2411201119D11,01N426NONREF
+                :86:BEA, BETAALPAS                   ALBERT HEIJN 1234,PAS196\r                NR:DR04JS, 19.11.24/18:28        Amsterdam
+                :62F:C241119EUR207,6""";
         final List<MT940Transaction> transactions = MT940Parser.parse(block);
 
         assertEquals(2, transactions.size());
@@ -92,30 +89,28 @@ class MT940ParserTest {
 
     @Test
     void testParseMultipleBlocks() {
-        final String block = "ABNANL2A\n" +
-                "940\n" +
-                "ABNANL2A\n" +
-                ":20:ABN AMRO BANK NV\n" +
-                ":25:234564321\n" +
-                ":28:32501/1\n" +
-                ":60F:C241119EUR207,6\n" +
-                ":61:2411201120D51,12N426NONREF\n" +
-                ":86:BEA, BETAALPAS                   ALBERT HEIJN 1234,PAS196\r" +
-                "NR:NP5S1F, 20.11.24/18:36        Amsterdam\n" +
-                ":62F:C241120EUR156,48\n" +
-                "-\n" +
-                "ABNANL2A\n" +
-                "940\n" +
-                "ABNANL2A\n" +
-                ":20:ABN AMRO BANK NV\n" +
-                ":25:234564321\n" +
-                ":28:32601/1\n" +
-                ":60F:C241120EUR156,48\n" +
-                ":61:2411211121C2750,N654NONREF\n" +
-                ":86:SEPA OVERBOEKING                 IBAN: LT123450012345678987\r" +
-                "BIC: REVOLT21XXX                 NAAM: MY NAME\r" +
-                "OMSCHRIJVING: RENT + DEPOSIT     KENMERK: NOTPROVIDED\n" +
-                ":62F:C241121EUR2906,48";
+        final String block = """
+                ABNANL2A
+                940
+                ABNANL2A
+                :20:ABN AMRO BANK NV
+                :25:234564321
+                :28:32501/1
+                :60F:C241119EUR207,6
+                :61:2411201120D51,12N426NONREF
+                :86:BEA, BETAALPAS                   ALBERT HEIJN 1234,PAS196\r                NR:NP5S1F, 20.11.24/18:36        Amsterdam
+                :62F:C241120EUR156,48
+                -
+                ABNANL2A
+                940
+                ABNANL2A
+                :20:ABN AMRO BANK NV
+                :25:234564321
+                :28:32601/1
+                :60F:C241120EUR156,48
+                :61:2411211121C2750,N654NONREF
+                :86:SEPA OVERBOEKING                 IBAN: LT123450012345678987\r                BIC: REVOLT21XXX                 NAAM: MY NAME\r                OMSCHRIJVING: RENT + DEPOSIT     KENMERK: NOTPROVIDED
+                :62F:C241121EUR2906,48""";
         final List<MT940Transaction> transactions = MT940Parser.parse(block);
 
         assertEquals(2, transactions.size());

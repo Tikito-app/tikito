@@ -30,7 +30,7 @@ public class CacheService {
     private final Map<Long, Map<LocalDate, Double>> currencyToEuroMultiplier = new HashMap<>();
     private final List<SecurityDto> currencies = new ArrayList<>();
     private Boolean firstEverUser;
-    private Map<Long, Boolean> isCryptoCache = new HashMap<>();
+    private final Map<Long, Boolean> isCryptoCache = new HashMap<>();
 
     public CacheService(final SecurityRepository securityRepository,
                         final IsinRepository isinRepository,

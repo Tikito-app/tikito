@@ -302,9 +302,6 @@ class LoanValueServiceTest extends BaseIntegrationTest {
                 0);
 
         service.generateLoanValues(DEFAULT_USER_ACCOUNT.getId(), loan.getId());
-        final List<LoanValue> values = loanValueRepository.findAll();
-
-        int i = 5;
     }
 
     private void assertLoanValue(final double amountRemaining, final double loanPaid, final double loanPaidThisPeriod, final double interestRemaining, final double interestPaid, final double interestPaidThisPeriod, final LoanValue value) {

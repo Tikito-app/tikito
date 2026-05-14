@@ -27,10 +27,9 @@ public class MortgageCalculator extends LoanValueCalculator {
      */
     public static RangedPayment calculateMonthlyTotalPaymentAmount(final DateRange dateRange, final LoanPart loanPart, final LoanInterest interest, final double remainingAmountNotYetPaid) {
         return switch (loanPart.getLoanType()) {
-            case GENERIC -> null;
+            case GENERIC, STUDENT -> null;
             case MORTGAGE_ANNUITEIT -> calculateMonthlyTotalPaymentAmountAnnuity(dateRange, loanPart, interest, remainingAmountNotYetPaid);
             case MORTGAGE_LINEAR -> calculateMonthlyTotalPaymentAmountLinear(dateRange, loanPart, interest);
-            case STUDENT -> null;
         };
     }
 

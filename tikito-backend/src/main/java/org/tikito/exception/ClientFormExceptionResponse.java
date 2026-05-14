@@ -1,14 +1,9 @@
 package org.tikito.exception;
 
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-public class ClientFormExceptionResponse {
-    private final List<ClientFormValidationExceptionField> errors;
-
+public record ClientFormExceptionResponse(List<ClientFormValidationExceptionField> errors) {
     public ClientFormExceptionResponse(final List<ClientFormValidationExceptionField> errors) {
         this.errors = new ArrayList<>(errors);
     }

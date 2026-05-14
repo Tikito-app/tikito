@@ -111,7 +111,7 @@ public class LoanValueService implements JobProcessor {
                 if (transactionAfterCurrentDate) {
                     break;
                 } else {
-                    amountPaidThisPeriod += -currentTransactionValue.getTransaction().getNormalizedAmount();
+                    amountPaidThisPeriod -= currentTransactionValue.getTransaction().getNormalizedAmount();
                     currentTransactionValue = currentTransactionValue.getNext();
                 }
             }

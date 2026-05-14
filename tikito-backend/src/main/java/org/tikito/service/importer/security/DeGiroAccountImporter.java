@@ -130,7 +130,7 @@ public class DeGiroAccountImporter extends SecurityTransactionImporter {
                 transactionType = TRANSFER_TO;
                 price = parsePrice(matcher.group(1));
                 currency = matcher.group(2);
-            } else if ((matcher = matches(adminCostsPattern, description, 1)) != null) {
+            } else if (matches(adminCostsPattern, description, 1) != null) {
                 transactionType = ADMIN_COSTS;
             }
 
@@ -181,7 +181,7 @@ public class DeGiroAccountImporter extends SecurityTransactionImporter {
 
     private double parsePrice(final String price) {
         if (price.contains(",") && price.contains(".")) {
-            return Double.parseDouble(price.replaceAll("\\.", "").replaceAll(",", "."));
+            return Double.parseDouble(price.replaceAll("\\.", "").replace(",", "."));
         } else if (price.contains(".")) {
             // nasty code for a price such as 4.300
             final int index = price.indexOf(".");
@@ -190,7 +190,7 @@ public class DeGiroAccountImporter extends SecurityTransactionImporter {
                 return Double.parseDouble(price.replace(".", ""));
             }
         }
-        return Double.parseDouble(price.replaceAll(",", "."));
+        return Double.parseDouble(price.replace(",", "."));
     }
 
     private Matcher matches(final Pattern pattern, final String description, final int expectedGroups) {
