@@ -1,5 +1,13 @@
 package org.tikito.service.money;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.text.similarity.JaccardSimilarity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.tikito.controller.request.CreateOrUpdateMoneyTransactionGroupRequest;
 import org.tikito.dto.AccountDto;
 import org.tikito.dto.money.HistoricalBudgetValueDto;
@@ -14,23 +22,21 @@ import org.tikito.repository.AccountRepository;
 import org.tikito.repository.HistoricalBudgetValueRepository;
 import org.tikito.repository.MoneyTransactionGroupRepository;
 import org.tikito.repository.MoneyTransactionRepository;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.text.similarity.JaccardSimilarity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.tikito.service.BudgetValueService;
+import org.tikito.service.JobFactoryService;
 import org.tikito.service.job.JobProcessor;
 import org.tikito.service.job.JobType;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static org.tikito.service.job.JobType.RECALCULATE_LOAN;
 
 @Slf4j
 @Service
@@ -40,17 +46,20 @@ public class MoneyTransactionGroupService implements JobProcessor {
     private final MoneyTransactionRepository moneyTransactionRepository;
     private final HistoricalBudgetValueRepository historicalBudgetValueRepository;
     private final BudgetValueService budgetValueService;
+    private final JobFactoryService jobFactoryService;
 
     public MoneyTransactionGroupService(final MoneyTransactionGroupRepository moneyTransactionGroupRepository,
                                         final AccountRepository accountRepository,
                                         final MoneyTransactionRepository moneyTransactionRepository,
                                         final HistoricalBudgetValueRepository historicalBudgetValueRepository,
-                                        final BudgetValueService budgetValueService) {
+                                        final BudgetValueService budgetValueService,
+                                        final JobFactoryService jobFactoryService) {
         this.moneyTransactionGroupRepository = moneyTransactionGroupRepository;
         this.accountRepository = accountRepository;
         this.moneyTransactionRepository = moneyTransactionRepository;
         this.historicalBudgetValueRepository = historicalBudgetValueRepository;
         this.budgetValueService = budgetValueService;
+        this.jobFactoryService = jobFactoryService;
     }
 
     public List<MoneyTransactionGroupDto> getGroups(final long userId) {
@@ -96,7 +105,7 @@ public class MoneyTransactionGroupService implements JobProcessor {
                     .forEach(qualifier -> group.getQualifiers().add(qualifier));
         }
         final MoneyTransactionGroupDto dto = moneyTransactionGroupRepository.saveAndFlush(group).toDto();
-        if(hasBudget(dto)) {
+        if (hasBudget(dto)) {
             budgetValueService.generateValues(userId, dto);
         }
         return dto;
@@ -126,6 +135,7 @@ public class MoneyTransactionGroupService implements JobProcessor {
         transactions.forEach(transaction -> groupTransaction(transaction, groups, accountsByAccountNumber));
         moneyTransactionRepository.saveAllAndFlush(transactions);
         log.info("Done grouping {} transactions", transactions.size());
+        generateJobsAfterGrouping(transactions, userId);
     }
 
     public List<HistoricalBudgetValueDto> getHistoricalBudgets(final long userId, final LocalDate startDate, final LocalDate endDate) {
@@ -143,6 +153,13 @@ public class MoneyTransactionGroupService implements JobProcessor {
                 .filter(this::hasBudget)
                 .map(MoneyTransactionGroup::toDto)
                 .forEach(group -> budgetValueService.generateValues(userId, group));
+    }
+
+    private void generateJobsAfterGrouping(final List<MoneyTransaction> transactions, final long userId) {
+        transactions.stream()
+                .map(MoneyTransaction::getLoanId)
+                .collect(Collectors.toSet())
+                .forEach(loanId -> jobFactoryService.addJob(Job.loan(RECALCULATE_LOAN, loanId, userId).build()));
     }
 
     private boolean hasBudget(final MoneyTransactionGroup group) {

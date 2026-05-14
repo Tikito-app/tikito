@@ -19,7 +19,7 @@ import org.tikito.entity.security.SecurityTransaction;
 import org.tikito.exception.UnsupportedImportFormatException;
 import org.tikito.repository.*;
 import org.tikito.service.CacheService;
-import org.tikito.service.JobService;
+import org.tikito.service.JobFactoryService;
 import org.tikito.service.importer.FileReader;
 import org.tikito.service.importer.security.CustomSecurityTransactionImporter;
 import org.tikito.service.importer.security.DeGiroAccountImporter;
@@ -44,7 +44,7 @@ public class SecurityImportService {
     private final IsinRepository isinRepository;
     private final List<SecurityTransactionImporter> importers;
     private final SecurityHoldingRepository securityHoldingRepository;
-    private final JobService jobService;
+    private final JobFactoryService jobFactoryService;
     private final CacheService cacheService;
     private final AccountRepository accountRepository;
     private final SecurityIsinMappingService securityIsinMappingService;
@@ -55,7 +55,7 @@ public class SecurityImportService {
                                  final DeGiroAccountImporter deGiroAccountImporter,
                                  final DeGiroTransactionsImporter deGiroTransactionsImporter,
                                  final SecurityHoldingRepository securityHoldingRepository,
-                                 final JobService jobService,
+                                 final JobFactoryService jobFactoryService,
                                  final CacheService cacheService,
                                  final AccountRepository accountRepository,
                                  final SecurityIsinMappingService securityIsinMappingService) {
@@ -63,7 +63,7 @@ public class SecurityImportService {
         this.securityRepository = securityRepository;
         this.isinRepository = isinRepository;
         this.securityHoldingRepository = securityHoldingRepository;
-        this.jobService = jobService;
+        this.jobFactoryService = jobFactoryService;
         this.cacheService = cacheService;
         this.accountRepository = accountRepository;
         this.securityIsinMappingService = securityIsinMappingService;
@@ -186,15 +186,15 @@ public class SecurityImportService {
 
     private void generateJobsAfterImport(final long userId, final SecurityTransactionImportResultDto result) {
         result.getNewSecuritiesByIsin().values().forEach(security -> {
-            jobService.addJob(Job.security(JobType.ENRICH_SECURITY, security.getId()).build());
-            jobService.addJob(Job.create(JobType.UPDATE_SECURITY_PRICES).securityId(security.getId()).build());
+            jobFactoryService.addJob(Job.security(JobType.ENRICH_SECURITY, security.getId()).build());
+            jobFactoryService.addJob(Job.create(JobType.UPDATE_SECURITY_PRICES).securityId(security.getId()).build());
         });
 
         result.getNewSecurityHoldings().forEach(securityHolding ->
-                jobService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, securityHolding.getSecurityId(), userId).build()));
+                jobFactoryService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, securityHolding.getSecurityId(), userId).build()));
 
         if (!result.getNewSecurityHoldings().isEmpty()) {
-            jobService.addJob(Job.create(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES).userId(userId).build());
+            jobFactoryService.addJob(Job.create(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES).userId(userId).build());
         }
     }
 

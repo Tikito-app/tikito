@@ -13,7 +13,7 @@ import org.tikito.entity.security.SecurityHolding;
 import org.tikito.entity.security.SecurityTransaction;
 import org.tikito.repository.*;
 import org.tikito.service.CacheService;
-import org.tikito.service.JobService;
+import org.tikito.service.JobFactoryService;
 import org.tikito.service.job.JobType;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class SecurityTransactionService {
 
     private final SecurityTransactionRepository securityTransactionRepository;
     private final SecurityHoldingRepository securityHoldingRepository;
-    private final JobService jobService;
+    private final JobFactoryService jobFactoryService;
     private final CacheService cacheService;
     private final AccountRepository accountRepository;
     private final IsinRepository isinRepository;
@@ -34,14 +34,14 @@ public class SecurityTransactionService {
 
     public SecurityTransactionService(final SecurityTransactionRepository securityTransactionRepository,
                                       final SecurityHoldingRepository securityHoldingRepository,
-                                      final JobService jobService,
+                                      final JobFactoryService jobFactoryService,
                                       final CacheService cacheService,
                                       final AccountRepository accountRepository,
                                       final IsinRepository isinRepository,
                                       final SecurityRepository securityRepository) {
         this.securityTransactionRepository = securityTransactionRepository;
         this.securityHoldingRepository = securityHoldingRepository;
-        this.jobService = jobService;
+        this.jobFactoryService = jobFactoryService;
         this.cacheService = cacheService;
         this.accountRepository = accountRepository;
         this.isinRepository = isinRepository;
@@ -64,8 +64,8 @@ public class SecurityTransactionService {
     public void deleteTransaction(final long userId, final long transactionId) {
         final SecurityTransaction transaction = securityTransactionRepository.findByUserIdAndId(userId, transactionId).orElseThrow();
         securityTransactionRepository.deleteByUserIdAndId(userId, transactionId);
-        jobService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, transaction.getSecurityId(), userId).build());
-        jobService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
+        jobFactoryService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, transaction.getSecurityId(), userId).build());
+        jobFactoryService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
     }
 
     public List<SecurityTransactionDto> getSecurityTransactions(final long userId, final SecurityHoldingFilter filter) {

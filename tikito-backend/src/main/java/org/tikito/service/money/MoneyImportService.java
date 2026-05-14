@@ -21,7 +21,7 @@ import org.tikito.repository.AccountRepository;
 import org.tikito.repository.MoneyHoldingRepository;
 import org.tikito.repository.MoneyTransactionRepository;
 import org.tikito.service.CacheService;
-import org.tikito.service.JobService;
+import org.tikito.service.JobFactoryService;
 import org.tikito.service.MT940.MT940Parser;
 import org.tikito.service.importer.FileReader;
 import org.tikito.service.importer.money.*;
@@ -47,7 +47,7 @@ public class MoneyImportService {
     private final List<MoneyTransactionImporter> importers;
     private final AccountRepository accountRepository;
     private final CacheService cacheService;
-    private final JobService jobService;
+    private final JobFactoryService jobFactorService;
     private final MoneyHoldingRepository moneyHoldingRepository;
 
     public MoneyImportService(final MoneyTransactionRepository moneyTransactionRepository,
@@ -58,7 +58,7 @@ public class MoneyImportService {
                               final List<MoneyTransactionImporter> importers,
                               final AccountRepository accountRepository,
                               final CacheService cacheService,
-                              final JobService jobService,
+                              final JobFactoryService jobFactorService,
                               final MoneyHoldingRepository moneyHoldingRepository) {
         this.moneyTransactionRepository = moneyTransactionRepository;
         this.moneyHoldingRepository = moneyHoldingRepository;
@@ -66,7 +66,7 @@ public class MoneyImportService {
         this.importers = new ArrayList<>(importers);
         this.accountRepository = accountRepository;
         this.cacheService = cacheService;
-        this.jobService = jobService;
+        this.jobFactorService = jobFactorService;
     }
 
     public MoneyTransactionImportResultDto importTransactions(final long userId,
@@ -208,7 +208,7 @@ public class MoneyImportService {
     }
 
     /**
-     * For money (debit/crypto), we need to create a money holding per currency.
+     * For money we need to create a money holding per currency.
      */
     private void assertMoneyHoldings(final long userId, final long accountId, final List<MoneyTransaction> transactionsToImport) {
         final Map<Long, MoneyHolding> existingHoldingsPerCurrencyId = moneyHoldingRepository.findByUserIdAndAccountId(userId, accountId)
@@ -220,7 +220,7 @@ public class MoneyImportService {
         final List<MoneyHolding> newHoldings = new ArrayList<>();
 
         transactionsToImport.forEach(transaction -> {
-            if(!existingHoldingsPerCurrencyId.containsKey(transaction.getCurrencyId())) {
+            if (!existingHoldingsPerCurrencyId.containsKey(transaction.getCurrencyId())) {
                 final MoneyHolding holding = new MoneyHolding();
                 holding.setUserId(userId);
                 holding.setAccountId(accountId);
@@ -234,9 +234,9 @@ public class MoneyImportService {
 
     private void generateJobsAfterImport(final long userId, final long accountId, final MoneyTransactionImportResultDto result) {
         if (!result.getImportedTransactions().isEmpty()) {
-            jobService.addJob(Job.account(JobType.RECALCULATE_HISTORICAL_MONEY_VALUES, accountId, userId).build());
-            jobService.addJob(Job.account(JobType.GROUP_MONEY_TRANSACTIONS, accountId, userId).build());
-            jobService.addJob(Job.create(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES).userId(userId).build());
+            jobFactorService.addJob(Job.account(JobType.RECALCULATE_HISTORICAL_MONEY_VALUES, accountId, userId).build());
+            jobFactorService.addJob(Job.account(JobType.GROUP_MONEY_TRANSACTIONS, accountId, userId).build());
+            jobFactorService.addJob(Job.create(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES).userId(userId).build());
         }
     }
 
