@@ -81,6 +81,12 @@ export class AdminApi {
       .withUrl('/api/admin/securities/isin/' + isin));
   }
 
+  getJobsCount(): Observable<number> {
+    return this.http.basicHttpRequestWithErrorHandling(new HttpRequestData()
+      .withRequestMethod(HttpRequestMethod.GET)
+      .withUrl('/api/admin/jobs-count'));
+  }
+
   recalculateHistoricalSecurityValue(securityId: number) {
     return this.http.httpPost(new HttpRequestData()
       .withUrl('/api/admin/securities/' + securityId + '/recalculate-historical-value'));

@@ -20,4 +20,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
 
     @Query("select j from Job j order by j.id asc")
     List<Job> findAllOrdered();
+
+    @Query("select count(j) from Job j where j.userId is null or j.userId = :userId")
+    long countByUserId(long userId);
 }
