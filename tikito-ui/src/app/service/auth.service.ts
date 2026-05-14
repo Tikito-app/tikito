@@ -7,6 +7,7 @@ import {HttpRequestData} from "../dto/http-request-data";
 import {LoggedInUser} from "../dto/logged-in-user";
 import {CacheService} from "./cache-service";
 import {HttpRequestMethod} from "../dto/http-request-method";
+import {VersionCheckService} from "./version-check.service";
 
 @Injectable({
   providedIn: 'root'
@@ -23,12 +24,16 @@ export class AuthService {
   constructor(private http: HttpService,
               private route: ActivatedRoute,
               private router: Router,
+              private versionCheckService: VersionCheckService,
               @Inject('environment') private environment: any) {
 
     this.initialiseUserSession().subscribe(loggedIn => {
-      this.systemReady = true;
-      CacheService.init().subscribe(() => {
-        this.systemReadySubject$.next(this.loggedInUser);
+      this.versionCheckService.checkVersion().subscribe(needsRefresh => {
+        console.log(needsRefresh);
+        this.systemReady = true;
+        CacheService.init().subscribe(() => {
+          this.systemReadySubject$.next(this.loggedInUser);
+        });
       });
     });
   }
