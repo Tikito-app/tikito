@@ -25,6 +25,9 @@ import {PopoverComponent} from "../../components/popover/popover.component";
 import {UserPreference} from "../../dto/user-preference";
 import {UserPreferenceService} from "../../service/user-preference-service";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
+import {Account} from "../../dto/account";
+import {AccountApi} from "../../api/account-api";
+import {Security} from "../../dto/security/security";
 
 @Component({
   selector: 'app-security-holding-overview',
@@ -62,9 +65,10 @@ import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
   providers: [provideNativeDateAdapter()],
 })
 export class SecurityHoldingOverviewComponent implements OnInit {
-  holdingIds: string = '';
+  securityIds: string = '';
   startDate: string;
-  holdings: SecurityHolding[] = [];
+  securities: Security[] = [];
+  accounts: Account[];
 
   form: FormGroup;
   chartLegendSelected: any;
@@ -76,13 +80,15 @@ export class SecurityHoldingOverviewComponent implements OnInit {
               private router: Router,
               private dialogService: DialogService,
               private authService: AuthService,
+              private accountApi: AccountApi,
               private api: SecurityApi) {
   }
 
   ngOnInit(): void {
     this.authService.onSystemReady((loggedInUser: any) => {
       this.form = new FormGroup({
-        holdingIds: new FormControl(),
+        accountIds: new FormControl(),
+        securityIds: new FormControl(),
         dateRange: new FormControl(),
         startDate: new FormControl(),
         startAtZeroFromBeginning: new FormControl(),
@@ -103,24 +109,32 @@ export class SecurityHoldingOverviewComponent implements OnInit {
   }
 
   resetFilterFromUrl() {
-    this.holdingIds = Util.getUrlFragment('holdingIds') as string;
+    this.securityIds = Util.getUrlFragment('securityIds') as string;
     this.startDate = Util.getUrlFragment('startDate') as string;
 
-    this.form.controls['holdingIds'].setValue(this.holdingIds == null ? [] : this.holdingIds.split(',').map(v => parseInt(v)));
     if (this.startDate != null) {
       this.form.controls['startDate'].setValue(this.startDate);
     }
 
+    this.form.controls['securityIds'].setValue(this.securityIds == null ? [] : this.securityIds.split(',').map(v => parseInt(v)));
     this.form.controls['startAtZeroFromBeginning'].setValue(UserPreferenceService.get(UserPreference.SECURITY_START_AT_ZERO_FROM_BEGINNING, true) || this.form.value.nonGrouped);
     this.form.controls['startAtZeroAfterDateAggregation'].setValue(UserPreferenceService.get(UserPreference.SECURITY_START_AT_ZERO_AFTER_DATE_RANGE, true));
     this.form.controls['aggregateDateRange'].setValue(UserPreferenceService.get(UserPreference.SECURITY_AGGREGATE_DATE_RANGE, true));
     this.form.controls['dateRange'].setValue(UserPreferenceService.get(UserPreference.SECURITY_DATE_RANGE, null));
+    this.form.controls['accountIds'].setValue(UserPreferenceService.get(UserPreference.ACCOUNT_IDS, '').toString().split(',').map(v => parseInt(v)));
+  }
+
+  onAccountIdsSelectChanged(value: any[]) {
+    UserPreferenceService.onSelectChange(UserPreference.ACCOUNT_IDS, value);
   }
 
   resetUrlFromFilter() {
     let hash = '';
-    if (this.form.value.holdingIds != null) {
-      hash += 'holdingIds=' + this.form.value.holdingIds + ';';
+    if (this.form.value.securityIds != null) {
+      hash += 'securityIds=' + this.form.value.securityIds + ';';
+    }
+    if (this.form.value.accountIds != null) {
+      hash += 'accountIds=' + this.form.value.accountIds + ';';
     }
     if (this.form.value.startDate != null) {
       hash += 'startDate=' + Util.formatDate(this.form.value.startDate, 'yyyy-MM-dd') + ';';
@@ -132,13 +146,23 @@ export class SecurityHoldingOverviewComponent implements OnInit {
   }
 
   reset() {
-    this.api.getSecurityHoldings().subscribe(holdings => {
-      this.holdings = holdings;
-      if (this.holdingIds != null) {
-        let ids = this.holdingIds.split(',').map(id => parseInt(id, 10));
-        this.form.controls['holdingIds'].setValue(ids);
-        this.onUpdateFilterButtonClicked();
-      }
+    this.accountApi.getAccounts().subscribe(accounts => {
+      this.accounts = accounts;
+      this.api.getSecurityHoldings().subscribe(holdings => {
+        let processedSecurityIds: number[] = [];
+        this.securities = [];
+        holdings.map(holding => holding.security).forEach(security => {
+          if(!processedSecurityIds.includes(security.id)) {
+            this.securities.push(security);
+            processedSecurityIds.push(security.id);
+          }
+        });
+        if (this.securityIds != null) {
+          let ids = this.securityIds.split(',').map(id => parseInt(id, 10));
+          this.form.controls['holdingIds'].setValue(ids);
+          this.onUpdateFilterButtonClicked();
+        }
+      });
     });
   }
 
@@ -148,8 +172,8 @@ export class SecurityHoldingOverviewComponent implements OnInit {
 
   getTransactionFilter() {
     let filter = new SecurityHoldingFilter();
-    // if(this.form != null) {}
-    filter.holdingIds = this.form.value.holdingIds;
+    filter.accountIds = this.form.value.accountIds;
+    filter.securityIds = this.form.value.securityIds;
     filter.dateRange = this.form.value.dateRange;
     filter.startDate = this.form.value.startDate;
     filter.startAtZeroAfterDateAggregation = this.form.value.startAtZeroAfterDateAggregation;
@@ -163,11 +187,11 @@ export class SecurityHoldingOverviewComponent implements OnInit {
   }
 
   getTitle() {
-    if (this.holdingIds != null) {
-      let selectedIds: number[] = this.form.value.holdingIds;
-      return this.holdings
-        .filter(holding => selectedIds.includes(holding.id))
-        .map(holding => holding.security.name)
+    if (this.securityIds != null) {
+      let selectedIds: number[] = this.form.value.securityIds;
+      return this.securities
+        .filter(security => selectedIds.includes(security.id))
+        .map(security => security.name)
         .join(', ');
     }
     return '';

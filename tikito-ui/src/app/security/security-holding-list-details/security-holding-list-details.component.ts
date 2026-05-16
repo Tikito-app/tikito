@@ -70,7 +70,8 @@ export class SecurityHoldingListDetailsComponent implements OnChanges {
 
   getSecurityHoldingFilter() {
     let filter = new SecurityHoldingFilter();
-    filter.holdingIds = [this.holding.id];
+    filter.securityIds = [this.holding.securityId];
+    filter.accountIds = [this.holding.accountId];
     filter.displayField = SecurityHoldingGraphDisplayField.PRICE;
     return filter;
   }

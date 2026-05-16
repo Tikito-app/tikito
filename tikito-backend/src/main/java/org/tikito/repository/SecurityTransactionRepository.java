@@ -11,15 +11,14 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface SecurityTransactionRepository extends JpaRepository<SecurityTransaction, Long> {
-    List<SecurityTransaction> findBySecurityId(Long securityId);
-
     @Query(value = """
             select t from SecurityTransaction t where
                         t.userId = :userId and
                         (t.securityId in :securityIds or (:amountOfSecurityId = 0 or t.securityId is not null)) and
+                        (t.accountId in :accountIds) and
                         (:timestamp is null or t.timestamp >= :timestamp)
             """)
-    List<SecurityTransaction> findBySecurityIdIn(final long userId, Set<Long> securityIds, Instant timestamp, int amountOfSecurityId);
+    List<SecurityTransaction> findBySecurityIdIn(final long userId, Set<Long> securityIds, Set<Long> accountIds, Instant timestamp, int amountOfSecurityId);
 
     List<SecurityTransaction> findByAccountId(long accountId);
 
@@ -37,8 +36,7 @@ public interface SecurityTransactionRepository extends JpaRepository<SecurityTra
     @Query("select distinct(t.currencyId) from SecurityTransaction t")
     Set<Long> getCurrencyIdsInUse();
 
-    @Query("select distinct(t.securityId) from SecurityTransaction t where t.userId = :userId and t.securityId is not null")
-    Set<Long> findSecurityIdsByUserId(long userId);
-
     List<SecurityTransaction> findAllByUserId(long userId);
+
+    List<SecurityTransaction> findBySecurityIdAndAccountId(long securityId, long accountId);
 }

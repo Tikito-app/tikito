@@ -9,23 +9,23 @@ import org.tikito.dto.security.SecurityTransactionDto;
 import org.tikito.dto.security.SecurityType;
 import org.tikito.entity.Job;
 import org.tikito.entity.security.Isin;
-import org.tikito.entity.security.SecurityHolding;
 import org.tikito.entity.security.SecurityTransaction;
-import org.tikito.repository.*;
+import org.tikito.repository.AccountRepository;
+import org.tikito.repository.IsinRepository;
+import org.tikito.repository.SecurityRepository;
+import org.tikito.repository.SecurityTransactionRepository;
 import org.tikito.service.CacheService;
 import org.tikito.service.JobFactoryService;
 import org.tikito.service.job.JobType;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public class SecurityTransactionService {
 
     private final SecurityTransactionRepository securityTransactionRepository;
-    private final SecurityHoldingRepository securityHoldingRepository;
     private final JobFactoryService jobFactoryService;
     private final CacheService cacheService;
     private final AccountRepository accountRepository;
@@ -33,14 +33,12 @@ public class SecurityTransactionService {
     private final SecurityRepository securityRepository;
 
     public SecurityTransactionService(final SecurityTransactionRepository securityTransactionRepository,
-                                      final SecurityHoldingRepository securityHoldingRepository,
                                       final JobFactoryService jobFactoryService,
                                       final CacheService cacheService,
                                       final AccountRepository accountRepository,
                                       final IsinRepository isinRepository,
                                       final SecurityRepository securityRepository) {
         this.securityTransactionRepository = securityTransactionRepository;
-        this.securityHoldingRepository = securityHoldingRepository;
         this.jobFactoryService = jobFactoryService;
         this.cacheService = cacheService;
         this.accountRepository = accountRepository;
@@ -64,16 +62,13 @@ public class SecurityTransactionService {
     public void deleteTransaction(final long userId, final long transactionId) {
         final SecurityTransaction transaction = securityTransactionRepository.findByUserIdAndId(userId, transactionId).orElseThrow();
         securityTransactionRepository.deleteByUserIdAndId(userId, transactionId);
-        jobFactoryService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, transaction.getAccountId(), userId).build());
-        jobFactoryService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
+        jobFactoryService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, transaction.getSecurityId(), userId).build());
+        jobFactoryService.addJob(Job.user(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
     }
 
     public List<SecurityTransactionDto> getSecurityTransactions(final long userId, final SecurityHoldingFilter filter) {
-        final List<SecurityHolding> holdingList = securityHoldingRepository.findByUserIdAndIdIn(userId, filter.getHoldingIds());
-        final Set<Long> securityIds = holdingList.stream().map(SecurityHolding::getSecurityId).collect(Collectors.toSet());
-
         return enrichTransactions(securityTransactionRepository
-                .findBySecurityIdIn(userId, securityIds, filter.getStartDateAsInstant(), securityIds.size())
+                .findBySecurityIdIn(userId, filter.getSecurityIds(), filter.getAccountIds(), filter.getStartDateAsInstant(), filter.getSecurityIds().size())
                 .stream()
                 .sorted((o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp())));
     }

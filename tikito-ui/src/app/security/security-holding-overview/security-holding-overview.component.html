@@ -1,7 +1,7 @@
 <div class="main-side-column main-column">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>{{'filter' | translatePipe}}</mat-card-title>
+      <mat-card-title>{{'money/filter' | translatePipe}}</mat-card-title>
     </mat-card-header>
     <mat-card-content *ngIf="form">
       <form [formGroup]="form">
@@ -11,12 +11,20 @@
 <!--        <mat-checkbox formControlName="startAtZeroAfterDateAggregation" (change)="UserPreferenceService.onCheckboxChange(UserPreference.SECURITY_START_AT_ZERO_AFTER_DATE_RANGE, $event.checked)">{{ 'money/graph/start-at-zero-after-date-aggregation' | translatePipe}}</mat-checkbox>-->
 <!--        <app-popover text="money/graph/start-at-zero-after-date-aggregation-tooltip"></app-popover>-->
 
+        <mat-form-field class="full-width">
+          <mat-label>{{'money/accounts' | translatePipe}}</mat-label>
+          <mat-select [attr.data-cy]="'account-ids'" multiple formControlName="accountIds" (selectionChange)="onAccountIdsSelectChanged($event.value)">
+            @for (account of accounts; track accounts) {
+              <mat-option [value]="account.id">{{account.name}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
         <mat-form-field class="full-width">
-          <mat-label>{{'security/holdings' | translatePipe}}</mat-label>
-          <mat-select [attr.data-cy]="'holdingIds'" multiple formControlName="holdingIds" (selectionChange)="resetUrlFromFilter()">
-            @for (holding of holdings; track holding) {
-              <mat-option [value]="holding.id">{{holding.security.name}}</mat-option>
+          <mat-label>{{'security/securities' | translatePipe}}</mat-label>
+          <mat-select [attr.data-cy]="'securityIds'" multiple formControlName="securityIds" (selectionChange)="resetUrlFromFilter()">
+            @for (security of securities; track security) {
+              <mat-option [value]="security.id">{{security.name}}</mat-option>
             }
           </mat-select>
         </mat-form-field>

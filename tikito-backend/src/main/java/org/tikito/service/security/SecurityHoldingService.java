@@ -130,7 +130,7 @@ public class SecurityHoldingService implements JobProcessor {
 
     public List<HistoricalSecurityHoldingValueDto> getHistoricalHoldingValues(final long userId, final SecurityHoldingFilter filter) {
         return historicalSecurityHoldingValueRepository
-                .findAllBySecurityHoldingIdIn(userId, filter.getHoldingIds(), filter.getStartDate())
+                .findAllBySecurityAndAccount(userId, filter.getAccountIds(), filter.getSecurityIds(), filter.getStartDate())
                 .stream()
                 .map(HistoricalSecurityHoldingValue::toDto)
                 .sorted(Comparator.comparing(HistoricalSecurityHoldingValueDto::getDate))
@@ -148,7 +148,7 @@ public class SecurityHoldingService implements JobProcessor {
 
     public List<HistoricalSecurityHoldingValueDto> getHistoricalHoldingValues(final long userId, final Set<Long> ids) {
         return historicalSecurityHoldingValueRepository
-                .findAllBySecurityHoldingIdIn(userId, ids, null)
+                .findAllBySecurityAndAccount(userId, null, ids, null)
                 .stream()
                 .map(HistoricalSecurityHoldingValue::toDto)
                 .sorted(Comparator.comparing(HistoricalSecurityHoldingValueDto::getDate))
@@ -156,8 +156,8 @@ public class SecurityHoldingService implements JobProcessor {
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public void recalculateHistoricalValue(final long userId, final long accountId) {
-        securityHoldingRepository.findByUserIdAndAccountId(userId, accountId)
+    public void recalculateHistoricalValue(final long userId, final long securityId) {
+        securityHoldingRepository.findByUserIdAndSecurityId(userId, securityId)
                 .forEach(this::recalculateHistoricalHoldingValue);
     }
 
@@ -166,10 +166,10 @@ public class SecurityHoldingService implements JobProcessor {
      * holding and then persists it in the database.
      */
     private void recalculateHistoricalHoldingValue(final SecurityHolding holding) {
-        log.info("Recalculating historical security holding values for holding #{} of {}", holding.getSecurityId(), cacheService.getSecurityName(holding.getSecurityId()));
+        log.info("Recalculating historical security holding values for security {}({}) from account {}", cacheService.getSecurityName(holding.getSecurityId()), holding.getSecurityId(), holding.getAccountId());
 
         final Security security = securityRepository.findById(holding.getSecurityId()).orElseThrow();
-        final Map<LocalDate, List<SecurityTransaction>> transactionsPerTimestamp = getTransactionsPerTimestamp(holding.getSecurityId());
+        final Map<LocalDate, List<SecurityTransaction>> transactionsPerTimestamp = getTransactionsPerTimestamp(holding.getSecurityId(), holding.getAccountId());
         final Map<LocalDate, SecurityPrice> securityPricePerTimestamp = securityPriceRepository
                 .findAllBySecurityId(security.getId())
                 .stream()
@@ -238,11 +238,11 @@ public class SecurityHoldingService implements JobProcessor {
     /**
      * Returns a map of transactions per date. A single date holds a list of transactions.
      */
-    private Map<LocalDate, List<SecurityTransaction>> getTransactionsPerTimestamp(final long securityId) {
+    private Map<LocalDate, List<SecurityTransaction>> getTransactionsPerTimestamp(final long securityId, final long accountId) {
         final Map<LocalDate, List<SecurityTransaction>> transactionsPerTimestamp = new HashMap<>();
 
         securityTransactionRepository
-                .findBySecurityId(securityId)
+                .findBySecurityIdAndAccountId(securityId, accountId)
                 .forEach(transaction -> {
                     final LocalDate date = LocalDate.ofInstant(transaction.getTimestamp(), ZoneOffset.UTC);
                     transactionsPerTimestamp.putIfAbsent(date, new ArrayList<>());
@@ -261,7 +261,7 @@ public class SecurityHoldingService implements JobProcessor {
     public void process(final Job job) {
         switch (job.getJobType()) {
             case RECALCULATE_HISTORICAL_SECURITY_VALUES ->
-                    recalculateHistoricalValue(job.getUserId(), job.getAccountId());
+                    recalculateHistoricalValue(job.getUserId(), job.getSecurityId());
             case RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES ->
                     recalculateAggregatedHistoricalHoldingValues(job.getUserId());
             default -> throw new IllegalStateException();

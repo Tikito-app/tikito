@@ -164,10 +164,8 @@ public class SecurityImportService {
                     .map(line -> new SecurityTransaction(account.getUserId(), account.getId(), line))
                     .toList();
 
-            result.getImportedTransactions().addAll(securityTransactionRepository
-                    .saveAllAndFlush(transactions)
-                    .stream()
-                    .toList());
+            final List<SecurityTransaction> storedList = securityTransactionRepository.saveAllAndFlush(transactions);
+            result.getImportedTransactions().addAll(storedList);
 
             generateJobsAfterImport(account.getUserId(), result);
 
@@ -191,7 +189,7 @@ public class SecurityImportService {
         });
 
         result.getNewSecurityHoldings().forEach(securityHolding ->
-                jobFactoryService.addJob(Job.account(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, securityHolding.getAccountId(), userId).build()));
+                jobFactoryService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, securityHolding.getSecurityId(), userId).build()));
 
         if (!result.getNewSecurityHoldings().isEmpty()) {
             jobFactoryService.addJob(Job.create(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES).userId(userId).build());

@@ -3,6 +3,9 @@ package org.tikito.util;
 import org.tikito.dto.DateRange;
 
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class Util {
     private Util() {
@@ -47,5 +50,15 @@ public final class Util {
             case DAY, ALL -> ChronoUnit.DAYS;
             case ONCE -> throw new RuntimeException("todo");
         };
+    }
+
+    public static Set<Long> toSetOfNonNullLongs(final Set<Long> set) {
+        if (set != null) {
+            final Set<Long> ids = set.stream().filter(Objects::nonNull).collect(Collectors.toSet());
+            if (!ids.isEmpty()) {
+                return ids;
+            }
+        }
+        return null;
     }
 }

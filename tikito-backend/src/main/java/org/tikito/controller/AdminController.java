@@ -86,9 +86,9 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/securities/{accountId}/recalculate-historical-value")
-    public ResponseEntity<Void> recalculateHistoricalSecurityValue(final AuthUser authUser, @PathVariable("accountId") final long accountId) {
-        jobFactoryService.addJob(Job.account(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, accountId, authUser.getId()).build());
+    @PostMapping("/securities/{securityId}/recalculate-historical-value")
+    public ResponseEntity<Void> recalculateHistoricalSecurityValue(final AuthUser authUser, @PathVariable("securityId") final long securityId) {
+        jobFactoryService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, securityId, authUser.getId()).build());
         return ResponseEntity.ok().build();
     }
 
@@ -134,7 +134,7 @@ public class AdminController {
 
     @PostMapping("/money/group-transactions")
     public ResponseEntity<Void> groupMoneyTransaction(final AuthUser authUser) {
-        jobFactoryService.addJob(Job.account(JobType.GROUP_MONEY_TRANSACTIONS, authUser.getId()).build());
+        jobFactoryService.addJob(Job.user(JobType.GROUP_MONEY_TRANSACTIONS, authUser.getId()).build());
         return ResponseEntity.ok().build();
     }
 
