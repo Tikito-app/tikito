@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class SecurityHoldingFilter {
-    private Set<Long> accountIds;
+    private Set<@NotNull Long> accountIds;
     private Set<@NotNull Long> securityIds;
     private DateRange dateRange;
     private LocalDate startDate;

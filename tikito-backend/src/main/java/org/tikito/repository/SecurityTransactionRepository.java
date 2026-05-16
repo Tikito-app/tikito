@@ -14,11 +14,11 @@ public interface SecurityTransactionRepository extends JpaRepository<SecurityTra
     @Query(value = """
             select t from SecurityTransaction t where
                         t.userId = :userId and
-                        (t.securityId in :securityIds or (:amountOfSecurityId = 0 or t.securityId is not null)) and
+                        (:securityIds is null or t.securityId in :securityIds) and
                         (t.accountId in :accountIds) and
                         (:timestamp is null or t.timestamp >= :timestamp)
             """)
-    List<SecurityTransaction> findBySecurityIdIn(final long userId, Set<Long> securityIds, Set<Long> accountIds, Instant timestamp, int amountOfSecurityId);
+    List<SecurityTransaction> findBySecurityIdIn(final long userId, Set<Long> securityIds, Set<Long> accountIds, Instant timestamp);
 
     List<SecurityTransaction> findByAccountId(long accountId);
 

@@ -7,7 +7,6 @@ import {Util} from "../../util";
 import {SecurityTransactionListComponent} from "../security-transaction-list/security-transaction-list.component";
 import {MatButton} from "@angular/material/button";
 import {SecurityApi} from "../../api/security-api";
-import SecurityHolding from "../../dto/security/security-holding";
 import {NgIf} from "@angular/common";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
@@ -159,7 +158,7 @@ export class SecurityHoldingOverviewComponent implements OnInit {
         });
         if (this.securityIds != null) {
           let ids = this.securityIds.split(',').map(id => parseInt(id, 10));
-          this.form.controls['holdingIds'].setValue(ids);
+          this.form.controls['securityIds'].setValue(ids);
           this.onUpdateFilterButtonClicked();
         }
       });

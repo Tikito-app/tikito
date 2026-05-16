@@ -119,7 +119,7 @@ export class SecurityHoldingListComponent implements AfterViewInit {
   reset(): void {
     this.onFilterUpdateCallback.next(this.securityHoldingFilter);
     this.api.getSecurityHoldings().subscribe(holdings => {
-      this.allHoldings = holdings;
+      this.allHoldings = this.aggregateHoldings(holdings);
 
       this.dataSource = new MatTableDataSource<SecurityHolding>(this.filterHoldings(holdings));
       setTimeout(() => {
@@ -168,6 +168,18 @@ export class SecurityHoldingListComponent implements AfterViewInit {
     return this
       .allHoldings
       .filter(holding => showClosedPositions || holding.amount > 0);
+  }
+
+  aggregateHoldings(holdings: SecurityHolding[]): SecurityHolding[] {
+    let holdingPerSecurityId: any = {};
+    holdings.forEach(holding => {
+      if(holdingPerSecurityId[holding.securityId] == null) {
+        holdingPerSecurityId[holding.securityId] = holding;
+      } else {
+        holdingPerSecurityId[holding.securityId] = SecurityUtil.aggregateHistoricalHoldingValue(holdingPerSecurityId[holding.securityId], holding as any);
+      }
+    });
+    return Object.values(holdingPerSecurityId);
   }
 
   protected readonly SecurityUtil = SecurityUtil;

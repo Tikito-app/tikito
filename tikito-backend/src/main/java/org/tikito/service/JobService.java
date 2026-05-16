@@ -56,13 +56,14 @@ public class JobService {
     public void updateAllSecurities(final long userId) {
         final Set<Long> currencyIdsProcessed = new HashSet<>();
         securityTransactionRepository.findAllByUserId(userId)
+                .stream()
+                .filter(transaction -> transaction.getSecurityId() != null)
                 .forEach(transaction -> {
-                    final Long securityId = transaction.getId();
 
                     // Be sure to also update the currency prices, before recalculating the historical values
-                    jobFactoryService.addJobToUpdateCurrencyPrice(transaction, currencyIdsProcessed, securityId);
-                    jobFactoryService.addJob(Job.security(JobType.ENRICH_SECURITY, securityId).build());
-                    jobFactoryService.addJob(Job.security(JobType.UPDATE_SECURITY_PRICES, securityId).build());
+                    jobFactoryService.addJobToUpdateCurrencyPrice(transaction, currencyIdsProcessed, transaction.getSecurityId());
+                    jobFactoryService.addJob(Job.security(JobType.ENRICH_SECURITY, transaction.getSecurityId()).build());
+                    jobFactoryService.addJob(Job.security(JobType.UPDATE_SECURITY_PRICES, transaction.getSecurityId()).build());
                     jobFactoryService.addJob(Job.security(JobType.RECALCULATE_HISTORICAL_SECURITY_VALUES, transaction.getSecurityId(), userId).build());
                 });
         jobFactoryService.addJob(Job.user(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());

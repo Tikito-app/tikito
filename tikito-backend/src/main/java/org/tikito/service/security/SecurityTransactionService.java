@@ -68,7 +68,7 @@ public class SecurityTransactionService {
 
     public List<SecurityTransactionDto> getSecurityTransactions(final long userId, final SecurityHoldingFilter filter) {
         return enrichTransactions(securityTransactionRepository
-                .findBySecurityIdIn(userId, filter.getSecurityIds(), filter.getAccountIds(), filter.getStartDateAsInstant(), filter.getSecurityIds().size())
+                .findBySecurityIdIn(userId, filter.getSecurityIds(), filter.getAccountIds(), filter.getStartDateAsInstant())
                 .stream()
                 .sorted((o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp())));
     }
