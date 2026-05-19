@@ -3,6 +3,8 @@ package org.tikito.service;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.tikito.controller.request.CreateOrUpdateAccountRequest;
 import org.tikito.dto.AccountDto;
 import org.tikito.dto.DateRange;
@@ -22,6 +24,9 @@ import org.tikito.entity.security.Security;
 import org.tikito.entity.security.SecurityPrice;
 import org.tikito.repository.*;
 import org.tikito.service.export.ImportExportService;
+import org.tikito.util.MariadbTestContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -34,7 +39,18 @@ import java.util.Set;
 import static org.tikito.TestUtil.randomDouble;
 import static org.tikito.TestUtil.randomString;
 
+@Testcontainers
 public class BaseIntegrationTest extends BaseTest {
+
+    @Container
+    protected static MariadbTestContainer testContainer = MariadbTestContainer.instance();
+
+    @DynamicPropertySource
+    static void configureProperties(final DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", testContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", testContainer::getUsername);
+        registry.add("spring.datasource.password", testContainer::getPassword);
+    }
 
     protected static Account DEFAULT_DEBIT_ACCOUNT = null;
     protected static Account DEFAULT_SECURITY_ACCOUNT = null;

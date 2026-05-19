@@ -9,7 +9,7 @@ public class MariadbTestContainer extends MariaDBContainer<MariadbTestContainer>
     private static MariadbTestContainer _instance;
 
     private MariadbTestContainer() {
-        super("mariadb:10.3.39");
+        super("mariadb:10.5");
     }
 
     public static MariadbTestContainer instance() {
