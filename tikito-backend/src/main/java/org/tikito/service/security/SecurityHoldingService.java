@@ -9,6 +9,7 @@ import org.tikito.dto.security.HistoricalSecurityHoldingValueDto;
 import org.tikito.dto.security.SecurityHoldingDto;
 import org.tikito.dto.security.SecurityHoldingFilter;
 import org.tikito.entity.Job;
+import org.tikito.entity.money.MoneyHolding;
 import org.tikito.entity.security.*;
 import org.tikito.repository.*;
 import org.tikito.service.CacheService;
@@ -33,6 +34,7 @@ public class SecurityHoldingService implements JobProcessor {
     private final SecurityTransactionRepository securityTransactionRepository;
     private final CacheService cacheService;
     private final AggregatedHistoricalSecurityHoldingValueRepository aggregatedHistoricalSecurityHoldingValueRepository;
+    private final MoneyHoldingRepository moneyHoldingRepository;
 
     public SecurityHoldingService(final SecurityHoldingRepository securityHoldingRepository,
                                   final HistoricalSecurityHoldingValueRepository historicalSecurityHoldingValueRepository,
@@ -40,7 +42,8 @@ public class SecurityHoldingService implements JobProcessor {
                                   final SecurityPriceRepository securityPriceRepository,
                                   final SecurityTransactionRepository securityTransactionRepository,
                                   final CacheService cacheService,
-                                  final AggregatedHistoricalSecurityHoldingValueRepository aggregatedHistoricalSecurityHoldingValueRepository) {
+                                  final AggregatedHistoricalSecurityHoldingValueRepository aggregatedHistoricalSecurityHoldingValueRepository,
+                                  final MoneyHoldingRepository moneyHoldingRepository) {
         this.securityHoldingRepository = securityHoldingRepository;
         this.historicalSecurityHoldingValueRepository = historicalSecurityHoldingValueRepository;
         this.securityRepository = securityRepository;
@@ -48,6 +51,7 @@ public class SecurityHoldingService implements JobProcessor {
         this.securityTransactionRepository = securityTransactionRepository;
         this.cacheService = cacheService;
         this.aggregatedHistoricalSecurityHoldingValueRepository = aggregatedHistoricalSecurityHoldingValueRepository;
+        this.moneyHoldingRepository = moneyHoldingRepository;
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -75,6 +79,7 @@ public class SecurityHoldingService implements JobProcessor {
                                                                                  final Map<LocalDate, List<SecurityTransaction>> transactionsPerTimestamp) {
         final LocalDate firstTimestamp = getFirstTimestamp(transactionsPerTimestamp);
         final List<HistoricalSecurityHoldingValue> historicalSecurityHoldingValues = new ArrayList<>();
+        final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountIdAndCurrencyId(userId, accountId, currencyId).orElseThrow();
 
         HistoricalSecurityHoldingValueDto currentHoldingValue = new HistoricalSecurityHoldingValueDto(accountId, securityId, securityHoldingId, currencyId);
 

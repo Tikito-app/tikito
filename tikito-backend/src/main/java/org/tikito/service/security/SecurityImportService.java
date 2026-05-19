@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.tikito.dto.AccountDto;
 import org.tikito.dto.ImportFileType;
+import org.tikito.dto.money.MoneyTransactionDto;
 import org.tikito.dto.security.SecurityTransactionDto;
 import org.tikito.dto.security.SecurityTransactionImportLine;
 import org.tikito.dto.security.SecurityTransactionImportResultDto;
@@ -48,6 +49,7 @@ public class SecurityImportService {
     private final CacheService cacheService;
     private final AccountRepository accountRepository;
     private final SecurityIsinMappingService securityIsinMappingService;
+    private final MoneyTransactionRepository moneyTransactionRepository;
 
     public SecurityImportService(final SecurityTransactionRepository securityTransactionRepository,
                                  final SecurityRepository securityRepository,
@@ -58,7 +60,8 @@ public class SecurityImportService {
                                  final JobFactoryService jobFactoryService,
                                  final CacheService cacheService,
                                  final AccountRepository accountRepository,
-                                 final SecurityIsinMappingService securityIsinMappingService) {
+                                 final SecurityIsinMappingService securityIsinMappingService,
+                                 final MoneyTransactionRepository moneyTransactionRepository) {
         this.securityTransactionRepository = securityTransactionRepository;
         this.securityRepository = securityRepository;
         this.isinRepository = isinRepository;
@@ -67,6 +70,7 @@ public class SecurityImportService {
         this.cacheService = cacheService;
         this.accountRepository = accountRepository;
         this.securityIsinMappingService = securityIsinMappingService;
+        this.moneyTransactionRepository = moneyTransactionRepository;
 
         importers = List.of(deGiroAccountImporter, deGiroTransactionsImporter);
     }
@@ -140,7 +144,6 @@ public class SecurityImportService {
 
         failedAmountsPerReason.keySet().forEach(reason -> log.info("Failed {}: {}", reason, failedAmountsPerReason.get(reason)));
 
-
         if (!dryRun) {
             // first save the new securities
             securityRepository.saveAllAndFlush(result.getNewSecuritiesByIsin().values());
@@ -202,9 +205,58 @@ public class SecurityImportService {
      */
     private void failDuplicateTransactions(final long accountId, final SecurityTransactionImportResultDto result) {
         final Map<String, List<SecurityTransactionDto>> existingUniqueTransactionsPerDate = new HashMap<>();
+        final Map<String, List<MoneyTransactionDto>> existingUniqueMoneyTransactionsPerDate = new HashMap<>();
         final Map<String, List<SecurityTransactionImportLine>> newUniqueTransactionsPerDate = new HashMap<>();
 
+        fillExistingTransactionsMap(accountId, existingUniqueTransactionsPerDate);
+        fillExistingMoneyTransactionsMap(accountId, existingUniqueMoneyTransactionsPerDate);
+
+        fillNewUniqueTransactionsPerDate(accountId, result, newUniqueTransactionsPerDate);
+        fillNewUniqueMoneyTransactionsPerDAte(result, newUniqueTransactionsPerDate);
+
+        newUniqueTransactionsPerDate.forEach((uniqueKey, newList) -> {
+            final int existingAmount = (existingUniqueTransactionsPerDate.containsKey(uniqueKey) ? existingUniqueTransactionsPerDate.get(uniqueKey).size() : 0) +
+                    (existingUniqueMoneyTransactionsPerDate.containsKey(uniqueKey) ? existingUniqueMoneyTransactionsPerDate.get(uniqueKey).size() : 0);
+            final int newAmount = newList.size();
+
+            for (int i = 0; i < existingAmount && i < newAmount; i++) {
+                newList.get(i).setFailedReason(FAILED_DUPLICATE_TRANSACTION);
+            }
+        });
+    }
+
+    private void fillNewUniqueMoneyTransactionsPerDAte(final SecurityTransactionImportResultDto result, final Map<String, List<SecurityTransactionImportLine>> newUniqueTransactionsPerDate) {
+        filterNonFailed(result)
+                .filter(SecurityTransactionImportLine::isMoneyTransaction)
+                .forEach(line -> {
+                    final String uniqueKey = MoneyTransactionDto.getUniqueKey(line);
+                    newUniqueTransactionsPerDate.putIfAbsent(uniqueKey, new ArrayList<>());
+                    newUniqueTransactionsPerDate.get(uniqueKey).add(line);
+                });
+    }
+
+    private void fillNewUniqueTransactionsPerDate(final long accountId, final SecurityTransactionImportResultDto result, final Map<String, List<SecurityTransactionImportLine>> newUniqueTransactionsPerDate) {
+        filterNonFailed(result)
+                .filter(line -> !line.isMoneyTransaction())
+                .forEach(line -> {
+                    final String uniqueKey = SecurityTransactionDto.getUniqueKey(accountId, line);
+                    newUniqueTransactionsPerDate.putIfAbsent(uniqueKey, new ArrayList<>());
+                    newUniqueTransactionsPerDate.get(uniqueKey).add(line);
+                });
+    }
+
+    private void fillExistingMoneyTransactionsMap(final long accountId, final Map<String, List<MoneyTransactionDto>> existingUniqueMoneyTransactionsPerDate) {
         // todo: add filter by isin when we don't store them anymore as a comma separated string
+        moneyTransactionRepository
+                .findByAccountId(accountId)
+                .forEach(transaction -> {
+                    final String uniqueKey = MoneyTransactionDto.getUniqueKey(transaction);
+                    existingUniqueMoneyTransactionsPerDate.putIfAbsent(uniqueKey, new ArrayList<>());
+                    existingUniqueMoneyTransactionsPerDate.get(uniqueKey).add(transaction.toDto());
+                });
+    }
+
+    private void fillExistingTransactionsMap(final long accountId, final Map<String, List<SecurityTransactionDto>> existingUniqueTransactionsPerDate) {
         securityTransactionRepository
                 .findByAccountId(accountId)
                 .forEach(transaction -> {
@@ -212,20 +264,6 @@ public class SecurityImportService {
                     existingUniqueTransactionsPerDate.putIfAbsent(uniqueKey, new ArrayList<>());
                     existingUniqueTransactionsPerDate.get(uniqueKey).add(transaction.toDto());
                 });
-        filterNonFailed(result)
-                .forEach(line -> {
-                    final String uniqueKey = SecurityTransactionDto.getUniqueKey(accountId, line);
-                    newUniqueTransactionsPerDate.putIfAbsent(uniqueKey, new ArrayList<>());
-                    newUniqueTransactionsPerDate.get(uniqueKey).add(line);
-                });
-        newUniqueTransactionsPerDate.forEach((uniqueKey, newList) -> {
-            final int existingAmount = existingUniqueTransactionsPerDate.containsKey(uniqueKey) ? existingUniqueTransactionsPerDate.get(uniqueKey).size() : 0;
-            final int newAmount = newList.size();
-
-            for (int i = 0; i < existingAmount && i < newAmount; i++) {
-                newList.get(i).setFailedReason(FAILED_DUPLICATE_TRANSACTION);
-            }
-        });
     }
 
     private void extractNewHoldingsFromTransactions(final long userId, final long accountId, final SecurityTransactionImportResultDto result) {

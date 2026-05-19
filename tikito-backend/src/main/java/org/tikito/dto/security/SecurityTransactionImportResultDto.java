@@ -1,10 +1,11 @@
 package org.tikito.dto.security;
 
+import lombok.Getter;
+import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.entity.security.Isin;
+import org.tikito.entity.security.Security;
 import org.tikito.entity.security.SecurityHolding;
 import org.tikito.entity.security.SecurityTransaction;
-import org.tikito.entity.security.Security;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class SecurityTransactionImportResultDto {
     private final Map<String, Isin> newIsinsByIsin = new HashMap<>();
     private final List<SecurityHolding> newSecurityHoldings = new ArrayList<>();
     private final List<SecurityTransaction> importedTransactions = new ArrayList<>();
+    private final List<MoneyTransaction> moneyTransactions = new ArrayList<>();
     private final Map<Long, SecurityHolding> existingSecurityHoldings = new HashMap<>();
 
     public SecurityTransactionImportResultDto(final List<List<String>> csv) {

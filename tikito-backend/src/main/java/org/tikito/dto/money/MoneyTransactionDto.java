@@ -1,5 +1,6 @@
 package org.tikito.dto.money;
 
+import org.tikito.dto.security.SecurityTransactionImportLine;
 import org.tikito.entity.money.MoneyTransaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +37,13 @@ public class MoneyTransactionDto {
 
     public static String getUniqueKey(final MoneyTransactionImportLine line) {
         return line.getCounterpartyAccountNumber() + "#" +
+                LocalDate.ofInstant(line.getTimestamp(), ZoneOffset.UTC) + "#" +
+                line.getAmount() + "#" +
+                line.getCurrencyId();
+    }
+
+    public static String getUniqueKey(final SecurityTransactionImportLine line) {
+        return "#" + // because we don't have the counterparty account number, we just have '#'
                 LocalDate.ofInstant(line.getTimestamp(), ZoneOffset.UTC) + "#" +
                 line.getAmount() + "#" +
                 line.getCurrencyId();

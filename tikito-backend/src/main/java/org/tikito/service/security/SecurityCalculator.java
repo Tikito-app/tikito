@@ -82,6 +82,9 @@ public final class SecurityCalculator {
                 newHoldingValue.setTotalAdministrativeCosts(newHoldingValue.getTotalAdministrativeCosts() + transaction.getPrice());
                 totalMutation = transaction.getPrice();
                 break;
+//            case IDEAL_DEPOSIT:
+//                totalMutation = transaction.getPrice();
+////                newHoldingValue.setCashOnHand();
         }
 
         if (totalMutation < 0) {

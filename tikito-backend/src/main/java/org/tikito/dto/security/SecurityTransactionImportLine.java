@@ -29,6 +29,7 @@ public class SecurityTransactionImportLine {
     private boolean failed;
     private String failedReason;
     private Double exchangeRate;
+    private boolean moneyTransaction;
 
     public SecurityTransactionImportLine(final int lineNumber, final List<String> cells) {
         this.lineNumber = lineNumber;
