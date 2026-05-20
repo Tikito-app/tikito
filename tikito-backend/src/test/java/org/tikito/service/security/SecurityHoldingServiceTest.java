@@ -45,9 +45,6 @@ class SecurityHoldingServiceTest extends BaseTest {
     @Mock
     private AggregatedHistoricalSecurityHoldingValueRepository aggregatedHistoricalSecurityHoldingValueRepository;
 
-    @Mock
-    private MoneyHoldingRepository moneyHoldingRepository;
-
     @BeforeEach
     void setup() {
         loginWithUser(1);
@@ -61,8 +58,7 @@ class SecurityHoldingServiceTest extends BaseTest {
                 securityPriceRepository,
                 securityTransactionRepository,
                 cacheService,
-                aggregatedHistoricalSecurityHoldingValueRepository,
-                moneyHoldingRepository);
+                aggregatedHistoricalSecurityHoldingValueRepository);
 
         final HistoricalSecurityHoldingValue value1 = new HistoricalSecurityHoldingValue(DEFAULT_USER_ACCOUNT.getId(), randomHistoricalHoldingValueDto(CURRENCY_EURO_ID, DEFAULT_USER_ACCOUNT.getId()));
         final HistoricalSecurityHoldingValue value2 = new HistoricalSecurityHoldingValue(DEFAULT_USER_ACCOUNT.getId(), randomHistoricalHoldingValueDto(CURRENCY_EURO_ID, DEFAULT_USER_ACCOUNT.getId()));

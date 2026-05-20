@@ -172,17 +172,11 @@ public class DeGiroAccountImporter extends SecurityTransactionImporter {
             line.setCurrency(currency);
             line.setCountry(country);
             line.setCash(parsePrice(line.getCells().get(10)));
-            line.setMoneyTransaction(isMoneyTransaction(line));
         } catch (final Exception e) {
             line.setFailedReason(e.getMessage());
         }
 
         return lines;
-    }
-
-    private boolean isMoneyTransaction(final SecurityTransactionImportLine line) {
-        return line.getTransactionType() == FLATEX_DEPOSIT  ||
-                line.getTransactionType() == IDEAL_DEPOSIT;
     }
 
     private double parsePrice(final String price) {

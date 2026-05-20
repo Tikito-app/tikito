@@ -12,7 +12,6 @@ public interface MoneyHoldingRepository extends JpaRepository<MoneyHolding, Long
     void deleteByUserIdAndAccountId(long userId, long accountId);
 
     List<MoneyHolding> findByUserIdAndAccountId(long userId, long accountId);
-    Optional<MoneyHolding> findByUserIdAndAccountIdAndCurrencyId(long userId, long accountId, long currencyId);
 
     List<MoneyHolding> findByUserId(long userId);
 }

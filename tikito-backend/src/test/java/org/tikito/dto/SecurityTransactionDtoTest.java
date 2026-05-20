@@ -39,48 +39,48 @@ class SecurityTransactionDtoTest extends BaseTest {
     void getUniqueKey_shouldEqual_givenEqualValues() {
         assertEquals(
                 SecurityTransactionDto.getUniqueKey(new SecurityTransaction(null, DEFAULT_USER_ACCOUNT.getId(), null, ISIN, ACCOUNT_ID, CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, TIMESTAMP, null, 1.0, TRANSACTION_TYPE)),
-                SecurityTransactionDto.getUniqueKey(ACCOUNT_ID, new SecurityTransactionImportLine(TIMESTAMP, ISIN, PRODUCT_NAME, "EUR", CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, TRANSACTION_TYPE, COUNTRY, null, null, 0, null, false, null, 1.0, false)));
+                SecurityTransactionDto.getUniqueKey(ACCOUNT_ID, new SecurityTransactionImportLine(TIMESTAMP, ISIN, PRODUCT_NAME, "EUR", CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, TRANSACTION_TYPE, COUNTRY, null, null, 0, null, false, null, 1.0)));
     }
 
     @Test
     void getUniqueKey_shouldNotBeEqual_givenDifferentTimestamp() {
         assertNotEquals(
                 SecurityTransactionDto.getUniqueKey(new SecurityTransaction(null, DEFAULT_USER_ACCOUNT.getId(), null, ISIN, ACCOUNT_ID, CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, TIMESTAMP, null, 1.0, TRANSACTION_TYPE)),
-                SecurityTransactionDto.getUniqueKey(ACCOUNT_ID, new SecurityTransactionImportLine(TIMESTAMP.plusMillis(1), ISIN, PRODUCT_NAME, "EUR", CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, TRANSACTION_TYPE, COUNTRY, null, null, 0, null, false, null, 1.0, false)));
+                SecurityTransactionDto.getUniqueKey(ACCOUNT_ID, new SecurityTransactionImportLine(TIMESTAMP.plusMillis(1), ISIN, PRODUCT_NAME, "EUR", CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, TRANSACTION_TYPE, COUNTRY, null, null, 0, null, false, null, 1.0)));
     }
 
     @Test
     void getUniqueKey_shouldNotBeEqual_givenDifferentIsin() {
         assertNotEquals(
                 SecurityTransactionDto.getUniqueKey(new SecurityTransaction(null, DEFAULT_USER_ACCOUNT.getId(), null, ISIN, ACCOUNT_ID, CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, TIMESTAMP, null, 1.0, TRANSACTION_TYPE)),
-                SecurityTransactionDto.getUniqueKey(ACCOUNT_ID, new SecurityTransactionImportLine(TIMESTAMP, UUID.randomUUID().toString(), PRODUCT_NAME, "EUR", CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, TRANSACTION_TYPE, COUNTRY, null, null, 0, null, false, null, 1.0, false)));
+                SecurityTransactionDto.getUniqueKey(ACCOUNT_ID, new SecurityTransactionImportLine(TIMESTAMP, UUID.randomUUID().toString(), PRODUCT_NAME, "EUR", CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, TRANSACTION_TYPE, COUNTRY, null, null, 0, null, false, null, 1.0)));
     }
 
     @Test
     void getUniqueKey_shouldNotBeEqual_givenDifferentAmount() {
         assertNotEquals(
                 SecurityTransactionDto.getUniqueKey(new SecurityTransaction(null, DEFAULT_USER_ACCOUNT.getId(), null, ISIN, ACCOUNT_ID, CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, TIMESTAMP, null, 1.0, TRANSACTION_TYPE)),
-                SecurityTransactionDto.getUniqueKey(ACCOUNT_ID, new SecurityTransactionImportLine(TIMESTAMP, ISIN, PRODUCT_NAME, "EUR", CURRENCY_EURO_ID, 2, PRICE, DESCRIPTION, TRANSACTION_TYPE, COUNTRY, null, null, 0, null, false, null, 1.0, false)));
+                SecurityTransactionDto.getUniqueKey(ACCOUNT_ID, new SecurityTransactionImportLine(TIMESTAMP, ISIN, PRODUCT_NAME, "EUR", CURRENCY_EURO_ID, 2, PRICE, DESCRIPTION, TRANSACTION_TYPE, COUNTRY, null, null, 0, null, false, null, 1.0)));
     }
 
     @Test
     void getUniqueKey_shouldNotBeEqual_givenDifferentPrice() {
         assertNotEquals(
                 SecurityTransactionDto.getUniqueKey(new SecurityTransaction(null, DEFAULT_USER_ACCOUNT.getId(), null, ISIN, ACCOUNT_ID, CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, TIMESTAMP, null, 1.0, TRANSACTION_TYPE)),
-                SecurityTransactionDto.getUniqueKey(ACCOUNT_ID, new SecurityTransactionImportLine(TIMESTAMP, ISIN, PRODUCT_NAME, "EUR", CURRENCY_EURO_ID, AMOUNT, 4, DESCRIPTION, TRANSACTION_TYPE, COUNTRY, null, null, 0, null, false, null, 1.0, false)));
+                SecurityTransactionDto.getUniqueKey(ACCOUNT_ID, new SecurityTransactionImportLine(TIMESTAMP, ISIN, PRODUCT_NAME, "EUR", CURRENCY_EURO_ID, AMOUNT, 4, DESCRIPTION, TRANSACTION_TYPE, COUNTRY, null, null, 0, null, false, null, 1.0)));
     }
 
     @Test
     void getUniqueKey_shouldNotBeEqual_givenDifferentTransactionType() {
         assertNotEquals(
                 SecurityTransactionDto.getUniqueKey(new SecurityTransaction(null, DEFAULT_USER_ACCOUNT.getId(), null, ISIN, ACCOUNT_ID, CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, TIMESTAMP, null, 1.0, TRANSACTION_TYPE)),
-                SecurityTransactionDto.getUniqueKey(ACCOUNT_ID, new SecurityTransactionImportLine(TIMESTAMP, ISIN, PRODUCT_NAME, "EUR", CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, SecurityTransactionType.SELL, COUNTRY, null, null, 0, null, false, null, 1.0, false)));
+                SecurityTransactionDto.getUniqueKey(ACCOUNT_ID, new SecurityTransactionImportLine(TIMESTAMP, ISIN, PRODUCT_NAME, "EUR", CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, SecurityTransactionType.SELL, COUNTRY, null, null, 0, null, false, null, 1.0)));
     }
 
     @Test
     void getUniqueKey_shouldNotBeEqual_givenDifferentAccountIds() {
         assertNotEquals(
                 SecurityTransactionDto.getUniqueKey(new SecurityTransaction(null, DEFAULT_USER_ACCOUNT.getId(), null, ISIN, ACCOUNT_ID, CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, TIMESTAMP, null, 1.0, TRANSACTION_TYPE)),
-                SecurityTransactionDto.getUniqueKey(3L, new SecurityTransactionImportLine(TIMESTAMP, ISIN, PRODUCT_NAME, "EUR", CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, SecurityTransactionType.SELL, COUNTRY, null, null, 0, null, false, null, 1.0, false)));
+                SecurityTransactionDto.getUniqueKey(3L, new SecurityTransactionImportLine(TIMESTAMP, ISIN, PRODUCT_NAME, "EUR", CURRENCY_EURO_ID, AMOUNT, PRICE, DESCRIPTION, SecurityTransactionType.SELL, COUNTRY, null, null, 0, null, false, null, 1.0)));
     }
 }

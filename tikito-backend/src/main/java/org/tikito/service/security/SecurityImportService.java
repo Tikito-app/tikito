@@ -205,18 +205,14 @@ public class SecurityImportService {
      */
     private void failDuplicateTransactions(final long accountId, final SecurityTransactionImportResultDto result) {
         final Map<String, List<SecurityTransactionDto>> existingUniqueTransactionsPerDate = new HashMap<>();
-        final Map<String, List<MoneyTransactionDto>> existingUniqueMoneyTransactionsPerDate = new HashMap<>();
         final Map<String, List<SecurityTransactionImportLine>> newUniqueTransactionsPerDate = new HashMap<>();
 
         fillExistingTransactionsMap(accountId, existingUniqueTransactionsPerDate);
-        fillExistingMoneyTransactionsMap(accountId, existingUniqueMoneyTransactionsPerDate);
 
         fillNewUniqueTransactionsPerDate(accountId, result, newUniqueTransactionsPerDate);
-        fillNewUniqueMoneyTransactionsPerDAte(result, newUniqueTransactionsPerDate);
 
         newUniqueTransactionsPerDate.forEach((uniqueKey, newList) -> {
-            final int existingAmount = (existingUniqueTransactionsPerDate.containsKey(uniqueKey) ? existingUniqueTransactionsPerDate.get(uniqueKey).size() : 0) +
-                    (existingUniqueMoneyTransactionsPerDate.containsKey(uniqueKey) ? existingUniqueMoneyTransactionsPerDate.get(uniqueKey).size() : 0);
+            final int existingAmount = existingUniqueTransactionsPerDate.containsKey(uniqueKey) ? existingUniqueTransactionsPerDate.get(uniqueKey).size() : 0;
             final int newAmount = newList.size();
 
             for (int i = 0; i < existingAmount && i < newAmount; i++) {
@@ -225,19 +221,8 @@ public class SecurityImportService {
         });
     }
 
-    private void fillNewUniqueMoneyTransactionsPerDAte(final SecurityTransactionImportResultDto result, final Map<String, List<SecurityTransactionImportLine>> newUniqueTransactionsPerDate) {
-        filterNonFailed(result)
-                .filter(SecurityTransactionImportLine::isMoneyTransaction)
-                .forEach(line -> {
-                    final String uniqueKey = MoneyTransactionDto.getUniqueKey(line);
-                    newUniqueTransactionsPerDate.putIfAbsent(uniqueKey, new ArrayList<>());
-                    newUniqueTransactionsPerDate.get(uniqueKey).add(line);
-                });
-    }
-
     private void fillNewUniqueTransactionsPerDate(final long accountId, final SecurityTransactionImportResultDto result, final Map<String, List<SecurityTransactionImportLine>> newUniqueTransactionsPerDate) {
         filterNonFailed(result)
-                .filter(line -> !line.isMoneyTransaction())
                 .forEach(line -> {
                     final String uniqueKey = SecurityTransactionDto.getUniqueKey(accountId, line);
                     newUniqueTransactionsPerDate.putIfAbsent(uniqueKey, new ArrayList<>());

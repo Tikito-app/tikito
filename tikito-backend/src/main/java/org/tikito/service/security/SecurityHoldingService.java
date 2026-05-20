@@ -34,7 +34,6 @@ public class SecurityHoldingService implements JobProcessor {
     private final SecurityTransactionRepository securityTransactionRepository;
     private final CacheService cacheService;
     private final AggregatedHistoricalSecurityHoldingValueRepository aggregatedHistoricalSecurityHoldingValueRepository;
-    private final MoneyHoldingRepository moneyHoldingRepository;
 
     public SecurityHoldingService(final SecurityHoldingRepository securityHoldingRepository,
                                   final HistoricalSecurityHoldingValueRepository historicalSecurityHoldingValueRepository,
@@ -42,8 +41,7 @@ public class SecurityHoldingService implements JobProcessor {
                                   final SecurityPriceRepository securityPriceRepository,
                                   final SecurityTransactionRepository securityTransactionRepository,
                                   final CacheService cacheService,
-                                  final AggregatedHistoricalSecurityHoldingValueRepository aggregatedHistoricalSecurityHoldingValueRepository,
-                                  final MoneyHoldingRepository moneyHoldingRepository) {
+                                  final AggregatedHistoricalSecurityHoldingValueRepository aggregatedHistoricalSecurityHoldingValueRepository) {
         this.securityHoldingRepository = securityHoldingRepository;
         this.historicalSecurityHoldingValueRepository = historicalSecurityHoldingValueRepository;
         this.securityRepository = securityRepository;
@@ -51,7 +49,6 @@ public class SecurityHoldingService implements JobProcessor {
         this.securityTransactionRepository = securityTransactionRepository;
         this.cacheService = cacheService;
         this.aggregatedHistoricalSecurityHoldingValueRepository = aggregatedHistoricalSecurityHoldingValueRepository;
-        this.moneyHoldingRepository = moneyHoldingRepository;
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -79,7 +76,6 @@ public class SecurityHoldingService implements JobProcessor {
                                                                                  final Map<LocalDate, List<SecurityTransaction>> transactionsPerTimestamp) {
         final LocalDate firstTimestamp = getFirstTimestamp(transactionsPerTimestamp);
         final List<HistoricalSecurityHoldingValue> historicalSecurityHoldingValues = new ArrayList<>();
-        final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountIdAndCurrencyId(userId, accountId, currencyId).orElseThrow();
 
         HistoricalSecurityHoldingValueDto currentHoldingValue = new HistoricalSecurityHoldingValueDto(accountId, securityId, securityHoldingId, currencyId);
 
