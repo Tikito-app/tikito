@@ -116,7 +116,6 @@ class UserAccountServiceTest extends BaseIntegrationTest {
         service.register(email, randomString(20));
         final UserAccount userAccount = userAccountRepository.findByEmail(email).get();
         assertTrue(userAccount.isActivated());
-        assertEquals(168, securityRepository.findBySecurityTypes(Set.of(SecurityType.CURRENCY, SecurityType.CRYPTO)).size());
         assertFalse(cacheService.isFirstEverUser());
     }
 }

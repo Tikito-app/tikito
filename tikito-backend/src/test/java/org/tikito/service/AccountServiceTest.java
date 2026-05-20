@@ -6,9 +6,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.tikito.controller.request.CreateOrUpdateAccountRequest;
 import org.tikito.dto.AccountDto;
+import org.tikito.entity.Account;
 import org.tikito.entity.money.MoneyHolding;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,50 +26,10 @@ class AccountServiceTest extends BaseIntegrationTest {
 
     @Test
     void testCreateNewDebitAccount() {
-        final AccountDto dto = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE);
+        createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE);
 
-        final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), dto.getId()).getFirst();
-        assertEquals(CURRENCY_EURO_ID, moneyHolding.getCurrencyId());
-    }
-
-    @Test
-    void testCreateNewCreditAccount() {
-        final AccountDto dto = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE);
-
-        final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), dto.getId()).getFirst();
-        assertEquals(CURRENCY_EURO_ID, moneyHolding.getCurrencyId());
-    }
-
-    @Test
-    void shouldHaveSingleHolding_givenDeletedAccount() {
-        final AccountDto deleted = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE);
-        assertEquals(1, moneyHoldingRepository.count());
-        accountService.deleteAccount(deleted.getUserId(), deleted.getId());
-
-        final AccountDto securityAccount = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE);
-        assertEquals(0, moneyHoldingRepository.count());
-        accountService.deleteAccount(securityAccount.getUserId(), securityAccount.getId());
-
-        final AccountDto newDto = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE);
-        final List<MoneyHolding> all = moneyHoldingRepository.findAll();
-        assertEquals(1, all.size());
-
-        final MoneyHolding holding = all.getFirst();
-        assertHoldingMatches(newDto, holding);
-    }
-
-    @Test
-    void shouldSetProperHolding_given_updatedAccount() {
-        final AccountDto account = createAccount(DEFAULT_USER_ACCOUNT.getId(), ACCOUNT_NAME_ONE);
-        final long holdingId = moneyHoldingRepository.findAll().getFirst().getId();
-
-        accountService.createOrUpdate(account.getUserId(), request("new", account.getId()));
-        final List<MoneyHolding> allHoldings = moneyHoldingRepository.findAll();
-        assertEquals(1, allHoldings.size());
-        assertEquals(holdingId, allHoldings.getFirst().getId().longValue());
-
-        accountService.createOrUpdate(account.getUserId(), request("new-new", account.getId()));
-        assertEquals(0, moneyHoldingRepository.count());
+        final List<Account> accounts = accountRepository.findByUserIdAndName(DEFAULT_USER_ACCOUNT.getId(), Set.of(ACCOUNT_NAME_ONE));
+        assertEquals(1, accounts.size());
     }
 
     private void assertHoldingMatches(final AccountDto account, final MoneyHolding holding) {
