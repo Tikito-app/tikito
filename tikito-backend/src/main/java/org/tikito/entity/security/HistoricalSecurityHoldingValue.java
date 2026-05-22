@@ -21,11 +21,6 @@ public class HistoricalSecurityHoldingValue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private long userId;
-//    @ElementCollection(fetch = FetchType.LAZY)
-//    @CollectionTable(
-//            name = "historical_security_holding_account",
-//            joinColumns = @JoinColumn(name = "historical_security_holding_id"))
-//    @Column(name = "account_id")
     private long accountId;
     private Long securityHoldingId;
     private Long securityId; // todo: can we remove this?

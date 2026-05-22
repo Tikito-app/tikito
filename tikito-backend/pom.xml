@@ -25,7 +25,6 @@
 		<apache.httpcomoponents.version>4.5.13</apache.httpcomoponents.version>
 		<prowidesoftware.version>SRU2024-10.2.6</prowidesoftware.version>
 		<cucumber.version>7.34.3</cucumber.version>
-		<rest-assured.version>6.0.0</rest-assured.version>
 	</properties>
 
 	<dependencies>
@@ -188,12 +187,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-testcontainers</artifactId>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<scope>test</scope>
-			<version>${rest-assured.version}</version>
 		</dependency>
 	</dependencies>
 

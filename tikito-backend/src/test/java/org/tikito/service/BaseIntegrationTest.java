@@ -23,6 +23,7 @@ import org.tikito.entity.security.Security;
 import org.tikito.entity.security.SecurityPrice;
 import org.tikito.repository.*;
 import org.tikito.service.export.ImportExportService;
+import org.tikito.service.security.SecurityHoldingService;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -87,6 +88,9 @@ public class BaseIntegrationTest extends BaseTest {
     protected HistoricalSecurityHoldingValueRepository historicalSecurityHoldingValueRepository;
 
     @Autowired
+    protected AggregatedHistoricalSecurityHoldingValueRepository aggregatedHistoricalSecurityHoldingValueRepository;
+
+    @Autowired
     protected AggregatedHistoricalMoneyHoldingValueRepository aggregatedHistoricalMoneyHoldingValueRepository;
 
     @Autowired
@@ -103,6 +107,9 @@ public class BaseIntegrationTest extends BaseTest {
 
     @Autowired
     protected AccountService accountService;
+
+    @Autowired
+    protected SecurityHoldingService securityHoldingService;
 
     @AfterEach
     @BeforeEach
@@ -129,7 +136,9 @@ public class BaseIntegrationTest extends BaseTest {
     protected void withDefaultData() {
         withDefaultCurrencies();
         withDefaultSecurities();
+        withDefaultUserAccount();
         withDefaultAccounts();
+        cacheService.refreshCurrencies(); // todo fix for all securities
     }
 
     protected void loginWithDefaultUser() {
@@ -271,15 +280,12 @@ public class BaseIntegrationTest extends BaseTest {
     }
 
     protected Account withExistingAccounts(final long userId, final String name, final String accountNumber, final long currencyId) {
-        final CreateOrUpdateAccountRequest request = new CreateOrUpdateAccountRequest();
-
-        request.setName(name);
-        request.setAccountNumber(accountNumber);
-        request.setCurrencyId(currencyId);
-
-        final AccountDto dto = accountService.createOrUpdate(userId, request);
-
-        return accountRepository.findById(dto.getId()).orElseThrow();
+        final Account account = new Account();
+        account.setUserId(userId);
+        account.setName(name);
+        account.setAccountNumber(accountNumber);
+        account.setCurrencyId(currencyId);
+        return accountRepository.saveAndFlush(account);
     }
 
     protected void withDefaultSecurities() {
