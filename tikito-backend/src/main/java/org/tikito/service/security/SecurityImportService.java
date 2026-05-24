@@ -98,6 +98,7 @@ public class SecurityImportService {
         return importTransactions(userId, accountId, file, separatorChar, quoteChar, dryRun, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
     }
 
+    @Transactional(propagation = Propagation.MANDATORY)
     public SecurityTransactionImportResultDto importTransactions(final long userId,
                                                                  final Long accountId,
                                                                  final MultipartFile file,
@@ -125,6 +126,7 @@ public class SecurityImportService {
         return importTransactions(account, result, dryRun);
     }
 
+    @Transactional(propagation = Propagation.MANDATORY)
     public SecurityTransactionImportResultDto importTransactions(final AccountDto account,
                                                                  final SecurityTransactionImportResultDto result,
                                                                  final boolean dryRun) {

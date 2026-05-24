@@ -19,6 +19,11 @@ public class UserStepDefinitions extends BaseStepDefinitions {
         withDefaultData();
     }
 
+    @Given("default security prices")
+    public void default_security_prices() {
+//        withDefaultSecurityPrices();
+    }
+
     @Given("logged in with the default user")
     public void logged_in_default_user() {
         loginWithDefaultUser();

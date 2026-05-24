@@ -3,16 +3,22 @@ package org.tikito.cucumber;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.springframework.transaction.annotation.Transactional;
+import org.tikito.dto.export.AccountExportDto;
+import org.tikito.dto.export.ImportExportSettings;
+import org.tikito.dto.export.SecurityTransactionExportDto;
+import org.tikito.dto.export.TikitoExportDto;
 import org.tikito.dto.security.*;
 import org.tikito.entity.security.*;
+import org.tikito.service.CacheService;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Transactional
 public class SecurityStepDefinitions extends BaseStepDefinitions {
-
 
     @Given("default securities")
     public void default_securities() {
@@ -29,6 +35,38 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
         securityHoldingService.recalculateAggregatedHistoricalHoldingValues(userId);
     }
 
+    @When("security prices are:")
+    public void security_prices_are(final List<Map<String, String>> map) {
+        map.forEach(row -> {
+            final SecurityPrice price = new SecurityPrice();
+            price.setSecurityId(BaseStepDefinitions.getSecurityId(row));
+            price.setDate(LocalDate.parse(row.get("date")));
+            price.setPrice(Double.parseDouble(row.get("price")));
+            try {
+                securityPriceRepository.saveAndFlush(price);
+            } catch (final Exception _) {
+                securityPriceRepository.updatePrice(price.getSecurityId(), price.getDate(), price.getPrice());
+            }
+        });
+    }
+
+    @When("importing security transactions for user {int}:")
+    public void import_securities(final int userId, final List<Map<String, String>> map) {
+        final TikitoExportDto exportDto = new TikitoExportDto();
+        final Map<String, AccountExportDto> accountMap = new HashMap<>();
+
+        map.forEach(row -> {
+            final String accountName = row.get("account");
+            accountMap.putIfAbsent(accountName, new AccountExportDto(accountName, null, null));
+            accountMap.get(accountName).getSecurityTransactions().add(mapToSecurityTransactionExportDto(row));
+        });
+
+        final ImportExportSettings settings = generateImportSettings();
+        settings.setSecurityTransactions(true);
+        exportDto.setAccounts(accountMap.values().stream().toList());
+        importExportService.importFrom(userId, exportDto, settings);
+    }
+
     @Then("securities persisted are:")
     public void securitiesAre(final List<Map<String, String>> expected) {
         final List<SecurityDto> persisted = securityRepository.findAll()
@@ -38,10 +76,10 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
         equals(expected, persisted, this::securityEquals);
     }
 
-    @Then("security prices persisted are:")
+    @Then("security prices persisted have:")
     public void securityPricesAre(final List<Map<String, String>> expected) {
         final List<SecurityPriceDto> persisted = securityPriceRepository.findAll().stream().map(SecurityPrice::toDto).toList();
-        equals(expected, persisted, this::securityPricEquals);
+        equals(expected, persisted, this::securityPricEquals, false);
     }
 
     @Then("security transactions persisted are:")
@@ -56,16 +94,16 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
         equals(expected, persisted, this::securityHoldingEquals);
     }
 
-    @Then("historical security holding values persisted are:")
+    @Then("historical security holding values persisted have:")
     public void historicalSecurityHoldingValuesAre(final List<Map<String, String>> expected) {
         final List<HistoricalSecurityHoldingValueDto> persisted = historicalSecurityHoldingValueRepository.findAll().stream().map(HistoricalSecurityHoldingValue::toDto).toList();
-        equals(expected, persisted, this::historicalSecurityHoldingValueEquals);
+        equals(expected, persisted, this::historicalSecurityHoldingValueEquals, false);
     }
 
-    @Then("aggregated historical security holding values persisted are:")
+    @Then("aggregated historical security holding values persisted have:")
     public void aggregatedHistoricalSecurityHoldingValuesAre(final List<Map<String, String>> expected) {
         final List<AggregatedHistoricalSecurityHoldingValueDto> persisted = aggregatedHistoricalSecurityHoldingValueRepository.findAll().stream().map(AggregatedHistoricalSecurityHoldingValue::toDto).toList();
-        equals(expected, persisted, this::aggregatedHistoricalSecurityHoldingValueEquals);
+        equals(expected, persisted, this::aggregatedHistoricalSecurityHoldingValueEquals, false);
     }
 
     private boolean securityEquals(final Map<String, String> expectedMap, final SecurityDto persisted) {
@@ -327,5 +365,20 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
         }
 
         return true;
+    }
+
+    private SecurityTransactionExportDto mapToSecurityTransactionExportDto(final Map<String, String> row) {
+        final SecurityTransactionExportDto transaction = new SecurityTransactionExportDto();
+        transaction.setPrice(getNativeDouble(row, "price"));
+        transaction.setAmount(getNativeInt(row, "amount"));
+        transaction.setTimestamp(Instant.parse(row.get("timestamp")));
+        transaction.setIsin(CacheService.getSecurityByName(row.get("security")).get().getCurrentIsin());
+        transaction.setDescription(row.get("description"));
+        transaction.setAccountName(row.get("account"));
+        transaction.setCash(getNativeDouble(row, "cash"));
+        transaction.setCurrency(row.get("currency"));
+        transaction.setExchangeRate(getNativeDouble(row, "exchangeRate"));
+        transaction.setTransactionType(SecurityTransactionType.valueOf(row.get("transactionType")));
+        return transaction;
     }
 }

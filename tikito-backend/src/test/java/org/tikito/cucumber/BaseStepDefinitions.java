@@ -1,14 +1,16 @@
 package org.tikito.cucumber;
 
-import io.cucumber.java.en.Given;
 import lombok.extern.slf4j.Slf4j;
+import org.tikito.dto.export.ImportExportSettings;
 import org.tikito.dto.security.SecurityDto;
+import org.tikito.repository.AccountRepository;
 import org.tikito.service.BaseIntegrationTest;
 import org.tikito.service.CacheService;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiPredicate;
 
 import static org.junit.jupiter.api.Assertions.fail;
@@ -22,17 +24,21 @@ public class BaseStepDefinitions extends BaseIntegrationTest {
         return currencyId == null ? 0 : currencyId;
     }
 
+    public static Long getAccountId(final Map<String, String> map, final AccountRepository accountRepository) {
+        return accountRepository.findByUserIdAndName(Long.parseLong(map.get("userId")), Set.of(map.get("account"))).getFirst().getId();
+    }
+
     public static Long getCurrencyId(final Map<String, String> map) {
         return getSecurityId(map, "currency");
     }
 
     public static Long getSecurityId(final Map<String, String> map) {
-        return getSecurityId(map, "security");
+        return CacheService.getSecurityByName(map.get("security")).map(SecurityDto::getId).orElse(null);
     }
 
     public static Long getSecurityId(final String name) {
         return CacheService
-                .getSecurityByName("security")
+                .getSecurityByName(name)
                 .map(SecurityDto::getId)
                 .orElse(null);
     }
@@ -85,7 +91,11 @@ public class BaseStepDefinitions extends BaseIntegrationTest {
     }
 
     protected <T> void equals(final List<Map<String, String>> expected, final List<T> persisted, final BiPredicate<Map<String, String>, T> callback) {
-        if (expected.size() != persisted.size()) {
+        equals(expected, persisted, callback, true);
+    }
+
+    protected <T> void equals(final List<Map<String, String>> expected, final List<T> persisted, final BiPredicate<Map<String, String>, T> callback, final boolean assertSizeEquals) {
+        if (assertSizeEquals && expected.size() != persisted.size()) {
             fail("Expected: \n" + expected + "\n\nBut found\n" + objectsToString(persisted));
         }
 
@@ -109,7 +119,7 @@ public class BaseStepDefinitions extends BaseIntegrationTest {
             final Class<?> clazz = obj.getClass();
             final Field[] fields = clazz.getDeclaredFields();
 
-            stringBuilder.append(clazz.getSimpleName()).append("{");
+            stringBuilder.append("{");
 
             for (int i = 0; i < fields.length; i++) {
                 final Field field = fields[i];
@@ -132,5 +142,15 @@ public class BaseStepDefinitions extends BaseIntegrationTest {
         });
 
         return stringBuilder.toString();
+    }
+
+    protected ImportExportSettings generateImportSettings() {
+        final ImportExportSettings importExportSettings = new ImportExportSettings();
+        importExportSettings.setAccounts(false);
+        importExportSettings.setSecurityTransactions(false);
+        importExportSettings.setLoans(false);
+        importExportSettings.setMoneyTransactions(false);
+        importExportSettings.setMoneyTransactionGroups(false);
+        return importExportSettings;
     }
 }

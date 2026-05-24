@@ -149,10 +149,10 @@ public class BaseIntegrationTest extends BaseTest {
     }
 
     protected void withDefaultCurrencies() {
-        CURRENCY_EURO_ID = withExistingCurrency("EUR", "Euro").getId();
-        CURRENCY_DOLLAR_ID = withExistingCurrency("USD", "Dollar").getId();
+//        CURRENCY_EURO_ID = withExistingCurrency("EUR", "Euro").getId();
+//        CURRENCY_DOLLAR_ID = withExistingCurrency("USD", "Dollar").getId();
 
-        withExistingCurrencyCache(CURRENCY_DOLLAR_ID);
+//        withExistingCurrencyCache(CURRENCY_DOLLAR_ID);
 
         cacheService.refreshCurrencies();
     }

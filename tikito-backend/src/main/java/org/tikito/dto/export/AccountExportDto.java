@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -18,13 +19,12 @@ public class AccountExportDto {
     private String accountNumber;
     @NotNull
     private String currency;
+    private List<SecurityTransactionExportDto> securityTransactions = new ArrayList<>();
+    private List<MoneyTransactionExportDto> moneyTransactions = new ArrayList<>();
 
     public AccountExportDto(final String name, final String accountNumber, final String currency) {
         this.name = name;
         this.accountNumber = accountNumber;
         this.currency = currency;
     }
-
-    private List<SecurityTransactionExportDto> securityTransactions;
-    private List<MoneyTransactionExportDto> moneyTransactions;
 }
