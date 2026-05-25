@@ -2,6 +2,7 @@ package org.tikito.cucumber;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.tikito.dto.AccountDto;
 import org.tikito.entity.Account;
 
@@ -20,6 +21,14 @@ public class AccountStepDefinitions extends BaseStepDefinitions {
     public void accounts_in_database(final List<Map<String, String>> expected) {
         final List<AccountDto> persisted = accountRepository.findAll().stream().map(Account::toDto).toList();
         equals(expected, persisted, this::accountEquals);
+    }
+
+    @When("all jobs are finished")
+    public void allJobsAreFinished() {
+        // Write code here that turns the phrase above into concrete actions
+        while (jobRepository.count() != 0) {
+            jobService.processAllJobs();
+        }
     }
 
     private boolean accountEquals(final Map<String, String> expectedMap, final AccountDto persisted) {

@@ -83,8 +83,8 @@ public final class SecurityCalculator {
                 totalMutation = transaction.getPrice();
                 break;
 //            case IDEAL_DEPOSIT:
-//                totalMutation = transaction.getPrice();
-////                newHoldingValue.setCashOnHand();
+//                newHoldingValue.setMaxCashInvested(newHoldingValue.getMaxCashInvested() + transaction.getPrice());
+//                newHoldingValue.setCashOnHand();
         }
 
         if (totalMutation < 0) {

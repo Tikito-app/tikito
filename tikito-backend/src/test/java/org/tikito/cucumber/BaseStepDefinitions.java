@@ -2,16 +2,20 @@ package org.tikito.cucumber;
 
 import lombok.extern.slf4j.Slf4j;
 import org.tikito.dto.export.ImportExportSettings;
+import org.tikito.dto.security.HistoricalSecurityHoldingValueDto;
 import org.tikito.dto.security.SecurityDto;
 import org.tikito.repository.AccountRepository;
 import org.tikito.service.BaseIntegrationTest;
 import org.tikito.service.CacheService;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -91,20 +95,36 @@ public class BaseStepDefinitions extends BaseIntegrationTest {
     }
 
     protected <T> void equals(final List<Map<String, String>> expected, final List<T> persisted, final BiPredicate<Map<String, String>, T> callback) {
-        equals(expected, persisted, callback, true);
+        equals(expected, persisted, callback, true, null, null);
     }
 
-    protected <T> void equals(final List<Map<String, String>> expected, final List<T> persisted, final BiPredicate<Map<String, String>, T> callback, final boolean assertSizeEquals) {
+    protected <T> void equals(final List<Map<String, String>> expected, final List<T> persisted, final BiPredicate<Map<String, String>, T> callback, final boolean assertSizeEquals, final String dateKey, final Function<T, LocalDate> dateFunction) {
         if (assertSizeEquals && expected.size() != persisted.size()) {
             fail("Expected: \n" + expected + "\n\nBut found\n" + objectsToString(persisted));
         }
 
         for (final Map<String, String> expectedMap : expected) {
             boolean foundMatch = false;
-            for (final T persistedEntity : persisted) {
-                if (callback.test(expectedMap, persistedEntity)) {
+
+
+            if (dateKey != null && dateFunction != null) {
+                final Optional<T> maybeEntity = persisted.stream()
+                        .filter(persistedEntity -> LocalDate.parse(expectedMap.get(dateKey)).equals(dateFunction.apply(persistedEntity)))
+                        .findAny();
+                if (maybeEntity.isPresent()) {
+                    if (!callback.test(expectedMap, maybeEntity.get())) {
+                        fail("No matching entity found for expected: \n" + expectedMap + "\nGot\n" + objectToString(maybeEntity.get()));
+                    }
                     foundMatch = true;
-                    break;
+                } else {
+                    fail("No matching entity found for expected: \n" + expectedMap + "\nGot\n" + objectsToString(persisted));
+                }
+            } else {
+                for (final T persistedEntity : persisted) {
+                    if (callback.test(expectedMap, persistedEntity)) {
+                        foundMatch = true;
+                        break;
+                    }
                 }
             }
             if (!foundMatch) {
@@ -113,32 +133,46 @@ public class BaseStepDefinitions extends BaseIntegrationTest {
         }
     }
 
+    private <T> String objectToString(final T obj) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        objectToString(obj, stringBuilder);
+        return stringBuilder.toString();
+    }
+
+    private <T> void objectToString(final T obj, final StringBuilder stringBuilder) {
+        final Class<?> clazz = obj.getClass();
+        final Field[] fields = clazz.getDeclaredFields();
+
+        stringBuilder.append("{");
+
+        for (int i = 0; i < fields.length; i++) {
+            final Field field = fields[i];
+            field.setAccessible(true);
+
+            try {
+                stringBuilder.append(field.getName())
+                        .append("=")
+                        .append(field.get(obj));
+            } catch (IllegalAccessException e) {
+                stringBuilder.append(field.getName()).append("=<access denied>");
+            }
+
+            if (i < fields.length - 1) {
+                stringBuilder.append(", ");
+            }
+        }
+
+        if (obj instanceof final HistoricalSecurityHoldingValueDto dto) {
+            stringBuilder.append(", performance=").append(SecurityTestHelper.getPerformance(dto));
+        }
+
+        stringBuilder.append("}\n");
+    }
+
     private String objectsToString(final List<?> list) {
         final StringBuilder stringBuilder = new StringBuilder();
         list.forEach(obj -> {
-            final Class<?> clazz = obj.getClass();
-            final Field[] fields = clazz.getDeclaredFields();
-
-            stringBuilder.append("{");
-
-            for (int i = 0; i < fields.length; i++) {
-                final Field field = fields[i];
-                field.setAccessible(true);
-
-                try {
-                    stringBuilder.append(field.getName())
-                            .append("=")
-                            .append(field.get(obj));
-                } catch (IllegalAccessException e) {
-                    stringBuilder.append(field.getName()).append("=<access denied>");
-                }
-
-                if (i < fields.length - 1) {
-                    stringBuilder.append(", ");
-                }
-            }
-
-            stringBuilder.append("}\n");
+            objectToString(obj, stringBuilder);
         });
 
         return stringBuilder.toString();

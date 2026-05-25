@@ -111,6 +111,9 @@ public class BaseIntegrationTest extends BaseTest {
     @Autowired
     protected SecurityHoldingService securityHoldingService;
 
+    @Autowired
+    protected JobService jobService;
+
     @AfterEach
     @BeforeEach
     public void tearDown() {

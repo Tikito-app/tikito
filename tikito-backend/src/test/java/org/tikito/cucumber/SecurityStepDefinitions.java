@@ -25,11 +25,6 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
         withDefaultSecurities();
     }
 
-    @When("historical value for user {int} and security {string} are recalculated")
-    public void recalculate_historical_security_values(final int userId, final String securityName) {
-        securityHoldingService.recalculateHistoricalValue(userId, BaseStepDefinitions.getSecurityId(securityName));
-    }
-
     @When("aggregated historical security values for user {int} are recalculated")
     public void recalculate_historical_security_values(final int userId) {
         securityHoldingService.recalculateAggregatedHistoricalHoldingValues(userId);
@@ -79,7 +74,7 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
     @Then("security prices persisted have:")
     public void securityPricesAre(final List<Map<String, String>> expected) {
         final List<SecurityPriceDto> persisted = securityPriceRepository.findAll().stream().map(SecurityPrice::toDto).toList();
-        equals(expected, persisted, this::securityPricEquals, false);
+        equals(expected, persisted, this::securityPricEquals, false, "date", SecurityPriceDto::getDate);
     }
 
     @Then("security transactions persisted are:")
@@ -97,13 +92,13 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
     @Then("historical security holding values persisted have:")
     public void historicalSecurityHoldingValuesAre(final List<Map<String, String>> expected) {
         final List<HistoricalSecurityHoldingValueDto> persisted = historicalSecurityHoldingValueRepository.findAll().stream().map(HistoricalSecurityHoldingValue::toDto).toList();
-        equals(expected, persisted, this::historicalSecurityHoldingValueEquals, false);
+        equals(expected, persisted, this::historicalSecurityHoldingValueEquals, false, "date", HistoricalSecurityHoldingValueDto::getDate);
     }
 
     @Then("aggregated historical security holding values persisted have:")
     public void aggregatedHistoricalSecurityHoldingValuesAre(final List<Map<String, String>> expected) {
         final List<AggregatedHistoricalSecurityHoldingValueDto> persisted = aggregatedHistoricalSecurityHoldingValueRepository.findAll().stream().map(AggregatedHistoricalSecurityHoldingValue::toDto).toList();
-        equals(expected, persisted, this::aggregatedHistoricalSecurityHoldingValueEquals, false);
+        equals(expected, persisted, this::aggregatedHistoricalSecurityHoldingValueEquals, false, "date", AggregatedHistoricalSecurityHoldingValueDto::getDate);
     }
 
     private boolean securityEquals(final Map<String, String> expectedMap, final SecurityDto persisted) {
@@ -308,6 +303,9 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
             return false;
         }
         if (expectedMap.containsKey("cashOnHand") && Double.parseDouble(expectedMap.get("cashOnHand")) != persisted.getCashOnHand()) {
+            return false;
+        }
+        if (expectedMap.containsKey("performance") && Double.parseDouble(expectedMap.get("performance")) != SecurityTestHelper.getPerformance(persisted)) {
             return false;
         }
 

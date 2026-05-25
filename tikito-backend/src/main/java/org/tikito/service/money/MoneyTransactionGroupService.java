@@ -28,10 +28,7 @@ import org.tikito.service.job.JobProcessor;
 import org.tikito.service.job.JobType;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -158,6 +155,7 @@ public class MoneyTransactionGroupService implements JobProcessor {
     private void generateJobsAfterGrouping(final List<MoneyTransaction> transactions, final long userId) {
         transactions.stream()
                 .map(MoneyTransaction::getLoanId)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toSet())
                 .forEach(loanId -> jobFactoryService.addJob(Job.loan(RECALCULATE_LOAN, loanId, userId).build()));
     }
