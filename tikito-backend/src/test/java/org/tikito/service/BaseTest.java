@@ -216,4 +216,12 @@ public class BaseTest {
                 new BigDecimal(d1).setScale(precision, RoundingMode.HALF_EVEN).doubleValue(),
                 new BigDecimal(d2).setScale(precision, RoundingMode.HALF_EVEN).doubleValue());
     }
+
+    protected boolean isDoubleEquals(final double d1, final double d2) {
+        return isDoubleEquals(d1, d2, 5);
+    }
+
+    protected boolean isDoubleEquals(final double d1, final double d2, final int precision) {
+        return new BigDecimal(d1).setScale(precision, RoundingMode.HALF_EVEN).doubleValue() == new BigDecimal(d2).setScale(precision, RoundingMode.HALF_EVEN).doubleValue();
+    }
 }

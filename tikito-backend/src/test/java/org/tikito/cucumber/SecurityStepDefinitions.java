@@ -101,223 +101,223 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
         equals(expected, persisted, this::aggregatedHistoricalSecurityHoldingValueEquals, false, "date", AggregatedHistoricalSecurityHoldingValueDto::getDate);
     }
 
-    private boolean securityEquals(final Map<String, String> expectedMap, final SecurityDto persisted) {
+    private String securityEquals(final Map<String, String> expectedMap, final SecurityDto persisted) {
         if (expectedMap.containsKey("securityType") && SecurityType.valueOf(expectedMap.get("securityType")) != persisted.getSecurityType()) {
-            return false;
+            return "securityType";
         }
         if (expectedMap.containsKey("currencyId") && BaseStepDefinitions.getCurrencyId(expectedMap).longValue() != persisted.getCurrencyId().longValue()) {
-            return false;
+            return "currencyId";
         }
         if (expectedMap.containsKey("name") && !Objects.equals(expectedMap.get("name"), persisted.getName())) {
-            return false;
+            return "name";
         }
         if (expectedMap.containsKey("sector") && !Objects.equals(expectedMap.get("sector"), persisted.getSector())) {
-            return false;
+            return "sector";
         }
         if (expectedMap.containsKey("industry") && !Objects.equals(expectedMap.get("industry"), persisted.getIndustry())) {
-            return false;
+            return "industry";
         }
         if (expectedMap.containsKey("exchange") && !Objects.equals(expectedMap.get("exchange"), persisted.getExchange())) {
-            return false;
+            return "exchange";
         }
         if (expectedMap.containsKey("imageUrl") && !Objects.equals(expectedMap.get("imageUrl"), persisted.getImageUrl())) {
-            return false;
+            return "imageUrl";
         }
         if (expectedMap.containsKey("currentIsin") && !Objects.equals(expectedMap.get("currentIsin"), persisted.getCurrentIsin())) {
-            return false;
+            return "currentIsin";
         }
         if (expectedMap.containsKey("lastPriceDate") && !Objects.equals(LocalDate.parse(expectedMap.get("lastPriceDate")), persisted.getLastPriceDate())) {
-            return false;
+            return "lastPriceDate";
         }
 
-        return true;
+        return null;
     }
 
-    private boolean securityPricEquals(final Map<String, String> expectedMap, final SecurityPriceDto persisted) {
+    private String securityPricEquals(final Map<String, String> expectedMap, final SecurityPriceDto persisted) {
         if (expectedMap.containsKey("id") && Long.parseLong(expectedMap.get("id")) != persisted.getId()) {
-            return false;
+            return "id";
         }
         if (expectedMap.containsKey("securityId") && BaseStepDefinitions.getSecurityId(expectedMap).longValue() != persisted.getSecurityId()) {
-            return false;
+            return "securityId";
         }
         if (expectedMap.containsKey("date") && !Objects.equals(LocalDate.parse(expectedMap.get("date")), persisted.getDate())) {
-            return false;
+            return "date";
         }
         if (expectedMap.containsKey("price") && Double.parseDouble(expectedMap.get("price")) != persisted.getPrice()) {
-            return false;
+            return "price";
         }
 
-        return true;
+        return null;
     }
 
-    private boolean securityTransactionEquals(final Map<String, String> expectedMap, final SecurityTransactionDto persisted) {
+    private String securityTransactionEquals(final Map<String, String> expectedMap, final SecurityTransactionDto persisted) {
         if (expectedMap.containsKey("id") && Long.parseLong(expectedMap.get("id")) != persisted.getId()) {
-            return false;
+            return "id";
         }
         if (expectedMap.containsKey("userId") && Long.parseLong(expectedMap.get("userId")) != persisted.getUserId()) {
-            return false;
+            return "userId";
         }
         if (expectedMap.containsKey("securityId") && BaseStepDefinitions.getSecurityId(expectedMap) != persisted.getCurrencyId()) {
-            return false;
+            return "securityId";
         }
         if (expectedMap.containsKey("isin") && !Objects.equals(expectedMap.get("isin"), persisted.getIsin())) {
-            return false;
+            return "isin";
         }
         if (expectedMap.containsKey("accountId") && Long.parseLong(expectedMap.get("accountId")) != persisted.getAccountId()) {
-            return false;
+            return "accountId";
         }
         if (expectedMap.containsKey("currencyId") && BaseStepDefinitions.getCurrencyId(expectedMap) != persisted.getCurrencyId()) {
-            return false;
+            return "currencyId";
         }
         if (expectedMap.containsKey("amount") && Integer.parseInt(expectedMap.get("amount")) != persisted.getAmount()) {
-            return false;
+            return "amount";
         }
         if (expectedMap.containsKey("price") && Double.parseDouble(expectedMap.get("price")) != persisted.getPrice()) {
-            return false;
+            return "price";
         }
         if (expectedMap.containsKey("exchangeRate") && Double.parseDouble(expectedMap.get("exchangeRate")) != persisted.getExchangeRate()) {
-            return false;
+            return "exchangeRate";
         }
         if (expectedMap.containsKey("description") && !Objects.equals(expectedMap.get("description"), persisted.getDescription())) {
-            return false;
+            return "description";
         }
         if (expectedMap.containsKey("timestamp") && !Objects.equals(Instant.parse(expectedMap.get("timestamp")), persisted.getTimestamp())) {
-            return false;
+            return "timestamp";
         }
         if (expectedMap.containsKey("transactionType") && SecurityTransactionType.valueOf(expectedMap.get("transactionType")) != persisted.getTransactionType()) {
-            return false;
+            return "transactionType";
         }
         if (expectedMap.containsKey("cash") && Double.parseDouble(expectedMap.get("cash")) != persisted.getCash()) {
-            return false;
+            return "cash";
         }
 
-        return true;
+        return null;
     }
 
-    private boolean securityHoldingEquals(final Map<String, String> expectedMap, final SecurityHoldingDto persisted) {
+    private String securityHoldingEquals(final Map<String, String> expectedMap, final SecurityHoldingDto persisted) {
         if (expectedMap.containsKey("id") && Long.parseLong(expectedMap.get("id")) != persisted.getId()) {
-            return false;
+            return "id";
         }
         if (expectedMap.containsKey("userId") && Long.parseLong(expectedMap.get("userId")) != persisted.getUserId()) {
-            return false;
+            return "userId";
         }
         if (expectedMap.containsKey("accountId") && Long.parseLong(expectedMap.get("accountId")) != persisted.getAccountId()) {
-            return false;
+            return "accountId";
         }
         if (expectedMap.containsKey("securityId") && BaseStepDefinitions.getSecurityId(expectedMap) != persisted.getCurrencyId()) {
-            return false;
+            return "securityId";
         }
         if (expectedMap.containsKey("currencyId") && BaseStepDefinitions.getCurrencyId(expectedMap) != persisted.getCurrencyId()) {
-            return false;
+            return "currencyId";
         }
         if (expectedMap.containsKey("amount") && Integer.parseInt(expectedMap.get("amount")) != persisted.getAmount()) {
-            return false;
+            return "amount";
         }
         if (expectedMap.containsKey("price") && Double.parseDouble(expectedMap.get("price")) != persisted.getPrice()) {
-            return false;
+            return "price";
         }
         if (expectedMap.containsKey("totalDividend") && Double.parseDouble(expectedMap.get("totalDividend")) != persisted.getTotalDividend()) {
-            return false;
+            return "totalDividend";
         }
         if (expectedMap.containsKey("totalAdministrativeCosts") && Double.parseDouble(expectedMap.get("totalAdministrativeCosts")) != persisted.getTotalAdministrativeCosts()) {
-            return false;
+            return "totalAdministrativeCosts";
         }
         if (expectedMap.containsKey("totalTaxes") && Double.parseDouble(expectedMap.get("totalTaxes")) != persisted.getTotalTaxes()) {
-            return false;
+            return "totalTaxes";
         }
         if (expectedMap.containsKey("totalTransactionCosts") && Double.parseDouble(expectedMap.get("totalTransactionCosts")) != persisted.getTotalTransactionCosts()) {
-            return false;
+            return "totalTransactionCosts";
         }
         if (expectedMap.containsKey("totalCashInvested") && Double.parseDouble(expectedMap.get("totalCashInvested")) != persisted.getTotalCashInvested()) {
-            return false;
+            return "totalCashInvested";
         }
         if (expectedMap.containsKey("totalCashWithdrawn") && Double.parseDouble(expectedMap.get("totalCashWithdrawn")) != persisted.getTotalCashWithdrawn()) {
-            return false;
+            return "totalCashWithdrawn";
         }
         if (expectedMap.containsKey("worth") && Double.parseDouble(expectedMap.get("worth")) != persisted.getWorth()) {
-            return false;
+            return "worth";
         }
         if (expectedMap.containsKey("maxCashInvested") && Double.parseDouble(expectedMap.get("maxCashInvested")) != persisted.getMaxCashInvested()) {
-            return false;
+            return "maxCashInvested";
         }
         if (expectedMap.containsKey("cashOnHand") && Double.parseDouble(expectedMap.get("cashOnHand")) != persisted.getCashOnHand()) {
-            return false;
+            return "cashOnHand";
         }
 
-        return true;
+        return null;
     }
 
-    private boolean historicalSecurityHoldingValueEquals(final Map<String, String> expectedMap, final HistoricalSecurityHoldingValueDto persisted) {
+    private String historicalSecurityHoldingValueEquals(final Map<String, String> expectedMap, final HistoricalSecurityHoldingValueDto persisted) {
         if (expectedMap.containsKey("id") && Long.parseLong(expectedMap.get("id")) != persisted.getId()) {
-            return false;
+            return "id";
         }
         if (expectedMap.containsKey("userId") && Long.parseLong(expectedMap.get("userId")) != persisted.getUserId()) {
-            return false;
+            return "userId";
         }
         if (expectedMap.containsKey("accountId") && Long.parseLong(expectedMap.get("accountId")) != persisted.getAccountId()) {
-            return false;
+            return "accountId";
         }
         if (expectedMap.containsKey("securityHoldingId") && Long.parseLong(expectedMap.get("securityHoldingId")) != persisted.getSecurityHoldingId()) {
-            return false;
+            return "securityHoldingId";
         }
         if (expectedMap.containsKey("securityId") && BaseStepDefinitions.getSecurityId(expectedMap) != persisted.getCurrencyId()) {
-            return false;
+            return "securityId";
         }
         if (expectedMap.containsKey("date") && !Objects.equals(LocalDate.parse(expectedMap.get("date")), persisted.getDate())) {
-            return false;
+            return "date";
         }
         if (expectedMap.containsKey("currencyId") && BaseStepDefinitions.getCurrencyId(expectedMap) != persisted.getCurrencyId()) {
-            return false;
+            return "currencyId";
         }
         if (expectedMap.containsKey("currencyMultiplier") && Double.parseDouble(expectedMap.get("currencyMultiplier")) != persisted.getCurrencyMultiplier()) {
-            return false;
+            return "currencyMultiploer";
         }
         if (expectedMap.containsKey("amount") && Integer.parseInt(expectedMap.get("amount")) != persisted.getAmount()) {
-            return false;
+            return "amount";
         }
         if (expectedMap.containsKey("price") && Double.parseDouble(expectedMap.get("price")) != persisted.getPrice()) {
-            return false;
+            return "price";
         }
         if (expectedMap.containsKey("totalDividend") && Double.parseDouble(expectedMap.get("totalDividend")) != persisted.getTotalDividend()) {
-            return false;
+            return "totalDividend";
         }
         if (expectedMap.containsKey("totalAdministrativeCosts") && Double.parseDouble(expectedMap.get("totalAdministrativeCosts")) != persisted.getTotalAdministrativeCosts()) {
-            return false;
+            return "totalAdministrativeCosts";
         }
         if (expectedMap.containsKey("totalTaxes") && Double.parseDouble(expectedMap.get("totalTaxes")) != persisted.getTotalTaxes()) {
-            return false;
+            return "totalTaxes";
         }
         if (expectedMap.containsKey("totalTransactionCosts") && Double.parseDouble(expectedMap.get("totalTransactionCosts")) != persisted.getTotalTransactionCosts()) {
-            return false;
+            return "totalTransactionCosts";
         }
         if (expectedMap.containsKey("totalCashInvested") && Double.parseDouble(expectedMap.get("totalCashInvested")) != persisted.getTotalCashInvested()) {
-            return false;
+            return "totalCashInvested";
         }
         if (expectedMap.containsKey("totalCashWithdrawn") && Double.parseDouble(expectedMap.get("totalCashWithdrawn")) != persisted.getTotalCashWithdrawn()) {
-            return false;
+            return "totalCashWithdrawn";
         }
         if (expectedMap.containsKey("worth") && Double.parseDouble(expectedMap.get("worth")) != persisted.getWorth()) {
-            return false;
+            return "worth";
         }
         if (expectedMap.containsKey("maxCashInvested") && Double.parseDouble(expectedMap.get("maxCashInvested")) != persisted.getMaxCashInvested()) {
-            return false;
+            return "maxCashInvested";
         }
         if (expectedMap.containsKey("cashOnHand") && Double.parseDouble(expectedMap.get("cashOnHand")) != persisted.getCashOnHand()) {
-            return false;
+            return "cashOnHand";
         }
-        if (expectedMap.containsKey("performance") && Double.parseDouble(expectedMap.get("performance")) != SecurityTestHelper.getPerformance(persisted)) {
-            return false;
+        if (expectedMap.containsKey("performance") && !isDoubleEquals(Double.parseDouble(expectedMap.get("performance")),SecurityTestHelper.getPerformance(persisted))) {
+            return "performance";
         }
 
-        return true;
+        return null;
     }
 
-    private boolean aggregatedHistoricalSecurityHoldingValueEquals(final Map<String, String> expectedMap, final AggregatedHistoricalSecurityHoldingValueDto persisted) {
+    private String aggregatedHistoricalSecurityHoldingValueEquals(final Map<String, String> expectedMap, final AggregatedHistoricalSecurityHoldingValueDto persisted) {
         if (expectedMap.containsKey("id") && Long.parseLong(expectedMap.get("id")) != persisted.getId()) {
-            return false;
+            return "id";
         }
         if (expectedMap.containsKey("userId") && Long.parseLong(expectedMap.get("userId")) != persisted.getUserId()) {
-            return false;
+            return "userId";
         }
 
         if (expectedMap.containsKey("accountIds")) {
@@ -325,44 +325,44 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
                     .map(Long::parseLong)
                     .collect(Collectors.toSet());
             if (!Objects.equals(expectedAccountIds, persisted.getAccountIds())) {
-                return false;
+                return "accountIds";
             }
         }
         if (expectedMap.containsKey("date") && !Objects.equals(LocalDate.parse(expectedMap.get("date")), persisted.getDate())) {
-            return false;
+            return "date";
         }
         if (expectedMap.containsKey("positionValue") && Double.parseDouble(expectedMap.get("positionValue")) != persisted.getPositionValue()) {
-            return false;
+            return "positionValue";
         }
         if (expectedMap.containsKey("totalDividend") && Double.parseDouble(expectedMap.get("totalDividend")) != persisted.getTotalDividend()) {
-            return false;
+            return "totalDividend";
         }
         if (expectedMap.containsKey("totalAdministrativeCosts") && Double.parseDouble(expectedMap.get("totalAdministrativeCosts")) != persisted.getTotalAdministrativeCosts()) {
-            return false;
+            return "totalAdministrativeCosts";
         }
         if (expectedMap.containsKey("totalTaxes") && Double.parseDouble(expectedMap.get("totalTaxes")) != persisted.getTotalTaxes()) {
-            return false;
+            return "totalTaxes";
         }
         if (expectedMap.containsKey("totalTransactionCosts") && Double.parseDouble(expectedMap.get("totalTransactionCosts")) != persisted.getTotalTransactionCosts()) {
-            return false;
+            return "totalTransactionCosts";
         }
         if (expectedMap.containsKey("totalCashInvested") && Double.parseDouble(expectedMap.get("totalCashInvested")) != persisted.getTotalCashInvested()) {
-            return false;
+            return "totalCashInvested";
         }
         if (expectedMap.containsKey("totalCashWithdrawn") && Double.parseDouble(expectedMap.get("totalCashWithdrawn")) != persisted.getTotalCashWithdrawn()) {
-            return false;
+            return "totalCashWithdrawn";
         }
         if (expectedMap.containsKey("worth") && Double.parseDouble(expectedMap.get("worth")) != persisted.getWorth()) {
-            return false;
+            return "worth";
         }
         if (expectedMap.containsKey("maxCashInvested") && Double.parseDouble(expectedMap.get("maxCashInvested")) != persisted.getMaxCashInvested()) {
-            return false;
+            return "maxCashInvested";
         }
         if (expectedMap.containsKey("cashOnHand") && Double.parseDouble(expectedMap.get("cashOnHand")) != persisted.getCashOnHand()) {
-            return false;
+            return "cashOnHand";
         }
 
-        return true;
+        return null;
     }
 
     private SecurityTransactionExportDto mapToSecurityTransactionExportDto(final Map<String, String> row) {

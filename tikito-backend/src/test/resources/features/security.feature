@@ -28,7 +28,7 @@ Feature: the version can be retrieved
   Scenario: Calculate performance for lots of cash changes
     Given default data
     Given default security prices
-    Given the current date is '2025-01-04'
+    Given the current date is '2025-01-10'
 
     When security prices are:
       | security       | date       | price |
@@ -38,11 +38,14 @@ Feature: the version can be retrieved
       | WOLTERS KLUWER | 2025-01-04 | 20    |
 
     When importing security transactions for user 1:
-      | userId | account               | security       | timestamp              | amount | price | currency | exchangeRate | transactionType | description | cash |
-      | 1      | Test security account | WOLTERS KLUWER | 2025-01-01T10:01:20.0Z | 10     | -10   | EUR      | 1            | BUY             | iets        | 0    |
-      # simulate the cash going to 0 again
-      | 1      | Test security account | WOLTERS KLUWER | 2025-01-02T10:02:20.0Z | 10     | 10    | EUR      | 1            | SELL            | iets        | 0    |
-      | 1      | Test security account | WOLTERS KLUWER | 2025-01-03T10:03:20.0Z | 10     | -10   | EUR      | 1            | BUY             | iets        | 0    |
+      | userId | account               | security       | timestamp              | amount | price | currency | exchangeRate | transactionType  | cash |
+      | 1      | Test security account | WOLTERS KLUWER | 2025-01-01T10:01:20.0Z | 10     | -10   | EUR      | 1            | BUY              | 0    |
+      | 1      | Test security account | WOLTERS KLUWER | 2025-01-02T10:02:20.0Z | 10     | 10    | EUR      | 1            | SELL             | 0    |
+      | 1      | Test security account | WOLTERS KLUWER | 2025-01-03T10:03:20.0Z | 10     | -10   | EUR      | 1            | BUY              | 0    |
+      | 1      | Test security account | WOLTERS KLUWER | 2025-01-05T10:03:20.0Z | 10     | 25    | EUR      | 1            | DIVIDEND         | 0    |
+      | 1      | Test security account | WOLTERS KLUWER | 2025-01-06T10:03:20.0Z | 10     | -5    | EUR      | 1            | COUNTRY_TAX      | 0    |
+      | 1      | Test security account | WOLTERS KLUWER | 2025-01-07T10:03:20.0Z | 10     | -3    | EUR      | 1            | TRANSACTION_COST | 0    |
+      | 1      | Test security account | WOLTERS KLUWER | 2025-01-08T10:03:20.0Z | 10     | -4    | EUR      | 1            | AANSLUITKOSTEN   | 0    |
 
     When all jobs are finished
 
@@ -55,5 +58,9 @@ Feature: the version can be retrieved
       | WOLTERS KLUWER | 2025-01-01 | 10     | 10    | 0           | 0             | 0                        | 0          | 0                     | -100              | 0                  | 0     | -100            | 0          |
       | WOLTERS KLUWER | 2025-01-02 | 0      | 10    | 0           | 0             | 0                        | 0          | 0                     | -100              | 100                | 0     | -100            | 100        |
       | WOLTERS KLUWER | 2025-01-03 | 10     | 10    | 0           | 0             | 0                        | 0          | 0                     | -200              | 100                | 0     | -100            | 0          |
-      | WOLTERS KLUWER | 2025-01-04 | 10     | 20    | 100         | 0             | 0                        | 0          | 0                     | -200              | 100                | 100   | -100            | 0        |
+      | WOLTERS KLUWER | 2025-01-04 | 10     | 20    | 100         | 0             | 0                        | 0          | 0                     | -200              | 100                | 100   | -100            | 0          |
+      | WOLTERS KLUWER | 2025-01-05 | 10     | 20    | 125         | 25            | 0                        | 0          | 0                     | -200              | 100                | 125   | -100            | 25         |
+      | WOLTERS KLUWER | 2025-01-06 | 10     | 20    | 120         | 25            | 0                        | -5         | 0                     | -200              | 100                | 120   | -100            | 20         |
+      | WOLTERS KLUWER | 2025-01-07 | 10     | 20    | 117         | 25            | 0                        | -5         | -3                    | -200              | 100                | 120   | -100            | 17         |
+      | WOLTERS KLUWER | 2025-01-08 | 10     | 20    | 113         | 25            | -4                       | -5         | -3                    | -200              | 100                | 116   | -100            | 13         |
 

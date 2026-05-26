@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.BiPredicate;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.fail;
@@ -93,11 +93,11 @@ public class BaseStepDefinitions extends BaseIntegrationTest {
         return null;
     }
 
-    protected <T> void equals(final List<Map<String, String>> expected, final List<T> persisted, final BiPredicate<Map<String, String>, T> callback) {
+    protected <T> void equals(final List<Map<String, String>> expected, final List<T> persisted, final BiFunction<Map<String, String>, T, String> callback) {
         equals(expected, persisted, callback, true, null, null);
     }
 
-    protected <T> void equals(final List<Map<String, String>> expected, final List<T> persisted, final BiPredicate<Map<String, String>, T> callback, final boolean assertSizeEquals, final String dateKey, final Function<T, LocalDate> dateFunction) {
+    protected <T> void equals(final List<Map<String, String>> expected, final List<T> persisted, final BiFunction<Map<String, String>, T, String> callback, final boolean assertSizeEquals, final String dateKey, final Function<T, LocalDate> dateFunction) {
         if (assertSizeEquals && expected.size() != persisted.size()) {
             fail("Expected: \n" + expected + "\n\nBut found\n" + objectsToString(persisted));
         }
@@ -105,14 +105,14 @@ public class BaseStepDefinitions extends BaseIntegrationTest {
         for (final Map<String, String> expectedMap : expected) {
             boolean foundMatch = false;
 
-
             if (dateKey != null && dateFunction != null) {
                 final Optional<T> maybeEntity = persisted.stream()
                         .filter(persistedEntity -> LocalDate.parse(expectedMap.get(dateKey)).equals(dateFunction.apply(persistedEntity)))
                         .findAny();
                 if (maybeEntity.isPresent()) {
-                    if (!callback.test(expectedMap, maybeEntity.get())) {
-                        fail("No matching entity found for expected: \n" + expectedMap + "\nGot\n" + objectToString(maybeEntity.get()));
+                    final String result = callback.apply(expectedMap, maybeEntity.get());
+                    if (result != null) {
+                        fail("No matching entity found for key " + result + " from expected: \n" + expectedMap + "\nGot\n" + objectToString(maybeEntity.get()));
                     }
                     foundMatch = true;
                 } else {
@@ -120,7 +120,8 @@ public class BaseStepDefinitions extends BaseIntegrationTest {
                 }
             } else {
                 for (final T persistedEntity : persisted) {
-                    if (callback.test(expectedMap, persistedEntity)) {
+                    final String result = callback.apply(expectedMap, persistedEntity);
+                    if (result == null) {
                         foundMatch = true;
                         break;
                     }

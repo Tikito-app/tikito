@@ -39,23 +39,23 @@ public class AccountStepDefinitions extends BaseStepDefinitions {
         when(timeService.now()).thenReturn(LocalDate.parse(date));
     }
 
-    private boolean accountEquals(final Map<String, String> expectedMap, final AccountDto persisted) {
+    private String accountEquals(final Map<String, String> expectedMap, final AccountDto persisted) {
         if (expectedMap.containsKey("id") && Long.parseLong(expectedMap.get("id")) != persisted.getId()) {
-            return false;
+            return "id";
         }
         if (expectedMap.containsKey("userId") && Long.parseLong(expectedMap.get("userId")) != persisted.getUserId()) {
-            return false;
+            return "userId";
         }
         if (expectedMap.containsKey("name") && !Objects.equals(expectedMap.get("name"), persisted.getName())) {
-            return false;
+            return "name";
         }
         if (expectedMap.containsKey("accountNumber") && !Objects.equals(expectedMap.get("accountNumber"), persisted.getAccountNumber())) {
-            return false;
+            return "accountNumber";
         }
         if (expectedMap.containsKey("currencyId") && BaseStepDefinitions.getCurrencyId(expectedMap) != persisted.getCurrencyId()) {
-            return false;
+            return "currencyId";
         }
 
-        return true;
+        return null;
     }
 }
