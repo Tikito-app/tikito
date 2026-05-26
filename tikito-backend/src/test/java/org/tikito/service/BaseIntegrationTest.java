@@ -3,8 +3,6 @@ package org.tikito.service;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
-import org.tikito.config.TestcontainersConfiguration;
 import org.tikito.dto.AccountDto;
 import org.tikito.dto.DateRange;
 import org.tikito.dto.loan.LoanType;
@@ -32,12 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.tikito.TestUtil.randomDouble;
 import static org.tikito.TestUtil.randomString;
 
-@Import(TestcontainersConfiguration.class)
 public class BaseIntegrationTest extends BaseTest {
 
     protected static Account DEFAULT_DEBIT_ACCOUNT = null;
@@ -51,8 +46,6 @@ public class BaseIntegrationTest extends BaseTest {
     protected static Security AMAZON = null;
     protected static MoneyTransactionGroup TRANSACTION_GROUP_REGEX = null;
     protected static MoneyTransactionGroup TRANSACTION_GROUP_CLUSTER = null;
-
-    protected TimeService timeService = mock();
 
     @Autowired
     protected AccountRepository accountRepository;
@@ -117,10 +110,12 @@ public class BaseIntegrationTest extends BaseTest {
     @Autowired
     protected JobService jobService;
 
+    @Autowired
+    protected TimeService timeService;
+
     @AfterEach
     @BeforeEach
     public void tearDown() {
-        when(timeService.now()).thenReturn(LocalDate.now());
         accountRepository.deleteAll();
         isinRepository.deleteAll();
         jobRepository.deleteAll();
