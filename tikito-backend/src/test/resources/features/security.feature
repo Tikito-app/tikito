@@ -28,6 +28,7 @@ Feature: the version can be retrieved
   Scenario: Calculate performance for lots of cash changes
     Given default data
     Given default security prices
+    Given the current date is '2025-01-03'
 
     When security prices are:
       | security       | date       | price |

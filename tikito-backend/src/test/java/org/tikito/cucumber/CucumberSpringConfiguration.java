@@ -10,9 +10,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @CucumberContextConfiguration
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @Import(TestcontainersConfiguration.class)
-//@Testcontainers
 public class CucumberSpringConfiguration {
-//
-//    @Container
-//    protected static MariadbTestContainer testContainer = MariadbTestContainer.instance();
+
 }

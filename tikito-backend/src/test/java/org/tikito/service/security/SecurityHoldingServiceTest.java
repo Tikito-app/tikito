@@ -11,6 +11,7 @@ import org.tikito.entity.security.HistoricalSecurityHoldingValue;
 import org.tikito.repository.*;
 import org.tikito.service.BaseTest;
 import org.tikito.service.CacheService;
+import org.tikito.service.TimeService;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -58,7 +59,8 @@ class SecurityHoldingServiceTest extends BaseTest {
                 securityPriceRepository,
                 securityTransactionRepository,
                 cacheService,
-                aggregatedHistoricalSecurityHoldingValueRepository);
+                aggregatedHistoricalSecurityHoldingValueRepository,
+                new TimeService());
 
         final HistoricalSecurityHoldingValue value1 = new HistoricalSecurityHoldingValue(DEFAULT_USER_ACCOUNT.getId(), randomHistoricalHoldingValueDto(CURRENCY_EURO_ID, DEFAULT_USER_ACCOUNT.getId()));
         final HistoricalSecurityHoldingValue value2 = new HistoricalSecurityHoldingValue(DEFAULT_USER_ACCOUNT.getId(), randomHistoricalHoldingValueDto(CURRENCY_EURO_ID, DEFAULT_USER_ACCOUNT.getId()));

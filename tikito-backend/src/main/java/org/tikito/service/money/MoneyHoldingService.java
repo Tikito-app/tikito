@@ -17,6 +17,7 @@ import org.tikito.entity.money.MoneyHolding;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.repository.*;
 import org.tikito.service.CacheService;
+import org.tikito.service.TimeService;
 import org.tikito.service.job.JobProcessor;
 
 import java.time.LocalDate;
@@ -37,19 +38,22 @@ public class MoneyHoldingService implements JobProcessor {
     private final CacheService cacheService;
     private final AggregatedHistoricalMoneyHoldingValueRepository aggregatedHistoricalMoneyHoldingValueRepository;
     private final MoneyHoldingRepository moneyHoldingRepository;
+    private final TimeService timeService;
 
     public MoneyHoldingService(final HistoricalMoneyHoldingValueRepository historicalMoneyHoldingValueRepository,
                                final AccountRepository accountRepository,
                                final MoneyTransactionRepository moneyTransactionRepository,
                                final CacheService cacheService,
                                final AggregatedHistoricalMoneyHoldingValueRepository aggregatedHistoricalMoneyHoldingValueRepository,
-                               final MoneyHoldingRepository moneyHoldingRepository) {
+                               final MoneyHoldingRepository moneyHoldingRepository,
+                               final TimeService timeService) {
         this.historicalMoneyHoldingValueRepository = historicalMoneyHoldingValueRepository;
         this.accountRepository = accountRepository;
         this.moneyTransactionRepository = moneyTransactionRepository;
         this.cacheService = cacheService;
         this.aggregatedHistoricalMoneyHoldingValueRepository = aggregatedHistoricalMoneyHoldingValueRepository;
         this.moneyHoldingRepository = moneyHoldingRepository;
+        this.timeService = timeService;
     }
 
     public List<AggregatedHistoricalMoneyHoldingValueDto> getAggregatedHoldingValues(final long userId) {
@@ -187,7 +191,7 @@ public class MoneyHoldingService implements JobProcessor {
         HistoricalMoneyHoldingValueDto currentHoldingValue = new HistoricalMoneyHoldingValueDto(accountId, currencyId, holding.getAmountOffset());
 
         for (LocalDate currentTimestamp = firstTimestamp;
-             currentTimestamp.isBefore(LocalDate.now().plusDays(1));
+             currentTimestamp.isBefore(timeService.now().plusDays(1));
              currentTimestamp = currentTimestamp.plusDays(1)) {
 
             final double currencyMultiplier = cacheService.getCurrencyMultiplier(currencyId, currentTimestamp);

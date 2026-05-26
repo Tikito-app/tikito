@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 @Slf4j
 public class BaseStepDefinitions extends BaseIntegrationTest {
 
-
     public static Long getNativeCurrencyId(final Map<String, String> map) {
         final Long currencyId = getCurrencyId(map);
         return currencyId == null ? 0 : currencyId;

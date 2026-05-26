@@ -17,6 +17,7 @@ import org.tikito.repository.IsinRepository;
 import org.tikito.repository.SecurityPriceRepository;
 import org.tikito.repository.SecurityRepository;
 import org.tikito.service.CacheService;
+import org.tikito.service.TimeService;
 import org.tikito.service.importer.security.YahooImporter;
 import org.tikito.service.job.JobProcessor;
 import org.tikito.service.job.JobType;
@@ -34,17 +35,20 @@ public class SecurityService implements JobProcessor {
     private final SecurityEnricherService securityEnricherService;
     private final IsinRepository isinRepository;
     private final CacheService cacheService;
+    private final TimeService timeService;
 
     public SecurityService(final SecurityRepository securityRepository,
                            final SecurityPriceRepository securityPriceRepository,
                            final SecurityEnricherService securityEnricherService,
                            final IsinRepository isinRepository,
-                           final CacheService cacheService) {
+                           final CacheService cacheService,
+                           final TimeService timeService) {
         this.securityRepository = securityRepository;
         this.securityPriceRepository = securityPriceRepository;
         this.securityEnricherService = securityEnricherService;
         this.isinRepository = isinRepository;
         this.cacheService = cacheService;
+        this.timeService = timeService;
     }
 
     public SecurityDto getSecurity(final long id) {
@@ -86,7 +90,7 @@ public class SecurityService implements JobProcessor {
         final Optional<LocalDate> latestPrice = securityPriceRepository.findDateOfLatestPrice(securityId);
         final LocalDate initialStartDate = latestPrice.orElse(
                 LocalDate.now().minusYears(10));
-        final LocalDate now = LocalDate.now();
+        final LocalDate now = timeService.now();
         LocalDate startDate = initialStartDate;
         boolean hasSetDateFromIsin = false;
 

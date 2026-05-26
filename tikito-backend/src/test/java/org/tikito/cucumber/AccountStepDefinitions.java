@@ -6,9 +6,12 @@ import io.cucumber.java.en.When;
 import org.tikito.dto.AccountDto;
 import org.tikito.entity.Account;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static org.mockito.Mockito.when;
 
 public class AccountStepDefinitions extends BaseStepDefinitions {
 
@@ -29,6 +32,11 @@ public class AccountStepDefinitions extends BaseStepDefinitions {
         while (jobRepository.count() != 0) {
             jobService.processAllJobs();
         }
+    }
+
+    @Given("the current date is {string}")
+    public void current_date_is(final String date) {
+        when(timeService.now()).thenReturn(LocalDate.parse(date));
     }
 
     private boolean accountEquals(final Map<String, String> expectedMap, final AccountDto persisted) {
