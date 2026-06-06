@@ -3,7 +3,6 @@ package org.tikito.dto.security;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -13,7 +12,7 @@ import java.util.Set;
 public class HistoricalSecurityHoldingValueDto {
     private Long id;
     private long userId;
-    private long accountId;
+    private Long accountId;
     private Long securityHoldingId;
     private Long securityId;
     private LocalDate date;
@@ -52,7 +51,7 @@ public class HistoricalSecurityHoldingValueDto {
         this.cashOnHand = previousValue.getCashOnHand();
     }
 
-    public HistoricalSecurityHoldingValueDto(final long accountId, final Long securityId, final Long securityHoldingId, final long currencyId) {
+    public HistoricalSecurityHoldingValueDto(final Long accountId, final Long securityId, final Long securityHoldingId, final long currencyId) {
         this.accountId = accountId;
         this.securityId = securityId;
         this.securityHoldingId = securityHoldingId;

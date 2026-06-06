@@ -12,7 +12,7 @@ import lombok.Setter;
 public class SecurityHoldingDto {
     private Long id;
     private long userId;
-    private long accountId;
+    private Long accountId;
     private Long securityId;
     private long currencyId;
     private int amount;

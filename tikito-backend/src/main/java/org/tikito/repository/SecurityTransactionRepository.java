@@ -15,7 +15,7 @@ public interface SecurityTransactionRepository extends JpaRepository<SecurityTra
             select t from SecurityTransaction t where
                         t.userId = :userId and
                         (:securityIds is null or t.securityId in :securityIds) and
-                        (t.accountId in :accountIds) and
+                        (:accountIds is null or t.accountId in :accountIds) and
                         (:timestamp is null or t.timestamp >= :timestamp)
             """)
     List<SecurityTransaction> findBySecurityIdIn(final long userId, Set<Long> securityIds, Set<Long> accountIds, Instant timestamp);
@@ -38,5 +38,6 @@ public interface SecurityTransactionRepository extends JpaRepository<SecurityTra
 
     List<SecurityTransaction> findAllByUserId(long userId);
 
-    List<SecurityTransaction> findBySecurityIdAndAccountId(long securityId, long accountId);
+    @Query("select t from SecurityTransaction t where t.securityId = :securityId and (:accountId is null or t.accountId = :accountId)")
+    List<SecurityTransaction> findBySecurityIdAndAccountId(long securityId, Long accountId);
 }

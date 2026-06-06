@@ -39,6 +39,7 @@ Feature: the version can be retrieved
 
     When importing security transactions for user 1:
       | userId | account               | security       | timestamp              | amount | price | currency | exchangeRate | transactionType  | cash |
+      | 1      | Test money account    | WOLTERS KLUWER | 2025-01-01T10:01:20.0Z | 11     | -10   | EUR      | 1            | BUY              | 0    |
       | 1      | Test security account | WOLTERS KLUWER | 2025-01-01T10:01:20.0Z | 10     | -10   | EUR      | 1            | BUY              | 0    |
       | 1      | Test security account | WOLTERS KLUWER | 2025-01-02T10:02:20.0Z | 10     | 10    | EUR      | 1            | SELL             | 0    |
       | 1      | Test security account | WOLTERS KLUWER | 2025-01-03T10:03:20.0Z | 10     | -10   | EUR      | 1            | BUY              | 0    |
@@ -53,14 +54,22 @@ Feature: the version can be retrieved
       | name           |
       | WOLTERS KLUWER |
 
+    Then security holdings persisted are:
+      | userId | account               | security       |
+      | 1      | Test security account | WOLTERS KLUWER |
+      | 1      | Test money account    | WOLTERS KLUWER |
+      | 1      | null                  | WOLTERS KLUWER |
+
     Then historical security holding values persisted have:
-      | security       | date       | amount | price | performance | totalDividend | totalAdministrativeCosts | totalTaxes | totalTransactionCosts | totalCashInvested | totalCashWithdrawn | worth | maxCashInvested | cashOnHand |
-      | WOLTERS KLUWER | 2025-01-01 | 10     | 10    | 0           | 0             | 0                        | 0          | 0                     | -100              | 0                  | 0     | -100            | 0          |
-      | WOLTERS KLUWER | 2025-01-02 | 0      | 10    | 0           | 0             | 0                        | 0          | 0                     | -100              | 100                | 0     | -100            | 100        |
-      | WOLTERS KLUWER | 2025-01-03 | 10     | 10    | 0           | 0             | 0                        | 0          | 0                     | -200              | 100                | 0     | -100            | 0          |
-      | WOLTERS KLUWER | 2025-01-04 | 10     | 20    | 100         | 0             | 0                        | 0          | 0                     | -200              | 100                | 100   | -100            | 0          |
-      | WOLTERS KLUWER | 2025-01-05 | 10     | 20    | 125         | 25            | 0                        | 0          | 0                     | -200              | 100                | 125   | -100            | 25         |
-      | WOLTERS KLUWER | 2025-01-06 | 10     | 20    | 120         | 25            | 0                        | -5         | 0                     | -200              | 100                | 120   | -100            | 20         |
-      | WOLTERS KLUWER | 2025-01-07 | 10     | 20    | 117         | 25            | 0                        | -5         | -3                    | -200              | 100                | 120   | -100            | 17         |
-      | WOLTERS KLUWER | 2025-01-08 | 10     | 20    | 113         | 25            | -4                       | -5         | -3                    | -200              | 100                | 116   | -100            | 13         |
+      | userId | security       | account               | date       | amount | price | performance | totalDividend | totalAdministrativeCosts | totalTaxes | totalTransactionCosts | totalCashInvested | totalCashWithdrawn | worth | maxCashInvested | cashOnHand |
+      | 1      | WOLTERS KLUWER | null                  | 2025-01-01 | 21     | 10    | 0           | 0             | 0                        | 0          | 0                     | -210              | 0                  | 0     | -210            | 0          |
+      | 1      | WOLTERS KLUWER | Test money account    | 2025-01-01 | 11     | 10    | 0           | 0             | 0                        | 0          | 0                     | -110              | 0                  | 0     | -110            | 0          |
+      | 1      | WOLTERS KLUWER | Test security account | 2025-01-01 | 10     | 10    | 0           | 0             | 0                        | 0          | 0                     | -100              | 0                  | 0     | -100            | 0          |
+      | 1      | WOLTERS KLUWER | Test security account | 2025-01-02 | 0      | 10    | 0           | 0             | 0                        | 0          | 0                     | -100              | 100                | 0     | -100            | 100        |
+      | 1      | WOLTERS KLUWER | Test security account | 2025-01-03 | 10     | 10    | 0           | 0             | 0                        | 0          | 0                     | -200              | 100                | 0     | -100            | 0          |
+      | 1      | WOLTERS KLUWER | Test security account | 2025-01-04 | 10     | 20    | 100         | 0             | 0                        | 0          | 0                     | -200              | 100                | 100   | -100            | 0          |
+      | 1      | WOLTERS KLUWER | Test security account | 2025-01-05 | 10     | 20    | 125         | 25            | 0                        | 0          | 0                     | -200              | 100                | 125   | -100            | 25         |
+      | 1      | WOLTERS KLUWER | Test security account | 2025-01-06 | 10     | 20    | 120         | 25            | 0                        | -5         | 0                     | -200              | 100                | 120   | -100            | 20         |
+      | 1      | WOLTERS KLUWER | Test security account | 2025-01-07 | 10     | 20    | 117         | 25            | 0                        | -5         | -3                    | -200              | 100                | 120   | -100            | 17         |
+      | 1      | WOLTERS KLUWER | Test security account | 2025-01-08 | 10     | 20    | 113         | 25            | -4                       | -5         | -3                    | -200              | 100                | 116   | -100            | 13         |
 

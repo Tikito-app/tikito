@@ -32,7 +32,8 @@ public class SecurityTransactionImportResultDto {
     private final Map<String, Isin> newIsinsByIsin = new HashMap<>();
     private final List<SecurityHolding> newSecurityHoldings = new ArrayList<>();
     private final List<SecurityTransaction> importedTransactions = new ArrayList<>();
-    private final Map<Long, SecurityHolding> existingSecurityHoldings = new HashMap<>();
+    private final Map<Long, SecurityHolding> existingSecurityHoldingsForAccount = new HashMap<>();
+    private final Map<Long, SecurityHolding> existingSecurityHoldingsForAll = new HashMap<>();
 
     public SecurityTransactionImportResultDto(final List<List<String>> csv) {
         lines = new ArrayList<>();

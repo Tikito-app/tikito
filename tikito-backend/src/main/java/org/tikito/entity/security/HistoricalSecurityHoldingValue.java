@@ -1,16 +1,15 @@
 package org.tikito.entity.security;
 
-import org.tikito.dto.security.HistoricalSecurityHoldingValueDto;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.dto.security.HistoricalSecurityHoldingValueDto;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -21,7 +20,7 @@ public class HistoricalSecurityHoldingValue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private long userId;
-    private long accountId;
+    private Long accountId;
     private Long securityHoldingId;
     private Long securityId; // todo: can we remove this?
     private LocalDate date;

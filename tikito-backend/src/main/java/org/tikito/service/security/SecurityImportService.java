@@ -161,7 +161,8 @@ public class SecurityImportService {
             log.info("Found {} new holdings", result.getNewSecurityHoldings().size());
 
             // existing holdings only, because the new ones are added in this map as well
-            securityHoldingRepository.saveAll(result.getExistingSecurityHoldings().values());
+            securityHoldingRepository.saveAll(result.getExistingSecurityHoldingsForAccount().values());
+            securityHoldingRepository.saveAll(result.getExistingSecurityHoldingsForAll().values());
 
             // now the security objects in the lines are filled with their id, so we can create the transactions
             log.info("Storing {} new transactions", filterNonFailed(result).count());
@@ -254,11 +255,16 @@ public class SecurityImportService {
     }
 
     private void extractNewHoldingsFromTransactions(final long userId, final long accountId, final SecurityTransactionImportResultDto result) {
-        result.getExistingSecurityHoldings().putAll(securityHoldingRepository
+        result.getExistingSecurityHoldingsForAccount().putAll(securityHoldingRepository
                 .findByUserIdAndAccountId(userId, accountId)
                 .stream()
                 .collect(Collectors.toMap(SecurityHolding::getSecurityId, Function.identity())));
-        final Map<Long, SecurityHolding> newHoldingsMap = new HashMap<>();
+        result.getExistingSecurityHoldingsForAll().putAll(securityHoldingRepository
+                .findByUserIdAndAccountId(userId, null)
+                .stream()
+                .collect(Collectors.toMap(SecurityHolding::getSecurityId, Function.identity())));
+        final Map<Long, SecurityHolding> newHoldingsMapForAccount = new HashMap<>();
+        final Map<Long, SecurityHolding> newHoldingsMapForAll = new HashMap<>();
 
         // todo write test for filter
         // for each non failed transaction, see if we need to create a new holding, or update the amount on the existing holding
@@ -267,19 +273,27 @@ public class SecurityImportService {
                         transaction.getTransactionType() == SecurityTransactionType.BUY ||
                                 transaction.getTransactionType() == SecurityTransactionType.SELL)
                 .forEach(transaction -> {
-                    if (!result.getExistingSecurityHoldings().containsKey(transaction.getSecurity().getId()) && !newHoldingsMap.containsKey(transaction.getSecurity().getId())) {
-                        final SecurityHolding securityHolding = new SecurityHolding(userId, accountId, transaction);
-                        newHoldingsMap.put(transaction.getSecurity().getId(), securityHolding);
+                    if (!result.getExistingSecurityHoldingsForAccount().containsKey(transaction.getSecurity().getId()) && !newHoldingsMapForAccount.containsKey(transaction.getSecurity().getId())) {
+                        final SecurityHolding securityHoldingForAccount = new SecurityHolding(userId, accountId, transaction);
+                        newHoldingsMapForAccount.put(transaction.getSecurity().getId(), securityHoldingForAccount);
                         // also populate the existing one, otherwise we keep on creating new ones
-                        // todo: merge the two collectons?
-                        result.getExistingSecurityHoldings().put(securityHolding.getSecurityId(), securityHolding);
+                        // todo: merge the two collections?
+                        result.getExistingSecurityHoldingsForAccount().put(securityHoldingForAccount.getSecurityId(), securityHoldingForAccount);
+
+                        // only generate global holding if it does not exist yet
+                        if (!result.getExistingSecurityHoldingsForAll().containsKey(transaction.getSecurity().getId()) && !newHoldingsMapForAll.containsKey(transaction.getSecurity().getId())) {
+                            final SecurityHolding securityHoldingForAllAccounts = new SecurityHolding(userId, null, transaction);
+                            newHoldingsMapForAll.put(transaction.getSecurity().getId(), securityHoldingForAllAccounts);
+                            result.getExistingSecurityHoldingsForAll().put(securityHoldingForAllAccounts.getSecurityId(), securityHoldingForAllAccounts);
+                        }
                     } else {
-                        final SecurityHolding securityHolding = result.getExistingSecurityHoldings().get(transaction.getSecurity().getId());
+                        final SecurityHolding securityHolding = result.getExistingSecurityHoldingsForAccount().get(transaction.getSecurity().getId());
                         securityHolding.setAccountId(accountId);
                         securityHolding.mutateAmount(transaction);
                     }
                 });
-        result.getNewSecurityHoldings().addAll(newHoldingsMap.values());
+        result.getNewSecurityHoldings().addAll(newHoldingsMapForAccount.values());
+        result.getNewSecurityHoldings().addAll(newHoldingsMapForAll.values());
     }
 
     /**

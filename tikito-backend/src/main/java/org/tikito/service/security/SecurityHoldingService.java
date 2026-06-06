@@ -1,6 +1,7 @@
 package org.tikito.service.security;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,13 +57,15 @@ public class SecurityHoldingService implements JobProcessor {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void deleteSecurityHolding(final long userId, final long securityHoldingId) {
-        final Optional<SecurityHolding> maybeSecurityHolding = securityHoldingRepository.findByUserIdAndId(userId, securityHoldingId);
-        maybeSecurityHolding.ifPresent((securityHolding -> {
-            historicalSecurityHoldingValueRepository.deleteAllBySecurityHoldingId(securityHoldingId);
-            securityHoldingRepository.deleteById(securityHoldingId);
-            securityTransactionRepository.deleteByUserIdAndSecurityId(userId, securityHolding.getSecurityId());
-        }));
-        recalculateAggregatedHistoricalHoldingValues(userId);
+
+        // todo
+//        final Optional<SecurityHolding> maybeSecurityHolding = securityHoldingRepository.findByUserIdAndId(userId, securityHoldingId);
+//        maybeSecurityHolding.ifPresent((securityHolding -> {
+//            historicalSecurityHoldingValueRepository.deleteAllBySecurityHoldingId(securityHoldingId);
+//            securityHoldingRepository.deleteById(securityHoldingId);
+//            securityTransactionRepository.deleteByUserIdAndSecurityId(userId, securityHolding.getSecurityId());
+//        }));
+//        recalculateAggregatedHistoricalHoldingValues(userId);
     }
 
     /**
@@ -71,7 +74,7 @@ public class SecurityHoldingService implements JobProcessor {
      * over the days until now() and creates a new HistoricalHoldingValue for that specific day.
      */
     private List<HistoricalSecurityHoldingValue> generateHistoricalHoldingValues(final long userId,
-                                                                                 final long accountId,
+                                                                                 final Long accountId,
                                                                                  final long securityId,
                                                                                  final long securityHoldingId,
                                                                                  final long currencyId,
@@ -114,11 +117,11 @@ public class SecurityHoldingService implements JobProcessor {
 
     public List<SecurityHoldingDto> getSecurityHoldings(final long userId) {
         return securityHoldingRepository
-                .findByUserId(userId)
+                .findByUserIdAndAccountId(userId, null)
                 .stream()
                 .map(SecurityHolding::toDto)
                 .map(holding -> {
-                    holding.setSecurity(cacheService.getSecurity(holding.getSecurityId()));
+                    holding.setSecurity(CacheService.getSecurity(holding.getSecurityId()));
                     return holding;
                 })
                 .sorted(Comparator.comparing(o -> o.getSecurity().getName()))
@@ -128,7 +131,7 @@ public class SecurityHoldingService implements JobProcessor {
     public SecurityHoldingDto getSecurityHolding(final long userId, final long securityHoldingId) {
         return securityHoldingRepository
                 .findByUserIdAndId(userId, securityHoldingId)
-                .map(holding -> holding.toDto(cacheService.getSecurity(holding.getSecurityId())))
+                .map(holding -> holding.toDto(CacheService.getSecurity(holding.getSecurityId())))
                 .orElseThrow();
     }
 
@@ -242,7 +245,7 @@ public class SecurityHoldingService implements JobProcessor {
     /**
      * Returns a map of transactions per date. A single date holds a list of transactions.
      */
-    private Map<LocalDate, List<SecurityTransaction>> getTransactionsPerTimestamp(final long securityId, final long accountId) {
+    private Map<LocalDate, List<SecurityTransaction>> getTransactionsPerTimestamp(final long securityId, final @Nullable Long accountId) {
         final Map<LocalDate, List<SecurityTransaction>> transactionsPerTimestamp = new HashMap<>();
 
         securityTransactionRepository

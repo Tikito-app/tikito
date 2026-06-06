@@ -201,8 +201,13 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
         if (expectedMap.containsKey("userId") && Long.parseLong(expectedMap.get("userId")) != persisted.getUserId()) {
             return "userId";
         }
-        if (expectedMap.containsKey("accountId") && Long.parseLong(expectedMap.get("accountId")) != persisted.getAccountId()) {
-            return "accountId";
+        if (expectedMap.containsKey("account")) {
+            final Long accountId = getAccountId(expectedMap, accountRepository);
+            if(accountId == null && persisted.getAccountId() != null) {
+                return "account";
+            } else if (accountId != null && persisted.getAccountId() != null && accountId.longValue() != persisted.getAccountId()) {
+                return "account";
+            }
         }
         if (expectedMap.containsKey("securityId") && BaseStepDefinitions.getSecurityId(expectedMap) != persisted.getCurrencyId()) {
             return "securityId";
@@ -254,8 +259,13 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
         if (expectedMap.containsKey("userId") && Long.parseLong(expectedMap.get("userId")) != persisted.getUserId()) {
             return "userId";
         }
-        if (expectedMap.containsKey("accountId") && Long.parseLong(expectedMap.get("accountId")) != persisted.getAccountId()) {
-            return "accountId";
+        if (expectedMap.containsKey("account")) {
+            final Long accountId = getAccountId(expectedMap, accountRepository);
+            if(accountId == null && persisted.getAccountId() != null) {
+                return "account";
+            } else if (accountId != null && persisted.getAccountId() != null && accountId.longValue() != persisted.getAccountId()) {
+                return "account";
+            }
         }
         if (expectedMap.containsKey("securityHoldingId") && Long.parseLong(expectedMap.get("securityHoldingId")) != persisted.getSecurityHoldingId()) {
             return "securityHoldingId";
@@ -270,7 +280,7 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
             return "currencyId";
         }
         if (expectedMap.containsKey("currencyMultiplier") && Double.parseDouble(expectedMap.get("currencyMultiplier")) != persisted.getCurrencyMultiplier()) {
-            return "currencyMultiploer";
+            return "currencyMultiplier";
         }
         if (expectedMap.containsKey("amount") && Integer.parseInt(expectedMap.get("amount")) != persisted.getAmount()) {
             return "amount";

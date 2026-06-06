@@ -12,7 +12,6 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -28,7 +27,11 @@ public class BaseStepDefinitions extends BaseIntegrationTest {
     }
 
     public static Long getAccountId(final Map<String, String> map, final AccountRepository accountRepository) {
-        return accountRepository.findByUserIdAndName(Long.parseLong(map.get("userId")), Set.of(map.get("account"))).getFirst().getId();
+        final String account = map.get("account");
+        if ("null".equals(account)) {
+            return null;
+        }
+        return accountRepository.findByUserIdAndName(Long.parseLong(map.get("userId")), Set.of(account)).getFirst().getId();
     }
 
     public static Long getCurrencyId(final Map<String, String> map) {
@@ -106,17 +109,19 @@ public class BaseStepDefinitions extends BaseIntegrationTest {
             boolean foundMatch = false;
 
             if (dateKey != null && dateFunction != null) {
-                final Optional<T> maybeEntity = persisted.stream()
+                final List<T> entitiesOnDate = persisted.stream()
                         .filter(persistedEntity -> LocalDate.parse(expectedMap.get(dateKey)).equals(dateFunction.apply(persistedEntity)))
-                        .findAny();
-                if (maybeEntity.isPresent()) {
-                    final String result = callback.apply(expectedMap, maybeEntity.get());
-                    if (result != null) {
-                        fail("No matching entity found for key " + result + " from expected: \n" + expectedMap + "\nGot\n" + objectToString(maybeEntity.get()));
+                        .toList();
+                String result = null;
+                for (final T entity : entitiesOnDate) {
+                    result = callback.apply(expectedMap, entity);
+                    if(result == null) {
+                        foundMatch = true;
                     }
-                    foundMatch = true;
-                } else {
-                    fail("No matching entity found for expected: \n" + expectedMap + "\nGot\n" + objectsToString(persisted));
+                }
+
+                if(!foundMatch) {
+                    fail("No matching entity found for " + (entitiesOnDate.size() == 1 ? result + " and for " : "") + " expected: \n" + expectedMap + "\nGot\n" + objectsToString(entitiesOnDate));
                 }
             } else {
                 for (final T persistedEntity : persisted) {
@@ -153,7 +158,7 @@ public class BaseStepDefinitions extends BaseIntegrationTest {
                 stringBuilder.append(field.getName())
                         .append("=")
                         .append(field.get(obj));
-            } catch (IllegalAccessException e) {
+            } catch (final IllegalAccessException e) {
                 stringBuilder.append(field.getName()).append("=<access denied>");
             }
 

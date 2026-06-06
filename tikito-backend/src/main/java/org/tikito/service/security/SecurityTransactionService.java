@@ -27,20 +27,17 @@ public class SecurityTransactionService {
 
     private final SecurityTransactionRepository securityTransactionRepository;
     private final JobFactoryService jobFactoryService;
-    private final CacheService cacheService;
     private final AccountRepository accountRepository;
     private final IsinRepository isinRepository;
     private final SecurityRepository securityRepository;
 
     public SecurityTransactionService(final SecurityTransactionRepository securityTransactionRepository,
                                       final JobFactoryService jobFactoryService,
-                                      final CacheService cacheService,
                                       final AccountRepository accountRepository,
                                       final IsinRepository isinRepository,
                                       final SecurityRepository securityRepository) {
         this.securityTransactionRepository = securityTransactionRepository;
         this.jobFactoryService = jobFactoryService;
-        this.cacheService = cacheService;
         this.accountRepository = accountRepository;
         this.isinRepository = isinRepository;
         this.securityRepository = securityRepository;
@@ -81,7 +78,7 @@ public class SecurityTransactionService {
                 .map(SecurityTransaction::toDto)
                 .map(transaction -> {
                     if (transaction.getSecurityId() != null) {
-                        transaction.setSecurity(cacheService.getSecurity(transaction.getSecurityId()));
+                        transaction.setSecurity(CacheService.getSecurity(transaction.getSecurityId()));
                     }
                     return transaction;
                 })

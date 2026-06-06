@@ -6,9 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.tikito.dto.security.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Getter
 @Setter
@@ -18,12 +15,7 @@ public class SecurityHolding {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private long userId;
-//    @ElementCollection(fetch = FetchType.LAZY)
-//    @CollectionTable(
-//            name = "security_holding_account",
-//            joinColumns = @JoinColumn(name = "security_holding_id"))
-//    @Column(name = "account_id")
-    private long accountId;
+    private Long accountId;
     private Long securityId;
     @Enumerated(EnumType.STRING)
     private SecurityType securityType;
@@ -40,7 +32,7 @@ public class SecurityHolding {
     private double maxCashInvested = 0;
     private double cashOnHand = 0;
 
-    public SecurityHolding(final long userId, final long accountId, final SecurityTransactionImportLine transaction) {
+    public SecurityHolding(final long userId, final Long accountId, final SecurityTransactionImportLine transaction) {
         this.userId = userId;
         this.accountId = accountId;
         this.securityId = transaction.getSecurity().getId();
