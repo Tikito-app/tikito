@@ -41,7 +41,7 @@
 
         <mat-form-field>
           <mat-label>{{'start-date' | translatePipe}}</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="startDate" (dateChange)="resetUrlFromFilter()">
+          <input matInput [matDatepicker]="picker" formControlName="startDate" (dateChange)="UserPreferenceService.onRadioChange(UserPreference.SECURITY_START_DATE, $event.value); resetUrlFromFilter()">
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>

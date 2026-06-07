@@ -144,14 +144,14 @@ export class MoneyTransactionOverviewComponent implements OnInit {
         });
         this.form.controls['startAtZeroFromBeginning'].setValue(UserPreferenceService.get(UserPreference.START_AT_ZERO_FROM_BEGINNING, true) || this.form.value.nonGrouped);
         this.form.controls['startAtZeroAfterDateAggregation'].setValue(UserPreferenceService.get(UserPreference.START_AT_ZERO_AFTER_DATE_RANGE, true));
-        this.form.controls['accountIds'].setValue(UserPreferenceService.get(UserPreference.ACCOUNT_IDS, '').toString().split(',').map(v => parseInt(v)));
+        this.form.controls['accountIds'].setValue(UserPreferenceService.get(UserPreference.MONEY_ACCOUNT_IDS, '').toString().split(',').map(v => parseInt(v)));
         this.form.controls['currencies'].setValue(UserPreferenceService.get(UserPreference.CURRENCY_FILTER, '').toString().split(',').map(v => parseInt(v)));
         this.form.controls['groupIds'].setValue(UserPreferenceService.get(UserPreference.GROUP_IDS, '').toString().split(',').map(v => parseInt(v)));
-        this.form.controls['dateRange'].setValue(UserPreferenceService.get(UserPreference.DATE_RANGE, TransactionDateRange.MONTH));
+        this.form.controls['dateRange'].setValue(UserPreferenceService.get(UserPreference.MONEY_DATE_RANGE, TransactionDateRange.MONTH));
         this.form.controls['aggregateDateRange'].setValue(UserPreferenceService.get(UserPreference.AGGREGATE_DATE_RANGE, true));
         this.form.controls['amountOfOtherGroups'].setValue(UserPreferenceService.get(UserPreference.AMOUNT_OF_OTHER_GROUPS, 5));
-        this.form.controls['startDate'].setValue(UserPreferenceService.get(UserPreference.START_DATE, null));
-        this.form.controls['endDate'].setValue(UserPreferenceService.get(UserPreference.END_DATE, null));
+        this.form.controls['startDate'].setValue(UserPreferenceService.get(UserPreference.MONEY_START_DATE, null));
+        this.form.controls['endDate'].setValue(UserPreferenceService.get(UserPreference.MONEY_END_DATE, null));
         this.form.controls['includeBudget'].setValue(UserPreferenceService.get(UserPreference.START_AT_ZERO_AFTER_DATE_RANGE, true) && UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_BUDGET, true));
         this.form.controls['includeMoney'].setValue(UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_MONEY, true));
         this.form.controls['includeMoneyHolding'].setValue(UserPreferenceService.get(UserPreference.MONEY_GRAPH_INCLUDE_MONEY_HOLDING, true));
@@ -198,7 +198,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
         UserPreferenceService.set(UserPreference.START_AT_ZERO_FROM_BEGINNING, true);
       }
     } else {
-      this.UserPreferenceService.set(UserPreference.DATE_RANGE, null);
+      this.UserPreferenceService.set(UserPreference.MONEY_DATE_RANGE, null);
       this.form.controls['dateRange'].setValue(null);
     }
     UserPreferenceService.onCheckboxChange(UserPreference.AGGREGATE_DATE_RANGE, checked);
@@ -209,7 +209,7 @@ export class MoneyTransactionOverviewComponent implements OnInit {
   }
 
   onAccountIdsSelectChanged(value: any[]) {
-    UserPreferenceService.onSelectChange(UserPreference.ACCOUNT_IDS, value);
+    UserPreferenceService.onSelectChange(UserPreference.MONEY_ACCOUNT_IDS, value);
   }
 
   onCurrencyFilterChanged(value: any[]) {

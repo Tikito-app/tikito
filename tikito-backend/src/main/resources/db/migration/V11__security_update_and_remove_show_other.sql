@@ -1,5 +1,3 @@
-delete from user_preference where value_key = 'MONEY_SHOW_OTHER';
-
 alter table security_holding modify account_id bigint(20) NULL;
 alter table historical_security_holding_value modify account_id bigint(20) NULL;
 
