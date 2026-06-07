@@ -224,7 +224,7 @@ public class SecurityHoldingService implements JobProcessor {
     @Transactional(propagation = Propagation.MANDATORY)
     public void recalculateAggregatedHistoricalHoldingValues(final long userId) {
         log.info("Recalculating aggregated historical security values");
-        final List<HistoricalSecurityHoldingValue> allHistoricalValues = historicalSecurityHoldingValueRepository.findAll();
+        final List<HistoricalSecurityHoldingValue> allHistoricalValues = historicalSecurityHoldingValueRepository.findByUserIdAndAccountId(userId, null);
         final Map<LocalDate, List<HistoricalSecurityHoldingValue>> historicalValuesByDate = new HashMap<>();
         allHistoricalValues.forEach(historicalSecurityHoldingValue -> {
             historicalValuesByDate.putIfAbsent(historicalSecurityHoldingValue.getDate(), new ArrayList<>());

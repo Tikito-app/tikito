@@ -24,4 +24,11 @@ public interface HistoricalSecurityHoldingValueRepository extends JpaRepository<
 
     @Modifying
     void deleteByAccountId(long accountId);
+
+    @Query("""
+             select h from HistoricalSecurityHoldingValue h where
+                        ((:accountId is null and h.accountId is null) or h.accountId = :accountId) and
+                        h.userId = :userId
+            """)
+    List<HistoricalSecurityHoldingValue> findByUserIdAndAccountId(long userId, Long accountId);
 }

@@ -2,8 +2,6 @@ delete from user_preference where value_key = 'MONEY_SHOW_OTHER';
 
 alter table security_holding modify account_id bigint(20) NULL;
 alter table historical_security_holding_value modify account_id bigint(20) NULL;
-insert into security_holding (user_id, security_id, security_type, currency_id, amount, account_id)
-    (select user_id, security_id, security_type, currency_id, 0, null from security_holding group by user_id, security_id);
 
 INSERT IGNORE INTO isin (isin, valid_from, valid_to, security_id, symbol) VALUES
     ('AED', null, null, (select id from security where current_isin = 'AED'), 'AEDEUR=X'),

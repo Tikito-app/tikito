@@ -40,10 +40,14 @@ export class TopHeaderComponent implements OnInit {
 
   updateJobsCount() {
     setTimeout(() => {
-      this.adminApi.getJobsCount().subscribe(jobsPending => {
-        this.jobsPending = jobsPending;
+      try {
+        this.adminApi.getJobsCount().subscribe(jobsPending => {
+          this.jobsPending = jobsPending;
+          this.updateJobsCount();
+        });
+      } catch (error) {
         this.updateJobsCount();
-      })
+      }
     }, 5000);
   }
 

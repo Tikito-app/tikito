@@ -13,7 +13,12 @@ public interface SecurityHoldingRepository extends JpaRepository<SecurityHolding
 
     Optional<SecurityHolding> findByUserIdAndId(long userId, long securityHoldingId);
 
-    @Query("select h from SecurityHolding h where h.userId = :userId and (:accountId is null or h.accountId = :accountId)")
+    @Query("""
+            select h from SecurityHolding h
+            where h.userId = :userId and (
+                (:accountId is null and h.accountId is null) or
+                h.accountId = :accountId)
+    """)
     List<SecurityHolding> findByUserIdAndAccountId(long userId, Long accountId);
 
     @Modifying
