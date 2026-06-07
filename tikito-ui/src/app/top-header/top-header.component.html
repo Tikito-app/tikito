@@ -12,7 +12,7 @@
       <!--      <app-header-item icon="person" routerLink="/register" *ngIf="!loggedIn" [displayValue]="'register' | translate"></app-header-item>-->
       <app-header-item icon="exit_to_app" routerLink="/logout" *ngIf="loggedIn" [displayValue]="'logout' | translatePipe"></app-header-item>
 
-      <app-header-item routerLink="/jobs" *ngIf="loggedIn && jobsPending > 0" [displayValue]="jobsPending + ' job pending' | translatePipe"></app-header-item>
+      <app-header-item routerLink="/admin/jobs" *ngIf="loggedIn && jobsPending > 0" [displayValue]="jobsPending + ' job pending' | translatePipe"></app-header-item>
     </div>
     <div style="float: right"><img src="/assets/images/logo.png" style="width: 75px; height: 75px; padding-right: 50px; padding-top: 10px"/></div>
   </div>

@@ -323,6 +323,13 @@
   "admin/import-export-security-transactions": "Security transactions",
   "admin/import-export-loans": "Loans",
 
+  "admin/jobs": "Jobs",
+  "admin/jobs/timestamp": "Timestamp",
+  "admin/jobs/job-type": "Job type",
+  "admin/jobs/security-id": "Security",
+  "admin/jobs/account-id": "Account",
+  "admin/jobs/loan-id": "Loan",
+
   "---------------- LANGUAGE --------------": "",
   "language/nl": "Dutch",
   "language/en": "English",

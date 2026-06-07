@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tikito.dto.JobDto;
 import org.tikito.entity.Job;
 import org.tikito.repository.JobRepository;
 import org.tikito.repository.SecurityHoldingRepository;
@@ -80,5 +81,12 @@ public class JobService {
     @Transactional(readOnly = true)
     public long getJobsCount(final long userId) {
         return jobRepository.countByUserId(userId);
+    }
+
+    public List<JobDto> getJobs() {
+        return jobRepository.findAllOrdered()
+                .stream()
+                .map(Job::toDto)
+                .toList();
     }
 }
