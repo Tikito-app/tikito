@@ -102,14 +102,14 @@ public class AccountService {
         moneyTransactionRepository.deleteByAccountId(accountId);
         historicalMoneyHoldingValueRepository.deleteByAccountId(accountId);
         aggregatedHistoricalMoneyHoldingValueRepository.deleteByAccountIds(accountId);
-        jobFactoryService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_MONEY_VALUES, userId).build());
+        jobFactoryService.addJob(Job.user(JobType.RECALCULATE_AGGREGATED_HISTORICAL_MONEY_VALUES, userId).build());
     }
 
     private void deleteSecuritiesUnderAccount(final long userId, final long accountId) {
         securityTransactionRepository.deleteByAccountId(accountId);
-        securityHoldingRepository.deleteByAccountIds(accountId);
-        historicalSecurityHoldingValueRepository.deleteByAccountIds(accountId);
+        securityHoldingRepository.deleteByAccountId(accountId);
+        historicalSecurityHoldingValueRepository.deleteByAccountId(accountId);
         aggregatedHistoricalSecurityHoldingValueRepository.deleteByAccountIds(accountId);
-        jobFactoryService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
+        jobFactoryService.addJob(Job.user(JobType.RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userId).build());
     }
 }

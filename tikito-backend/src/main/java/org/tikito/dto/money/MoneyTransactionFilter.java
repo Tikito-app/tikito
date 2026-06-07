@@ -1,16 +1,15 @@
 package org.tikito.dto.money;
 
-import org.tikito.dto.DateRange;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.dto.DateRange;
+import org.tikito.util.Util;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -27,23 +26,11 @@ public class MoneyTransactionFilter {
     private String transactionFilter;
 
     public Set<Long> getAccountIds() {
-        if (accountIds != null) {
-            final Set<Long> ids = accountIds.stream().filter(Objects::nonNull).collect(Collectors.toSet());
-            if (!ids.isEmpty()) {
-                return ids;
-            }
-        }
-        return null;
+        return Util.toSetOfNonNullLongs(accountIds);
     }
 
     public Set<Long> getCurrencies() {
-        if (currencies != null) {
-            final Set<Long> ids = currencies.stream().filter(Objects::nonNull).collect(Collectors.toSet());
-            if (!ids.isEmpty()) {
-                return ids;
-            }
-        }
-        return null;
+        return Util.toSetOfNonNullLongs(currencies);
     }
 
     public DateRange getDateRange() {
@@ -54,13 +41,7 @@ public class MoneyTransactionFilter {
     }
 
     public Set<Long> getGroupIds() {
-        if (groupIds != null) {
-            final Set<Long> ids = groupIds.stream().filter(Objects::nonNull).collect(Collectors.toSet());
-            if (!ids.isEmpty()) {
-                return ids;
-            }
-        }
-        return null;
+        return Util.toSetOfNonNullLongs(groupIds);
     }
 
     public Instant getStartDateAsInstant() {

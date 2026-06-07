@@ -3,7 +3,6 @@ package org.tikito.service;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.tikito.controller.request.CreateOrUpdateAccountRequest;
 import org.tikito.dto.AccountDto;
 import org.tikito.dto.DateRange;
 import org.tikito.dto.loan.LoanType;
@@ -14,7 +13,6 @@ import org.tikito.entity.Account;
 import org.tikito.entity.UserAccount;
 import org.tikito.entity.loan.Loan;
 import org.tikito.entity.loan.LoanPart;
-import org.tikito.entity.money.MoneyHolding;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.entity.money.MoneyTransactionGroup;
 import org.tikito.entity.security.Isin;
@@ -22,6 +20,7 @@ import org.tikito.entity.security.Security;
 import org.tikito.entity.security.SecurityPrice;
 import org.tikito.repository.*;
 import org.tikito.service.export.ImportExportService;
+import org.tikito.service.security.SecurityHoldingService;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -85,6 +84,9 @@ public class BaseIntegrationTest extends BaseTest {
     protected HistoricalSecurityHoldingValueRepository historicalSecurityHoldingValueRepository;
 
     @Autowired
+    protected AggregatedHistoricalSecurityHoldingValueRepository aggregatedHistoricalSecurityHoldingValueRepository;
+
+    @Autowired
     protected AggregatedHistoricalMoneyHoldingValueRepository aggregatedHistoricalMoneyHoldingValueRepository;
 
     @Autowired
@@ -101,6 +103,15 @@ public class BaseIntegrationTest extends BaseTest {
 
     @Autowired
     protected AccountService accountService;
+
+    @Autowired
+    protected SecurityHoldingService securityHoldingService;
+
+    @Autowired
+    protected JobService jobService;
+
+    @Autowired
+    protected TimeService timeService;
 
     @AfterEach
     @BeforeEach
@@ -127,7 +138,9 @@ public class BaseIntegrationTest extends BaseTest {
     protected void withDefaultData() {
         withDefaultCurrencies();
         withDefaultSecurities();
+        withDefaultUserAccount();
         withDefaultAccounts();
+        cacheService.refreshCurrencies(); // todo fix for all securities
     }
 
     protected void loginWithDefaultUser() {
@@ -138,10 +151,10 @@ public class BaseIntegrationTest extends BaseTest {
     }
 
     protected void withDefaultCurrencies() {
-        CURRENCY_EURO_ID = withExistingCurrency("EUR", "Euro").getId();
-        CURRENCY_DOLLAR_ID = withExistingCurrency("USD", "Dollar").getId();
+//        CURRENCY_EURO_ID = withExistingCurrency("EUR", "Euro").getId();
+//        CURRENCY_DOLLAR_ID = withExistingCurrency("USD", "Dollar").getId();
 
-        withExistingCurrencyCache(CURRENCY_DOLLAR_ID);
+//        withExistingCurrencyCache(CURRENCY_DOLLAR_ID);
 
         cacheService.refreshCurrencies();
     }
@@ -182,9 +195,9 @@ public class BaseIntegrationTest extends BaseTest {
         DEFAULT_SECURITY_ACCOUNT_DTO = DEFAULT_SECURITY_ACCOUNT.toDto();
         DEBIT_DOLLAR_ACCOUNT_DTO = DEBIT_DOLLAR_ACCOUNT.toDto();
 
-        final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT_DTO.getId()).getFirst();
-        moneyHolding.setAmountOffset(randomDouble(200, 500));
-        moneyHoldingRepository.saveAndFlush(moneyHolding);
+//        final MoneyHolding moneyHolding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT_DTO.getId()).getFirst();
+//        moneyHolding.setAmountOffset(randomDouble(200, 500));
+//        moneyHoldingRepository.saveAndFlush(moneyHolding);
     }
 
     protected void withDefaultMoneyTransactionGroups() {
@@ -269,15 +282,12 @@ public class BaseIntegrationTest extends BaseTest {
     }
 
     protected Account withExistingAccounts(final long userId, final String name, final String accountNumber, final long currencyId) {
-        final CreateOrUpdateAccountRequest request = new CreateOrUpdateAccountRequest();
-
-        request.setName(name);
-        request.setAccountNumber(accountNumber);
-        request.setCurrencyId(currencyId);
-
-        final AccountDto dto = accountService.createOrUpdate(userId, request);
-
-        return accountRepository.findById(dto.getId()).orElseThrow();
+        final Account account = new Account();
+        account.setUserId(userId);
+        account.setName(name);
+        account.setAccountNumber(accountNumber);
+        account.setCurrencyId(currencyId);
+        return accountRepository.saveAndFlush(account);
     }
 
     protected void withDefaultSecurities() {

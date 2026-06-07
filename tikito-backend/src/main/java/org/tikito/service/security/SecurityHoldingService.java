@@ -1,6 +1,7 @@
 package org.tikito.service.security;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import org.tikito.entity.Job;
 import org.tikito.entity.security.*;
 import org.tikito.repository.*;
 import org.tikito.service.CacheService;
+import org.tikito.service.TimeService;
 import org.tikito.service.job.JobProcessor;
 
 import java.time.LocalDate;
@@ -33,6 +35,7 @@ public class SecurityHoldingService implements JobProcessor {
     private final SecurityTransactionRepository securityTransactionRepository;
     private final CacheService cacheService;
     private final AggregatedHistoricalSecurityHoldingValueRepository aggregatedHistoricalSecurityHoldingValueRepository;
+    private final TimeService timeService;
 
     public SecurityHoldingService(final SecurityHoldingRepository securityHoldingRepository,
                                   final HistoricalSecurityHoldingValueRepository historicalSecurityHoldingValueRepository,
@@ -40,7 +43,8 @@ public class SecurityHoldingService implements JobProcessor {
                                   final SecurityPriceRepository securityPriceRepository,
                                   final SecurityTransactionRepository securityTransactionRepository,
                                   final CacheService cacheService,
-                                  final AggregatedHistoricalSecurityHoldingValueRepository aggregatedHistoricalSecurityHoldingValueRepository) {
+                                  final AggregatedHistoricalSecurityHoldingValueRepository aggregatedHistoricalSecurityHoldingValueRepository,
+                                  final TimeService timeService) {
         this.securityHoldingRepository = securityHoldingRepository;
         this.historicalSecurityHoldingValueRepository = historicalSecurityHoldingValueRepository;
         this.securityRepository = securityRepository;
@@ -48,17 +52,20 @@ public class SecurityHoldingService implements JobProcessor {
         this.securityTransactionRepository = securityTransactionRepository;
         this.cacheService = cacheService;
         this.aggregatedHistoricalSecurityHoldingValueRepository = aggregatedHistoricalSecurityHoldingValueRepository;
+        this.timeService = timeService;
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void deleteSecurityHolding(final long userId, final long securityHoldingId) {
-        final Optional<SecurityHolding> maybeSecurityHolding = securityHoldingRepository.findByUserIdAndId(userId, securityHoldingId);
-        maybeSecurityHolding.ifPresent((securityHolding -> {
-            historicalSecurityHoldingValueRepository.deleteAllBySecurityHoldingId(securityHoldingId);
-            securityHoldingRepository.deleteById(securityHoldingId);
-            securityTransactionRepository.deleteByUserIdAndSecurityId(userId, securityHolding.getSecurityId());
-        }));
-        recalculateAggregatedHistoricalHoldingValues(userId);
+
+        // todo
+//        final Optional<SecurityHolding> maybeSecurityHolding = securityHoldingRepository.findByUserIdAndId(userId, securityHoldingId);
+//        maybeSecurityHolding.ifPresent((securityHolding -> {
+//            historicalSecurityHoldingValueRepository.deleteAllBySecurityHoldingId(securityHoldingId);
+//            securityHoldingRepository.deleteById(securityHoldingId);
+//            securityTransactionRepository.deleteByUserIdAndSecurityId(userId, securityHolding.getSecurityId());
+//        }));
+//        recalculateAggregatedHistoricalHoldingValues(userId);
     }
 
     /**
@@ -67,19 +74,19 @@ public class SecurityHoldingService implements JobProcessor {
      * over the days until now() and creates a new HistoricalHoldingValue for that specific day.
      */
     private List<HistoricalSecurityHoldingValue> generateHistoricalHoldingValues(final long userId,
-                                                                                 final Set<Long> accountIds,
-                                                                                 final Long securityId,
-                                                                                 final Long securityHoldingId,
+                                                                                 final Long accountId,
+                                                                                 final long securityId,
+                                                                                 final long securityHoldingId,
                                                                                  final long currencyId,
                                                                                  final Map<LocalDate, SecurityPrice> securityPricePerTimestamp,
                                                                                  final Map<LocalDate, List<SecurityTransaction>> transactionsPerTimestamp) {
         final LocalDate firstTimestamp = getFirstTimestamp(transactionsPerTimestamp);
         final List<HistoricalSecurityHoldingValue> historicalSecurityHoldingValues = new ArrayList<>();
 
-        HistoricalSecurityHoldingValueDto currentHoldingValue = new HistoricalSecurityHoldingValueDto(accountIds, securityId, securityHoldingId, currencyId);
+        HistoricalSecurityHoldingValueDto currentHoldingValue = new HistoricalSecurityHoldingValueDto(accountId, securityId, securityHoldingId, currencyId);
 
         for (LocalDate currentTimestamp = firstTimestamp;
-             currentTimestamp.isBefore(LocalDate.now().plusDays(1));
+             currentTimestamp.isBefore(timeService.now().plusDays(1));
              currentTimestamp = currentTimestamp.plusDays(1)) {
 
             final double currencyMultiplier = cacheService.getCurrencyMultiplier(currencyId, currentTimestamp);
@@ -110,11 +117,11 @@ public class SecurityHoldingService implements JobProcessor {
 
     public List<SecurityHoldingDto> getSecurityHoldings(final long userId) {
         return securityHoldingRepository
-                .findByUserId(userId)
+                .findByUserIdAndAccountId(userId, null)
                 .stream()
                 .map(SecurityHolding::toDto)
                 .map(holding -> {
-                    holding.setSecurity(cacheService.getSecurity(holding.getSecurityId()));
+                    holding.setSecurity(CacheService.getSecurity(holding.getSecurityId()));
                     return holding;
                 })
                 .sorted(Comparator.comparing(o -> o.getSecurity().getName()))
@@ -124,13 +131,13 @@ public class SecurityHoldingService implements JobProcessor {
     public SecurityHoldingDto getSecurityHolding(final long userId, final long securityHoldingId) {
         return securityHoldingRepository
                 .findByUserIdAndId(userId, securityHoldingId)
-                .map(holding -> holding.toDto(cacheService.getSecurity(holding.getSecurityId())))
+                .map(holding -> holding.toDto(CacheService.getSecurity(holding.getSecurityId())))
                 .orElseThrow();
     }
 
     public List<HistoricalSecurityHoldingValueDto> getHistoricalHoldingValues(final long userId, final SecurityHoldingFilter filter) {
         return historicalSecurityHoldingValueRepository
-                .findAllBySecurityHoldingIdIn(userId, filter.getHoldingIds(), filter.getStartDate())
+                .findAllBySecurityAndAccount(userId, filter.getAccountIds(), filter.getSecurityIds(), filter.getStartDate())
                 .stream()
                 .map(HistoricalSecurityHoldingValue::toDto)
                 .sorted(Comparator.comparing(HistoricalSecurityHoldingValueDto::getDate))
@@ -148,7 +155,7 @@ public class SecurityHoldingService implements JobProcessor {
 
     public List<HistoricalSecurityHoldingValueDto> getHistoricalHoldingValues(final long userId, final Set<Long> ids) {
         return historicalSecurityHoldingValueRepository
-                .findAllBySecurityHoldingIdIn(userId, ids, null)
+                .findAllBySecurityAndAccount(userId, null, ids, null)
                 .stream()
                 .map(HistoricalSecurityHoldingValue::toDto)
                 .sorted(Comparator.comparing(HistoricalSecurityHoldingValueDto::getDate))
@@ -157,28 +164,26 @@ public class SecurityHoldingService implements JobProcessor {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void recalculateHistoricalValue(final long userId, final long securityId) {
-        securityHoldingRepository
-                .findByUserIdAndSecurityId(userId, securityId)
-                .forEach(holding -> recalculateHistoricalHoldingValue(userId, holding.getId(), holding.getSecurityId()));
+        securityHoldingRepository.findByUserIdAndSecurityId(userId, securityId)
+                .forEach(this::recalculateHistoricalHoldingValue);
     }
 
     /**
      * This method deletes the previous holding values, generates a completely new list of historical values for that
-     * holding and then persists it in the database,
+     * holding and then persists it in the database.
      */
-    private void recalculateHistoricalHoldingValue(final long userId, final Long securityHoldingId, final long securityId) {
-        log.info("Recalculating historical security holding values for holding #{} of {}", securityHoldingId, cacheService.getSecurityName(securityId));
+    private void recalculateHistoricalHoldingValue(final SecurityHolding holding) {
+        log.info("Recalculating historical security holding values for security {}({}) from account {}", cacheService.getSecurityName(holding.getSecurityId()), holding.getSecurityId(), holding.getAccountId());
 
-        final SecurityHolding holding = securityHoldingRepository.findByUserIdAndId(userId, securityHoldingId).orElseThrow();
         final Security security = securityRepository.findById(holding.getSecurityId()).orElseThrow();
-        final Map<LocalDate, List<SecurityTransaction>> transactionsPerTimestamp = getTransactionsPerTimestamp(holding.getSecurityId());
+        final Map<LocalDate, List<SecurityTransaction>> transactionsPerTimestamp = getTransactionsPerTimestamp(holding.getSecurityId(), holding.getAccountId());
         final Map<LocalDate, SecurityPrice> securityPricePerTimestamp = securityPriceRepository
                 .findAllBySecurityId(security.getId())
                 .stream()
                 .collect(Collectors.toMap(SecurityPrice::getDate, Function.identity()));
         final List<HistoricalSecurityHoldingValue> historicalSecurityHoldingValues = generateHistoricalHoldingValues(
-                userId,
-                holding.getAccountIds(),
+                holding.getUserId(),
+                holding.getAccountId(),
                 holding.getSecurityId(),
                 holding.getId(),
                 security.getCurrencyId(),
@@ -201,15 +206,15 @@ public class SecurityHoldingService implements JobProcessor {
             holding.apply(historicalSecurityHoldingValues.getLast());
         }
         log.info("Deleting previous values");
-        historicalSecurityHoldingValueRepository.deleteAllBySecurityHoldingId(securityHoldingId);
+        historicalSecurityHoldingValueRepository.deleteAllBySecurityHoldingId(holding.getId());
 
-        log.info("Storing {} historical security holding values for holding #{} of {}", historicalSecurityHoldingValues.size(), securityHoldingId, cacheService.getSecurityName(securityId));
+        log.info("Storing {} historical security holding values for holding #{} of {}", historicalSecurityHoldingValues.size(), holding.getId(), cacheService.getSecurityName(holding.getSecurityId()));
         historicalSecurityHoldingValueRepository.saveAllAndFlush(historicalSecurityHoldingValues);
         securityHoldingRepository.saveAndFlush(holding);
 
         log.info("Recalculating aggregated values");
         // todo: remove and make a job, so that we don't calculate it unnecessary.
-        recalculateAggregatedHistoricalHoldingValues(userId);
+        recalculateAggregatedHistoricalHoldingValues(holding.getUserId());
         log.info("Done");
     }
 
@@ -219,7 +224,7 @@ public class SecurityHoldingService implements JobProcessor {
     @Transactional(propagation = Propagation.MANDATORY)
     public void recalculateAggregatedHistoricalHoldingValues(final long userId) {
         log.info("Recalculating aggregated historical security values");
-        final List<HistoricalSecurityHoldingValue> allHistoricalValues = historicalSecurityHoldingValueRepository.findAll();
+        final List<HistoricalSecurityHoldingValue> allHistoricalValues = historicalSecurityHoldingValueRepository.findByUserIdAndAccountId(userId, null);
         final Map<LocalDate, List<HistoricalSecurityHoldingValue>> historicalValuesByDate = new HashMap<>();
         allHistoricalValues.forEach(historicalSecurityHoldingValue -> {
             historicalValuesByDate.putIfAbsent(historicalSecurityHoldingValue.getDate(), new ArrayList<>());
@@ -240,11 +245,11 @@ public class SecurityHoldingService implements JobProcessor {
     /**
      * Returns a map of transactions per date. A single date holds a list of transactions.
      */
-    private Map<LocalDate, List<SecurityTransaction>> getTransactionsPerTimestamp(final Long securityId) {
+    private Map<LocalDate, List<SecurityTransaction>> getTransactionsPerTimestamp(final long securityId, final @Nullable Long accountId) {
         final Map<LocalDate, List<SecurityTransaction>> transactionsPerTimestamp = new HashMap<>();
 
         securityTransactionRepository
-                .findBySecurityId(securityId)
+                .findBySecurityIdAndAccountId(securityId, accountId)
                 .forEach(transaction -> {
                     final LocalDate date = LocalDate.ofInstant(transaction.getTimestamp(), ZoneOffset.UTC);
                     transactionsPerTimestamp.putIfAbsent(date, new ArrayList<>());

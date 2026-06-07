@@ -107,6 +107,6 @@ public class MoneyTransactionService {
         final MoneyTransaction transaction = moneyTransactionRepository.findByUserIdAndId(userId, transactionId).orElseThrow();
         moneyTransactionRepository.deleteByUserIdAndId(userId, transactionId);
         jobFactoryService.addJob(Job.account(JobType.RECALCULATE_HISTORICAL_MONEY_VALUES, transaction.getAccountId(), userId).build());
-        jobFactoryService.addJob(Job.account(JobType.RECALCULATE_AGGREGATED_HISTORICAL_MONEY_VALUES, userId).build());
+        jobFactoryService.addJob(Job.user(JobType.RECALCULATE_AGGREGATED_HISTORICAL_MONEY_VALUES, userId).build());
     }
 }

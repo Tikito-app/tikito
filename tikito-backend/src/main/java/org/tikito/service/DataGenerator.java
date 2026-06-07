@@ -196,7 +196,7 @@ public class DataGenerator {
 
         final SecurityHolding holding = new SecurityHolding();
         holding.setSecurityId(security.getId());
-        holding.setAccountIds(new HashSet<>(Set.of(STOCK_ACCOUNT.getId())));
+        holding.setAccountId(STOCK_ACCOUNT.getId());
         holding.setSecurityType(SecurityType.STOCK);
         holding.setUserId(USER_ID);
         holding.setCurrencyId(EURO_ID);

@@ -33,17 +33,20 @@ public class LoanService {
     private final MoneyTransactionGroupRepository moneyTransactionGroupRepository;
     private final LoanValueRepository loanValueRepository;
     private final JobFactoryService jobFactoryService;
+    private final TimeService timeService;
 
     public LoanService(final LoanRepository loanRepository,
                        final LoanPartRepository loanPartRepository,
                        final MoneyTransactionGroupRepository moneyTransactionGroupRepository,
                        final LoanValueRepository loanValueRepository,
-                       final JobFactoryService jobFactoryService) {
+                       final JobFactoryService jobFactoryService,
+                       final TimeService timeService) {
         this.loanRepository = loanRepository;
         this.loanPartRepository = loanPartRepository;
         this.moneyTransactionGroupRepository = moneyTransactionGroupRepository;
         this.loanValueRepository = loanValueRepository;
         this.jobFactoryService = jobFactoryService;
+        this.timeService = timeService;
     }
 
     public List<LoanDto> getLoans(final long userId) {
@@ -82,7 +85,7 @@ public class LoanService {
                 .collect(Collectors.toSet());
         final Map<Long, LoanValueDto> values = new HashMap<>();
         loanValueRepository
-                .findByLoanPartIdsAndDateBefore(loanPartIds, LocalDate.now())
+                .findByLoanPartIdsAndDateBefore(loanPartIds, timeService.now())
                 .stream()
                 .map(LoanValue::toDto)
                 .forEach(value -> {

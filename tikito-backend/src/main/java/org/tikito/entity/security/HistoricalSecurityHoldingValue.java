@@ -1,16 +1,15 @@
 package org.tikito.entity.security;
 
-import org.tikito.dto.security.HistoricalSecurityHoldingValueDto;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.dto.security.HistoricalSecurityHoldingValueDto;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -21,12 +20,7 @@ public class HistoricalSecurityHoldingValue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private long userId;
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(
-            name = "historical_security_holding_account",
-            joinColumns = @JoinColumn(name = "historical_security_holding_id"))
-    @Column(name = "account_id")
-    private Set<Long> accountIds = new HashSet<>();
+    private Long accountId;
     private Long securityHoldingId;
     private Long securityId; // todo: can we remove this?
     private LocalDate date;
@@ -47,7 +41,7 @@ public class HistoricalSecurityHoldingValue {
     public HistoricalSecurityHoldingValue(final long userId, final HistoricalSecurityHoldingValueDto dto) {
         this.id = dto.getId();
         this.userId = userId;
-        this.accountIds = Arrays.stream(dto.getAccountIds()).collect(Collectors.toSet());
+        this.accountId = dto.getAccountId();
         this.securityHoldingId = dto.getSecurityHoldingId();
         this.securityId = dto.getSecurityId();
         this.currencyId = dto.getCurrencyId();
@@ -70,7 +64,7 @@ public class HistoricalSecurityHoldingValue {
         return new HistoricalSecurityHoldingValueDto(
                 id,
                 userId,
-                null,//accountIds.toArray(Long[]::new), // todo: speed up
+                accountId,
                 securityHoldingId,
                 securityId,
                 date,

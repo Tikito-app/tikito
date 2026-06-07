@@ -39,7 +39,7 @@ public class Job {
                 .securityId(securityId);
     }
 
-    public static JobBuilder account(final JobType jobType, final long userId) {
+    public static JobBuilder user(final JobType jobType, final long userId) {
         return create(jobType)
                 .userId(userId);
     }

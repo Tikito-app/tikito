@@ -1,5 +1,11 @@
 package org.tikito.service.security;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 import org.tikito.dto.security.SecurityTransactionImportResultDto;
 import org.tikito.dto.security.SecurityTransactionType;
 import org.tikito.dto.security.SecurityType;
@@ -9,23 +15,16 @@ import org.tikito.entity.security.SecurityHolding;
 import org.tikito.entity.security.SecurityTransaction;
 import org.tikito.exception.UnsupportedImportFormatException;
 import org.tikito.service.BaseIntegrationTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import static org.tikito.dto.security.SecurityTransactionImportResultDto.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.tikito.dto.security.SecurityTransactionImportResultDto.*;
 
 @SpringBootTest
 @Transactional
@@ -143,11 +142,11 @@ public class SecurityImportServiceTest extends BaseIntegrationTest {
     @Test
     void testImportNewAndExistingSecurityHolding() throws IOException, UnsupportedImportFormatException {
         final SecurityHolding securityHolding = new SecurityHolding();
-        securityHolding.setAccountIds(new HashSet<>());
-        securityHolding.getAccountIds().add(DEFAULT_SECURITY_ACCOUNT.getId());
+        securityHolding.setAccountId(DEFAULT_SECURITY_ACCOUNT.getId());
         securityHolding.setSecurityType(SecurityType.STOCK);
         securityHolding.setSecurityId(WOLTER_KLUWER.getId());
         securityHolding.setAmount(5);
+        securityHolding.setUserId(DEFAULT_USER_ACCOUNT.getId());
         securityHoldingRepository.saveAndFlush(securityHolding);
 
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-new-and-existing-security-holding.csv", "Account.csv");

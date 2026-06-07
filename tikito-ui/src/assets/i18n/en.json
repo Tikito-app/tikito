@@ -136,6 +136,7 @@
   "security/transaction/exchange-rate": "Exchange rate",
   "security/transaction/cash": "Cash",
   "security/transaction/timestamp": "Timestamp",
+  "security/transaction/transaction-type": "Type",
 
   "security/transaction/form/account-required": "Account is required",
   "security/transaction/form/isin-required": "Isin is required",

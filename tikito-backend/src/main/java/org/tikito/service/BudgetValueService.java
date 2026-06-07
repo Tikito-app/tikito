@@ -23,18 +23,21 @@ import java.util.*;
 public class BudgetValueService {
     private final HistoricalBudgetValueRepository historicalBudgetValueRepository;
     private final MoneyTransactionRepository moneyTransactionRepository;
+    private final TimeService timeService;
 
     public BudgetValueService(final HistoricalBudgetValueRepository historicalBudgetValueRepository,
-                              final MoneyTransactionRepository moneyTransactionRepository) {
+                              final MoneyTransactionRepository moneyTransactionRepository,
+                              final TimeService timeService) {
         this.historicalBudgetValueRepository = historicalBudgetValueRepository;
         this.moneyTransactionRepository = moneyTransactionRepository;
+        this.timeService = timeService;
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void generateValues(final long userId, final MoneyTransactionGroupDto group) {
         log.info("Recalculating historical budget for {}", group.getId());
 
-        final LocalDate endDate = incrementByDateRange(group.getEndDate() == null ? LocalDate.now().plusYears(2) : group.getEndDate(), group.getDateRange(), 1);
+        final LocalDate endDate = incrementByDateRange(group.getEndDate() == null ? timeService.now().plusYears(2) : group.getEndDate(), group.getDateRange(), 1);
         final Map<String, List<MoneyTransaction>> transactionsPerDateRange = new HashMap<>();
         final List<HistoricalBudgetValue> values = new ArrayList<>();
 

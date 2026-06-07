@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.tikito.dto.AccountDto;
 import org.tikito.dto.ImportFileType;
+import org.tikito.dto.money.MoneyTransactionDto;
 import org.tikito.dto.security.SecurityTransactionDto;
 import org.tikito.dto.security.SecurityTransactionImportLine;
 import org.tikito.dto.security.SecurityTransactionImportResultDto;
@@ -48,6 +49,7 @@ public class SecurityImportService {
     private final CacheService cacheService;
     private final AccountRepository accountRepository;
     private final SecurityIsinMappingService securityIsinMappingService;
+    private final MoneyTransactionRepository moneyTransactionRepository;
 
     public SecurityImportService(final SecurityTransactionRepository securityTransactionRepository,
                                  final SecurityRepository securityRepository,
@@ -58,7 +60,8 @@ public class SecurityImportService {
                                  final JobFactoryService jobFactoryService,
                                  final CacheService cacheService,
                                  final AccountRepository accountRepository,
-                                 final SecurityIsinMappingService securityIsinMappingService) {
+                                 final SecurityIsinMappingService securityIsinMappingService,
+                                 final MoneyTransactionRepository moneyTransactionRepository) {
         this.securityTransactionRepository = securityTransactionRepository;
         this.securityRepository = securityRepository;
         this.isinRepository = isinRepository;
@@ -67,6 +70,7 @@ public class SecurityImportService {
         this.cacheService = cacheService;
         this.accountRepository = accountRepository;
         this.securityIsinMappingService = securityIsinMappingService;
+        this.moneyTransactionRepository = moneyTransactionRepository;
 
         importers = List.of(deGiroAccountImporter, deGiroTransactionsImporter);
     }
@@ -94,6 +98,7 @@ public class SecurityImportService {
         return importTransactions(userId, accountId, file, separatorChar, quoteChar, dryRun, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
     }
 
+    @Transactional(propagation = Propagation.MANDATORY)
     public SecurityTransactionImportResultDto importTransactions(final long userId,
                                                                  final Long accountId,
                                                                  final MultipartFile file,
@@ -121,6 +126,7 @@ public class SecurityImportService {
         return importTransactions(account, result, dryRun);
     }
 
+    @Transactional(propagation = Propagation.MANDATORY)
     public SecurityTransactionImportResultDto importTransactions(final AccountDto account,
                                                                  final SecurityTransactionImportResultDto result,
                                                                  final boolean dryRun) {
@@ -140,7 +146,6 @@ public class SecurityImportService {
 
         failedAmountsPerReason.keySet().forEach(reason -> log.info("Failed {}: {}", reason, failedAmountsPerReason.get(reason)));
 
-
         if (!dryRun) {
             // first save the new securities
             securityRepository.saveAllAndFlush(result.getNewSecuritiesByIsin().values());
@@ -156,7 +161,8 @@ public class SecurityImportService {
             log.info("Found {} new holdings", result.getNewSecurityHoldings().size());
 
             // existing holdings only, because the new ones are added in this map as well
-            securityHoldingRepository.saveAll(result.getExistingSecurityHoldings().values());
+            securityHoldingRepository.saveAll(result.getExistingSecurityHoldingsForAccount().values());
+            securityHoldingRepository.saveAll(result.getExistingSecurityHoldingsForAll().values());
 
             // now the security objects in the lines are filled with their id, so we can create the transactions
             log.info("Storing {} new transactions", filterNonFailed(result).count());
@@ -164,10 +170,8 @@ public class SecurityImportService {
                     .map(line -> new SecurityTransaction(account.getUserId(), account.getId(), line))
                     .toList();
 
-            result.getImportedTransactions().addAll(securityTransactionRepository
-                    .saveAllAndFlush(transactions)
-                    .stream()
-                    .toList());
+            final List<SecurityTransaction> storedList = securityTransactionRepository.saveAllAndFlush(transactions);
+            result.getImportedTransactions().addAll(storedList);
 
             generateJobsAfterImport(account.getUserId(), result);
 
@@ -206,20 +210,10 @@ public class SecurityImportService {
         final Map<String, List<SecurityTransactionDto>> existingUniqueTransactionsPerDate = new HashMap<>();
         final Map<String, List<SecurityTransactionImportLine>> newUniqueTransactionsPerDate = new HashMap<>();
 
-        // todo: add filter by isin when we don't store them anymore as a comma separated string
-        securityTransactionRepository
-                .findByAccountId(accountId)
-                .forEach(transaction -> {
-                    final String uniqueKey = SecurityTransactionDto.getUniqueKey(transaction);
-                    existingUniqueTransactionsPerDate.putIfAbsent(uniqueKey, new ArrayList<>());
-                    existingUniqueTransactionsPerDate.get(uniqueKey).add(transaction.toDto());
-                });
-        filterNonFailed(result)
-                .forEach(line -> {
-                    final String uniqueKey = SecurityTransactionDto.getUniqueKey(accountId, line);
-                    newUniqueTransactionsPerDate.putIfAbsent(uniqueKey, new ArrayList<>());
-                    newUniqueTransactionsPerDate.get(uniqueKey).add(line);
-                });
+        fillExistingTransactionsMap(accountId, existingUniqueTransactionsPerDate);
+
+        fillNewUniqueTransactionsPerDate(accountId, result, newUniqueTransactionsPerDate);
+
         newUniqueTransactionsPerDate.forEach((uniqueKey, newList) -> {
             final int existingAmount = existingUniqueTransactionsPerDate.containsKey(uniqueKey) ? existingUniqueTransactionsPerDate.get(uniqueKey).size() : 0;
             final int newAmount = newList.size();
@@ -230,12 +224,47 @@ public class SecurityImportService {
         });
     }
 
-    private void extractNewHoldingsFromTransactions(final long userId, final Long accountId, final SecurityTransactionImportResultDto result) {
-        result.getExistingSecurityHoldings().putAll(securityHoldingRepository
-                .findAll()
+    private void fillNewUniqueTransactionsPerDate(final long accountId, final SecurityTransactionImportResultDto result, final Map<String, List<SecurityTransactionImportLine>> newUniqueTransactionsPerDate) {
+        filterNonFailed(result)
+                .forEach(line -> {
+                    final String uniqueKey = SecurityTransactionDto.getUniqueKey(accountId, line);
+                    newUniqueTransactionsPerDate.putIfAbsent(uniqueKey, new ArrayList<>());
+                    newUniqueTransactionsPerDate.get(uniqueKey).add(line);
+                });
+    }
+
+    private void fillExistingMoneyTransactionsMap(final long accountId, final Map<String, List<MoneyTransactionDto>> existingUniqueMoneyTransactionsPerDate) {
+        // todo: add filter by isin when we don't store them anymore as a comma separated string
+        moneyTransactionRepository
+                .findByAccountId(accountId)
+                .forEach(transaction -> {
+                    final String uniqueKey = MoneyTransactionDto.getUniqueKey(transaction);
+                    existingUniqueMoneyTransactionsPerDate.putIfAbsent(uniqueKey, new ArrayList<>());
+                    existingUniqueMoneyTransactionsPerDate.get(uniqueKey).add(transaction.toDto());
+                });
+    }
+
+    private void fillExistingTransactionsMap(final long accountId, final Map<String, List<SecurityTransactionDto>> existingUniqueTransactionsPerDate) {
+        securityTransactionRepository
+                .findByAccountId(accountId)
+                .forEach(transaction -> {
+                    final String uniqueKey = SecurityTransactionDto.getUniqueKey(transaction);
+                    existingUniqueTransactionsPerDate.putIfAbsent(uniqueKey, new ArrayList<>());
+                    existingUniqueTransactionsPerDate.get(uniqueKey).add(transaction.toDto());
+                });
+    }
+
+    private void extractNewHoldingsFromTransactions(final long userId, final long accountId, final SecurityTransactionImportResultDto result) {
+        result.getExistingSecurityHoldingsForAccount().putAll(securityHoldingRepository
+                .findByUserIdAndAccountId(userId, accountId)
                 .stream()
                 .collect(Collectors.toMap(SecurityHolding::getSecurityId, Function.identity())));
-        final Map<Long, SecurityHolding> newHoldingsMap = new HashMap<>();
+        result.getExistingSecurityHoldingsForAll().putAll(securityHoldingRepository
+                .findByUserIdAndAccountId(userId, null)
+                .stream()
+                .collect(Collectors.toMap(SecurityHolding::getSecurityId, Function.identity())));
+        final Map<Long, SecurityHolding> newHoldingsMapForAccount = new HashMap<>();
+        final Map<Long, SecurityHolding> newHoldingsMapForAll = new HashMap<>();
 
         // todo write test for filter
         // for each non failed transaction, see if we need to create a new holding, or update the amount on the existing holding
@@ -244,21 +273,27 @@ public class SecurityImportService {
                         transaction.getTransactionType() == SecurityTransactionType.BUY ||
                                 transaction.getTransactionType() == SecurityTransactionType.SELL)
                 .forEach(transaction -> {
-                    if (!result.getExistingSecurityHoldings().containsKey(transaction.getSecurity().getId()) && !newHoldingsMap.containsKey(transaction.getSecurity().getId())) {
-                        final Set<Long> accountIds = new HashSet<>();
-                        accountIds.add(accountId);
-                        final SecurityHolding securityHolding = new SecurityHolding(userId, accountIds, transaction);
-                        newHoldingsMap.put(transaction.getSecurity().getId(), securityHolding);
+                    if (!result.getExistingSecurityHoldingsForAccount().containsKey(transaction.getSecurity().getId()) && !newHoldingsMapForAccount.containsKey(transaction.getSecurity().getId())) {
+                        final SecurityHolding securityHoldingForAccount = new SecurityHolding(userId, accountId, transaction);
+                        newHoldingsMapForAccount.put(transaction.getSecurity().getId(), securityHoldingForAccount);
                         // also populate the existing one, otherwise we keep on creating new ones
-                        // todo: merge the two collectons?
-                        result.getExistingSecurityHoldings().put(securityHolding.getSecurityId(), securityHolding);
+                        // todo: merge the two collections?
+                        result.getExistingSecurityHoldingsForAccount().put(securityHoldingForAccount.getSecurityId(), securityHoldingForAccount);
+
+                        // only generate global holding if it does not exist yet
+                        if (!result.getExistingSecurityHoldingsForAll().containsKey(transaction.getSecurity().getId()) && !newHoldingsMapForAll.containsKey(transaction.getSecurity().getId())) {
+                            final SecurityHolding securityHoldingForAllAccounts = new SecurityHolding(userId, null, transaction);
+                            newHoldingsMapForAll.put(transaction.getSecurity().getId(), securityHoldingForAllAccounts);
+                            result.getExistingSecurityHoldingsForAll().put(securityHoldingForAllAccounts.getSecurityId(), securityHoldingForAllAccounts);
+                        }
                     } else {
-                        final SecurityHolding securityHolding = result.getExistingSecurityHoldings().get(transaction.getSecurity().getId());
-                        securityHolding.getAccountIds().add(accountId);
+                        final SecurityHolding securityHolding = result.getExistingSecurityHoldingsForAccount().get(transaction.getSecurity().getId());
+                        securityHolding.setAccountId(accountId);
                         securityHolding.mutateAmount(transaction);
                     }
                 });
-        result.getNewSecurityHoldings().addAll(newHoldingsMap.values());
+        result.getNewSecurityHoldings().addAll(newHoldingsMapForAccount.values());
+        result.getNewSecurityHoldings().addAll(newHoldingsMapForAll.values());
     }
 
     /**

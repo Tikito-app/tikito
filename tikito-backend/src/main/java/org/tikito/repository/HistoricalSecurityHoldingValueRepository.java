@@ -10,15 +10,25 @@ import java.util.List;
 import java.util.Set;
 
 public interface HistoricalSecurityHoldingValueRepository extends JpaRepository<HistoricalSecurityHoldingValue, Long> {
-    @Query("select h from HistoricalSecurityHoldingValue h " +
-            "where h.securityHoldingId in :ids " +
-            "and h.userId = :userId " +
-            "and (:startDate is null or h.date >= :startDate)")
-    List<HistoricalSecurityHoldingValue> findAllBySecurityHoldingIdIn(long userId, Set<Long> ids, LocalDate startDate);
+    @Query("""
+             select h from HistoricalSecurityHoldingValue h where
+                        (:securityIds is null or h.securityId in :securityIds) and
+                        (:accountIds is null or h.accountId in :accountIds) and
+                        h.userId = :userId and
+                        (:startDate is null or h.date >= :startDate)
+            """)
+    List<HistoricalSecurityHoldingValue> findAllBySecurityAndAccount(long userId, Set<Long> accountIds, Set<Long> securityIds, LocalDate startDate);
 
     @Modifying
     void deleteAllBySecurityHoldingId(Long securityHoldingId);
 
     @Modifying
-    void deleteByAccountIds(long accountIds);
+    void deleteByAccountId(long accountId);
+
+    @Query("""
+             select h from HistoricalSecurityHoldingValue h where
+                        ((:accountId is null and h.accountId is null) or h.accountId = :accountId) and
+                        h.userId = :userId
+            """)
+    List<HistoricalSecurityHoldingValue> findByUserIdAndAccountId(long userId, Long accountId);
 }

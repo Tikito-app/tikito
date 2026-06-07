@@ -58,7 +58,7 @@ public class UpdaterService {
                 jobFactoryService.addJob(Job.security(RECALCULATE_HISTORICAL_SECURITY_VALUES, securityHolding.getSecurityId(), securityHolding.getUserId()).build()));
 
         userAccountRepository.findAll().forEach(userAccount ->
-                jobFactoryService.addJob(Job.account(RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userAccount.getId()).build()));
+                jobFactoryService.addJob(Job.user(RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userAccount.getId()).build()));
     }
 
     private void updateMoney() {
@@ -66,7 +66,7 @@ public class UpdaterService {
                 jobFactoryService.addJob(Job.account(RECALCULATE_HISTORICAL_MONEY_VALUES, moneyHolding.getAccountId(), moneyHolding.getUserId()).build()));
 
         userAccountRepository.findAll().forEach(userAccount ->
-                jobFactoryService.addJob(Job.account(RECALCULATE_AGGREGATED_HISTORICAL_MONEY_VALUES, userAccount.getId()).build()));
+                jobFactoryService.addJob(Job.user(RECALCULATE_AGGREGATED_HISTORICAL_MONEY_VALUES, userAccount.getId()).build()));
     }
 
     private Set<Long> getCurrencyIdsInUse() {

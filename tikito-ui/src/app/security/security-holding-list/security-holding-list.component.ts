@@ -105,7 +105,7 @@ export class SecurityHoldingListComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.authService.onSystemReady((loggedInUser: any) => {
+    this.authService.onSystemReady(() => {
 
       this.form = new FormGroup({
         showClosedPositions: new FormControl(),
@@ -119,9 +119,9 @@ export class SecurityHoldingListComponent implements AfterViewInit {
   reset(): void {
     this.onFilterUpdateCallback.next(this.securityHoldingFilter);
     this.api.getSecurityHoldings().subscribe(holdings => {
-      this.allHoldings = holdings;
+      this.allHoldings = this.aggregateHoldings(holdings);
 
-      this.dataSource = new MatTableDataSource<SecurityHolding>(this.filterHoldings(holdings));
+      this.dataSource = new MatTableDataSource<SecurityHolding>(this.filterHoldings());
       setTimeout(() => {
         this.dataSource.paginator = this.paginator.getPaginator();
       });
@@ -147,7 +147,7 @@ export class SecurityHoldingListComponent implements AfterViewInit {
     if (this.isButton(event)) {
       return;
     }
-    this.router.navigate(['/security-holding'], {fragment: 'holdingIds=' + holding.id});
+    this.router.navigate(['/security-holding'], {fragment: 'securityIds=' + holding.securityId});
   }
 
   onDeleteHolding(holding: SecurityHolding) {
@@ -163,11 +163,23 @@ export class SecurityHoldingListComponent implements AfterViewInit {
     this.reset();
   }
 
-  filterHoldings(holdings: SecurityHolding[]) {
+  filterHoldings() {
     let showClosedPositions = this.form.value['showClosedPositions'];
     return this
       .allHoldings
       .filter(holding => showClosedPositions || holding.amount > 0);
+  }
+
+  aggregateHoldings(holdings: SecurityHolding[]): SecurityHolding[] {
+    let holdingPerSecurityId: any = {};
+    holdings.forEach(holding => {
+      if(holdingPerSecurityId[holding.securityId] == null) {
+        holdingPerSecurityId[holding.securityId] = holding;
+      } else {
+        holdingPerSecurityId[holding.securityId] = SecurityUtil.aggregateHistoricalHoldingValue(holdingPerSecurityId[holding.securityId], holding as any);
+      }
+    });
+    return Object.values(holdingPerSecurityId);
   }
 
   protected readonly SecurityUtil = SecurityUtil;

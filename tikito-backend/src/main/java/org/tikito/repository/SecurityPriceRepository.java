@@ -21,4 +21,9 @@ public interface SecurityPriceRepository extends JpaRepository<SecurityPrice, Lo
 
     @Query("select p.date from SecurityPrice p where p.securityId = :securityId order by p.date desc limit 1")
     Optional<LocalDate> findDateOfLatestPrice(long securityId);
+
+    // Testing only
+    @Modifying
+    @Query("update SecurityPrice p set p.price = :price where p.securityId = :securityId and p.date = :date")
+    void updatePrice(long securityId, LocalDate date, double price);
 }

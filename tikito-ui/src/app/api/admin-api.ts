@@ -87,9 +87,9 @@ export class AdminApi {
       .withUrl('/api/admin/jobs-count'));
   }
 
-  recalculateHistoricalSecurityValue(securityId: number) {
+  recalculateHistoricalSecurityValue(accountId: number) {
     return this.http.httpPost(new HttpRequestData()
-      .withUrl('/api/admin/securities/' + securityId + '/recalculate-historical-value'));
+      .withUrl('/api/admin/securities/' + accountId + '/recalculate-historical-value'));
   }
 
   updateSecurityPrices(securityId: number) {

@@ -129,8 +129,7 @@ export class SecurityHoldingGraphComponent implements OnInit {
         historicalValuesPerSecurityAndDate[value.securityId] = {}
       }
       let formattedDate = moment(value.date).format(this.DATE_FORMAT);
-
-      historicalValuesPerSecurityAndDate[value.securityId][formattedDate] = value;
+      historicalValuesPerSecurityAndDate[value.securityId][formattedDate] = SecurityUtil.aggregateHistoricalHoldingValue(historicalValuesPerSecurityAndDate[value.securityId][formattedDate], value);
     });
     return historicalValuesPerSecurityAndDate;
   }
@@ -149,7 +148,7 @@ export class SecurityHoldingGraphComponent implements OnInit {
     serie.performanceValues.push(
       // startAtZero ?
       //   SecurityUtil.getPerformanceBetween(holdingValue, previousHoldingValue) :
-        SecurityUtil.getPerformance(holdingValue));
+      SecurityUtil.getPerformance(holdingValue));
   }
 
 

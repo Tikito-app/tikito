@@ -134,7 +134,7 @@ public class AdminController {
 
     @PostMapping("/money/group-transactions")
     public ResponseEntity<Void> groupMoneyTransaction(final AuthUser authUser) {
-        jobFactoryService.addJob(Job.account(JobType.GROUP_MONEY_TRANSACTIONS, authUser.getId()).build());
+        jobFactoryService.addJob(Job.user(JobType.GROUP_MONEY_TRANSACTIONS, authUser.getId()).build());
         return ResponseEntity.ok().build();
     }
 

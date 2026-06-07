@@ -25,7 +25,7 @@ public class CacheService {
     private final SecurityPriceRepository securityPriceRepository;
     private final UserAccountRepository userAccountRepository;
 
-    private Map<Long, SecurityDto> securitiesById = new HashMap<>();
+    private static Map<Long, SecurityDto> securitiesById = new HashMap<>();
     private Map<Long, List<IsinDto>> isinsBySecurityId = new HashMap<>();
     private final Map<Long, Map<LocalDate, Double>> currencyToEuroMultiplier = new HashMap<>();
     private final List<SecurityDto> currencies = new ArrayList<>();
@@ -50,7 +50,7 @@ public class CacheService {
     }
 
     public void refreshSecurities() {
-        this.securitiesById = securityRepository
+        CacheService.securitiesById = securityRepository
                 .findAll()
                 .stream()
                 .map(Security::toDto)
@@ -106,8 +106,26 @@ public class CacheService {
         return isCryptoCache.get(currencyId);
     }
 
-    public SecurityDto getSecurity(final long securityId) {
-        return securitiesById.get(securityId);
+    // visible for testing
+    public static SecurityDto getSecurity(final long securityId) {
+        return CacheService.securitiesById.get(securityId);
+    }
+
+    // visible for testing
+    public static Optional<SecurityDto> getSecurityByIsin(final String isin) {
+        return CacheService.securitiesById
+                .values()
+                .stream()
+                .filter(security -> isin.equals(security.getCurrentIsin()))
+                .findAny();
+    }
+
+    public static Optional<SecurityDto> getSecurityByName(final String name) {
+        return CacheService.securitiesById
+                .values()
+                .stream()
+                .filter(security -> name.equals(security.getName()))
+                .findAny();
     }
 
     public double getCurrencyMultiplier(final long currencyId, final LocalDate date) {

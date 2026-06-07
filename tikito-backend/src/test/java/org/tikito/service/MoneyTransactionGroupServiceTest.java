@@ -10,7 +10,6 @@ import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.entity.money.MoneyTransactionGroup;
 import org.tikito.entity.money.MoneyTransactionGroupQualifier;
 import org.tikito.service.money.MoneyTransactionGroupService;
-import org.tikito.util.MariadbTestContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @SpringBootTest
 @Transactional
 class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
-
-    MariadbTestContainer testContainer = MariadbTestContainer.instance();
 
     @Autowired
     private MoneyTransactionGroupService groupService;

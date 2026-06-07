@@ -39,15 +39,18 @@ public class LoanValueService implements JobProcessor {
     private final LoanValueRepository loanValueRepository;
     private final MoneyTransactionRepository moneyTransactionRepository;
     private final MoneyTransactionGroupRepository moneyTransactionGroupRepository;
+    private final TimeService timeService;
 
     public LoanValueService(final LoanRepository loanRepository,
                             final LoanValueRepository loanValueRepository,
                             final MoneyTransactionRepository moneyTransactionRepository,
-                            final MoneyTransactionGroupRepository moneyTransactionGroupRepository) {
+                            final MoneyTransactionGroupRepository moneyTransactionGroupRepository,
+                            final TimeService timeService) {
         this.loanRepository = loanRepository;
         this.loanValueRepository = loanValueRepository;
         this.moneyTransactionRepository = moneyTransactionRepository;
         this.moneyTransactionGroupRepository = moneyTransactionGroupRepository;
+        this.timeService = timeService;
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -86,7 +89,7 @@ public class LoanValueService implements JobProcessor {
         final LocalDate endDate = getEndDate(loan);
         final Map<Long, LoanValue> previousValuesPerLoanPartId = getInitialValues(loan, startDate);
         final List<LoanValue> values = new ArrayList<>();
-        final LocalDate now = LocalDate.now();
+        final LocalDate now = timeService.now();
 
         LinkedValue currentLinkedValue = generateLinkedValues(startDate, endDate, dateRange, loan.getLoanParts());
         LinkedTransactionValue currentTransactionValue = generateLinkedMoneyValues(transactions);
