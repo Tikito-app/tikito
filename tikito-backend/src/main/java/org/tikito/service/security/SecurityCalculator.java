@@ -1,6 +1,7 @@
 package org.tikito.service.security;
 
 import org.tikito.dto.security.HistoricalSecurityHoldingValueDto;
+import org.tikito.dto.security.SecurityTransactionType;
 import org.tikito.entity.security.AggregatedHistoricalSecurityHoldingValue;
 import org.tikito.entity.security.HistoricalSecurityHoldingValue;
 import org.tikito.entity.security.SecurityPrice;
@@ -31,9 +32,9 @@ public final class SecurityCalculator {
 
         if (transactions != null) {
             // because we could sell/buy at the same date, we order the transactions here to
-            // that we first sell and then buy. Even if we would first buy and then sell, in terms of aggregation,
+            // that we first sell and then the rest. Even if we would first buy and then sell, in terms of aggregation,
             // the money would still flow as if it was sell first and then buy
-            transactions.sort((t1, t2) -> t2.getTransactionType().compareTo(t1.getTransactionType()));
+            sortTransactions(transactions);
             transactions.forEach(transaction -> applyTransaction(newHoldingValue, transaction));
         }
         calculateWorth(newHoldingValue);
@@ -164,5 +165,31 @@ public final class SecurityCalculator {
         SecurityCalculator.calculateWorth(aggregatedValue);
 
         return aggregatedValue;
+    }
+
+    /**
+     * Sorts transactions: SELL transactions come first, then sorted by ID.
+     *
+     * @param transactions The list of transactions to sort.
+     */
+    private static void sortTransactions(final List<SecurityTransaction> transactions) {
+        transactions.sort((t1, t2) -> {
+            final boolean isT1Sell = isSell(t1.getTransactionType());
+            final boolean isT2Sell = isSell(t2.getTransactionType());
+
+            if (isT1Sell && !isT2Sell) {
+                return -1;
+            } else if (!isT1Sell && isT2Sell) {
+                return 1;
+            } else {
+                return Long.compare(t1.getId(), t2.getId());
+            }
+        });
+    }
+
+    private static boolean isSell(final SecurityTransactionType transactionType) {
+        return transactionType == SecurityTransactionType.SELL ||
+                transactionType == SecurityTransactionType.SELL_ISIN_CHANGE ||
+                transactionType == SecurityTransactionType.SELL_PRODUCT_CHANGE;
     }
 }

@@ -10,6 +10,7 @@ import org.tikito.service.CacheService;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -112,16 +113,19 @@ public class BaseStepDefinitions extends BaseIntegrationTest {
                 final List<T> entitiesOnDate = persisted.stream()
                         .filter(persistedEntity -> LocalDate.parse(expectedMap.get(dateKey)).equals(dateFunction.apply(persistedEntity)))
                         .toList();
-                String result = null;
+                String result;
+                final Set<String> propertiesMismatched = new HashSet<>();
                 for (final T entity : entitiesOnDate) {
                     result = callback.apply(expectedMap, entity);
                     if(result == null) {
                         foundMatch = true;
+                    } else {
+                        propertiesMismatched.add(result);
                     }
                 }
 
                 if(!foundMatch) {
-                    fail("No matching entity found for " + (entitiesOnDate.size() == 1 ? result + " and for " : "") + " expected: \n" + expectedMap + "\nGot\n" + objectsToString(entitiesOnDate));
+                    fail("No matching entity found for " + propertiesMismatched + ", expected: \n" + expectedMap + "\nGot\n" + objectsToString(entitiesOnDate));
                 }
             } else {
                 for (final T persistedEntity : persisted) {
