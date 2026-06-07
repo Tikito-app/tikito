@@ -36,7 +36,7 @@
 
         <mat-checkbox formControlName="aggregateDateRange" (change)="onAggregateDateRangeChanged($event.checked)">{{ 'money/graph/aggregate-date-range' | translatePipe}}</mat-checkbox>
         <app-popover text="money/graph/aggregate-date-range-tooltip"></app-popover><br/>
-        <mat-radio-group *ngIf="form.value.aggregateDateRange" formControlName="dateRange" (change)="UserPreferenceService.onRadioChange(UserPreference.DATE_RANGE, $event.value);">
+        <mat-radio-group *ngIf="form.value.aggregateDateRange" formControlName="dateRange" (change)="UserPreferenceService.onRadioChange(UserPreference.MONEY_DATE_RANGE, $event.value);">
           <mat-radio-button style="padding-left: 30px;" value="ALL">{{'money/graph/aggregate-all' | translatePipe}}</mat-radio-button><br/>
           <mat-radio-button style="padding-left: 30px;" value="YEAR">{{'money/graph/aggregate-per-year' | translatePipe}}</mat-radio-button><br/>
           <mat-radio-button style="padding-left: 30px;" value="MONTH">{{'money/graph/aggregate-per-month' | translatePipe}}</mat-radio-button><br/>
@@ -60,7 +60,7 @@
         <br/>
         <mat-form-field class="half-width">
           <mat-label>{{'start-date' | translatePipe}}</mat-label>
-          <input matInput style="height: 36px;" [matDatepicker]="pickerStartDate" formControlName="startDate" (dateChange)="UserPreferenceService.onDatePickerChange(UserPreference.START_DATE, form.value.startDate)">
+          <input matInput style="height: 36px;" [matDatepicker]="pickerStartDate" formControlName="startDate" (dateChange)="UserPreferenceService.onDatePickerChange(UserPreference.MONEY_START_DATE, form.value.startDate)">
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-icon *ngIf="form.value['startDate']" matIconSuffix (click)="form.controls['startDate'].setValue(null);" class="clickable">close</mat-icon>
           <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
@@ -68,7 +68,7 @@
         </mat-form-field>
         <mat-form-field class="half-width">
           <mat-label>{{'end-date' | translatePipe}}</mat-label>
-          <input matInput style="height: 36px;" [matDatepicker]="pickerEndDate" formControlName="endDate" (dateChange)="UserPreferenceService.onDatePickerChange(UserPreference.END_DATE, form.value.endDate)">
+          <input matInput style="height: 36px;" [matDatepicker]="pickerEndDate" formControlName="endDate" (dateChange)="UserPreferenceService.onDatePickerChange(UserPreference.MONEY_END_DATE, form.value.endDate)">
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-icon *ngIf="form.value['endDate']" matIconSuffix (click)="form.controls['endDate'].setValue(null);" class="clickable">close</mat-icon>
           <mat-datepicker-toggle matIconSuffix [for]="pickerEndDate"></mat-datepicker-toggle>

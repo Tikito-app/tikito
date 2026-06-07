@@ -113,6 +113,8 @@ export class SecurityHoldingOverviewComponent implements OnInit {
 
     if (this.startDate != null) {
       this.form.controls['startDate'].setValue(this.startDate);
+    } else {
+      this.form.controls['startDate'].setValue(UserPreferenceService.get(UserPreference.SECURITY_START_DATE, null));
     }
 
     this.form.controls['securityIds'].setValue(this.securityIds == null ? [] : this.securityIds.split(',').map(v => parseInt(v)));
@@ -120,11 +122,11 @@ export class SecurityHoldingOverviewComponent implements OnInit {
     this.form.controls['startAtZeroAfterDateAggregation'].setValue(UserPreferenceService.get(UserPreference.SECURITY_START_AT_ZERO_AFTER_DATE_RANGE, true));
     this.form.controls['aggregateDateRange'].setValue(UserPreferenceService.get(UserPreference.SECURITY_AGGREGATE_DATE_RANGE, true));
     this.form.controls['dateRange'].setValue(UserPreferenceService.get(UserPreference.SECURITY_DATE_RANGE, null));
-    this.form.controls['accountIds'].setValue(UserPreferenceService.get(UserPreference.ACCOUNT_IDS, '').toString().split(',').map(v => parseInt(v)));
+    this.form.controls['accountIds'].setValue(UserPreferenceService.get(UserPreference.SECURITY_ACCOUNT_IDS, '').toString().split(',').map(v => parseInt(v)));
   }
 
   onAccountIdsSelectChanged(value: any[]) {
-    UserPreferenceService.onSelectChange(UserPreference.ACCOUNT_IDS, value);
+    UserPreferenceService.onSelectChange(UserPreference.SECURITY_ACCOUNT_IDS, value);
   }
 
   resetUrlFromFilter() {
