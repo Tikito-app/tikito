@@ -8,6 +8,11 @@
           <td mat-cell *matCellDef="let element"> {{element.timestamp | date : Util.TIMESTAMP_FORMAT}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="account">
+          <th mat-header-cell *matHeaderCellDef>{{'security/transaction/account' | translatePipe}}</th>
+          <td mat-cell *matCellDef="let element"> {{CacheService.getAccountById(element.accountId).name}} </td>
+        </ng-container>
+
         <ng-container matColumnDef="transaction-type">
           <th mat-header-cell *matHeaderCellDef>{{'security/transaction/transaction-type' | translatePipe}}</th>
           <td mat-cell *matCellDef="let element"> {{element.transactionType}} </td>
@@ -25,7 +30,12 @@
 
         <ng-container matColumnDef="price">
           <th mat-header-cell *matHeaderCellDef>{{'security/transaction/price' | translatePipe}}</th>
-          <td mat-cell *matCellDef="let element"><app-currency [amount]="element.price" [currencyId]="element.currencyId"></app-currency></td>
+          <td mat-cell *matCellDef="let element">
+            <app-currency [amount]="element.price" [currencyId]="element.currencyId"></app-currency>
+            @if (isBuyOrSell(element.transactionType)) {
+              (<app-currency [amount]="element.price * element.amount" [currencyId]="element.currencyId">)</app-currency>
+            }
+          </td>
         </ng-container>
 
 

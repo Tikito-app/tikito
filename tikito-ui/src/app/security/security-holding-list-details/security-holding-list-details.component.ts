@@ -7,14 +7,12 @@ import {MatDivider} from "@angular/material/divider";
 import {MatList, MatListItem} from "@angular/material/list";
 import {MatButton} from "@angular/material/button";
 import {Router} from "@angular/router";
-import {SecurityApi} from "../../api/security-api";
 import {SecurityHoldingGraphComponent} from "../security-holding-graph/security-holding-graph.component";
 import {SecurityHoldingGraphDisplayField} from "../../dto/security/security-holding-graph-display-field";
 import {CurrencyComponent} from "../../components/currency/currency.component";
 import {CacheService} from "../../service/cache-service";
 import {SecurityHoldingFilter} from "../../dto/security/security-holding-filter";
 import {PercentageComponent} from "../../components/percentage/percentage.component";
-import {Account} from "../../dto/account";
 
 @Component({
   selector: 'app-security-holding-list-details',
@@ -44,8 +42,7 @@ export class SecurityHoldingListDetailsComponent implements OnChanges {
   @ViewChild(SecurityHoldingGraphComponent)
   child!: SecurityHoldingGraphComponent;
 
-  constructor(private router: Router,
-              private api: SecurityApi) {
+  constructor(private router: Router) {
   }
 
   ngOnChanges(changes: any): void {
@@ -70,8 +67,8 @@ export class SecurityHoldingListDetailsComponent implements OnChanges {
 
   getSecurityHoldingFilter() {
     let filter = new SecurityHoldingFilter();
-    filter.securityIds = [this.holding.securityId];
-    filter.accountIds = [this.holding.accountId];
+    filter.securityIds = this.holding.securityId == null ? [] : [this.holding.securityId];
+    filter.accountIds = this.holding.accountId == null ? [] : [this.holding.accountId];
     filter.displayField = SecurityHoldingGraphDisplayField.PRICE;
     return filter;
   }

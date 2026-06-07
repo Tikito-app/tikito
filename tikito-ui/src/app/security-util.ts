@@ -10,6 +10,7 @@ export class SecurityUtil {
     return v / initialCosts * 100;
 
   }
+
   static getPerformanceBetween(holdingValue: HistoricalHoldingValue, previousHoldingValue: HistoricalHoldingValue): number {
     let initialCosts = holdingValue.totalCashInvested + holdingValue.totalAdministrativeCosts + holdingValue.totalTaxes;
     let previousInitialCosts = previousHoldingValue.totalCashInvested + previousHoldingValue.totalAdministrativeCosts + previousHoldingValue.totalTaxes;
@@ -70,7 +71,7 @@ export class SecurityUtil {
   }
 
   static aggregateHistoricalHoldingValue(v1: HistoricalHoldingValue, v2: HistoricalHoldingValue) {
-    if(v1 == null) {
+    if (v1 == null) {
       return v2;
     }
     v1.amount += v2.amount;

@@ -84,7 +84,7 @@ export class SecurityHoldingOverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.onSystemReady((loggedInUser: any) => {
+    this.authService.onSystemReady(() => {
       this.form = new FormGroup({
         accountIds: new FormControl(),
         securityIds: new FormControl(),
@@ -171,8 +171,8 @@ export class SecurityHoldingOverviewComponent implements OnInit {
 
   getTransactionFilter() {
     let filter = new SecurityHoldingFilter();
-    filter.accountIds = this.form.value.accountIds;
-    filter.securityIds = this.form.value.securityIds;
+    filter.accountIds = this.filterNonNull(this.form.value.accountIds);
+    filter.securityIds = this.filterNonNull(this.form.value.securityIds);
     filter.dateRange = this.form.value.dateRange;
     filter.startDate = this.form.value.startDate;
     filter.startAtZeroAfterDateAggregation = this.form.value.startAtZeroAfterDateAggregation;
@@ -208,6 +208,13 @@ export class SecurityHoldingOverviewComponent implements OnInit {
       this.form.controls['dateRange'].setValue(null);
     }
     UserPreferenceService.onCheckboxChange(UserPreference.SECURITY_AGGREGATE_DATE_RANGE, checked);
+  }
+
+  filterNonNull(array: any) {
+    if(array == null) {
+      return null;
+    }
+    return array.filter((entry: any) => entry != null && !isNaN(entry))
   }
 
   protected readonly Util = Util;

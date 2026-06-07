@@ -14,7 +14,7 @@ import {
 } from "@angular/material/table";
 import {Router} from "@angular/router";
 import {TranslatePipe} from "../../service/translate-pipe.pipe";
-import {DatePipe, NgIf} from "@angular/common";
+import {DatePipe} from "@angular/common";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
 import {SecurityApi} from "../../api/security-api";
 import {SecurityTransaction} from "../../dto/security/security-transaction";
@@ -29,6 +29,8 @@ import {DialogService} from "../../service/dialog.service";
 import {TranslateService} from "../../service/translate.service";
 import {MatSort} from "@angular/material/sort";
 import {MatCard, MatCardHeader} from "@angular/material/card";
+import {CacheService} from "../../service/cache-service";
+import {SecurityTransactionType} from "../../dto/security/security-transaction-type";
 
 @Component({
   selector: 'app-security-transaction-list',
@@ -61,7 +63,7 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
   styleUrl: './security-transaction-list.component.scss'
 })
 export class SecurityTransactionListComponent implements OnInit {
-  displayedColumns: string[] = ['date', 'trading-company', 'transaction-type', 'amount', 'price', 'currency', 'options'];
+  displayedColumns: string[] = ['date', 'account', 'trading-company', 'transaction-type', 'amount', 'price', 'currency', 'options'];
   dataSource: MatTableDataSource<SecurityTransaction>;
   transactions: SecurityTransaction[];
 
@@ -84,7 +86,7 @@ export class SecurityTransactionListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.onSystemReady((loggedInUser: any) => {
+    this.authService.onSystemReady(() => {
       this.onFilterUpdateCallback.subscribe(filter => {
         this.securityHoldingFilter = filter;
         this.resetTable();
@@ -117,10 +119,24 @@ export class SecurityTransactionListComponent implements OnInit {
   }
 
   onEditTransaction(transaction: SecurityTransaction) {
-    this.dialogService.createOrUpdateSecurityTransaction(transaction).then(updatedTransaction => {
+    this.dialogService.createOrUpdateSecurityTransaction(transaction).then(() => {
       this.resetTable();
     });
   }
 
+  isBuyOrSell(transactionType: SecurityTransactionType) {
+    let types = [
+      SecurityTransactionType.BUY,
+      SecurityTransactionType.BUY_ISIN_CHANGE,
+      SecurityTransactionType.BUY_PRODUCT_CHANGE,
+      SecurityTransactionType.SELL,
+      SecurityTransactionType.SELL_PRODUCT_CHANGE,
+      SecurityTransactionType.SELL_ISIN_CHANGE,
+    ];
+    return types.includes(transactionType);
+  }
+
   protected readonly Util = Util;
+  protected readonly CacheService = CacheService;
+
 }

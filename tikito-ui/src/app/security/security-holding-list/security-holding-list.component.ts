@@ -105,7 +105,7 @@ export class SecurityHoldingListComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.authService.onSystemReady((loggedInUser: any) => {
+    this.authService.onSystemReady(() => {
 
       this.form = new FormGroup({
         showClosedPositions: new FormControl(),
@@ -121,7 +121,7 @@ export class SecurityHoldingListComponent implements AfterViewInit {
     this.api.getSecurityHoldings().subscribe(holdings => {
       this.allHoldings = this.aggregateHoldings(holdings);
 
-      this.dataSource = new MatTableDataSource<SecurityHolding>(this.filterHoldings(holdings));
+      this.dataSource = new MatTableDataSource<SecurityHolding>(this.filterHoldings());
       setTimeout(() => {
         this.dataSource.paginator = this.paginator.getPaginator();
       });
@@ -147,7 +147,7 @@ export class SecurityHoldingListComponent implements AfterViewInit {
     if (this.isButton(event)) {
       return;
     }
-    this.router.navigate(['/security-holding'], {fragment: 'holdingIds=' + holding.id});
+    this.router.navigate(['/security-holding'], {fragment: 'securityIds=' + holding.securityId});
   }
 
   onDeleteHolding(holding: SecurityHolding) {
@@ -163,7 +163,7 @@ export class SecurityHoldingListComponent implements AfterViewInit {
     this.reset();
   }
 
-  filterHoldings(holdings: SecurityHolding[]) {
+  filterHoldings() {
     let showClosedPositions = this.form.value['showClosedPositions'];
     return this
       .allHoldings
