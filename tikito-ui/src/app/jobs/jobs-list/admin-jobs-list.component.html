@@ -1,0 +1,49 @@
+<div class="main-side-column main-column">
+</div>
+<div class="main-center-column main-column">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ 'admin/jobs' | translatePipe }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div>
+        <table mat-table [dataSource]="jobs">
+
+          <ng-container matColumnDef="timestamp">
+            <th mat-header-cell *matHeaderCellDef>{{ 'admin/jobs/timestamp' | translatePipe }}</th>
+            <td mat-cell *matCellDef="let job"> {{ job.timestamp }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="job-type">
+            <th mat-header-cell *matHeaderCellDef>{{ 'admin/jobs/job-type' | translatePipe }}</th>
+            <td mat-cell *matCellDef="let job"> {{ job.jobType }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="security-id">
+            <th mat-header-cell *matHeaderCellDef>{{ 'admin/jobs/security-id' | translatePipe }}</th>
+            <td mat-cell *matCellDef="let job">
+              {{ job.securityId }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="account-id">
+            <th mat-header-cell *matHeaderCellDef>{{ 'admin/jobs/account-id' | translatePipe }}</th>
+            <td mat-cell *matCellDef="let job">
+              @if (job.accountId != null) {
+                {{ CacheService.getAccountById(job.accountId).name }}
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="loan-id">
+            <th mat-header-cell *matHeaderCellDef>{{ 'admin/jobs/loan-id' | translatePipe }}</th>
+            <td mat-cell *matCellDef="let job"> {{ job.loanId }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.*;
+import org.tikito.dto.JobDto;
 import org.tikito.dto.UserAccountDto;
 import org.tikito.dto.export.TikitoExportDto;
 import org.tikito.dto.security.IsinDto;
@@ -152,5 +153,10 @@ public class AdminController {
     @GetMapping("/jobs-count")
     public ResponseEntity<Long> getJobCount(final AuthUser authUser) {
         return ResponseEntity.ok(jobService.getJobsCount(authUser.getId()));
+    }
+
+    @GetMapping("/jobs")
+    public ResponseEntity<List<JobDto>> getJobs(final AuthUser authUser) {
+        return ResponseEntity.ok(jobService.getJobs());
     }
 }

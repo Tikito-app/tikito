@@ -180,9 +180,7 @@ public class BaseStepDefinitions extends BaseIntegrationTest {
 
     private String objectsToString(final List<?> list) {
         final StringBuilder stringBuilder = new StringBuilder();
-        list.forEach(obj -> {
-            objectToString(obj, stringBuilder);
-        });
+        list.forEach(obj -> objectToString(obj, stringBuilder));
 
         return stringBuilder.toString();
     }

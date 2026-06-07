@@ -1,6 +1,7 @@
 package org.tikito.entity;
 
 import jakarta.persistence.*;
+import org.tikito.dto.JobDto;
 import org.tikito.service.job.JobType;
 import lombok.*;
 
@@ -54,5 +55,16 @@ public class Job {
         return create(jobType)
                 .userId(userId)
                 .loanId(loanId);
+    }
+
+    public JobDto toDto() {
+        return new JobDto(
+                id,
+                timestamp,
+                jobType,
+                userId,
+                securityId,
+                accountId,
+                loanId);
     }
 }

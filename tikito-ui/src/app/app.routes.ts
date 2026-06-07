@@ -37,6 +37,7 @@ import {LoanListComponent} from "./loan/loan-list/loan-list.component";
 import {AdminUserPreferencesComponent} from "./admin/admin-user-preferences/admin-user-preferences.component";
 import {AdminExportComponent} from "./admin/admin-export/admin-export.component";
 import {AdminImportComponent} from "./admin/admin-import/admin-import.component";
+import { AdminJobsListComponent } from './jobs/jobs-list/admin-jobs-list.component';
 
 export const routes: Routes = [
   {path: '', component: OverviewComponent},
@@ -70,6 +71,7 @@ export const routes: Routes = [
   {path: 'admin/money', component: AdminMoneyListComponent},
   {path: 'admin/export', component: AdminExportComponent},
   {path: 'admin/import', component: AdminImportComponent},
+  {path: 'admin/jobs', component: AdminJobsListComponent},
 
   {path: 'admin/security', component: AdminSecurityListComponent},
   {path: 'admin/security/:securityId', component: AdminSecurityFormComponent},

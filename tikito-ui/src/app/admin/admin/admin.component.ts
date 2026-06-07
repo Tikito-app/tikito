@@ -44,4 +44,8 @@ export class AdminComponent {
   routeToImport() {
     this.router.navigate(['admin/import']);
   }
+
+  routeToJobs() {
+    this.router.navigate(['admin/jobs']);
+  }
 }
