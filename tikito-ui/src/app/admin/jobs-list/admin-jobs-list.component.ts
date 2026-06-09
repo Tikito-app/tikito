@@ -10,6 +10,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {TranslatePipe} from '../../service/translate-pipe.pipe';
 import {CacheService} from "../../service/cache-service";
 import {AuthService} from "../../service/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-jobs-list',
@@ -31,7 +32,8 @@ export class AdminJobsListComponent implements OnInit {
   displayedColumns: string[] = ['timestamp', 'job-type', 'security-id', 'account-id', 'loan-id'];
 
   constructor(private jobApiService: JobApiService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -44,6 +46,10 @@ export class AdminJobsListComponent implements OnInit {
     this.jobApiService.getJobs().subscribe(jobs => {
       this.jobs = jobs;
     });
+  }
+
+  routeToAdmin() {
+    this.router.navigate(['/admin']);
   }
 
   protected readonly CacheService = CacheService;
