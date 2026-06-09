@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.tikito.auth.AuthUser;
 import org.tikito.controller.request.*;
 import org.tikito.dto.JobDto;
+import org.tikito.dto.LogDto;
 import org.tikito.dto.UserAccountDto;
 import org.tikito.dto.export.TikitoExportDto;
 import org.tikito.dto.security.IsinDto;
@@ -14,6 +15,7 @@ import org.tikito.dto.security.SecurityDto;
 import org.tikito.entity.Job;
 import org.tikito.exception.PasswordNotLongEnoughException;
 import org.tikito.service.JobFactoryService;
+import org.tikito.service.LogService;
 import org.tikito.service.export.ImportExportService;
 import org.tikito.service.JobService;
 import org.tikito.service.UserAccountService;
@@ -31,17 +33,20 @@ public class AdminController {
     private final JobFactoryService jobFactoryService;
     private final JobService jobService;
     private final ImportExportService importExportService;
+    private final LogService logService;
 
     public AdminController(final UserAccountService userAccountService,
                            final SecurityService securityService,
                            final JobFactoryService jobFactoryService,
                            final JobService jobService,
-                           final ImportExportService importExportService) {
+                           final ImportExportService importExportService,
+                           final LogService logService) {
         this.userAccountService = userAccountService;
         this.securityService = securityService;
         this.jobFactoryService = jobFactoryService;
         this.jobService = jobService;
         this.importExportService = importExportService;
+        this.logService = logService;
     }
 
     @GetMapping("/users")
@@ -158,5 +163,16 @@ public class AdminController {
     @GetMapping("/jobs")
     public ResponseEntity<List<JobDto>> getJobs(final AuthUser authUser) {
         return ResponseEntity.ok(jobService.getJobs());
+    }
+
+    @GetMapping("/logs")
+    public ResponseEntity<List<LogDto>> getLogs(final AuthUser authUser) {
+        return ResponseEntity.ok(logService.getLogs());
+    }
+
+    @DeleteMapping("/log/{id}")
+    public ResponseEntity<Void> deleteLog(final AuthUser authUser, final @PathVariable("id") long id) {
+        logService.markAsRead(id);
+        return ResponseEntity.ok().build();
     }
 }

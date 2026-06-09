@@ -330,6 +330,11 @@
   "admin/jobs/account-id": "Account",
   "admin/jobs/loan-id": "Loan",
 
+  "admin/logs": "Logs",
+  "admin/logs/timestamp": "Timestamp",
+  "admin/logs/object-identifier": "Object ID",
+  "admin/logs/message": "Log message",
+
   "---------------- LANGUAGE --------------": "",
   "language/nl": "Dutch",
   "language/en": "English",

@@ -48,4 +48,8 @@ export class AdminComponent {
   routeToJobs() {
     this.router.navigate(['admin/jobs']);
   }
+
+  routeToLogs() {
+    this.router.navigate(['admin/logs']);
+  }
 }

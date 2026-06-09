@@ -1,15 +1,16 @@
 package org.tikito.service.importer.security;
 
-import org.tikito.dto.security.SecurityPriceDto;
-import org.tikito.dto.security.SecurityType;
-import org.tikito.entity.security.Security;
-import org.tikito.exception.ResourceNotFoundException;
-import org.tikito.util.HttpUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
+import org.tikito.dto.security.SecurityPriceDto;
+import org.tikito.dto.security.SecurityType;
+import org.tikito.entity.security.Security;
+import org.tikito.exception.ResourceNotFoundException;
+import org.tikito.service.LogService;
+import org.tikito.util.HttpUtil;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -18,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+
+import static org.tikito.dto.LogMessage.CANNOT_RETRIEVE_HISTORICAL_SECURITY_PRICE;
+import static org.tikito.dto.LogMessage.CANNOT_RETRIEVE_SECURITY_INFO;
 
 @Slf4j
 public final class YahooImporter {
@@ -41,8 +45,9 @@ public final class YahooImporter {
             final JsonNode timestampNode = innerNode.get("timestamp");
             final JsonNode adjclose = innerNode.get("indicators").get("quote").get(0).get("close");
 
-            if(timestampNode == null) {
+            if (timestampNode == null) {
                 log.error("Could not fetch historical security price for {} and symbol {}", securityId, symbol);
+                LogService.log(CANNOT_RETRIEVE_HISTORICAL_SECURITY_PRICE, symbol);
                 return rates;
             }
 
@@ -108,6 +113,7 @@ public final class YahooImporter {
             }
         } catch (final ResourceNotFoundException | JsonProcessingException e) {
             log.warn("Cannot retrieve security info for isin {}:", isin, e);
+            LogService.log(CANNOT_RETRIEVE_SECURITY_INFO, isin);
         }
     }
 //    https://query1.finance.yahoo.com/v7/finance/quote?fields=fiftyTwoWeekHigh,fiftyTwoWeekLow,fromCurrency,fromExchange,headSymbolAsString,logoUrl,longName,marketCap,messageBoardId,optionsType,overnightMarketTime,overnightMarketPrice,overnightMarketChange,overnightMarketChangePercent,regularMarketTime,regularMarketChange,regularMarketChangePercent,regularMarketOpen,regularMarketPrice,regularMarketSource,regularMarketVolume,postMarketTime,postMarketPrice,postMarketChange,postMarketChangePercent,preMarketTime,preMarketPrice,preMarketChange,preMarketChangePercent,shortName,toCurrency,toExchange,underlyingExchangeSymbol,underlyingSymbol&formatted=true&imgHeights=50&imgLabels=logoUrl&imgWidths=50&symbols=URW.PA&lang=en-AU&region=AU&crumb=.8ihKSax2ZO
