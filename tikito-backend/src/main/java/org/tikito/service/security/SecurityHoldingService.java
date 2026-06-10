@@ -153,15 +153,6 @@ public class SecurityHoldingService implements JobProcessor {
                 .toList();
     }
 
-    public List<HistoricalSecurityHoldingValueDto> getHistoricalHoldingValues(final long userId, final Set<Long> ids) {
-        return historicalSecurityHoldingValueRepository
-                .findAllBySecurityAndAccount(userId, null, ids, null)
-                .stream()
-                .map(HistoricalSecurityHoldingValue::toDto)
-                .sorted(Comparator.comparing(HistoricalSecurityHoldingValueDto::getDate))
-                .toList();
-    }
-
     @Transactional(propagation = Propagation.MANDATORY)
     public void recalculateHistoricalValue(final long userId, final long securityId) {
         securityHoldingRepository.findByUserIdAndSecurityId(userId, securityId)

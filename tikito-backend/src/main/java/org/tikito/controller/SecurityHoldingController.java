@@ -9,9 +9,7 @@ import org.tikito.dto.security.*;
 import org.tikito.service.security.SecurityHoldingService;
 import org.tikito.service.security.SecurityTransactionService;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/security/holding")
@@ -56,12 +54,5 @@ public class SecurityHoldingController {
     @GetMapping("/aggregated-historical-values")
     public ResponseEntity<List<AggregatedHistoricalSecurityHoldingValueDto>> getAggregatedHistoricalHoldingValues(final AuthUser authUser) {
         return ResponseEntity.ok(securityHoldingService.getAggregatedHistoricalHoldingValues(authUser.getId()));
-    }
-
-    @GetMapping("/{ids}/multiple-historical-values")
-    public ResponseEntity<List<HistoricalSecurityHoldingValueDto>> getHistoricalHoldingValues(final AuthUser authUser, @PathVariable("ids") final String ids) {
-        return ResponseEntity.ok(securityHoldingService.getHistoricalHoldingValues(
-                authUser.getId(),
-                Arrays.stream(ids.split(",")).map(Long::valueOf).collect(Collectors.toSet())));
     }
 }

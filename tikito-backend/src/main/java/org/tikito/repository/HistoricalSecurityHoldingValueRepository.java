@@ -13,7 +13,7 @@ public interface HistoricalSecurityHoldingValueRepository extends JpaRepository<
     @Query("""
              select h from HistoricalSecurityHoldingValue h where
                         (:securityIds is null or h.securityId in :securityIds) and
-                        (:accountIds is null or h.accountId in :accountIds) and
+                        ((:accountIds is null and h.accountId is null) or (:accountIds is not null and h.accountId in :accountIds)) and
                         h.userId = :userId and
                         (:startDate is null or h.date >= :startDate)
             """)
