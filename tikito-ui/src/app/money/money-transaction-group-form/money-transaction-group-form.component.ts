@@ -3,7 +3,7 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/ma
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatError, MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
-import {NgForOf, NgIf} from "@angular/common";
+
 import {MatInput} from "@angular/material/input";
 import {MatButton, MatFabButton} from "@angular/material/button";
 import {Util} from "../../util";
@@ -28,31 +28,29 @@ import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/m
 @Component({
     selector: 'app-moneyTransactionGroup-form',
     imports: [
-        MatCardModule,
-        MatCard,
-        MatCardHeader,
-        MatCardContent,
-        ReactiveFormsModule,
-        MatLabel,
-        MatFormField,
-        MatIcon,
-        NgIf,
-        MatInput,
-        MatButton,
-        NgForOf,
-        MoneyTransactionGroupQualifierListItemComponent,
-        MatFabButton,
-        MoneyTransactionGroupQualifierFormComponent,
-        MatOption,
-        MatSelect,
-        TranslatePipe,
-        MatDatepicker,
-        MatDatepickerInput,
-        MatDatepickerToggle,
-        MatHint,
-        MatSuffix,
-        MatError
-    ],
+    MatCardModule,
+    MatCard,
+    MatCardHeader,
+    MatCardContent,
+    ReactiveFormsModule,
+    MatLabel,
+    MatFormField,
+    MatIcon,
+    MatInput,
+    MatButton,
+    MoneyTransactionGroupQualifierListItemComponent,
+    MatFabButton,
+    MoneyTransactionGroupQualifierFormComponent,
+    MatOption,
+    MatSelect,
+    TranslatePipe,
+    MatDatepicker,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatHint,
+    MatSuffix,
+    MatError
+],
     templateUrl: './money-transaction-group-form.component.html',
     styleUrl: './money-transaction-group-form.component.scss',
     providers: [provideNativeDateAdapter()]

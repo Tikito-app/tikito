@@ -1,5 +1,5 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {CommonModule, DOCUMENT} from '@angular/common'
+import {Component, Inject, OnInit, DOCUMENT} from '@angular/core';
+
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
@@ -25,17 +25,7 @@ import {TranslatePipe} from "@ngx-translate/core";
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
-    imports: [CommonModule, MatCardModule,
-        ReactiveFormsModule,
-        MatInputModule,
-        MatIconModule,
-        MatButtonModule,
-        MatListModule,
-        MatOptionModule,
-        MatSelectModule,
-        MatSidenavModule,
-        MatToolbarModule,
-        TranslatePipe]
+    imports: [MatCardModule, ReactiveFormsModule, MatInputModule, MatIconModule, MatButtonModule, MatListModule, MatOptionModule, MatSelectModule, MatSidenavModule, MatToolbarModule, TranslatePipe]
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;

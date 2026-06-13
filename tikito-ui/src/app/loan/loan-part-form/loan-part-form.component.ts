@@ -7,7 +7,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
-import {NgForOf, NgIf} from "@angular/common";
+
 import {TranslatePipe} from "@ngx-translate/core";
 import {Account} from "../../dto/account";
 import {AccountApi} from "../../api/account-api";
@@ -33,32 +33,30 @@ import {LoanType} from "../../dto/loan-type";
 @Component({
     selector: 'app-loan-part-form',
     imports: [
-        FormsModule,
-        MatButton,
-        MatCard,
-        MatCardContent,
-        MatCardHeader,
-        MatCardTitle,
-        MatFabButton,
-        MatFormField,
-        MatIcon,
-        MatInput,
-        MatLabel,
-        MatOption,
-        MatSelect,
-        NgForOf,
-        NgIf,
-        ReactiveFormsModule,
-        LoanInterestListItemComponent,
-        LoanInterestFormComponent,
-        MatDatepicker,
-        MatDatepickerInput,
-        MatDatepickerToggle,
-        MatHint,
-        MatSuffix,
-        TranslatePipe,
-        MatError
-    ],
+    FormsModule,
+    MatButton,
+    MatCard,
+    MatCardContent,
+    MatCardHeader,
+    MatCardTitle,
+    MatFabButton,
+    MatFormField,
+    MatIcon,
+    MatInput,
+    MatLabel,
+    MatOption,
+    MatSelect,
+    ReactiveFormsModule,
+    LoanInterestListItemComponent,
+    LoanInterestFormComponent,
+    MatDatepicker,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatHint,
+    MatSuffix,
+    TranslatePipe,
+    MatError
+],
     providers: [provideNativeDateAdapter()],
     templateUrl: './loan-part-form.component.html',
     styleUrl: './loan-part-form.component.scss'

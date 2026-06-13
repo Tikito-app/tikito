@@ -3,7 +3,9 @@
 </div>
 
 <div class="main-center-column-small main-column">
-  <h2 *ngIf="security">{{security.name}}</h2>
+  @if (security) {
+    <h2>{{security.name}}</h2>
+  }
   @if(dataSource) {
     <mat-card>
       <mat-card-header>

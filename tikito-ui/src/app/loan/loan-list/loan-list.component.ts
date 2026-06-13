@@ -16,7 +16,7 @@ import {MatFabButton} from "@angular/material/button";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {NgIf} from "@angular/common";
+
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
 import {TranslatePipe} from "@ngx-translate/core";
 import {Loan} from "../../dto/loan";
@@ -36,34 +36,33 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 @Component({
     selector: 'app-loan-list',
     imports: [
-        MatCell,
-        MatCellDef,
-        MatColumnDef,
-        MatFabButton,
-        MatFormField,
-        MatHeaderCell,
-        MatHeaderRow,
-        MatHeaderRowDef,
-        MatIcon,
-        MatInput,
-        MatLabel,
-        MatRow,
-        MatRowDef,
-        MatTable,
-        NgIf,
-        PaginatorComponent,
-        MatHeaderCellDef,
-        MatTab,
-        MatTabGroup,
-        LoanGraphComponent,
-        LoanGraphFilterComponent,
-        LoanMoneyTransactionsListComponent,
-        TranslatePipe,
-        MatCard,
-        MatCardHeader,
-        FormsModule,
-        ReactiveFormsModule
-    ],
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatFabButton,
+    MatFormField,
+    MatHeaderCell,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatIcon,
+    MatInput,
+    MatLabel,
+    MatRow,
+    MatRowDef,
+    MatTable,
+    PaginatorComponent,
+    MatHeaderCellDef,
+    MatTab,
+    MatTabGroup,
+    LoanGraphComponent,
+    LoanGraphFilterComponent,
+    LoanMoneyTransactionsListComponent,
+    TranslatePipe,
+    MatCard,
+    MatCardHeader,
+    FormsModule,
+    ReactiveFormsModule
+],
     templateUrl: './loan-list.component.html',
     styleUrl: './loan-list.component.scss'
 })

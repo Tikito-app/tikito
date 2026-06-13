@@ -62,10 +62,12 @@
                   <mat-icon>isin</mat-icon>
                   <span>{{ 'admin/security/update-price' | translate }}</span>
                 </button>
-                <button mat-menu-item (click)="onRecalculateHistoricalSecurityValue(element)" *ngIf="element.securityType != SecurityType.CURRENCY">
-                  <mat-icon>isin</mat-icon>
-                  <span>{{ 'admin/security/recalculate-historical-value' | translate }}</span>
-                </button>
+                @if (element.securityType != SecurityType.CURRENCY) {
+                  <button mat-menu-item (click)="onRecalculateHistoricalSecurityValue(element)">
+                    <mat-icon>isin</mat-icon>
+                    <span>{{ 'admin/security/recalculate-historical-value' | translate }}</span>
+                  </button>
+                }
                 <button mat-menu-item (click)="onDeleteSecurityPrices(element)">
                   <mat-icon>isin</mat-icon>
                   <span>{{ 'admin/security/delete-price' | translate }}</span>

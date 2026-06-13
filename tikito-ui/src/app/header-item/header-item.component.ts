@@ -2,15 +2,14 @@ import {Component, Input} from '@angular/core';
 import {Router} from "@angular/router";
 import {MatAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
-import {NgIf} from "@angular/common";
+
 
 @Component({
     selector: 'app-header-item',
     imports: [
-        MatAnchor,
-        MatIcon,
-        NgIf
-    ],
+    MatAnchor,
+    MatIcon
+],
     templateUrl: './header-item.component.html',
     styleUrl: './header-item.component.scss'
 })

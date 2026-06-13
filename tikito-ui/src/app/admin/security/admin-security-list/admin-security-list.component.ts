@@ -15,7 +15,7 @@ import {
 } from "@angular/material/table";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
-import {NgIf} from "@angular/common";
+
 import {PaginatorComponent} from "../../../components/paginator/paginator.component";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../service/auth.service";
@@ -32,31 +32,30 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
 @Component({
     selector: 'app-admin-security-list',
     imports: [
-        MatButton,
-        MatCell,
-        MatCellDef,
-        MatColumnDef,
-        MatHeaderCell,
-        MatHeaderRow,
-        MatHeaderRowDef,
-        MatIcon,
-        MatMenu,
-        MatMenuItem,
-        MatRow,
-        MatRowDef,
-        MatTable,
-        NgIf,
-        PaginatorComponent,
-        MatMenuTrigger,
-        MatHeaderCellDef,
-        MatFormField,
-        MatInput,
-        MatLabel,
-        TranslatePipe,
-        TranslatePipe,
-        MatCard,
-        MatCardHeader
-    ],
+    MatButton,
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatIcon,
+    MatMenu,
+    MatMenuItem,
+    MatRow,
+    MatRowDef,
+    MatTable,
+    PaginatorComponent,
+    MatMenuTrigger,
+    MatHeaderCellDef,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    TranslatePipe,
+    TranslatePipe,
+    MatCard,
+    MatCardHeader
+],
     templateUrl: './admin-security-list.component.html',
     styleUrl: './admin-security-list.component.scss'
 })

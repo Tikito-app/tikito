@@ -11,7 +11,7 @@ import {MoneyApi} from "../api/money-api";
 import {AggregatedHistoricalMoneyHoldingValue} from "../dto/money/aggregated-historical-money-holding-value";
 import moment from "moment/moment";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {NgForOf, NgIf} from "@angular/common";
+
 import {Moment} from "moment";
 import {LoanApi} from "../api/loan-api";
 import {OverviewLoanComponent} from "./overview-loan/overview-loan.component";
@@ -24,15 +24,13 @@ import {AssetType} from "../dto/asset-type";
 @Component({
     selector: 'app-overview',
     imports: [
-        NgxEchartsDirective,
-        FormsModule,
-        NgIf,
-        ReactiveFormsModule,
-        NgForOf,
-        OverviewLoanComponent,
-        TranslatePipe,
-        CurrencyComponent
-    ],
+    NgxEchartsDirective,
+    FormsModule,
+    ReactiveFormsModule,
+    OverviewLoanComponent,
+    TranslatePipe,
+    CurrencyComponent
+],
     templateUrl: './overview.component.html',
     styleUrl: './overview.component.scss',
     providers: [

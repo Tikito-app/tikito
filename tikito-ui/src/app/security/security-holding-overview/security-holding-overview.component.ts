@@ -7,7 +7,7 @@ import {Util} from "../../util";
 import {SecurityTransactionListComponent} from "../security-transaction-list/security-transaction-list.component";
 import {MatButton} from "@angular/material/button";
 import {SecurityApi} from "../../api/security-api";
-import {NgIf} from "@angular/common";
+
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
@@ -31,33 +31,32 @@ import {Security} from "../../dto/security/security";
 @Component({
     selector: 'app-security-holding-overview',
     imports: [
-        MatTab,
-        MatTabGroup,
-        SecurityHoldingGraphComponent,
-        SecurityTransactionListComponent,
-        NgIf,
-        MatButton,
-        MatCard,
-        MatCardContent,
-        MatCardHeader,
-        MatCardTitle,
-        MatDatepicker,
-        MatDatepickerInput,
-        MatDatepickerToggle,
-        MatFormField,
-        MatHint,
-        MatInput,
-        MatLabel,
-        MatOption,
-        MatSelect,
-        MatSuffix,
-        ReactiveFormsModule,
-        MatCheckbox,
-        PopoverComponent,
-        MatRadioButton,
-        MatRadioGroup,
-        TranslatePipe
-    ],
+    MatTab,
+    MatTabGroup,
+    SecurityHoldingGraphComponent,
+    SecurityTransactionListComponent,
+    MatButton,
+    MatCard,
+    MatCardContent,
+    MatCardHeader,
+    MatCardTitle,
+    MatDatepicker,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatFormField,
+    MatHint,
+    MatInput,
+    MatLabel,
+    MatOption,
+    MatSelect,
+    MatSuffix,
+    ReactiveFormsModule,
+    MatCheckbox,
+    PopoverComponent,
+    MatRadioButton,
+    MatRadioGroup,
+    TranslatePipe
+],
     templateUrl: './security-holding-overview.component.html',
     styleUrl: './security-holding-overview.component.scss',
     providers: [provideNativeDateAdapter()]

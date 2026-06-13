@@ -23,35 +23,34 @@ import {Util} from "../../../util";
 import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
-import {NgIf} from "@angular/common";
+
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
     selector: 'app-admin-security-isin-list',
     imports: [
-        MatButton,
-        MatCell,
-        MatCellDef,
-        MatColumnDef,
-        MatHeaderCell,
-        MatHeaderRow,
-        MatHeaderRowDef,
-        MatIcon,
-        MatMenu,
-        MatMenuItem,
-        MatRow,
-        MatRowDef,
-        MatTable,
-        NgIf,
-        PaginatorComponent,
-        MatMenuTrigger,
-        MatHeaderCellDef,
-        TranslatePipe,
-        TranslatePipe,
-        MatCard,
-        MatCardHeader
-    ],
+    MatButton,
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatIcon,
+    MatMenu,
+    MatMenuItem,
+    MatRow,
+    MatRowDef,
+    MatTable,
+    PaginatorComponent,
+    MatMenuTrigger,
+    MatHeaderCellDef,
+    TranslatePipe,
+    TranslatePipe,
+    MatCard,
+    MatCardHeader
+],
     templateUrl: './admin-security-isin-list.component.html',
     styleUrl: './admin-security-isin-list.component.scss'
 })

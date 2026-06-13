@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HeaderItemComponent} from "../header-item/header-item.component";
-import {NgIf} from "@angular/common";
+
 import {Util} from "../util";
 import {AuthService} from "../service/auth.service";
 import {TranslatePipe} from "@ngx-translate/core";
@@ -9,10 +9,9 @@ import {AdminApi} from "../api/admin-api";
 @Component({
     selector: 'app-top-header',
     imports: [
-        HeaderItemComponent,
-        NgIf,
-        TranslatePipe,
-    ],
+    HeaderItemComponent,
+    TranslatePipe
+],
     templateUrl: './top-header.component.html',
     styleUrl: './top-header.component.scss'
 })

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {JobApiService} from '../../api/job-api.service';
 import {Job} from '../../dto/job';
-import {CommonModule} from '@angular/common';
+
 import {MatTableModule} from '@angular/material/table';
 import {MatCardModule} from '@angular/material/card';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -15,14 +15,13 @@ import {Router} from "@angular/router";
 @Component({
     selector: 'app-jobs-list',
     imports: [
-        CommonModule,
-        MatTableModule,
-        MatCardModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatButtonModule,
-        TranslatePipe
-    ],
+    MatTableModule,
+    MatCardModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    TranslatePipe
+],
     templateUrl: './admin-jobs-list.component.html',
     styleUrl: './admin-jobs-list.component.scss'
 })

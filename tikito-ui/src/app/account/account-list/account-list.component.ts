@@ -17,7 +17,7 @@ import {MatButton, MatFabButton} from "@angular/material/button";
 import {Router} from "@angular/router";
 import {AccountApi} from "../../api/account-api";
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
-import {NgIf} from "@angular/common";
+
 import {Account} from "../../dto/account";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
 import {AuthService} from "../../service/auth.service";
@@ -29,28 +29,27 @@ import {MatCard, MatCardContent} from "@angular/material/card";
 @Component({
     selector: 'app-account-list',
     imports: [
-        MatTable,
-        MatColumnDef,
-        MatHeaderCell,
-        MatCell,
-        MatHeaderRow,
-        MatRow,
-        MatHeaderRowDef,
-        MatHeaderCellDef,
-        MatCellDef,
-        MatRowDef,
-        MatIcon,
-        MatFabButton,
-        NgIf,
-        PaginatorComponent,
-        MatButton,
-        MatMenu,
-        MatMenuItem,
-        MatMenuTrigger,
-        MatCard,
-        MatCardContent,
-        TranslatePipe
-    ],
+    MatTable,
+    MatColumnDef,
+    MatHeaderCell,
+    MatCell,
+    MatHeaderRow,
+    MatRow,
+    MatHeaderRowDef,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatRowDef,
+    MatIcon,
+    MatFabButton,
+    PaginatorComponent,
+    MatButton,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger,
+    MatCard,
+    MatCardContent,
+    TranslatePipe
+],
     templateUrl: './account-list.component.html',
     styleUrl: './account-list.component.scss'
 })

@@ -6,7 +6,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
-import {NgIf} from "@angular/common";
+
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../../service/auth.service";
@@ -18,21 +18,20 @@ import {TranslatePipe} from "@ngx-translate/core";
 @Component({
     selector: 'app-admin-security-form',
     imports: [
-        MatButton,
-        MatCard,
-        MatCardContent,
-        MatCardHeader,
-        MatCardTitle,
-        MatFormField,
-        MatIcon,
-        MatInput,
-        MatLabel,
-        MatOption,
-        MatSelect,
-        NgIf,
-        ReactiveFormsModule,
-        TranslatePipe
-    ],
+    MatButton,
+    MatCard,
+    MatCardContent,
+    MatCardHeader,
+    MatCardTitle,
+    MatFormField,
+    MatIcon,
+    MatInput,
+    MatLabel,
+    MatOption,
+    MatSelect,
+    ReactiveFormsModule,
+    TranslatePipe
+],
     templateUrl: './admin-security-form.component.html',
     styleUrl: './admin-security-form.component.scss'
 })

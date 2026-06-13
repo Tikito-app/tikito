@@ -16,7 +16,7 @@ import {PaginatorComponent} from "../../../components/paginator/paginator.compon
 import {MatSort} from "@angular/material/sort";
 import {Util} from "../../../util";
 import {CurrencyComponent} from "../../../components/currency/currency.component";
-import {DatePipe, NgIf} from "@angular/common";
+import { DatePipe } from "@angular/common";
 import {TranslatePipe} from "@ngx-translate/core";
 import {SecurityTransactionImportLine} from "../../../dto/security/security-transaction-import-line";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
@@ -26,27 +26,26 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
 @Component({
     selector: 'app-security-import-result',
     imports: [
-        CurrencyComponent,
-        DatePipe,
-        MatCell,
-        MatCellDef,
-        MatColumnDef,
-        MatHeaderCell,
-        MatHeaderRow,
-        MatHeaderRowDef,
-        MatRow,
-        MatRowDef,
-        MatTable,
-        NgIf,
-        PaginatorComponent,
-        MatHeaderCellDef,
-        MatFormField,
-        MatInput,
-        MatLabel,
-        TranslatePipe,
-        MatCard,
-        MatCardHeader
-    ],
+    CurrencyComponent,
+    DatePipe,
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatRow,
+    MatRowDef,
+    MatTable,
+    PaginatorComponent,
+    MatHeaderCellDef,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    TranslatePipe,
+    MatCard,
+    MatCardHeader
+],
     templateUrl: './security-import-result.component.html',
     styleUrl: './security-import-result.component.scss'
 })

@@ -6,7 +6,7 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
-import {NgIf} from "@angular/common";
+
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {AuthService} from "../../service/auth.service";
 import {CacheService} from "../../service/cache-service";
@@ -20,23 +20,21 @@ import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 @Component({
     selector: 'app-admin-user-preferences',
     imports: [
-        MatButton,
-        MatCard,
-        MatCardContent,
-        MatCardHeader,
-        MatCardTitle,
-        MatCheckbox,
-        MatFormField,
-        MatInput,
-        MatLabel,
-        MatOption,
-        MatSelect,
-        NgIf,
-        ReactiveFormsModule,
-        MatIcon,
-        TranslatePipe,
-        // TranslatePipe
-    ],
+    MatButton,
+    MatCard,
+    MatCardContent,
+    MatCardHeader,
+    MatCardTitle,
+    MatCheckbox,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    MatOption,
+    MatSelect,
+    ReactiveFormsModule,
+    MatIcon,
+    TranslatePipe
+],
     templateUrl: './admin-user-preferences.component.html',
     styleUrl: './admin-user-preferences.component.scss',
     providers: [provideNativeDateAdapter()]

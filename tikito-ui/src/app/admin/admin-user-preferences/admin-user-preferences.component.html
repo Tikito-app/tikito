@@ -7,55 +7,53 @@
     <mat-card-header>
       <mat-card-title>{{ 'admin/user-preferences' | translate }}</mat-card-title>
     </mat-card-header>
-    <mat-card-content *ngIf="form">
-      <p>{{'admin/user-preferences/values-are-automatically-saved' | translate}}</p>
-      <form [formGroup]="form">
-        <mat-form-field class="full-width">
-          <mat-label>{{ 'admin/user-preferences/default-currency' | translate }}</mat-label>
-          <mat-select formControlName="defaultCurrency"
-                      (selectionChange)="UserPreferenceService.onSelectChange(UserPreference.DEFAULT_CURRENCY, $event.value)">
-            @for (currency of CacheService.getCurrencies(); track currency) {
-              <mat-option [value]="currency.id">{{ 'currency/' + currency.currentIsin | translate }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-
-
-        <mat-form-field appearance="fill">
-          <mat-label>{{ 'admin/user-preferences/start-date-minus-amount' | translate }}</mat-label>
-          <input type="number" [attr.data-cy]="'csv-separator'" matInput formControlName="overviewStartDateMinusAmount" (change)="UserPreferenceService.onInputChange(UserPreference.OVERVIEW_START_DATE_MINUS_AMOUNT, $event)">
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label></mat-label>
-          <mat-select formControlName="overviewStartDateMinusUnit"
-                      (selectionChange)="UserPreferenceService.onSelectChange(UserPreference.OVERVIEW_START_DATE_MINUS_UNIT, $event.value)">
+    @if (form) {
+      <mat-card-content>
+        <p>{{'admin/user-preferences/values-are-automatically-saved' | translate}}</p>
+        <form [formGroup]="form">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'admin/user-preferences/default-currency' | translate }}</mat-label>
+            <mat-select formControlName="defaultCurrency"
+              (selectionChange)="UserPreferenceService.onSelectChange(UserPreference.DEFAULT_CURRENCY, $event.value)">
+              @for (currency of CacheService.getCurrencies(); track currency) {
+                <mat-option [value]="currency.id">{{ 'currency/' + currency.currentIsin | translate }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>{{ 'admin/user-preferences/start-date-minus-amount' | translate }}</mat-label>
+            <input type="number" [attr.data-cy]="'csv-separator'" matInput formControlName="overviewStartDateMinusAmount" (change)="UserPreferenceService.onInputChange(UserPreference.OVERVIEW_START_DATE_MINUS_AMOUNT, $event)">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label></mat-label>
+            <mat-select formControlName="overviewStartDateMinusUnit"
+              (selectionChange)="UserPreferenceService.onSelectChange(UserPreference.OVERVIEW_START_DATE_MINUS_UNIT, $event.value)">
               <mat-option [value]="'DAY'">{{ 'day' | translate }}</mat-option>
               <mat-option [value]="'WEEK'">{{ 'week' | translate }}</mat-option>
               <mat-option [value]="'MONTH'">{{ 'month' | translate }}</mat-option>
               <mat-option [value]="'YEAR'">{{ 'year' | translate }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        {{'admin/user-preferences/start-date-ago' | translate}}
-        <mat-checkbox formControlName="overviewStartDateAtBeginningOfRange" (change)="UserPreferenceService.onCheckboxChange(UserPreference.OVERVIEW_START_DATE_AT_BEGINNING_OF_RANGE, $event.checked)">{{ 'money/graph/start-at-zero-from-beginning' | translate}}</mat-checkbox>
-
-        <mat-form-field class="full-width">
-          <mat-label>{{ 'admin/user-preferences/language' | translate }}</mat-label>
-          <mat-select formControlName="language"
-                      (selectionChange)="onLanguageChange($event.value);">
-            <mat-option value="en">{{'language/en' | translate}}</mat-option>
-            <mat-option value="nl">{{'language/nl' | translate}}</mat-option>
-            <mat-option value="es">{{'language/es' | translate}}</mat-option>
-            <mat-option value="de">{{'language/de' | translate}}</mat-option>
-            <mat-option value="fr">{{'language/fr' | translate}}</mat-option>
-            <mat-option value="uk">{{'language/uk' | translate}}</mat-option>
-            <mat-option value="zh">{{'language/zh' | translate}}</mat-option>
-            <mat-option value="it">{{'language/it' | translate}}</mat-option>
-            <mat-option value="ru">{{'language/ru' | translate}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </form>
-    </mat-card-content>
+            </mat-select>
+          </mat-form-field>
+          {{'admin/user-preferences/start-date-ago' | translate}}
+          <mat-checkbox formControlName="overviewStartDateAtBeginningOfRange" (change)="UserPreferenceService.onCheckboxChange(UserPreference.OVERVIEW_START_DATE_AT_BEGINNING_OF_RANGE, $event.checked)">{{ 'money/graph/start-at-zero-from-beginning' | translate}}</mat-checkbox>
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'admin/user-preferences/language' | translate }}</mat-label>
+            <mat-select formControlName="language"
+              (selectionChange)="onLanguageChange($event.value);">
+              <mat-option value="en">{{'language/en' | translate}}</mat-option>
+              <mat-option value="nl">{{'language/nl' | translate}}</mat-option>
+              <mat-option value="es">{{'language/es' | translate}}</mat-option>
+              <mat-option value="de">{{'language/de' | translate}}</mat-option>
+              <mat-option value="fr">{{'language/fr' | translate}}</mat-option>
+              <mat-option value="uk">{{'language/uk' | translate}}</mat-option>
+              <mat-option value="zh">{{'language/zh' | translate}}</mat-option>
+              <mat-option value="it">{{'language/it' | translate}}</mat-option>
+              <mat-option value="ru">{{'language/ru' | translate}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+    }
   </mat-card>
 </div>
 

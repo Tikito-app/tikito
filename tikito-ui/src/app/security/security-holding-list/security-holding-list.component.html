@@ -1,18 +1,22 @@
-<div class="main-side-column main-column" *ngIf="selectedHolding == null">
-  <form *ngIf="form" [formGroup]="form">
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <mat-checkbox formControlName="showClosedPositions" (change)="onShowClosedPositionChanged($event)">{{ 'security/show-closed-positions' | translate }}
-    </mat-checkbox>
-  </form>
-</div>
+@if (selectedHolding == null) {
+  <div class="main-side-column main-column">
+    @if (form) {
+      <form [formGroup]="form">
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <mat-checkbox formControlName="showClosedPositions" (change)="onShowClosedPositionChanged($event)">{{ 'security/show-closed-positions' | translate }}
+        </mat-checkbox>
+      </form>
+    }
+  </div>
+}
 <div class="main-center-column main-column">
 
   <mat-tab-group>
@@ -20,7 +24,7 @@
       <app-aggregated-security-holdings-graph
         [showTooltip]="true"
         [showLegend]="true"
-        [height]="300"></app-aggregated-security-holdings-graph>
+      [height]="300"></app-aggregated-security-holdings-graph>
     </mat-tab>
     <mat-tab label="{{'security/sector' | translate}}">
       <app-trading-company-pie-graph [height]="300" [valueType]="'sector'"></app-trading-company-pie-graph>
@@ -60,7 +64,7 @@
                 <th mat-header-cell *matHeaderCellDef>{{ 'security/holding/position-value' | translate }}</th>
                 <td mat-cell *matCellDef="let element">
                   <app-currency [amount]="SecurityUtil.getPositionValue(element)"
-                                [currencyId]="element.currencyId"></app-currency>
+                  [currencyId]="element.currencyId"></app-currency>
                 </td>
               </ng-container>
 
@@ -80,18 +84,18 @@
               <ng-container matColumnDef="performance">
                 <th mat-header-cell *matHeaderCellDef>{{ 'security/holding/performance' | translate }}</th>
                 <td mat-cell *matCellDef="let element">
-                  <ng-container *ngIf="SecurityUtil.getPerformance(element) >= 0">
+                  @if (SecurityUtil.getPerformance(element) >= 0) {
                     <div style="color: green">
                       <mat-icon>trending_up</mat-icon>
                       {{ Util.percentageFormat(SecurityUtil.getPerformance(element)) }}
                     </div>
-                  </ng-container>
-                  <ng-container *ngIf="SecurityUtil.getPerformance(element) < 0">
+                  }
+                  @if (SecurityUtil.getPerformance(element) < 0) {
                     <div style="color: red">
                       <mat-icon>trending_down</mat-icon>
                       {{ Util.percentageFormat(SecurityUtil.getPerformance(element)) }}
                     </div>
-                  </ng-container>
+                  }
                 </td>
               </ng-container>
 
@@ -112,7 +116,7 @@
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;" (dblclick)="onRowDblClicked(row, $event)"
-                  (click)="onRowClicked(row, $event)" class="clickable"></tr>
+              (click)="onRowClicked(row, $event)" class="clickable"></tr>
             </table>
 
           </mat-card-header>
@@ -125,7 +129,9 @@
     </mat-tab>
   </mat-tab-group>
 </div>
-<div class="main-side-column main-column" *ngIf="selectedHolding != null">
-  <app-security-holding-list-details [holding]="selectedHolding"
-                                     (closeCallback)="selectedHolding = null"></app-security-holding-list-details>
-</div>
+@if (selectedHolding != null) {
+  <div class="main-side-column main-column">
+    <app-security-holding-list-details [holding]="selectedHolding"
+    (closeCallback)="selectedHolding = null"></app-security-holding-list-details>
+  </div>
+}

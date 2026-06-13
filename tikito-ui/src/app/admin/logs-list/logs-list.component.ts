@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {LogApiService} from '../../api/log-api.service';
 import {Log} from '../../dto/log';
-import {CommonModule} from '@angular/common';
+
 import {MatTableModule} from '@angular/material/table';
 import {MatCardModule} from '@angular/material/card';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -15,14 +15,13 @@ import {AuthService} from "../../service/auth.service";
 @Component({
     selector: 'app-logs-list',
     imports: [
-        CommonModule,
-        MatTableModule,
-        MatCardModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatButtonModule,
-        TranslatePipe
-    ],
+    MatTableModule,
+    MatCardModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    TranslatePipe
+],
     templateUrl: './logs-list.component.html',
     styleUrl: './logs-list.component.scss'
 })

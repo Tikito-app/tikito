@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/
 import {MyData} from "../ok-cancel-dialog/ok-cancel-dialog.component";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
-import {CommonModule} from '@angular/common';
+
 import {MatBadgeModule} from "@angular/material/badge";
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -13,16 +13,15 @@ import {TranslatePipe} from "@ngx-translate/core";
 @Component({
     selector: 'app-ok-dialog',
     imports: [
-        MatMenuModule,
-        MatIconModule,
-        CommonModule,
-        MatBadgeModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        MatDialogModule,
-        TranslatePipe
-    ],
+    MatMenuModule,
+    MatIconModule,
+    MatBadgeModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDialogModule,
+    TranslatePipe
+],
     templateUrl: './ok-dialog.component.html',
     styleUrls: ['./ok-dialog.component.scss']
 })

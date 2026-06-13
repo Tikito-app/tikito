@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {NgIf} from "@angular/common";
+
 import {MatOption} from "@angular/material/core";
 import {MatFormField, MatLabel, MatSelect} from "@angular/material/select";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
@@ -28,27 +28,26 @@ import {AssetType} from "../../../dto/asset-type";
 @Component({
     selector: 'app-select-columns',
     imports: [
-        MatOption,
-        MatSelect,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatCell,
-        MatCellDef,
-        MatColumnDef,
-        MatHeaderCell,
-        MatHeaderRow,
-        MatHeaderRowDef,
-        MatRow,
-        MatRowDef,
-        MatTable,
-        NgIf,
-        MatHeaderCellDef,
-        MatInput,
-        TranslatePipe,
-        MatCard,
-        MatCardHeader
-    ],
+    MatOption,
+    MatSelect,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatRow,
+    MatRowDef,
+    MatTable,
+    MatHeaderCellDef,
+    MatInput,
+    TranslatePipe,
+    MatCard,
+    MatCardHeader
+],
     templateUrl: './select-columns.component.html',
     styleUrl: './select-columns.component.scss'
 })

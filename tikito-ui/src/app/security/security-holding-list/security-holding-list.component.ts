@@ -14,7 +14,7 @@ import {
 } from "@angular/material/table";
 import {MatIcon} from "@angular/material/icon";
 import {Router} from "@angular/router";
-import {NgIf} from "@angular/common";
+
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
 import SecurityHolding from "../../dto/security/security-holding";
 import {SecurityApi} from "../../api/security-api";
@@ -45,36 +45,35 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
 @Component({
     selector: 'app-security-holding-list',
     imports: [
-        MatTable,
-        MatColumnDef,
-        MatHeaderCell,
-        MatCell,
-        MatHeaderRow,
-        MatRow,
-        MatHeaderRowDef,
-        MatHeaderCellDef,
-        MatCellDef,
-        MatRowDef,
-        MatIcon,
-        NgIf,
-        PaginatorComponent,
-        SecurityHoldingListDetailsComponent,
-        CurrencyComponent,
-        AggregatedSecurityHoldingsGraphComponent,
-        MatTabGroup,
-        MatTab,
-        SecurityPieGraphComponent,
-        ReactiveFormsModule,
-        MatCheckbox,
-        MatButton,
-        MatMenu,
-        MatMenuItem,
-        MatMenuTrigger,
-        SecurityTransactionListComponent,
-        TranslatePipe,
-        MatCard,
-        MatCardHeader
-    ],
+    MatTable,
+    MatColumnDef,
+    MatHeaderCell,
+    MatCell,
+    MatHeaderRow,
+    MatRow,
+    MatHeaderRowDef,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatRowDef,
+    MatIcon,
+    PaginatorComponent,
+    SecurityHoldingListDetailsComponent,
+    CurrencyComponent,
+    AggregatedSecurityHoldingsGraphComponent,
+    MatTabGroup,
+    MatTab,
+    SecurityPieGraphComponent,
+    ReactiveFormsModule,
+    MatCheckbox,
+    MatButton,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger,
+    SecurityTransactionListComponent,
+    TranslatePipe,
+    MatCard,
+    MatCardHeader
+],
     templateUrl: './security-holding-list.component.html',
     styleUrl: './security-holding-list.component.scss',
     providers: [TranslatePipe]

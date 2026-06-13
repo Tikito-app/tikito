@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {CommonModule} from '@angular/common'
+
 import {HttpService} from "../../service/http.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserAccount} from "../../dto/user-account";
@@ -22,17 +22,7 @@ import {TranslatePipe} from "@ngx-translate/core";
     selector: 'app-register',
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
-    imports: [CommonModule, MatCardModule,
-        ReactiveFormsModule,
-        MatInputModule,
-        MatIconModule,
-        MatButtonModule,
-        MatListModule,
-        MatOptionModule,
-        MatSelectModule,
-        MatSidenavModule,
-        MatToolbarModule,
-        TranslatePipe]
+    imports: [MatCardModule, ReactiveFormsModule, MatInputModule, MatIconModule, MatButtonModule, MatListModule, MatOptionModule, MatSelectModule, MatSidenavModule, MatToolbarModule, TranslatePipe]
 })
 export class RegisterComponent implements OnInit {
   showPasswordFlag = false;

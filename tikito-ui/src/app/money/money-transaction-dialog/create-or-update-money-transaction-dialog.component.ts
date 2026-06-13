@@ -17,7 +17,7 @@ import {Util} from "../../util";
 import {UserPreferenceService} from "../../service/user-preference-service";
 import {UserPreference} from "../../dto/user-preference";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
-import {NgIf} from "@angular/common";
+
 import {MoneyApi} from "../../api/money-api";
 import {AccountApi} from "../../api/account-api";
 import {Account} from "../../dto/account";
@@ -35,27 +35,26 @@ export interface MyData {
 @Component({
     selector: 'app-money-transaction-dialog',
     imports: [
-        MatButton,
-        MatDialogActions,
-        MatDialogContent,
-        MatDialogTitle,
-        MatLabel,
-        FormsModule,
-        MatFormField,
-        MatIcon,
-        MatInput,
-        MatOption,
-        MatSelect,
-        ReactiveFormsModule,
-        MatDatepicker,
-        MatDatepickerInput,
-        MatDatepickerToggle,
-        MatHint,
-        MatSuffix,
-        NgIf,
-        TranslatePipe,
-        MatError,
-    ],
+    MatButton,
+    MatDialogActions,
+    MatDialogContent,
+    MatDialogTitle,
+    MatLabel,
+    FormsModule,
+    MatFormField,
+    MatIcon,
+    MatInput,
+    MatOption,
+    MatSelect,
+    ReactiveFormsModule,
+    MatDatepicker,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatHint,
+    MatSuffix,
+    TranslatePipe,
+    MatError
+],
     providers: [provideNativeDateAdapter()],
     templateUrl: './create-or-update-money-transaction-dialog.component.html',
     styleUrl: './create-or-update-money-transaction-dialog.component.scss'

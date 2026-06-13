@@ -17,7 +17,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatFabButton} from "@angular/material/button";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TranslatePipe} from "@ngx-translate/core";
-import {NgIf} from "@angular/common";
+
 import {MoneyApi} from "../../api/money-api";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
@@ -32,30 +32,29 @@ import {CurrencyComponent} from "../../components/currency/currency.component";
 @Component({
     selector: 'app-moneyTransactionGroup-list',
     imports: [
-        MatTable,
-        MatColumnDef,
-        MatHeaderCell,
-        MatCell,
-        MatHeaderRow,
-        MatRow,
-        MatHeaderRowDef,
-        MatHeaderCellDef,
-        MatCellDef,
-        MatRowDef,
-        MatIcon,
-        MatFabButton,
-        NgIf,
-        MatFormField,
-        MatInput,
-        MatNoDataRow,
-        MatLabel,
-        PaginatorComponent,
-        TranslatePipe,
-        MatCard,
-        MatCardHeader,
-        CurrencyComponent,
-        MatButton
-    ],
+    MatTable,
+    MatColumnDef,
+    MatHeaderCell,
+    MatCell,
+    MatHeaderRow,
+    MatRow,
+    MatHeaderRowDef,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatRowDef,
+    MatIcon,
+    MatFabButton,
+    MatFormField,
+    MatInput,
+    MatNoDataRow,
+    MatLabel,
+    PaginatorComponent,
+    TranslatePipe,
+    MatCard,
+    MatCardHeader,
+    CurrencyComponent,
+    MatButton
+],
     templateUrl: './money-transaction-group-list.component.html',
     styleUrl: './money-transaction-group-list.component.scss',
     providers: [TranslatePipe]

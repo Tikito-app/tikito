@@ -6,7 +6,7 @@ import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
-import {NgIf} from "@angular/common";
+
 import {TranslatePipe} from "@ngx-translate/core";
 import {Loan} from "../../dto/loan";
 import {LoanInterest} from "../../dto/loan-interest";
@@ -30,25 +30,24 @@ import {DateRange} from "../../dto/date-range";
 @Component({
     selector: 'app-loan-form',
     imports: [
-        FormsModule,
-        MatButton,
-        MatCard,
-        MatCardContent,
-        MatCardHeader,
-        MatCardTitle,
-        MatFabButton,
-        MatFormField,
-        MatIcon,
-        MatInput,
-        MatLabel,
-        NgIf,
-        ReactiveFormsModule,
-        LoanPartListComponent,
-        MatOption,
-        MatSelect,
-        TranslatePipe,
-        MatError
-    ],
+    FormsModule,
+    MatButton,
+    MatCard,
+    MatCardContent,
+    MatCardHeader,
+    MatCardTitle,
+    MatFabButton,
+    MatFormField,
+    MatIcon,
+    MatInput,
+    MatLabel,
+    ReactiveFormsModule,
+    LoanPartListComponent,
+    MatOption,
+    MatSelect,
+    TranslatePipe,
+    MatError
+],
     providers: [provideNativeDateAdapter()],
     templateUrl: './loan-form.component.html',
     styleUrl: './loan-form.component.scss'

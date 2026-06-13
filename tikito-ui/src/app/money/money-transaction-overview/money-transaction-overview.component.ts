@@ -27,7 +27,7 @@ import {UserPreference} from "../../dto/user-preference";
 import {MatIcon, MatIconModule} from "@angular/material/icon";
 import {PopoverModule} from "../../components/popover/popover.module";
 import {PopoverComponent} from "../../components/popover/popover.component";
-import {NgIf} from "@angular/common";
+
 import {AccountApi} from "../../api/account-api";
 import {Account} from "../../dto/account";
 import {MatChipsModule} from "@angular/material/chips";
@@ -41,38 +41,37 @@ import moment from "moment";
 @Component({
     selector: 'app-money-transaction-overview',
     imports: [
-        MatTabGroup,
-        MatTab,
-        MoneyTransactionListComponent,
-        MatCard,
-        MatCardTitle,
-        MatCardContent,
-        MatCardHeader,
-        MatCheckbox,
-        MatDatepickerModule,
-        MatFormField,
-        MatInputModule,
-        MatLabel,
-        MatOption,
-        MatSelect,
-        ReactiveFormsModule,
-        MatDatepickerToggle,
-        MatButton,
-        MatInput,
-        MatDatepickerInput,
-        MatDatepicker,
-        MatRadioGroup,
-        MatRadioButton,
-        MatIcon,
-        PopoverModule,
-        MatIconModule,
-        MatChipsModule,
-        PopoverComponent,
-        NgIf,
-        FormsModule,
-        TranslatePipe,
-        MoneyGraphComponent
-    ],
+    MatTabGroup,
+    MatTab,
+    MoneyTransactionListComponent,
+    MatCard,
+    MatCardTitle,
+    MatCardContent,
+    MatCardHeader,
+    MatCheckbox,
+    MatDatepickerModule,
+    MatFormField,
+    MatInputModule,
+    MatLabel,
+    MatOption,
+    MatSelect,
+    ReactiveFormsModule,
+    MatDatepickerToggle,
+    MatButton,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepicker,
+    MatRadioGroup,
+    MatRadioButton,
+    MatIcon,
+    PopoverModule,
+    MatIconModule,
+    MatChipsModule,
+    PopoverComponent,
+    FormsModule,
+    TranslatePipe,
+    MoneyGraphComponent
+],
     templateUrl: './money-transaction-overview.component.html',
     styleUrl: './money-transaction-overview.component.scss',
     providers: [provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'nl-NL' }]

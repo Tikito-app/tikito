@@ -8,7 +8,7 @@ import {MatError, MatFormField, MatLabel, MatSuffix} from "@angular/material/for
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
-import {NgIf} from "@angular/common";
+
 import {UserAccount} from "../dto/user-account";
 import {HttpRequestData} from "../dto/http-request-data";
 import {HttpService} from "../service/http.service";
@@ -19,22 +19,21 @@ import {TranslatePipe} from "@ngx-translate/core";
 @Component({
     selector: 'app-initial-installation',
     imports: [
-        FormsModule,
-        MatCardContent,
-        MatFormField,
-        MatIcon,
-        MatInput,
-        MatLabel,
-        ReactiveFormsModule,
-        MatButton,
-        MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        MatError,
-        MatSuffix,
-        NgIf,
-        TranslatePipe
-    ],
+    FormsModule,
+    MatCardContent,
+    MatFormField,
+    MatIcon,
+    MatInput,
+    MatLabel,
+    ReactiveFormsModule,
+    MatButton,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatError,
+    MatSuffix,
+    TranslatePipe
+],
     providers: [
         TranslatePipe
     ],

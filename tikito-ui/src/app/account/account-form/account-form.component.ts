@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
-import {NgIf} from "@angular/common";
+
 import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {Util} from "../../util";
@@ -17,21 +17,20 @@ import {CacheService} from "../../service/cache-service";
 @Component({
     selector: 'app-account-form',
     imports: [
-        MatCardModule,
-        MatCard,
-        MatCardHeader,
-        MatCardContent,
-        ReactiveFormsModule,
-        MatLabel,
-        MatFormField,
-        NgIf,
-        MatInput,
-        MatButton,
-        MatOption,
-        MatSelect,
-        TranslatePipe,
-        MatError
-    ],
+    MatCardModule,
+    MatCard,
+    MatCardHeader,
+    MatCardContent,
+    ReactiveFormsModule,
+    MatLabel,
+    MatFormField,
+    MatInput,
+    MatButton,
+    MatOption,
+    MatSelect,
+    TranslatePipe,
+    MatError
+],
     templateUrl: './account-form.component.html',
     styleUrl: './account-form.component.scss'
 })
