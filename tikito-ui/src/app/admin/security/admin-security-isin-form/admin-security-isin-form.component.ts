@@ -12,24 +12,23 @@ import {NgIf} from "@angular/common";
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-admin-security-isin-form',
-  standalone: true,
-  imports: [
-    MatButton,
-    MatCard,
-    MatCardContent,
-    MatCardHeader,
-    MatCardTitle,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    NgIf,
-    ReactiveFormsModule,
-    TranslatePipe,
-    TranslatePipe
-  ],
-  templateUrl: './admin-security-isin-form.component.html',
-  styleUrl: './admin-security-isin-form.component.scss'
+    selector: 'app-admin-security-isin-form',
+    imports: [
+        MatButton,
+        MatCard,
+        MatCardContent,
+        MatCardHeader,
+        MatCardTitle,
+        MatFormField,
+        MatInput,
+        MatLabel,
+        NgIf,
+        ReactiveFormsModule,
+        TranslatePipe,
+        TranslatePipe
+    ],
+    templateUrl: './admin-security-isin-form.component.html',
+    styleUrl: './admin-security-isin-form.component.scss'
 })
 export class AdminSecurityIsinFormComponent implements OnInit {
   form: FormGroup;

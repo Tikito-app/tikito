@@ -4,11 +4,10 @@ import {AuthService} from "../../service/auth.service";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-logout',
-  standalone: true,
-  templateUrl: './logout.component.html',
-  styleUrls: ['./logout.component.scss'],
-  imports: [CommonModule]
+    selector: 'app-logout',
+    templateUrl: './logout.component.html',
+    styleUrls: ['./logout.component.scss'],
+    imports: [CommonModule]
 })
 export class LogoutComponent {
   constructor(private router: Router,

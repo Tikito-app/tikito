@@ -15,21 +15,20 @@ export interface MyData {
 }
 
 @Component({
-  selector: 'app-ok-cancel-dialog',
-  standalone: true,
-  imports: [
-    MatMenuModule,
-    MatIconModule,
-    CommonModule,
-    MatBadgeModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDialogModule,
-    TranslatePipe
-  ],
-  templateUrl: './ok-cancel-dialog.component.html',
-  styleUrls: ['./ok-cancel-dialog.component.scss']
+    selector: 'app-ok-cancel-dialog',
+    imports: [
+        MatMenuModule,
+        MatIconModule,
+        CommonModule,
+        MatBadgeModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatDialogModule,
+        TranslatePipe
+    ],
+    templateUrl: './ok-cancel-dialog.component.html',
+    styleUrls: ['./ok-cancel-dialog.component.scss']
 })
 export class OkCancelDialogComponent {
 

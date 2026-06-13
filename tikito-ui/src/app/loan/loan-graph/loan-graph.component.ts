@@ -10,17 +10,16 @@ import * as echarts from "echarts/core";
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-loan-graph',
-  standalone: true,
-  imports: [
-    NgxEchartsDirective,
-    TranslatePipe
-  ],
-  providers: [
-    provideEchartsCore({echarts}),
-  ],
-  templateUrl: './loan-graph.component.html',
-  styleUrl: './loan-graph.component.scss'
+    selector: 'app-loan-graph',
+    imports: [
+        NgxEchartsDirective,
+        TranslatePipe
+    ],
+    providers: [
+        provideEchartsCore({ echarts }),
+    ],
+    templateUrl: './loan-graph.component.html',
+    styleUrl: './loan-graph.component.scss'
 })
 export class LoanGraphComponent implements OnInit {
   @Input()

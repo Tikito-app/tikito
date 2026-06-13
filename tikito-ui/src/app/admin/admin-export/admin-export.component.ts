@@ -14,18 +14,17 @@ import {Account} from "../../dto/account";
 import {MatCheckbox} from "@angular/material/checkbox";
 
 @Component({
-  selector: 'app-admin-export',
-  standalone: true,
-  imports: [
-    MatButton,
-    ReactiveFormsModule,
-    MatIcon,
-    AdminImportExportSettingComponent,
-    MatCheckbox,
-    TranslatePipe
-  ],
-  templateUrl: './admin-export.component.html',
-  styleUrl: './admin-export.component.scss'
+    selector: 'app-admin-export',
+    imports: [
+        MatButton,
+        ReactiveFormsModule,
+        MatIcon,
+        AdminImportExportSettingComponent,
+        MatCheckbox,
+        TranslatePipe
+    ],
+    templateUrl: './admin-export.component.html',
+    styleUrl: './admin-export.component.scss'
 })
 export class AdminExportComponent implements OnInit {
 

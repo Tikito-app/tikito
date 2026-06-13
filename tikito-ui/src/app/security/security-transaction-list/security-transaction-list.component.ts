@@ -32,34 +32,33 @@ import {CacheService} from "../../service/cache-service";
 import {SecurityTransactionType} from "../../dto/security/security-transaction-type";
 
 @Component({
-  selector: 'app-security-transaction-list',
-  standalone: true,
-  imports: [
-    MatTable,
-    MatColumnDef,
-    MatHeaderCell,
-    MatCell,
-    MatHeaderRow,
-    MatRow,
-    MatHeaderRowDef,
-    MatHeaderCellDef,
-    MatCellDef,
-    MatRowDef,
-    PaginatorComponent,
-    DatePipe,
-    CurrencyComponent,
-    MatButton,
-    MatIcon,
-    MatMenu,
-    MatMenuItem,
-    MatMenuTrigger,
-    TranslatePipe,
-    MatSort,
-    MatCard,
-    MatCardHeader
-  ],
-  templateUrl: './security-transaction-list.component.html',
-  styleUrl: './security-transaction-list.component.scss'
+    selector: 'app-security-transaction-list',
+    imports: [
+        MatTable,
+        MatColumnDef,
+        MatHeaderCell,
+        MatCell,
+        MatHeaderRow,
+        MatRow,
+        MatHeaderRowDef,
+        MatHeaderCellDef,
+        MatCellDef,
+        MatRowDef,
+        PaginatorComponent,
+        DatePipe,
+        CurrencyComponent,
+        MatButton,
+        MatIcon,
+        MatMenu,
+        MatMenuItem,
+        MatMenuTrigger,
+        TranslatePipe,
+        MatSort,
+        MatCard,
+        MatCardHeader
+    ],
+    templateUrl: './security-transaction-list.component.html',
+    styleUrl: './security-transaction-list.component.scss'
 })
 export class SecurityTransactionListComponent implements OnInit {
   displayedColumns: string[] = ['date', 'account', 'trading-company', 'transaction-type', 'amount', 'price', 'currency', 'options'];

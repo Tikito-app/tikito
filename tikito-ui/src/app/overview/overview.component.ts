@@ -22,23 +22,22 @@ import {CurrencyComponent} from "../components/currency/currency.component";
 import {AssetType} from "../dto/asset-type";
 
 @Component({
-  selector: 'app-overview',
-  standalone: true,
-  imports: [
-    NgxEchartsDirective,
-    FormsModule,
-    NgIf,
-    ReactiveFormsModule,
-    NgForOf,
-    OverviewLoanComponent,
-    TranslatePipe,
-    CurrencyComponent
-  ],
-  templateUrl: './overview.component.html',
-  styleUrl: './overview.component.scss',
-  providers: [
-    provideEchartsCore({echarts}),
-  ]
+    selector: 'app-overview',
+    imports: [
+        NgxEchartsDirective,
+        FormsModule,
+        NgIf,
+        ReactiveFormsModule,
+        NgForOf,
+        OverviewLoanComponent,
+        TranslatePipe,
+        CurrencyComponent
+    ],
+    templateUrl: './overview.component.html',
+    styleUrl: './overview.component.scss',
+    providers: [
+        provideEchartsCore({ echarts }),
+    ]
 })
 export class OverviewComponent implements OnInit {
   overview: Overview;

@@ -31,36 +31,35 @@ import {DialogService} from "../../service/dialog.service";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
-  selector: 'app-moneyTransaction-list',
-  standalone: true,
-  imports: [
-    MatTable,
-    MatColumnDef,
-    MatHeaderCell,
-    MatCell,
-    MatHeaderRow,
-    MatRow,
-    MatHeaderRowDef,
-    MatHeaderCellDef,
-    MatCellDef,
-    MatRowDef,
-    MatInput,
-    MatLabel,
-    MatFormField,
-    DatePipe,
-    MatButton,
-    PaginatorComponent,
-    CurrencyComponent,
-    MatIcon,
-    MatMenu,
-    MatMenuItem,
-    MatMenuTrigger,
-    TranslatePipe,
-    MatCard,
-    MatCardHeader
-  ],
-  templateUrl: './money-transaction-list.component.html',
-  styleUrl: './money-transaction-list.component.scss'
+    selector: 'app-moneyTransaction-list',
+    imports: [
+        MatTable,
+        MatColumnDef,
+        MatHeaderCell,
+        MatCell,
+        MatHeaderRow,
+        MatRow,
+        MatHeaderRowDef,
+        MatHeaderCellDef,
+        MatCellDef,
+        MatRowDef,
+        MatInput,
+        MatLabel,
+        MatFormField,
+        DatePipe,
+        MatButton,
+        PaginatorComponent,
+        CurrencyComponent,
+        MatIcon,
+        MatMenu,
+        MatMenuItem,
+        MatMenuTrigger,
+        TranslatePipe,
+        MatCard,
+        MatCardHeader
+    ],
+    templateUrl: './money-transaction-list.component.html',
+    styleUrl: './money-transaction-list.component.scss'
 })
 export class MoneyTransactionListComponent implements OnInit {
   displayedColumns: string[] = ['timestamp', 'debit-credit', 'counterparty-account-name', 'counterparty-account-number', 'amount', 'group', 'description', 'options'];

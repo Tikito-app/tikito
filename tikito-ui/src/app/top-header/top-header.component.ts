@@ -7,15 +7,14 @@ import {TranslatePipe} from "@ngx-translate/core";
 import {AdminApi} from "../api/admin-api";
 
 @Component({
-  selector: 'app-top-header',
-  standalone: true,
-  imports: [
-    HeaderItemComponent,
-    NgIf,
-    TranslatePipe,
-  ],
-  templateUrl: './top-header.component.html',
-  styleUrl: './top-header.component.scss'
+    selector: 'app-top-header',
+    imports: [
+        HeaderItemComponent,
+        NgIf,
+        TranslatePipe,
+    ],
+    templateUrl: './top-header.component.html',
+    styleUrl: './top-header.component.scss'
 })
 export class TopHeaderComponent implements OnInit {
   loggedIn: boolean;

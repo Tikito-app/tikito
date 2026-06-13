@@ -28,24 +28,23 @@ import {ExcelService} from "../../service/excel.service";
 import {AssetType} from "../../dto/asset-type";
 
 @Component({
-  selector: 'app-import',
-  standalone: true,
-  imports: [
-    MatFormField,
-    MatLabel,
-    MatOption,
-    MatSelect,
-    ReactiveFormsModule,
-    NgIf,
-    MoneyImportResultComponent,
-    SecurityImportResultComponent,
-    MatButton,
-    SelectColumnsComponent,
-    MatInput,
-    TranslatePipe
-  ],
-  templateUrl: './import.component.html',
-  styleUrl: './import.component.scss'
+    selector: 'app-import',
+    imports: [
+        MatFormField,
+        MatLabel,
+        MatOption,
+        MatSelect,
+        ReactiveFormsModule,
+        NgIf,
+        MoneyImportResultComponent,
+        SecurityImportResultComponent,
+        MatButton,
+        SelectColumnsComponent,
+        MatInput,
+        TranslatePipe
+    ],
+    templateUrl: './import.component.html',
+    styleUrl: './import.component.scss'
 })
 export class ImportComponent implements OnInit {
   accounts: Account[];

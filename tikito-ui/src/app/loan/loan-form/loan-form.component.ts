@@ -28,31 +28,30 @@ import {DialogService} from "../../service/dialog.service";
 import {DateRange} from "../../dto/date-range";
 
 @Component({
-  selector: 'app-loan-form',
-  standalone: true,
-  imports: [
-    FormsModule,
-    MatButton,
-    MatCard,
-    MatCardContent,
-    MatCardHeader,
-    MatCardTitle,
-    MatFabButton,
-    MatFormField,
-    MatIcon,
-    MatInput,
-    MatLabel,
-    NgIf,
-    ReactiveFormsModule,
-    LoanPartListComponent,
-    MatOption,
-    MatSelect,
-    TranslatePipe,
-    MatError
-  ],
-  providers: [provideNativeDateAdapter()],
-  templateUrl: './loan-form.component.html',
-  styleUrl: './loan-form.component.scss'
+    selector: 'app-loan-form',
+    imports: [
+        FormsModule,
+        MatButton,
+        MatCard,
+        MatCardContent,
+        MatCardHeader,
+        MatCardTitle,
+        MatFabButton,
+        MatFormField,
+        MatIcon,
+        MatInput,
+        MatLabel,
+        NgIf,
+        ReactiveFormsModule,
+        LoanPartListComponent,
+        MatOption,
+        MatSelect,
+        TranslatePipe,
+        MatError
+    ],
+    providers: [provideNativeDateAdapter()],
+    templateUrl: './loan-form.component.html',
+    styleUrl: './loan-form.component.scss'
 })
 export class LoanFormComponent implements OnInit {
   form: FormGroup;

@@ -5,16 +5,15 @@ import {TranslatePipe} from "@ngx-translate/core";
 import {ImportExportSettings} from "../../dto/import-export-settings";
 
 @Component({
-  selector: 'app-admin-import-export-setting',
-  standalone: true,
-  imports: [
-    FormsModule,
-    MatCheckbox,
-    ReactiveFormsModule,
-    TranslatePipe
-  ],
-  templateUrl: './admin-import-export-setting.component.html',
-  styleUrl: './admin-import-export-setting.component.scss'
+    selector: 'app-admin-import-export-setting',
+    imports: [
+        FormsModule,
+        MatCheckbox,
+        ReactiveFormsModule,
+        TranslatePipe
+    ],
+    templateUrl: './admin-import-export-setting.component.html',
+    styleUrl: './admin-import-export-setting.component.scss'
 })
 export class AdminImportExportSettingComponent {
   accountsDisabled: boolean = false;

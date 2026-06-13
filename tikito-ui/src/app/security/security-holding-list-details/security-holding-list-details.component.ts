@@ -15,21 +15,20 @@ import {SecurityHoldingFilter} from "../../dto/security/security-holding-filter"
 import {PercentageComponent} from "../../components/percentage/percentage.component";
 
 @Component({
-  selector: 'app-security-holding-list-details',
-  standalone: true,
-  imports: [
-    MatIcon,
-    MatDivider,
-    MatList,
-    MatListItem,
-    MatButton,
-    SecurityHoldingGraphComponent,
-    CurrencyComponent,
-    PercentageComponent,
-    TranslatePipe
-  ],
-  templateUrl: './security-holding-list-details.component.html',
-  styleUrl: './security-holding-list-details.component.scss'
+    selector: 'app-security-holding-list-details',
+    imports: [
+        MatIcon,
+        MatDivider,
+        MatList,
+        MatListItem,
+        MatButton,
+        SecurityHoldingGraphComponent,
+        CurrencyComponent,
+        PercentageComponent,
+        TranslatePipe
+    ],
+    templateUrl: './security-holding-list-details.component.html',
+    styleUrl: './security-holding-list-details.component.scss'
 })
 export class SecurityHoldingListDetailsComponent implements OnChanges {
 

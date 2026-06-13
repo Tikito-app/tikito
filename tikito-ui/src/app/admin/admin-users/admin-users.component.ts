@@ -31,37 +31,36 @@ import {MatInput} from "@angular/material/input";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-admin-users',
-  standalone: true,
-  imports: [
-    MatCell,
-    MatCellDef,
-    MatColumnDef,
-    MatHeaderCell,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatRow,
-    MatRowDef,
-    MatTable,
-    NgIf,
-    PaginatorComponent,
-    MatHeaderCellDef,
-    MatIcon,
-    MatButton,
-    MatCard,
-    MatCardContent,
-    MatCardHeader,
-    MatCardTitle,
-    MatError,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    MatSuffix,
-    ReactiveFormsModule,
-    TranslatePipe
-  ],
-  templateUrl: './admin-users.component.html',
-  styleUrl: './admin-users.component.scss'
+    selector: 'app-admin-users',
+    imports: [
+        MatCell,
+        MatCellDef,
+        MatColumnDef,
+        MatHeaderCell,
+        MatHeaderRow,
+        MatHeaderRowDef,
+        MatRow,
+        MatRowDef,
+        MatTable,
+        NgIf,
+        PaginatorComponent,
+        MatHeaderCellDef,
+        MatIcon,
+        MatButton,
+        MatCard,
+        MatCardContent,
+        MatCardHeader,
+        MatCardTitle,
+        MatError,
+        MatFormField,
+        MatInput,
+        MatLabel,
+        MatSuffix,
+        ReactiveFormsModule,
+        TranslatePipe
+    ],
+    templateUrl: './admin-users.component.html',
+    styleUrl: './admin-users.component.scss'
 })
 export class AdminUsersComponent implements OnInit {
   displayedColumns: string[] = ['name'];

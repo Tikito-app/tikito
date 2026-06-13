@@ -12,21 +12,20 @@ import {AuthService} from "../../service/auth.service";
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-money-transaction-group-qualifier-form',
-  standalone: true,
-  imports: [
-    MatFormField,
-    MatSelect,
-    MatOption,
-    MatIcon,
-    ReactiveFormsModule,
-    MatLabel,
-    MatInput,
-    MatButton,
-    TranslatePipe
-  ],
-  templateUrl: './money-transaction-group-qualifier-form.component.html',
-  styleUrl: './money-transaction-group-qualifier-form.component.scss'
+    selector: 'app-money-transaction-group-qualifier-form',
+    imports: [
+        MatFormField,
+        MatSelect,
+        MatOption,
+        MatIcon,
+        ReactiveFormsModule,
+        MatLabel,
+        MatInput,
+        MatButton,
+        TranslatePipe
+    ],
+    templateUrl: './money-transaction-group-qualifier-form.component.html',
+    styleUrl: './money-transaction-group-qualifier-form.component.scss'
 })
 export class MoneyTransactionGroupQualifierFormComponent implements OnInit {
   form: FormGroup;

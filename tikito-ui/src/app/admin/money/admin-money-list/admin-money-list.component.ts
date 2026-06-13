@@ -30,34 +30,33 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
 import {AccountApi} from "../../../api/account-api";
 
 @Component({
-  selector: 'app-admin-money-list',
-  standalone: true,
-  imports: [
-    MatButton,
-    MatCell,
-    MatCellDef,
-    MatColumnDef,
-    MatFormField,
-    MatHeaderCell,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatIcon,
-    MatInput,
-    MatLabel,
-    MatMenu,
-    MatMenuItem,
-    MatRow,
-    MatRowDef,
-    MatTable,
-    PaginatorComponent,
-    MatMenuTrigger,
-    MatHeaderCellDef,
-    TranslatePipe,
-    MatCard,
-    MatCardHeader
-  ],
-  templateUrl: './admin-money-list.component.html',
-  styleUrl: './admin-money-list.component.scss'
+    selector: 'app-admin-money-list',
+    imports: [
+        MatButton,
+        MatCell,
+        MatCellDef,
+        MatColumnDef,
+        MatFormField,
+        MatHeaderCell,
+        MatHeaderRow,
+        MatHeaderRowDef,
+        MatIcon,
+        MatInput,
+        MatLabel,
+        MatMenu,
+        MatMenuItem,
+        MatRow,
+        MatRowDef,
+        MatTable,
+        PaginatorComponent,
+        MatMenuTrigger,
+        MatHeaderCellDef,
+        TranslatePipe,
+        MatCard,
+        MatCardHeader
+    ],
+    templateUrl: './admin-money-list.component.html',
+    styleUrl: './admin-money-list.component.scss'
 })
 export class AdminMoneyListComponent implements AfterViewInit {
   displayedColumns: string[] = ['name', 'currency', 'options'];

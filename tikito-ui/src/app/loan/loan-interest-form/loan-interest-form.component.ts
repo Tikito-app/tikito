@@ -14,28 +14,27 @@ import {NgIf} from "@angular/common";
 import {DialogService} from "../../service/dialog.service";
 
 @Component({
-  selector: 'app-loan-interest-form',
-  standalone: true,
-  imports: [
-    FormsModule,
-    MatButton,
-    MatFormField,
-    MatIcon,
-    MatInput,
-    MatLabel,
-    ReactiveFormsModule,
-    MatDatepicker,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatHint,
-    MatSuffix,
-    NgIf,
-    TranslatePipe,
-    MatError
-  ],
-  providers: [provideNativeDateAdapter()],
-  templateUrl: './loan-interest-form.component.html',
-  styleUrl: './loan-interest-form.component.scss'
+    selector: 'app-loan-interest-form',
+    imports: [
+        FormsModule,
+        MatButton,
+        MatFormField,
+        MatIcon,
+        MatInput,
+        MatLabel,
+        ReactiveFormsModule,
+        MatDatepicker,
+        MatDatepickerInput,
+        MatDatepickerToggle,
+        MatHint,
+        MatSuffix,
+        NgIf,
+        TranslatePipe,
+        MatError
+    ],
+    providers: [provideNativeDateAdapter()],
+    templateUrl: './loan-interest-form.component.html',
+    styleUrl: './loan-interest-form.component.scss'
 })
 export class LoanInterestFormComponent implements OnInit {
   form: FormGroup;

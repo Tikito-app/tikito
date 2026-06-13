@@ -17,30 +17,29 @@ import {CacheService} from "../service/cache-service";
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-initial-installation',
-  standalone: true,
-  imports: [
-    FormsModule,
-    MatCardContent,
-    MatFormField,
-    MatIcon,
-    MatInput,
-    MatLabel,
-    ReactiveFormsModule,
-    MatButton,
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatError,
-    MatSuffix,
-    NgIf,
-    TranslatePipe
-  ],
-  providers: [
-    TranslatePipe
-  ],
-  templateUrl: './initial-installation.component.html',
-  styleUrl: './initial-installation.component.scss'
+    selector: 'app-initial-installation',
+    imports: [
+        FormsModule,
+        MatCardContent,
+        MatFormField,
+        MatIcon,
+        MatInput,
+        MatLabel,
+        ReactiveFormsModule,
+        MatButton,
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatError,
+        MatSuffix,
+        NgIf,
+        TranslatePipe
+    ],
+    providers: [
+        TranslatePipe
+    ],
+    templateUrl: './initial-installation.component.html',
+    styleUrl: './initial-installation.component.scss'
 })
 export class InitialInstallationComponent implements OnInit {
 

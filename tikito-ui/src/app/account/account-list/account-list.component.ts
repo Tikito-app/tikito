@@ -27,33 +27,32 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
-  selector: 'app-account-list',
-  standalone: true,
-  imports: [
-    MatTable,
-    MatColumnDef,
-    MatHeaderCell,
-    MatCell,
-    MatHeaderRow,
-    MatRow,
-    MatHeaderRowDef,
-    MatHeaderCellDef,
-    MatCellDef,
-    MatRowDef,
-    MatIcon,
-    MatFabButton,
-    NgIf,
-    PaginatorComponent,
-    MatButton,
-    MatMenu,
-    MatMenuItem,
-    MatMenuTrigger,
-    MatCard,
-    MatCardContent,
-    TranslatePipe
-  ],
-  templateUrl: './account-list.component.html',
-  styleUrl: './account-list.component.scss'
+    selector: 'app-account-list',
+    imports: [
+        MatTable,
+        MatColumnDef,
+        MatHeaderCell,
+        MatCell,
+        MatHeaderRow,
+        MatRow,
+        MatHeaderRowDef,
+        MatHeaderCellDef,
+        MatCellDef,
+        MatRowDef,
+        MatIcon,
+        MatFabButton,
+        NgIf,
+        PaginatorComponent,
+        MatButton,
+        MatMenu,
+        MatMenuItem,
+        MatMenuTrigger,
+        MatCard,
+        MatCardContent,
+        TranslatePipe
+    ],
+    templateUrl: './account-list.component.html',
+    styleUrl: './account-list.component.scss'
 })
 export class AccountListComponent implements AfterViewInit {
   displayedColumns: string[] = ['name', 'account-number', 'currency', 'options'];

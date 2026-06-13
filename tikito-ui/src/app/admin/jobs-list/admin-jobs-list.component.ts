@@ -13,19 +13,18 @@ import {AuthService} from "../../service/auth.service";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-jobs-list',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatCardModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    TranslatePipe
-  ],
-  templateUrl: './admin-jobs-list.component.html',
-  styleUrl: './admin-jobs-list.component.scss'
+    selector: 'app-jobs-list',
+    imports: [
+        CommonModule,
+        MatTableModule,
+        MatCardModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        TranslatePipe
+    ],
+    templateUrl: './admin-jobs-list.component.html',
+    styleUrl: './admin-jobs-list.component.scss'
 })
 export class AdminJobsListComponent implements OnInit {
   jobs: Job[] = [];

@@ -30,36 +30,35 @@ import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
-  selector: 'app-admin-security-list',
-  standalone: true,
-  imports: [
-    MatButton,
-    MatCell,
-    MatCellDef,
-    MatColumnDef,
-    MatHeaderCell,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatIcon,
-    MatMenu,
-    MatMenuItem,
-    MatRow,
-    MatRowDef,
-    MatTable,
-    NgIf,
-    PaginatorComponent,
-    MatMenuTrigger,
-    MatHeaderCellDef,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    TranslatePipe,
-    TranslatePipe,
-    MatCard,
-    MatCardHeader
-  ],
-  templateUrl: './admin-security-list.component.html',
-  styleUrl: './admin-security-list.component.scss'
+    selector: 'app-admin-security-list',
+    imports: [
+        MatButton,
+        MatCell,
+        MatCellDef,
+        MatColumnDef,
+        MatHeaderCell,
+        MatHeaderRow,
+        MatHeaderRowDef,
+        MatIcon,
+        MatMenu,
+        MatMenuItem,
+        MatRow,
+        MatRowDef,
+        MatTable,
+        NgIf,
+        PaginatorComponent,
+        MatMenuTrigger,
+        MatHeaderCellDef,
+        MatFormField,
+        MatInput,
+        MatLabel,
+        TranslatePipe,
+        TranslatePipe,
+        MatCard,
+        MatCardHeader
+    ],
+    templateUrl: './admin-security-list.component.html',
+    styleUrl: './admin-security-list.component.scss'
 })
 export class AdminSecurityListComponent implements AfterViewInit {
   displayedColumns: string[] = ['name', 'currency', 'security-type', 'sector', 'industry', 'exchange', 'options'];

@@ -1,11 +1,10 @@
 import {Component, Input} from '@angular/core';
 
 @Component({
-  selector: 'app-percentage',
-  standalone: true,
-  imports: [],
-  templateUrl: './percentage.component.html',
-  styleUrl: './percentage.component.scss'
+    selector: 'app-percentage',
+    imports: [],
+    templateUrl: './percentage.component.html',
+    styleUrl: './percentage.component.scss'
 })
 export class PercentageComponent {
   @Input()

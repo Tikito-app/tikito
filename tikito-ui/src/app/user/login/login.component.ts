@@ -22,21 +22,20 @@ import {EnvService} from "../../service/env.service";
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
-  imports: [CommonModule, MatCardModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-    MatListModule,
-    MatOptionModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    TranslatePipe],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    imports: [CommonModule, MatCardModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatIconModule,
+        MatButtonModule,
+        MatListModule,
+        MatOptionModule,
+        MatSelectModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        TranslatePipe]
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;

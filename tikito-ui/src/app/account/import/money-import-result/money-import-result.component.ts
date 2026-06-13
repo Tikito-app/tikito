@@ -24,31 +24,30 @@ import {TranslatePipe} from "@ngx-translate/core";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
-  selector: 'app-money-import-result',
-  standalone: true,
-  imports: [
-    MatCell,
-    MatCellDef,
-    MatColumnDef,
-    MatHeaderCell,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatRow,
-    MatRowDef,
-    MatTable,
-    PaginatorComponent,
-    MatHeaderCellDef,
-    CurrencyComponent,
-    DatePipe,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    TranslatePipe,
-    MatCard,
-    MatCardHeader
-  ],
-  templateUrl: './money-import-result.component.html',
-  styleUrl: './money-import-result.component.scss'
+    selector: 'app-money-import-result',
+    imports: [
+        MatCell,
+        MatCellDef,
+        MatColumnDef,
+        MatHeaderCell,
+        MatHeaderRow,
+        MatHeaderRowDef,
+        MatRow,
+        MatRowDef,
+        MatTable,
+        PaginatorComponent,
+        MatHeaderCellDef,
+        CurrencyComponent,
+        DatePipe,
+        MatFormField,
+        MatInput,
+        MatLabel,
+        TranslatePipe,
+        MatCard,
+        MatCardHeader
+    ],
+    templateUrl: './money-import-result.component.html',
+    styleUrl: './money-import-result.component.scss'
 })
 export class MoneyImportResultComponent implements OnInit {
   @Input()

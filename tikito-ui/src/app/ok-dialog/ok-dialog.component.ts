@@ -11,21 +11,20 @@ import {MatButtonModule} from '@angular/material/button';
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-ok-dialog',
-  standalone: true,
-  imports: [
-    MatMenuModule,
-    MatIconModule,
-    CommonModule,
-    MatBadgeModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDialogModule,
-    TranslatePipe
-  ],
-  templateUrl: './ok-dialog.component.html',
-  styleUrls: ['./ok-dialog.component.scss']
+    selector: 'app-ok-dialog',
+    imports: [
+        MatMenuModule,
+        MatIconModule,
+        CommonModule,
+        MatBadgeModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatDialogModule,
+        TranslatePipe
+    ],
+    templateUrl: './ok-dialog.component.html',
+    styleUrls: ['./ok-dialog.component.scss']
 })
 export class OkDialogComponent {
 

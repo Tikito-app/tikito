@@ -3,13 +3,12 @@ import MoneyTransactionGroupQualifier from "../../dto/money/money-transaction-gr
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-money-transaction-group-qualifier-list-item',
-  standalone: true,
-  imports: [
-    TranslatePipe
-  ],
-  templateUrl: './money-transaction-group-qualifier-list-item.component.html',
-  styleUrl: './money-transaction-group-qualifier-list-item.component.scss'
+    selector: 'app-money-transaction-group-qualifier-list-item',
+    imports: [
+        TranslatePipe
+    ],
+    templateUrl: './money-transaction-group-qualifier-list-item.component.html',
+    styleUrl: './money-transaction-group-qualifier-list-item.component.scss'
 })
 export class MoneyTransactionGroupQualifierListItemComponent {
   @Input()

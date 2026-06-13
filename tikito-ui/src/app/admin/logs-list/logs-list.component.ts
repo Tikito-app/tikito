@@ -13,19 +13,18 @@ import {Router} from "@angular/router";
 import {AuthService} from "../../service/auth.service";
 
 @Component({
-  selector: 'app-logs-list',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatCardModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    TranslatePipe
-  ],
-  templateUrl: './logs-list.component.html',
-  styleUrl: './logs-list.component.scss'
+    selector: 'app-logs-list',
+    imports: [
+        CommonModule,
+        MatTableModule,
+        MatCardModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        TranslatePipe
+    ],
+    templateUrl: './logs-list.component.html',
+    styleUrl: './logs-list.component.scss'
 })
 export class LogsListComponent implements OnInit {
   logs: Log[] = [];

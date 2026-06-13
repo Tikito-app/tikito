@@ -26,32 +26,31 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
 import {AssetType} from "../../../dto/asset-type";
 
 @Component({
-  selector: 'app-select-columns',
-  standalone: true,
-  imports: [
-    MatOption,
-    MatSelect,
-    ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatCell,
-    MatCellDef,
-    MatColumnDef,
-    MatHeaderCell,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatRow,
-    MatRowDef,
-    MatTable,
-    NgIf,
-    MatHeaderCellDef,
-    MatInput,
-    TranslatePipe,
-    MatCard,
-    MatCardHeader
-  ],
-  templateUrl: './select-columns.component.html',
-  styleUrl: './select-columns.component.scss'
+    selector: 'app-select-columns',
+    imports: [
+        MatOption,
+        MatSelect,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatCell,
+        MatCellDef,
+        MatColumnDef,
+        MatHeaderCell,
+        MatHeaderRow,
+        MatHeaderRowDef,
+        MatRow,
+        MatRowDef,
+        MatTable,
+        NgIf,
+        MatHeaderCellDef,
+        MatInput,
+        TranslatePipe,
+        MatCard,
+        MatCardHeader
+    ],
+    templateUrl: './select-columns.component.html',
+    styleUrl: './select-columns.component.scss'
 })
 export class SelectColumnsComponent implements OnInit {
 

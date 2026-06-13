@@ -2,11 +2,10 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {LoanInterest} from "../../dto/loan-interest";
 
 @Component({
-  selector: 'app-loan-interest-list-item',
-  standalone: true,
-  imports: [],
-  templateUrl: './loan-interest-list-item.component.html',
-  styleUrl: './loan-interest-list-item.component.scss'
+    selector: 'app-loan-interest-list-item',
+    imports: [],
+    templateUrl: './loan-interest-list-item.component.html',
+    styleUrl: './loan-interest-list-item.component.scss'
 })
 export class LoanInterestListItemComponent {
 

@@ -14,17 +14,16 @@ import {Util} from "../../util";
 import {TranslateService} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-money-graph',
-  standalone: true,
-  imports: [
-    NgxEchartsDirective,
-    EChartModule
-  ],
-  templateUrl: './money-graph.component.html',
-  styleUrl: './money-graph.component.scss',
-  providers: [
-    provideEchartsCore({echarts}),
-  ]
+    selector: 'app-money-graph',
+    imports: [
+        NgxEchartsDirective,
+        EChartModule
+    ],
+    templateUrl: './money-graph.component.html',
+    styleUrl: './money-graph.component.scss',
+    providers: [
+        provideEchartsCore({ echarts }),
+    ]
 })
 export class MoneyGraphComponent implements OnInit {
   @Input()

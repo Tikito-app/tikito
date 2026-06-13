@@ -11,17 +11,16 @@ import {Router} from "@angular/router";
 import {AdminImportExportSettingComponent} from "../admin-import-export-setting/admin-import-export-setting.component";
 
 @Component({
-  selector: 'app-admin-import',
-  standalone: true,
-  imports: [
-    MatButton,
-    NgIf,
-    MatIcon,
-    AdminImportExportSettingComponent,
-    TranslatePipe
-  ],
-  templateUrl: './admin-import.component.html',
-  styleUrl: './admin-import.component.scss'
+    selector: 'app-admin-import',
+    imports: [
+        MatButton,
+        NgIf,
+        MatIcon,
+        AdminImportExportSettingComponent,
+        TranslatePipe
+    ],
+    templateUrl: './admin-import.component.html',
+    styleUrl: './admin-import.component.scss'
 })
 export class AdminImportComponent {
   file: File;

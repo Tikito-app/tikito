@@ -19,21 +19,20 @@ import {HttpRequestMethod} from "../../dto/http-request-method";
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-register',
-  standalone: true,
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss'],
-  imports: [CommonModule, MatCardModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-    MatListModule,
-    MatOptionModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    TranslatePipe]
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss'],
+    imports: [CommonModule, MatCardModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatIconModule,
+        MatButtonModule,
+        MatListModule,
+        MatOptionModule,
+        MatSelectModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        TranslatePipe]
 })
 export class RegisterComponent implements OnInit {
   showPasswordFlag = false;

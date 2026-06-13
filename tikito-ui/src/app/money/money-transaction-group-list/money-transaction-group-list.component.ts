@@ -30,36 +30,35 @@ import {Util} from "../../util";
 import {CurrencyComponent} from "../../components/currency/currency.component";
 
 @Component({
-  selector: 'app-moneyTransactionGroup-list',
-  standalone: true,
-  imports: [
-    MatTable,
-    MatColumnDef,
-    MatHeaderCell,
-    MatCell,
-    MatHeaderRow,
-    MatRow,
-    MatHeaderRowDef,
-    MatHeaderCellDef,
-    MatCellDef,
-    MatRowDef,
-    MatIcon,
-    MatFabButton,
-    NgIf,
-    MatFormField,
-    MatInput,
-    MatNoDataRow,
-    MatLabel,
-    PaginatorComponent,
-    TranslatePipe,
-    MatCard,
-    MatCardHeader,
-    CurrencyComponent,
-    MatButton
-  ],
-  templateUrl: './money-transaction-group-list.component.html',
-  styleUrl: './money-transaction-group-list.component.scss',
-  providers: [TranslatePipe]
+    selector: 'app-moneyTransactionGroup-list',
+    imports: [
+        MatTable,
+        MatColumnDef,
+        MatHeaderCell,
+        MatCell,
+        MatHeaderRow,
+        MatRow,
+        MatHeaderRowDef,
+        MatHeaderCellDef,
+        MatCellDef,
+        MatRowDef,
+        MatIcon,
+        MatFabButton,
+        NgIf,
+        MatFormField,
+        MatInput,
+        MatNoDataRow,
+        MatLabel,
+        PaginatorComponent,
+        TranslatePipe,
+        MatCard,
+        MatCardHeader,
+        CurrencyComponent,
+        MatButton
+    ],
+    templateUrl: './money-transaction-group-list.component.html',
+    styleUrl: './money-transaction-group-list.component.scss',
+    providers: [TranslatePipe]
 })
 export class MoneyTransactionGroupListComponent implements AfterViewInit {
   displayedColumns: string[] = ['name', 'budgeted'];

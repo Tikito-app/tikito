@@ -17,7 +17,8 @@ import {PopoverService} from "./popover.service";
 import {AuthService} from "../../service/auth.service";
 
 @Directive({
-  selector: "[popoverTrigger]"
+    selector: "[popoverTrigger]",
+    standalone: false
 })
 export class PopoverDirective implements OnDestroy, OnInit {
   @Input()

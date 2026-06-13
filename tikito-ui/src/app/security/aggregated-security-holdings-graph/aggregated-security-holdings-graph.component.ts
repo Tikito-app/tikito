@@ -11,16 +11,15 @@ import AggregatedHistoricalHoldingsValue from "../../dto/security/aggregated-his
 import {AuthService} from "../../service/auth.service";
 
 @Component({
-  selector: 'app-aggregated-security-holdings-graph',
-  standalone: true,
-  imports: [
-    NgxEchartsDirective
-  ],
-  templateUrl: './aggregated-security-holdings-graph.component.html',
-  styleUrl: './aggregated-security-holdings-graph.component.scss',
-  providers: [
-    provideEchartsCore({echarts}),
-  ]
+    selector: 'app-aggregated-security-holdings-graph',
+    imports: [
+        NgxEchartsDirective
+    ],
+    templateUrl: './aggregated-security-holdings-graph.component.html',
+    styleUrl: './aggregated-security-holdings-graph.component.scss',
+    providers: [
+        provideEchartsCore({ echarts }),
+    ]
 })
 export class AggregatedSecurityHoldingsGraphComponent implements OnInit {
 

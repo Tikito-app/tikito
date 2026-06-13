@@ -5,16 +5,15 @@ import {PopoverModule} from "./popover.module";
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-popover',
-  standalone: true,
-  imports: [
-    MatIcon,
-    MatSuffix,
-    PopoverModule,
-    TranslatePipe
-  ],
-  templateUrl: './popover.component.html',
-  styleUrl: './popover.component.scss'
+    selector: 'app-popover',
+    imports: [
+        MatIcon,
+        MatSuffix,
+        PopoverModule,
+        TranslatePipe
+    ],
+    templateUrl: './popover.component.html',
+    styleUrl: './popover.component.scss'
 })
 export class PopoverComponent {
   @Input()

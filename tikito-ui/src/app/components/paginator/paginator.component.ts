@@ -3,13 +3,12 @@ import {MatPaginator} from "@angular/material/paginator";
 import {Util} from "../../util";
 
 @Component({
-  selector: 'app-paginator',
-  standalone: true,
-  imports: [
-    MatPaginator
-  ],
-  templateUrl: './paginator.component.html',
-  styleUrl: './paginator.component.scss'
+    selector: 'app-paginator',
+    imports: [
+        MatPaginator
+    ],
+    templateUrl: './paginator.component.html',
+    styleUrl: './paginator.component.scss'
 })
 export class PaginatorComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;

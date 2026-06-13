@@ -16,26 +16,25 @@ import {CacheService} from "../../../service/cache-service";
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-admin-security-form',
-  standalone: true,
-  imports: [
-    MatButton,
-    MatCard,
-    MatCardContent,
-    MatCardHeader,
-    MatCardTitle,
-    MatFormField,
-    MatIcon,
-    MatInput,
-    MatLabel,
-    MatOption,
-    MatSelect,
-    NgIf,
-    ReactiveFormsModule,
-    TranslatePipe
-  ],
-  templateUrl: './admin-security-form.component.html',
-  styleUrl: './admin-security-form.component.scss'
+    selector: 'app-admin-security-form',
+    imports: [
+        MatButton,
+        MatCard,
+        MatCardContent,
+        MatCardHeader,
+        MatCardTitle,
+        MatFormField,
+        MatIcon,
+        MatInput,
+        MatLabel,
+        MatOption,
+        MatSelect,
+        NgIf,
+        ReactiveFormsModule,
+        TranslatePipe
+    ],
+    templateUrl: './admin-security-form.component.html',
+    styleUrl: './admin-security-form.component.scss'
 })
 export class AdminSecurityFormComponent implements OnInit {
   form: FormGroup;

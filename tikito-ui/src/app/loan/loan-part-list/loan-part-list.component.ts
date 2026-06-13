@@ -24,27 +24,26 @@ import {LoanPart} from "../../dto/loan-part";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
-  selector: 'app-loan-part-list',
-  standalone: true,
-  imports: [
-    MatCell,
-    MatCellDef,
-    MatColumnDef,
-    MatHeaderCell,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatRow,
-    MatRowDef,
-    MatTable,
-    NgIf,
-    PaginatorComponent,
-    MatHeaderCellDef,
-    TranslatePipe,
-    MatCard,
-    MatCardHeader
-  ],
-  templateUrl: './loan-part-list.component.html',
-  styleUrl: './loan-part-list.component.scss'
+    selector: 'app-loan-part-list',
+    imports: [
+        MatCell,
+        MatCellDef,
+        MatColumnDef,
+        MatHeaderCell,
+        MatHeaderRow,
+        MatHeaderRowDef,
+        MatRow,
+        MatRowDef,
+        MatTable,
+        NgIf,
+        PaginatorComponent,
+        MatHeaderCellDef,
+        TranslatePipe,
+        MatCard,
+        MatCardHeader
+    ],
+    templateUrl: './loan-part-list.component.html',
+    styleUrl: './loan-part-list.component.scss'
 })
 export class LoanPartListComponent implements AfterViewInit {
   displayedColumns: string[] = ['name'];

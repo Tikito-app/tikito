@@ -7,19 +7,18 @@ import {NgIf} from "@angular/common";
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-overview-loan',
-  standalone: true,
-  imports: [
-    MatCard,
-    MatCardContent,
-    MatCardHeader,
-    MatCardTitle,
-    CurrencyComponent,
-    NgIf,
-    TranslatePipe
-  ],
-  templateUrl: './overview-loan.component.html',
-  styleUrl: './overview-loan.component.scss'
+    selector: 'app-overview-loan',
+    imports: [
+        MatCard,
+        MatCardContent,
+        MatCardHeader,
+        MatCardTitle,
+        CurrencyComponent,
+        NgIf,
+        TranslatePipe
+    ],
+    templateUrl: './overview-loan.component.html',
+    styleUrl: './overview-loan.component.scss'
 })
 export class OverviewLoanComponent {
   @Input()

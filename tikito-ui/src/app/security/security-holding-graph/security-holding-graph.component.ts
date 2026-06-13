@@ -26,16 +26,15 @@ class Serie {
 }
 
 @Component({
-  selector: 'app-security-holding-graph',
-  standalone: true,
-  imports: [
-    NgxEchartsDirective
-  ],
-  templateUrl: './security-holding-graph.component.html',
-  styleUrl: './security-holding-graph.component.scss',
-  providers: [
-    provideEchartsCore({echarts}),
-  ]
+    selector: 'app-security-holding-graph',
+    imports: [
+        NgxEchartsDirective
+    ],
+    templateUrl: './security-holding-graph.component.html',
+    styleUrl: './security-holding-graph.component.scss',
+    providers: [
+        provideEchartsCore({ echarts }),
+    ]
 })
 export class SecurityHoldingGraphComponent implements OnInit {
 

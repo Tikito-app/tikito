@@ -28,33 +28,32 @@ import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
-  selector: 'app-admin-security-isin-list',
-  standalone: true,
-  imports: [
-    MatButton,
-    MatCell,
-    MatCellDef,
-    MatColumnDef,
-    MatHeaderCell,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatIcon,
-    MatMenu,
-    MatMenuItem,
-    MatRow,
-    MatRowDef,
-    MatTable,
-    NgIf,
-    PaginatorComponent,
-    MatMenuTrigger,
-    MatHeaderCellDef,
-    TranslatePipe,
-    TranslatePipe,
-    MatCard,
-    MatCardHeader
-  ],
-  templateUrl: './admin-security-isin-list.component.html',
-  styleUrl: './admin-security-isin-list.component.scss'
+    selector: 'app-admin-security-isin-list',
+    imports: [
+        MatButton,
+        MatCell,
+        MatCellDef,
+        MatColumnDef,
+        MatHeaderCell,
+        MatHeaderRow,
+        MatHeaderRowDef,
+        MatIcon,
+        MatMenu,
+        MatMenuItem,
+        MatRow,
+        MatRowDef,
+        MatTable,
+        NgIf,
+        PaginatorComponent,
+        MatMenuTrigger,
+        MatHeaderCellDef,
+        TranslatePipe,
+        TranslatePipe,
+        MatCard,
+        MatCardHeader
+    ],
+    templateUrl: './admin-security-isin-list.component.html',
+    styleUrl: './admin-security-isin-list.component.scss'
 })
 export class AdminSecurityIsinListComponent implements AfterViewInit {
   displayedColumns: string[] = ['isin', 'symbol', 'valid-from', 'valid-to'];

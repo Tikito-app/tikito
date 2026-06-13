@@ -5,13 +5,12 @@ import {SecurityType} from "../../dto/security/security-type";
 import {Security} from "../../dto/security/security";
 
 @Component({
-  selector: 'app-currency',
-  standalone: true,
-  imports: [
-    CurrencyPipe,
-  ],
-  templateUrl: './currency.component.html',
-  styleUrl: './currency.component.scss'
+    selector: 'app-currency',
+    imports: [
+        CurrencyPipe,
+    ],
+    templateUrl: './currency.component.html',
+    styleUrl: './currency.component.scss'
 })
 export class CurrencyComponent {
   @Input()

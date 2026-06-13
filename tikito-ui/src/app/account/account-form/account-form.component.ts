@@ -15,26 +15,25 @@ import {AuthService} from "../../service/auth.service";
 import {CacheService} from "../../service/cache-service";
 
 @Component({
-  selector: 'app-account-form',
-  standalone: true,
-  imports: [
-    MatCardModule,
-    MatCard,
-    MatCardHeader,
-    MatCardContent,
-    ReactiveFormsModule,
-    MatLabel,
-    MatFormField,
-    NgIf,
-    MatInput,
-    MatButton,
-    MatOption,
-    MatSelect,
-    TranslatePipe,
-    MatError
-  ],
-  templateUrl: './account-form.component.html',
-  styleUrl: './account-form.component.scss'
+    selector: 'app-account-form',
+    imports: [
+        MatCardModule,
+        MatCard,
+        MatCardHeader,
+        MatCardContent,
+        ReactiveFormsModule,
+        MatLabel,
+        MatFormField,
+        NgIf,
+        MatInput,
+        MatButton,
+        MatOption,
+        MatSelect,
+        TranslatePipe,
+        MatError
+    ],
+    templateUrl: './account-form.component.html',
+    styleUrl: './account-form.component.scss'
 })
 export class AccountFormComponent implements OnInit {
   form: FormGroup;

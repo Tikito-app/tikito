@@ -5,15 +5,14 @@ import {MatIcon} from "@angular/material/icon";
 import {NgIf} from "@angular/common";
 
 @Component({
-  selector: 'app-header-item',
-  standalone: true,
-  imports: [
-    MatAnchor,
-    MatIcon,
-    NgIf
-  ],
-  templateUrl: './header-item.component.html',
-  styleUrl: './header-item.component.scss'
+    selector: 'app-header-item',
+    imports: [
+        MatAnchor,
+        MatIcon,
+        NgIf
+    ],
+    templateUrl: './header-item.component.html',
+    styleUrl: './header-item.component.scss'
 })
 export class HeaderItemComponent {
   @Input()

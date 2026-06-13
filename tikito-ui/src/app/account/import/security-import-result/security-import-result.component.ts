@@ -24,32 +24,31 @@ import {MatInput} from "@angular/material/input";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
-  selector: 'app-security-import-result',
-  standalone: true,
-  imports: [
-    CurrencyComponent,
-    DatePipe,
-    MatCell,
-    MatCellDef,
-    MatColumnDef,
-    MatHeaderCell,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatRow,
-    MatRowDef,
-    MatTable,
-    NgIf,
-    PaginatorComponent,
-    MatHeaderCellDef,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    TranslatePipe,
-    MatCard,
-    MatCardHeader
-  ],
-  templateUrl: './security-import-result.component.html',
-  styleUrl: './security-import-result.component.scss'
+    selector: 'app-security-import-result',
+    imports: [
+        CurrencyComponent,
+        DatePipe,
+        MatCell,
+        MatCellDef,
+        MatColumnDef,
+        MatHeaderCell,
+        MatHeaderRow,
+        MatHeaderRowDef,
+        MatRow,
+        MatRowDef,
+        MatTable,
+        NgIf,
+        PaginatorComponent,
+        MatHeaderCellDef,
+        MatFormField,
+        MatInput,
+        MatLabel,
+        TranslatePipe,
+        MatCard,
+        MatCardHeader
+    ],
+    templateUrl: './security-import-result.component.html',
+    styleUrl: './security-import-result.component.scss'
 })
 export class SecurityImportResultComponent implements OnInit {
 

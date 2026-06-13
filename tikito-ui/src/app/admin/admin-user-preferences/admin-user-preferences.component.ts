@@ -18,29 +18,28 @@ import {Router} from "@angular/router";
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-admin-user-preferences',
-  standalone: true,
-  imports: [
-    MatButton,
-    MatCard,
-    MatCardContent,
-    MatCardHeader,
-    MatCardTitle,
-    MatCheckbox,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    MatOption,
-    MatSelect,
-    NgIf,
-    ReactiveFormsModule,
-    MatIcon,
-    TranslatePipe,
-    // TranslatePipe
-  ],
-  templateUrl: './admin-user-preferences.component.html',
-  styleUrl: './admin-user-preferences.component.scss',
-  providers: [provideNativeDateAdapter()]
+    selector: 'app-admin-user-preferences',
+    imports: [
+        MatButton,
+        MatCard,
+        MatCardContent,
+        MatCardHeader,
+        MatCardTitle,
+        MatCheckbox,
+        MatFormField,
+        MatInput,
+        MatLabel,
+        MatOption,
+        MatSelect,
+        NgIf,
+        ReactiveFormsModule,
+        MatIcon,
+        TranslatePipe,
+        // TranslatePipe
+    ],
+    templateUrl: './admin-user-preferences.component.html',
+    styleUrl: './admin-user-preferences.component.scss',
+    providers: [provideNativeDateAdapter()]
 })
 export class AdminUserPreferencesComponent {
   form: FormGroup;
