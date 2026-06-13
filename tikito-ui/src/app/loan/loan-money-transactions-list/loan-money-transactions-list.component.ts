@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {CurrencyComponent} from "../../components/currency/currency.component";
-import {DatePipe, NgIf} from "@angular/common";
+import {DatePipe} from "@angular/common";
 import {
   MatCell,
   MatCellDef,
@@ -17,12 +17,10 @@ import {
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import MoneyTransaction from "../../dto/money/money-transaction";
 import {MatSort} from "@angular/material/sort";
 import {AuthService} from "../../service/auth.service";
-import {DialogService} from "../../service/dialog.service";
-import {TranslateService} from "../../service/translate.service";
 import {MoneyApi} from "../../api/money-api";
 import {Util} from "../../util";
 import {MatCard, MatCardHeader} from "@angular/material/card";
@@ -64,8 +62,6 @@ export class LoanMoneyTransactionsListComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private dialogService: DialogService,
-    private translateService: TranslateService,
     private api: MoneyApi) {
   }
 

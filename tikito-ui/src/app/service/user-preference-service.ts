@@ -1,6 +1,7 @@
 import {Injectable, OnInit} from "@angular/core";
 import {UserApi} from "../api/user-api";
 import {UserPreference} from "../dto/user-preference";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,18 @@ export class UserPreferenceService implements OnInit {
 
   constructor(private userApi: UserApi) {
     UserPreferenceService.userApi = userApi;
-    this.userApi.getPreferences().subscribe(preferences => {
-      UserPreferenceService.preferences = preferences;
-    });
   }
 
   ngOnInit(): void {
+  }
+
+  loadPreferences(): Observable<void> {
+    return new Observable(observer => {
+      this.userApi.getPreferences().subscribe(preferences => {
+        UserPreferenceService.preferences = preferences;
+        observer.next();
+      });
+    })
   }
 
   static get<T>(key: string, defaultValue: T): T {

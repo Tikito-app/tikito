@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {MatButton} from "@angular/material/button";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {NgIf} from "@angular/common";
 import {SecurityTransactionImportLine} from "../../dto/security/security-transaction-import-line";
 import {HttpRequestData} from "../../dto/http-request-data";

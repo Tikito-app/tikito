@@ -9,29 +9,29 @@
       <table mat-table [dataSource]="dataSource">
 
         <ng-container matColumnDef="timestamp">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/date' | translatePipe }}</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/date' | translate }}</th>
           <td mat-cell *matCellDef="let element"> {{ element.timestamp | date : Util.DATE_FORMAT }}</td>
         </ng-container>
 
         <ng-container matColumnDef="counterparty-account-name">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/counterparty-account-name' | translatePipe }}</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/counterparty-account-name' | translate }}</th>
           <td mat-cell *matCellDef="let element"> {{ element.counterpartyAccountName }}</td>
         </ng-container>
 
         <ng-container matColumnDef="counterparty-account-number">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/counterparty-account-number' | translatePipe }}</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/counterparty-account-number' | translate }}</th>
           <td mat-cell *matCellDef="let element"> {{ element.counterpartyAccountNumber }}</td>
         </ng-container>
 
         <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/amount' | translatePipe }}</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/amount' | translate }}</th>
           <td mat-cell *matCellDef="let element">
             <app-currency [amount]="element.amount" [currencyId]="element.currencyId"></app-currency>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/description' | translatePipe }}</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'money/transaction/description' | translate }}</th>
           <td mat-cell *matCellDef="let element"> {{ element.description }}</td>
         </ng-container>
 

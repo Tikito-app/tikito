@@ -8,7 +8,7 @@ import {MatBadgeModule} from "@angular/material/badge";
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
-import {TranslatePipe} from "../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-ok-dialog',

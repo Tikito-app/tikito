@@ -1,5 +1,5 @@
 <div class="main-side-column main-column">
-  <h2>{{'money/cash-holding-overview' | translatePipe}}</h2>
+  <h2>{{'money/cash-holding-overview' | translate}}</h2>
   @for (holding of holdings; track holding.id) {
     {{holding.account.name}}: <app-currency [currencyId]="holding.currencyId" [amount]="holding.amount"></app-currency><br/>
   }
@@ -7,7 +7,7 @@
 <div class="main-center-column-small main-column">
   <h2>Assets</h2>
   <ng-container *ngIf="aggregatedHistoricalMoneyHoldingValues.length == 0">
-    <div [innerHTML]="'overview/extended-overview-message' | translatePipe"></div>
+    <div [innerHTML]="'overview/extended-overview-message' | translate"></div>
   </ng-container>
   <div echarts [options]="chartOption" [initOpts]="initOptions" class="full-width"></div>
 </div>

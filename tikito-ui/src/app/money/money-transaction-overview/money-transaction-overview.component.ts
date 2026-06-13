@@ -1,6 +1,6 @@
 import {Component, computed, EventEmitter, model, OnInit, Output, signal} from '@angular/core';
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {MoneyTransactionListComponent} from "../money-transaction-list/money-transaction-list.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Util} from "../../util";

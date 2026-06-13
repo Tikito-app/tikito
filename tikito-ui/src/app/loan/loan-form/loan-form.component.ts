@@ -2,12 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton, MatFabButton} from "@angular/material/button";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
-import {MatError, MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
+import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
 import {NgIf} from "@angular/common";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {Loan} from "../../dto/loan";
 import {LoanInterest} from "../../dto/loan-interest";
 import {Account} from "../../dto/account";
@@ -42,7 +42,6 @@ import {DateRange} from "../../dto/date-range";
     MatIcon,
     MatInput,
     MatLabel,
-    MatSuffix,
     NgIf,
     ReactiveFormsModule,
     LoanPartListComponent,

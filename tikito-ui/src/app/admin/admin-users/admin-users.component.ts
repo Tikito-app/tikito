@@ -14,7 +14,7 @@ import {
   MatTableDataSource
 } from "@angular/material/table";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {UserAccount} from "../../dto/user-account";
 import {AuthService} from "../../service/auth.service";
 import {AdminApi} from "../../api/admin-api";

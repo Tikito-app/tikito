@@ -18,7 +18,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {LoanApi} from "../../api/loan-api";
 import {Loan} from "../../dto/loan";
 import {NgIf} from "@angular/common";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {AuthService} from "../../service/auth.service";
 import {LoanPart} from "../../dto/loan-part";
 import {MatCard, MatCardHeader} from "@angular/material/card";

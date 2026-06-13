@@ -26,8 +26,7 @@ import {CacheService} from "../../../service/cache-service";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {SecurityType} from "../../../dto/security/security-type";
-import {TranslateService} from "../../../service/translate.service";
-import {TranslatePipe} from "../../../service/translate-pipe.pipe";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
@@ -125,8 +124,8 @@ export class AdminSecurityListComponent implements AfterViewInit {
   onDeleteSecurity(security: Security) {
     this.dialogService.deleteConfirmation().subscribe(() => {
       this.api.deleteSecurity(security.id).subscribe(() => this.dialogService.snackbar(
-        this.translateService.translate('admin/security/deleted-message'),
-        this.translateService.translate('close')));
+        this.translateService.instant('admin/security/deleted-message'),
+        this.translateService.instant('close')));
     });
   }
 
@@ -140,37 +139,37 @@ export class AdminSecurityListComponent implements AfterViewInit {
 
   onRecalculateHistoricalSecurityValue(security: Security) {
     this.api.recalculateHistoricalSecurityValue(security.id).subscribe(() => { // todo
-      this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
+      this.dialogService.snackbar(this.translateService.instant('done'), this.translateService.instant('done'));
     });
   }
 
   onUpdateSecurityPrices(security: Security) {
     this.api.updateSecurityPrices(security.id).subscribe(() => {
-      this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
+      this.dialogService.snackbar(this.translateService.instant('done'), this.translateService.instant('done'));
     });
   }
 
   onEnrichSecurity(security: Security) {
     this.api.enrichSecurity(security.id).subscribe(() => {
-      this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
+      this.dialogService.snackbar(this.translateService.instant('done'), this.translateService.instant('done'));
     });
   }
 
   onDeleteSecurityPrices(security: Security) {
     this.api.deleteSecurityPrices(security.id).subscribe(() => {
-      this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
+      this.dialogService.snackbar(this.translateService.instant('done'), this.translateService.instant('done'));
     });
   }
 
   onUpdateAllClicked() {
     this.api.updateAllSecurities().subscribe(() => {
-      this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
+      this.dialogService.snackbar(this.translateService.instant('done'), this.translateService.instant('done'));
     });
   }
 
   onUpdateAllValuesClicked() {
     this.api.updateAllSecurityValues().subscribe(() => {
-      this.dialogService.snackbar(this.translateService.translate('done'), this.translateService.translate('done'));
+      this.dialogService.snackbar(this.translateService.instant('done'), this.translateService.instant('done'));
     });
   }
 

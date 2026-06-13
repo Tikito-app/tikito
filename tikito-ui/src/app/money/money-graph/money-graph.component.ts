@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnInit} from '@angular/core';
 import {NgxEchartsDirective, provideEchartsCore} from "ngx-echarts";
 import {MoneyTransactionsFilter, TransactionDateRange} from "../../dto/money/money-transactions-filter";
 import {AuthService} from "../../service/auth.service";
-import {TranslateService} from "../../service/translate.service";
 import {MoneyGraphProcessor} from "./money-graph-processor";
 import {MoneyGraphDataFetcher} from "./money-graph-data-fetcher";
 import {MoneyGraphDto} from "./money-graph-dto";
@@ -12,6 +11,7 @@ import {EChartModule} from "../../echart-module";
 import * as echarts from "echarts/core";
 import {MoneyGraphGroupKey} from "../../dto/money/money-graph-group-key";
 import {Util} from "../../util";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-money-graph',
@@ -54,7 +54,7 @@ export class MoneyGraphComponent implements OnInit {
     this.authService.onSystemReady((loggedInUser: any) => {
       this.onFilterUpdateCallback.subscribe(filter => {
         this.transactionFilter = filter;
-        this.otherGroupName = this.translateService.translate('money/graph/other-group-name');
+        this.otherGroupName = this.translateService.instant('money/graph/other-group-name');
         this.resetGraph();
       });
     });
@@ -288,11 +288,11 @@ export class MoneyGraphComponent implements OnInit {
         }
         html += otherHtml;
         if(totalCashValue != 0) {
-          html += `<tr style="border-top: 1px solid #000""><td></td><td>${translateService.translate('total')}</td><td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(totalCashValue)};">${Util.currencyFormat(totalCashValue)}</span></td><td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(totalBudgeted)};">${Util.currencyFormat(totalBudgeted)}</span></td></tr>`
+          html += `<tr style="border-top: 1px solid #000""><td></td><td>${translateService.instant('total')}</td><td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(totalCashValue)};">${Util.currencyFormat(totalCashValue)}</span></td><td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(totalBudgeted)};">${Util.currencyFormat(totalBudgeted)}</span></td></tr>`
         }
         html += htmlForCurrencies;
         if(totalCurrencyValue != 0) {
-          html += `<tr style="border-top: 1px solid #000""><td></td><td>${translateService.translate('total')}</td><td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(totalCurrencyValue)};">${Util.currencyFormat(totalCurrencyValue)}</span></td><td></td></tr>`
+          html += `<tr style="border-top: 1px solid #000""><td></td><td>${translateService.instant('total')}</td><td><span style="float: right; margin-left: 20px; color: ${Util.currencyColor(totalCurrencyValue)};">${Util.currencyFormat(totalCurrencyValue)}</span></td><td></td></tr>`
         }
         html += '</table>';
 

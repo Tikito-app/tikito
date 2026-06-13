@@ -1,8 +1,8 @@
-<h1 mat-dialog-title>{{'money/transaction/set-transaction-group' | translatePipe}}</h1>
+<h1 mat-dialog-title>{{'money/transaction/set-transaction-group' | translate}}</h1>
 <div mat-dialog-content>
   <form [formGroup]="form">
     <mat-form-field class="full-width">
-      <mat-label>{{'money/group' | translatePipe}}</mat-label>
+      <mat-label>{{'money/group' | translate}}</mat-label>
       <mat-select [attr.data-cy]="'group'" formControlName="group">
         @for (group of groups; track groups) {
           <mat-option [value]="group">{{group.name}}</mat-option>
@@ -12,6 +12,6 @@
   </form>
 </div>
 <div mat-dialog-actions>
-  <button [attr.data-cy]="'save-button'"  mat-raised-button color="primary" (click)="onSave();">{{'save' | translatePipe}}</button>&nbsp;
-  <button [attr.data-cy]="'cancel-button'"  mat-raised-button color="secondary" (click)="onCancel()">{{'cancel' | translatePipe}}</button>
+  <button [attr.data-cy]="'save-button'"  mat-raised-button color="primary" (click)="onSave();">{{'save' | translate}}</button>&nbsp;
+  <button [attr.data-cy]="'cancel-button'"  mat-raised-button color="secondary" (click)="onCancel()">{{'cancel' | translate}}</button>
 </div>

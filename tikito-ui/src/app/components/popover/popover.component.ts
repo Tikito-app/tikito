@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import {MatIcon} from "@angular/material/icon";
 import {MatSuffix} from "@angular/material/form-field";
 import {PopoverModule} from "./popover.module";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-popover',

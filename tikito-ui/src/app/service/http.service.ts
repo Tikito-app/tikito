@@ -9,7 +9,7 @@ import {AuthService} from "./auth.service";
 import {Router} from "@angular/router";
 import {EnvService} from "./env.service";
 import {DialogService} from "./dialog.service";
-import {TranslateService} from "./translate.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Injectable({
   providedIn: 'root'
@@ -223,7 +223,7 @@ export class HttpService {
   handleError(error: any) {
     if (error.error?.error != null) {
       const key = error.error.error;
-      let errorMessage = this.translateService.translate('exception.' + key);
+      let errorMessage = this.translateService.instant('exception.' + key);
 
       if (errorMessage != null) {
         this.dialogService.snackbar(errorMessage);

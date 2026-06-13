@@ -8,7 +8,7 @@ import {MatInput} from "@angular/material/input";
 import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
 import {NgForOf, NgIf} from "@angular/common";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {Account} from "../../dto/account";
 import {AccountApi} from "../../api/account-api";
 import {ActivatedRoute, Router} from "@angular/router";

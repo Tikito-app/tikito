@@ -4,7 +4,7 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/mat
 import {LoanValue} from "../../dto/loan-value";
 import {CurrencyComponent} from "../../components/currency/currency.component";
 import {NgIf} from "@angular/common";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-overview-loan',

@@ -18,7 +18,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {NgIf} from "@angular/common";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {Loan} from "../../dto/loan";
 import {MatSort} from "@angular/material/sort";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -32,7 +32,6 @@ import {
 } from "../loan-money-transactions-list/loan-money-transactions-list.component";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatSelect} from "@angular/material/select";
 
 @Component({
   selector: 'app-loan-list',
@@ -64,7 +63,6 @@ import {MatSelect} from "@angular/material/select";
     MatCard,
     MatCardHeader,
     FormsModule,
-    MatSelect,
     ReactiveFormsModule
   ],
   templateUrl: './loan-list.component.html',

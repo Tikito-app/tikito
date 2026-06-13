@@ -1,34 +1,34 @@
 <div class="main-side-column main-column">
-  <button mat-button (click)="routeToAdmin();"><mat-icon>arrow_back</mat-icon> {{'admin/back-to-admin' | translatePipe}}</button>
+  <button mat-button (click)="routeToAdmin();"><mat-icon>arrow_back</mat-icon> {{'admin/back-to-admin' | translate}}</button>
 </div>
 <div class="main-center-column main-column">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>{{ 'admin/jobs' | translatePipe }}</mat-card-title>
+      <mat-card-title>{{ 'admin/jobs' | translate }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div>
         <table mat-table [dataSource]="jobs">
 
           <ng-container matColumnDef="timestamp">
-            <th mat-header-cell *matHeaderCellDef>{{ 'admin/jobs/timestamp' | translatePipe }}</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'admin/jobs/timestamp' | translate }}</th>
             <td mat-cell *matCellDef="let job"> {{ job.timestamp }}</td>
           </ng-container>
 
           <ng-container matColumnDef="job-type">
-            <th mat-header-cell *matHeaderCellDef>{{ 'admin/jobs/job-type' | translatePipe }}</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'admin/jobs/job-type' | translate }}</th>
             <td mat-cell *matCellDef="let job"> {{ job.jobType }}</td>
           </ng-container>
 
           <ng-container matColumnDef="security-id">
-            <th mat-header-cell *matHeaderCellDef>{{ 'admin/jobs/security-id' | translatePipe }}</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'admin/jobs/security-id' | translate }}</th>
             <td mat-cell *matCellDef="let job">
               {{ job.securityId }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="account-id">
-            <th mat-header-cell *matHeaderCellDef>{{ 'admin/jobs/account-id' | translatePipe }}</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'admin/jobs/account-id' | translate }}</th>
             <td mat-cell *matCellDef="let job">
               @if (job.accountId != null) {
                 {{ CacheService.getAccountById(job.accountId).name }}
@@ -37,7 +37,7 @@
           </ng-container>
 
           <ng-container matColumnDef="loan-id">
-            <th mat-header-cell *matHeaderCellDef>{{ 'admin/jobs/loan-id' | translatePipe }}</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'admin/jobs/loan-id' | translate }}</th>
             <td mat-cell *matCellDef="let job"> {{ job.loanId }}</td>
           </ng-container>
 

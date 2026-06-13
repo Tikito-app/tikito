@@ -7,7 +7,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
-import {TranslatePipe} from '../../service/translate-pipe.pipe';
+import {TranslatePipe} from "@ngx-translate/core";
 import {CacheService} from "../../service/cache-service";
 import {AuthService} from "../../service/auth.service";
 import {Router} from "@angular/router";

@@ -16,7 +16,7 @@ import {
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatFabButton} from "@angular/material/button";
 import {ActivatedRoute, Router} from "@angular/router";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {NgIf} from "@angular/common";
 import {MoneyApi} from "../../api/money-api";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";

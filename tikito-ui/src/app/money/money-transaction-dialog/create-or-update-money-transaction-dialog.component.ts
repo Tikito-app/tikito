@@ -25,9 +25,8 @@ import MoneyTransaction from "../../dto/money/money-transaction";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
 import {Loan} from "../../dto/loan";
 import {LoanApi} from "../../api/loan-api";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {DialogService} from "../../service/dialog.service";
-import {TranslateService} from "../../service/translate.service";
 
 export interface MyData {
   transaction: MoneyTransaction;
@@ -140,8 +139,8 @@ export class CreateOrUpdateMoneyTransactionDialogComponent implements OnInit {
   onDeleteButtonClicked() {
     this.dialogService.deleteConfirmation().subscribe(() => {
       this.api.deleteMoneyTransaction(this.data.transaction.id).subscribe(() => this.dialogService.snackbar(
-        this.translateService.translate('money/transaction/deleted-message'),
-        this.translateService.translate('close')));
+        this.translateService.instant('money/transaction/deleted-message'),
+        this.translateService.instant('close')));
       this.dialogRef.close();
     });
   }

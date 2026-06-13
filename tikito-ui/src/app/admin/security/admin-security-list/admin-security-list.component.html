@@ -1,5 +1,5 @@
 <div class="main-side-column main-column">
-  <button mat-button (click)="routeToAdmin();"><mat-icon>arrow_back</mat-icon> {{'admin/back-to-admin' | translatePipe}}</button>
+  <button mat-button (click)="routeToAdmin();"><mat-icon>arrow_back</mat-icon> {{'admin/back-to-admin' | translate}}</button>
 </div>
 
 <div class="main-center-column-small main-column">
@@ -13,32 +13,32 @@
         <table mat-table [dataSource]="dataSource">
 
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>{{'security' | translatePipe}}</th>
+            <th mat-header-cell *matHeaderCellDef>{{'security' | translate}}</th>
             <td mat-cell *matCellDef="let element"> {{element.name}} </td>
           </ng-container>
 
           <ng-container matColumnDef="currency">
-            <th mat-header-cell *matHeaderCellDef>{{'currency' | translatePipe}}</th>
+            <th mat-header-cell *matHeaderCellDef>{{'currency' | translate}}</th>
             <td mat-cell *matCellDef="let element"> {{getCurrencyName(element)}} </td>
           </ng-container>
 
           <ng-container matColumnDef="security-type">
-            <th mat-header-cell *matHeaderCellDef>{{ 'security/type' | translatePipe }}</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'security/type' | translate }}</th>
             <td mat-cell *matCellDef="let element"> {{ element.securityType }}</td>
           </ng-container>
 
           <ng-container matColumnDef="sector">
-            <th mat-header-cell *matHeaderCellDef>{{ 'security/sector' | translatePipe }}</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'security/sector' | translate }}</th>
             <td mat-cell *matCellDef="let element"> {{ element.sector }}</td>
           </ng-container>
 
           <ng-container matColumnDef="industry">
-            <th mat-header-cell *matHeaderCellDef>{{ 'security/industry' | translatePipe }}</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'security/industry' | translate }}</th>
             <td mat-cell *matCellDef="let element"> {{ element.industry }}</td>
           </ng-container>
 
           <ng-container matColumnDef="exchange">
-            <th mat-header-cell *matHeaderCellDef>{{ 'security/exchange' | translatePipe }}</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'security/exchange' | translate }}</th>
             <td mat-cell *matCellDef="let element"> {{ element.exchange }}</td>
           </ng-container>
 
@@ -52,27 +52,27 @@
               <mat-menu #menu="matMenu">
                 <button mat-menu-item (click)="onEditIsin(element)">
                   <mat-icon>isin</mat-icon>
-                  <span [attr.data-cy]="'option-edit-isin'">{{ 'admin/security/edit-isin' | translatePipe }}</span>
+                  <span [attr.data-cy]="'option-edit-isin'">{{ 'admin/security/edit-isin' | translate }}</span>
                 </button>
                 <button mat-menu-item (click)="onEnrichSecurity(element)">
                   <mat-icon>isin</mat-icon>
-                  <span>{{ 'admin/security/enrich' | translatePipe }}</span>
+                  <span>{{ 'admin/security/enrich' | translate }}</span>
                 </button>
                 <button mat-menu-item (click)="onUpdateSecurityPrices(element)">
                   <mat-icon>isin</mat-icon>
-                  <span>{{ 'admin/security/update-price' | translatePipe }}</span>
+                  <span>{{ 'admin/security/update-price' | translate }}</span>
                 </button>
                 <button mat-menu-item (click)="onRecalculateHistoricalSecurityValue(element)" *ngIf="element.securityType != SecurityType.CURRENCY">
                   <mat-icon>isin</mat-icon>
-                  <span>{{ 'admin/security/recalculate-historical-value' | translatePipe }}</span>
+                  <span>{{ 'admin/security/recalculate-historical-value' | translate }}</span>
                 </button>
                 <button mat-menu-item (click)="onDeleteSecurityPrices(element)">
                   <mat-icon>isin</mat-icon>
-                  <span>{{ 'admin/security/delete-price' | translatePipe }}</span>
+                  <span>{{ 'admin/security/delete-price' | translate }}</span>
                 </button>
                 <button mat-menu-item (click)="onDeleteSecurity(element)">
                   <mat-icon>delete</mat-icon>
-                  <span>{{ 'delete' | translatePipe }}</span>
+                  <span>{{ 'delete' | translate }}</span>
                 </button>
               </mat-menu>
             </td>
@@ -88,6 +88,6 @@
   }
 </div>
 <div class="main-side-column main-column">
-  <button mat-button color="primary" (click)="onUpdateAllClicked()">{{'admin/security/update-all' | translatePipe}}</button><br/>
-  <button mat-button color="primary" (click)="onUpdateAllValuesClicked()">{{'admin/security/update-all-values' | translatePipe}}</button>
+  <button mat-button color="primary" (click)="onUpdateAllClicked()">{{'admin/security/update-all' | translate}}</button><br/>
+  <button mat-button color="primary" (click)="onUpdateAllValuesClicked()">{{'admin/security/update-all-values' | translate}}</button>
 </div>

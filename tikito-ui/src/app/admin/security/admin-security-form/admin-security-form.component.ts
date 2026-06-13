@@ -13,7 +13,7 @@ import {AuthService} from "../../../service/auth.service";
 import {Util} from "../../../util";
 import {AdminApi} from "../../../api/admin-api";
 import {CacheService} from "../../../service/cache-service";
-import {TranslatePipe} from "../../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-admin-security-form',
