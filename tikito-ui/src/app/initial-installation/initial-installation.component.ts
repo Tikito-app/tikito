@@ -14,7 +14,7 @@ import {HttpRequestData} from "../dto/http-request-data";
 import {HttpService} from "../service/http.service";
 import {HttpRequestMethod} from "../dto/http-request-method";
 import {CacheService} from "../service/cache-service";
-import {TranslatePipe} from "../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-initial-installation',

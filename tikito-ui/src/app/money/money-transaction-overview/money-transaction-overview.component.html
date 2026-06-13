@@ -1,13 +1,13 @@
 <div class="main-side-column main-column">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>{{'money/filter' | translatePipe}}</mat-card-title>
+      <mat-card-title>{{'money/filter' | translate}}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="form" *ngIf="form">
 
         <mat-form-field class="full-width">
-          <mat-label>{{'money/accounts' | translatePipe}}</mat-label>
+          <mat-label>{{'money/accounts' | translate}}</mat-label>
           <mat-select [attr.data-cy]="'account-ids'" multiple formControlName="accountIds" (selectionChange)="onAccountIdsSelectChanged($event.value)">
             @for (account of accounts; track accounts) {
               <mat-option [value]="account.id">{{account.name}}</mat-option>
@@ -15,13 +15,13 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field class="full-width">
-          <mat-label>{{ 'money/graph/transaction-filter' | translatePipe }}</mat-label>
+          <mat-label>{{ 'money/graph/transaction-filter' | translate }}</mat-label>
           <input matInput formControlName="transactionFilter" (change)="UserPreferenceService.onInputChange(UserPreference.TRANSACTION_FILTER, $event)">
         </mat-form-field>
         <br/>
 
         <mat-form-field class="full-width">
-          <mat-label>{{'money/currency-filter' | translatePipe}}</mat-label>
+          <mat-label>{{'money/currency-filter' | translate}}</mat-label>
           <mat-select [attr.data-cy]="'currency-filter'" multiple formControlName="currencies" (selectionChange)="onCurrencyFilterChanged($event.value)">
             @for (currency of CacheService.getCurrencies(); track currency) {
               <mat-option [value]="currency.id">{{currency.name}}</mat-option>
@@ -29,27 +29,27 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-checkbox formControlName="startAtZeroFromBeginning" (change)="UserPreferenceService.onCheckboxChange(UserPreference.START_AT_ZERO_FROM_BEGINNING, $event.checked)">{{ 'money/graph/start-at-zero-from-beginning' | translatePipe}}</mat-checkbox>
+        <mat-checkbox formControlName="startAtZeroFromBeginning" (change)="UserPreferenceService.onCheckboxChange(UserPreference.START_AT_ZERO_FROM_BEGINNING, $event.checked)">{{ 'money/graph/start-at-zero-from-beginning' | translate}}</mat-checkbox>
         <app-popover text="money/graph/start-at-zero-from-beginning-tooltip"></app-popover>
-        <mat-checkbox formControlName="startAtZeroAfterDateAggregation" (change)="onStartAtZeroAfterDateAggregationChanged($event)">{{ 'money/graph/start-at-zero-after-date-aggregation' | translatePipe}}</mat-checkbox>
+        <mat-checkbox formControlName="startAtZeroAfterDateAggregation" (change)="onStartAtZeroAfterDateAggregationChanged($event)">{{ 'money/graph/start-at-zero-after-date-aggregation' | translate}}</mat-checkbox>
         <app-popover text="money/graph/start-at-zero-after-date-aggregation-tooltip"></app-popover>
 
-        <mat-checkbox formControlName="aggregateDateRange" (change)="onAggregateDateRangeChanged($event.checked)">{{ 'money/graph/aggregate-date-range' | translatePipe}}</mat-checkbox>
+        <mat-checkbox formControlName="aggregateDateRange" (change)="onAggregateDateRangeChanged($event.checked)">{{ 'money/graph/aggregate-date-range' | translate}}</mat-checkbox>
         <app-popover text="money/graph/aggregate-date-range-tooltip"></app-popover><br/>
         <mat-radio-group *ngIf="form.value.aggregateDateRange" formControlName="dateRange" (change)="UserPreferenceService.onRadioChange(UserPreference.MONEY_DATE_RANGE, $event.value);">
-          <mat-radio-button style="padding-left: 30px;" value="ALL">{{'money/graph/aggregate-all' | translatePipe}}</mat-radio-button><br/>
-          <mat-radio-button style="padding-left: 30px;" value="YEAR">{{'money/graph/aggregate-per-year' | translatePipe}}</mat-radio-button><br/>
-          <mat-radio-button style="padding-left: 30px;" value="MONTH">{{'money/graph/aggregate-per-month' | translatePipe}}</mat-radio-button><br/>
-          <mat-radio-button style="padding-left: 30px;" value="WEEK">{{'money/graph/aggregate-per-week' | translatePipe}}</mat-radio-button>
+          <mat-radio-button style="padding-left: 30px;" value="ALL">{{'money/graph/aggregate-all' | translate}}</mat-radio-button><br/>
+          <mat-radio-button style="padding-left: 30px;" value="YEAR">{{'money/graph/aggregate-per-year' | translate}}</mat-radio-button><br/>
+          <mat-radio-button style="padding-left: 30px;" value="MONTH">{{'money/graph/aggregate-per-month' | translate}}</mat-radio-button><br/>
+          <mat-radio-button style="padding-left: 30px;" value="WEEK">{{'money/graph/aggregate-per-week' | translate}}</mat-radio-button>
         </mat-radio-group>
         <br/>
-        <mat-checkbox formControlName="includeBudget" [disabled]="includeBudgetDisabled" (change)="UserPreferenceService.onCheckboxChange(UserPreference.MONEY_GRAPH_INCLUDE_BUDGET, $event.checked)">{{ 'money/graph/include-budget' | translatePipe}}</mat-checkbox>
-        <mat-checkbox formControlName="includeMoney" (change)="onIncludeMoneyChanged($event)">{{ 'money/graph/include-money' | translatePipe}}</mat-checkbox>
-        <mat-checkbox formControlName="includeMoneyHolding" (change)="UserPreferenceService.onCheckboxChange(UserPreference.MONEY_GRAPH_INCLUDE_MONEY_HOLDING, $event.checked)">{{ 'money/graph/include-money-holding' | translatePipe}}</mat-checkbox>
+        <mat-checkbox formControlName="includeBudget" [disabled]="includeBudgetDisabled" (change)="UserPreferenceService.onCheckboxChange(UserPreference.MONEY_GRAPH_INCLUDE_BUDGET, $event.checked)">{{ 'money/graph/include-budget' | translate}}</mat-checkbox>
+        <mat-checkbox formControlName="includeMoney" (change)="onIncludeMoneyChanged($event)">{{ 'money/graph/include-money' | translate}}</mat-checkbox>
+        <mat-checkbox formControlName="includeMoneyHolding" (change)="UserPreferenceService.onCheckboxChange(UserPreference.MONEY_GRAPH_INCLUDE_MONEY_HOLDING, $event.checked)">{{ 'money/graph/include-money-holding' | translate}}</mat-checkbox>
         <app-popover text="money/graph/show-include-money-budget-tooltip"></app-popover>
 
         <mat-form-field class="full-width">
-          <mat-label>{{'money/transaction-groups' | translatePipe}}</mat-label>
+          <mat-label>{{'money/transaction-groups' | translate}}</mat-label>
           <mat-select [attr.data-cy]="'groupIds'" multiple formControlName="groupIds" (selectionChange)="onGroupIdsSelectChanged($event.value)">
             @for (group of groups; track group) {
               <mat-option [value]="group.id">{{group.name}}</mat-option>
@@ -59,7 +59,7 @@
 
         <br/>
         <mat-form-field class="half-width">
-          <mat-label>{{'start-date' | translatePipe}}</mat-label>
+          <mat-label>{{'start-date' | translate}}</mat-label>
           <input matInput style="height: 36px;" [matDatepicker]="pickerStartDate" formControlName="startDate" (dateChange)="UserPreferenceService.onDatePickerChange(UserPreference.MONEY_START_DATE, form.value.startDate)">
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-icon *ngIf="form.value['startDate']" matIconSuffix (click)="form.controls['startDate'].setValue(null);" class="clickable">close</mat-icon>
@@ -67,7 +67,7 @@
           <mat-datepicker #pickerStartDate></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="half-width">
-          <mat-label>{{'end-date' | translatePipe}}</mat-label>
+          <mat-label>{{'end-date' | translate}}</mat-label>
           <input matInput style="height: 36px;" [matDatepicker]="pickerEndDate" formControlName="endDate" (dateChange)="UserPreferenceService.onDatePickerChange(UserPreference.MONEY_END_DATE, form.value.endDate)">
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-icon *ngIf="form.value['endDate']" matIconSuffix (click)="form.controls['endDate'].setValue(null);" class="clickable">close</mat-icon>
@@ -76,21 +76,21 @@
         </mat-form-field>
         <br/>
         <mat-form-field>
-          <mat-label>{{ 'money/graph/show-amount-of-non-grouped-groups' | translatePipe }}</mat-label>
+          <mat-label>{{ 'money/graph/show-amount-of-non-grouped-groups' | translate }}</mat-label>
           <input matInput type="number" formControlName="amountOfOtherGroups" (change)="UserPreferenceService.onInputChange(UserPreference.AMOUNT_OF_OTHER_GROUPS, $event)">
         </mat-form-field>
         <br/>
 
-        <button mat-raised-button (click)="onUpdateFilterButtonClicked()" color="primary">{{'update' | translatePipe}}</button>
-        <button mat-button style="float: right;" (click)="onRouteToMoneySettings()"><mat-icon>settings</mat-icon> {{'money-settings/settings' | translatePipe}}</button>
+        <button mat-raised-button (click)="onUpdateFilterButtonClicked()" color="primary">{{'update' | translate}}</button>
+        <button mat-button style="float: right;" (click)="onRouteToMoneySettings()"><mat-icon>settings</mat-icon> {{'money-settings/settings' | translate}}</button>
       </form>
     </mat-card-content>
   </mat-card>
 </div>
 <div class="main-center-column main-column">
   <mat-tab-group *ngIf="form">
-    <mat-tab [label]="'money/graph' | translatePipe"> <app-money-graph [height]="600" [accountId]="accountId" [onFilterUpdateCallback]="onFilterUpdateCallback" [transactionFilter]="getTransactionFilter()"></app-money-graph> </mat-tab>
-    <mat-tab [label]="'money/transactions' | translatePipe"> <app-moneyTransaction-list [accountId]="accountId" [onFilterUpdateCallback]="onFilterUpdateCallback" [transactionFilter]="getTransactionFilter()"></app-moneyTransaction-list> </mat-tab>
-<!--    <mat-tab [label]="'money/aggregated-table' | translatePipe"> <app-money-transaction-aggregated-table [onFilterUpdateCallback]="onFilterUpdateCallback" [transactionFilter]="getTransactionFilter()"></app-money-transaction-aggregated-table> </mat-tab>-->
+    <mat-tab [label]="'money/graph' | translate"> <app-money-graph [height]="600" [accountId]="accountId" [onFilterUpdateCallback]="onFilterUpdateCallback" [transactionFilter]="getTransactionFilter()"></app-money-graph> </mat-tab>
+    <mat-tab [label]="'money/transactions' | translate"> <app-moneyTransaction-list [accountId]="accountId" [onFilterUpdateCallback]="onFilterUpdateCallback" [transactionFilter]="getTransactionFilter()"></app-moneyTransaction-list> </mat-tab>
+<!--    <mat-tab [label]="'money/aggregated-table' | translate"> <app-money-transaction-aggregated-table [onFilterUpdateCallback]="onFilterUpdateCallback" [transactionFilter]="getTransactionFilter()"></app-money-transaction-aggregated-table> </mat-tab>-->
   </mat-tab-group>
 </div>

@@ -37,10 +37,9 @@ import {DialogService} from "../../service/dialog.service";
 import {UserPreferenceService} from "../../service/user-preference-service";
 import {UserPreference} from "../../dto/user-preference";
 import {AuthService} from "../../service/auth.service";
-import {TranslateService} from "../../service/translate.service";
 import {SecurityTransactionListComponent} from "../security-transaction-list/security-transaction-list.component";
 import {SecurityHoldingFilter} from "../../dto/security/security-holding-filter";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
@@ -153,8 +152,8 @@ export class SecurityHoldingListComponent implements AfterViewInit {
   onDeleteHolding(holding: SecurityHolding) {
     this.dialogService.deleteConfirmation().subscribe(() => {
       this.api.deleteSecurityHolding(holding.id).subscribe(() => this.dialogService.snackbar(
-        this.translateService.translate('security/holding/deleted-message'),
-        this.translateService.translate('close')));
+        this.translateService.instant('security/holding/deleted-message'),
+        this.translateService.instant('close')));
     });
   }
 

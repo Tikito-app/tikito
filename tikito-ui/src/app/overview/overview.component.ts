@@ -16,11 +16,10 @@ import {Moment} from "moment";
 import {LoanApi} from "../api/loan-api";
 import {OverviewLoanComponent} from "./overview-loan/overview-loan.component";
 import {LoanValue} from "../dto/loan-value";
-import {TranslatePipe} from "../service/translate-pipe.pipe";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {MoneyHolding} from "../dto/money-holding";
 import {CurrencyComponent} from "../components/currency/currency.component";
 import {AssetType} from "../dto/asset-type";
-import {TranslateService} from "../service/translate.service";
 
 @Component({
   selector: 'app-overview',
@@ -242,12 +241,12 @@ export class OverviewComponent implements OnInit {
           let value = asset.amount ? asset.amount : asset.positionValue;
 
           if (value != null && value != 0) {
-            html += `${getMarker(params, type)} ${translateService.translate('money/type/' + type)} <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(value)};">${Util.currencyFormatWithSymbol(value, 47)}</span><br/>`;
+            html += `${getMarker(params, type)} ${translateService.instant('money/type/' + type)} <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(value)};">${Util.currencyFormatWithSymbol(value, 47)}</span><br/>`;
             total += value;
           }
         }
 
-        html += `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;"></span> ${translateService.translate('total')} <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(total)};">${Util.currencyFormatWithSymbol(total, 47)}</span><br/>`;
+        html += `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;"></span> ${translateService.instant('total')} <span style="float: right; margin-left: 20px; color: ${Util.currencyColor(total)};">${Util.currencyFormatWithSymbol(total, 47)}</span><br/>`;
 
         return `${date}<br/>` + html;
       },

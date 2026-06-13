@@ -9,7 +9,7 @@ import {HistoricalBudgetValue} from "../../dto/money/historical-budget-value";
 import moment from "moment";
 import {Util} from "../../util";
 import {MatTableDataSource, MatTableModule} from "@angular/material/table";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {CommonModule} from "@angular/common";
 import {MatTabChangeEvent, MatTabGroup, MatTab} from "@angular/material/tabs";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";

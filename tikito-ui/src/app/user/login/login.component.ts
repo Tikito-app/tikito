@@ -19,7 +19,7 @@ import {AuthService} from "../../service/auth.service";
 import {LoggedInUser} from "../../dto/logged-in-user";
 import {ServerResponse} from "../../dto/server-response";
 import {EnvService} from "../../service/env.service";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-login',

@@ -7,7 +7,7 @@ import {MatError, MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/mat
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {provideNativeDateAdapter} from "@angular/material/core";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {Util} from "../../util";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {NgIf} from "@angular/common";

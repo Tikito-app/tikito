@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {SecurityHoldingGraphComponent} from "../security-holding-graph/security-holding-graph.component";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {Util} from "../../util";
 import {SecurityTransactionListComponent} from "../security-transaction-list/security-transaction-list.component";

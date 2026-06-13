@@ -8,7 +8,6 @@ import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
 import {NgIf} from "@angular/common";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
 import {AuthService} from "../../service/auth.service";
 import {CacheService} from "../../service/cache-service";
 import {UserPreferenceService} from "../../service/user-preference-service";
@@ -16,6 +15,7 @@ import {UserPreference} from "../../dto/user-preference";
 import {Util} from "../../util";
 import {MatIcon} from "@angular/material/icon";
 import {Router} from "@angular/router";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-admin-user-preferences',
@@ -35,7 +35,8 @@ import {Router} from "@angular/router";
     NgIf,
     ReactiveFormsModule,
     MatIcon,
-    TranslatePipe
+    TranslatePipe,
+    // TranslatePipe
   ],
   templateUrl: './admin-user-preferences.component.html',
   styleUrl: './admin-user-preferences.component.scss',
@@ -45,7 +46,8 @@ export class AdminUserPreferencesComponent {
   form: FormGroup;
 
   constructor(private authService: AuthService,
-              private router: Router) {
+              private router: Router,
+              private translateService: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -55,12 +57,14 @@ export class AdminUserPreferencesComponent {
         overviewStartDateMinusAmount: new FormControl(),
         overviewStartDateMinusUnit: new FormControl(),
         overviewStartDateAtBeginningOfRange: new FormControl(),
+        language: new FormControl(),
       });
 
       this.form.controls['defaultCurrency'].setValue(UserPreferenceService.get<string>(UserPreference.DEFAULT_CURRENCY, 'EUR'));
       this.form.controls['overviewStartDateMinusAmount'].setValue(UserPreferenceService.get<number>(UserPreference.OVERVIEW_START_DATE_MINUS_AMOUNT, 1));
       this.form.controls['overviewStartDateMinusUnit'].setValue(UserPreferenceService.get<string>(UserPreference.OVERVIEW_START_DATE_MINUS_UNIT, 'YEAR'));
       this.form.controls['overviewStartDateAtBeginningOfRange'].setValue(UserPreferenceService.get<boolean>(UserPreference.OVERVIEW_START_DATE_AT_BEGINNING_OF_RANGE, true));
+      this.form.controls['language'].setValue(UserPreferenceService.get<string>(UserPreference.LANGUAGE, 'en'));
     });
   }
 
@@ -70,6 +74,7 @@ export class AdminUserPreferencesComponent {
 
   onLanguageChange(language: string) {
     UserPreferenceService.onSelectChange(UserPreference.LANGUAGE, language);
+    this.translateService.use(language);
   }
 
   protected readonly CacheService = CacheService;

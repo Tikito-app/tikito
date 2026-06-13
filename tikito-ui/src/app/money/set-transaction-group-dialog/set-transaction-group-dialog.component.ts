@@ -8,7 +8,7 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {MoneyApi} from "../../api/money-api";
 import {AuthService} from "../../service/auth.service";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";

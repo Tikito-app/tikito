@@ -137,6 +137,7 @@
   "security/transaction/cash": "Cash",
   "security/transaction/timestamp": "Timestamp",
   "security/transaction/transaction-type": "Type",
+  "security/transaction/account": "Account",
 
   "security/transaction/form/account-required": "Account is required",
   "security/transaction/form/isin-required": "Isin is required",
@@ -267,10 +268,6 @@
   "import-file-type-DE_GIRO": "DeGiro",
   "import-file-type-ABN_AMRO": "ABN Amro",
   "import-file-type-ING": "ING",
-  "import-guessed-file-type-correct-question": "This file looks like it is of type {{guessed-file-type}}, is this correct?",
-  "import-file-type-account-mismatch": "The security type of the account that you selected does not match the security type of the file type.",
-
-
 
 
   "--------------- ADMIN ---------------------": "",
@@ -336,9 +333,14 @@
   "admin/logs/message": "Log message",
 
   "---------------- LANGUAGE --------------": "",
-  "language/nl": "Dutch",
+  "language/de": "German",
   "language/en": "English",
+  "language/es": "Spanish",
+  "language/fr": "French",
+  "language/nl": "Dutch",
   "language/tr": "Turkish",
+  "language/uk": "Ukrainian",
+  "language/zh": "Mandarin Chinese",
 
 
   "--------------- LOAN ---------------------": "",

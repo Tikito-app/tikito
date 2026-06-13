@@ -7,13 +7,13 @@ import {SecurityHoldingValue} from "../../dto/security/security-holding-value";
 import {AuthService} from "../../service/auth.service";
 import {CacheService} from "../../service/cache-service";
 import {Util} from "../../util";
-import {TranslateService} from "../../service/translate.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-trading-company-pie-graph',
   standalone: true,
     imports: [
-        NgxEchartsDirective
+        NgxEchartsDirective,
     ],
   templateUrl: './security-pie-graph.component.html',
   styleUrl: './security-pie-graph.component.scss',
@@ -68,7 +68,7 @@ export class SecurityPieGraphComponent implements OnInit {
       },
       series: [
         {
-          name: this.translateService.translate('security/' + this.valueType),
+          name: this.translateService.instant('security/' + this.valueType),
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: true,
@@ -117,7 +117,7 @@ export class SecurityPieGraphComponent implements OnInit {
     } else if(this.valueType == 'currency') {
       return "" + CacheService.getCurrencyById(holding.security.currencyId).name;
     } else if(this.valueType == 'type') {
-      return this.translateService.translate('security/transaction/type/' + holding.security.securityType);
+      return this.translateService.instant('security/transaction/type/' + holding.security.securityType);
     }
     return 'unknown';
   }

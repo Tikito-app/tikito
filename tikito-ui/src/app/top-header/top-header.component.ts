@@ -3,7 +3,7 @@ import {HeaderItemComponent} from "../header-item/header-item.component";
 import {NgIf} from "@angular/common";
 import {Util} from "../util";
 import {AuthService} from "../service/auth.service";
-import {TranslatePipe} from "../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {AdminApi} from "../api/admin-api";
 
 @Component({

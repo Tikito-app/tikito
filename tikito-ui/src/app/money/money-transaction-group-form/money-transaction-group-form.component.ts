@@ -8,7 +8,7 @@ import {MatInput} from "@angular/material/input";
 import {MatButton, MatFabButton} from "@angular/material/button";
 import {Util} from "../../util";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MoneyApi} from "../../api/money-api";
 import MoneyTransactionGroupQualifier from "../../dto/money/money-transaction-group-qualifier";

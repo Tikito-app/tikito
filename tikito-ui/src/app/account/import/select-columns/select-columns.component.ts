@@ -3,7 +3,7 @@ import {NgIf} from "@angular/common";
 import {MatOption} from "@angular/material/core";
 import {MatFormField, MatLabel, MatSelect} from "@angular/material/select";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {TranslatePipe} from "../../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {Util} from "../../../util";
 import {
   MatCell,

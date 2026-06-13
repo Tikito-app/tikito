@@ -1,14 +1,14 @@
 <div class="main-side-column main-column">
-  <button mat-button (click)="routeToMoney();"><mat-icon>arrow_back</mat-icon> {{'money-settings/back-to-money' | translatePipe}}</button>
+  <button mat-button (click)="routeToMoney();"><mat-icon>arrow_back</mat-icon> {{'money-settings/back-to-money' | translate}}</button>
   <br/><br/>
 
   <mat-form-field>
-    <mat-label>{{ 'money/filter' | translatePipe }}</mat-label>
+    <mat-label>{{ 'money/filter' | translate }}</mat-label>
     <input matInput (keyup)="applyFilter($event)" #input>
   </mat-form-field>
 </div>
 <div class="main-center-column-small main-column" *ngIf="moneyTransactionGroups.length == 0">
-  {{'money/group/introduction-text' | translatePipe}}
+  {{'money/group/introduction-text' | translate}}
 </div>
 <div class="main-center-column-small main-column" *ngIf="moneyTransactionGroups.length > 0">
 
@@ -18,12 +18,12 @@
         <table mat-table [dataSource]="dataSource" class="full-width">
 
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>{{'money/transaction-group/name' | translatePipe}}</th>
+            <th mat-header-cell *matHeaderCellDef>{{'money/transaction-group/name' | translate}}</th>
             <td mat-cell *matCellDef="let element"> {{element.name}} </td>
           </ng-container>
 
           <ng-container matColumnDef="budgeted">
-            <th mat-header-cell *matHeaderCellDef>{{'money/transaction-group/budgeted' | translatePipe}}</th>
+            <th mat-header-cell *matHeaderCellDef>{{'money/transaction-group/budgeted' | translate}}</th>
             <td mat-cell *matCellDef="let element">
               @if (element.budgeted != null && element.budgeted != 0) {
                 <app-currency [amount]="element.budgeted"></app-currency>

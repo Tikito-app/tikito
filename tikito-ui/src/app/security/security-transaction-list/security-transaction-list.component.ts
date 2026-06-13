@@ -13,7 +13,7 @@ import {
   MatTableDataSource
 } from "@angular/material/table";
 import {Router} from "@angular/router";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {DatePipe} from "@angular/common";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
 import {SecurityApi} from "../../api/security-api";
@@ -26,7 +26,6 @@ import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {DialogService} from "../../service/dialog.service";
-import {TranslateService} from "../../service/translate.service";
 import {MatSort} from "@angular/material/sort";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 import {CacheService} from "../../service/cache-service";
@@ -107,13 +106,13 @@ export class SecurityTransactionListComponent implements OnInit {
 
   onDeleteTransaction(transaction: SecurityTransaction) {
     this.dialogService.okCancel(
-      this.translateService.translate('are-you-sure-delete-title'),
-      this.translateService.translate('are-you-sure-delete-text'))
+      this.translateService.instant('are-you-sure-delete-title'),
+      this.translateService.instant('are-you-sure-delete-text'))
       .then((doDelete) => {
         if (doDelete) {
           this.api.deleteSecurityTransaction(transaction.id).subscribe(() => this.dialogService.snackbar(
-            this.translateService.translate('money/transaction/deleted-message'),
-            this.translateService.translate('close')));
+            this.translateService.instant('money/transaction/deleted-message'),
+            this.translateService.instant('close')));
         }
       })
   }

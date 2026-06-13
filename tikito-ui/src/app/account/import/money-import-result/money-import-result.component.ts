@@ -12,7 +12,7 @@ import {
   MatTable,
   MatTableDataSource
 } from "@angular/material/table";
-import {DatePipe, NgIf} from "@angular/common";
+import {DatePipe} from "@angular/common";
 import {PaginatorComponent} from "../../../components/paginator/paginator.component";
 import {CurrencyComponent} from "../../../components/currency/currency.component";
 import {Util} from "../../../util";
@@ -20,7 +20,7 @@ import {MatSort} from "@angular/material/sort";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MoneyTransactionImportLine} from "../../../dto/money/money-transaction-import-line";
-import {TranslatePipe} from "../../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({

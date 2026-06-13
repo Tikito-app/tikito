@@ -1,12 +1,13 @@
 import {Inject, Injectable} from '@angular/core';
 import {Observable, Subject} from "rxjs";
 import {HttpService} from "./http.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {Util} from "../util";
 import {HttpRequestData} from "../dto/http-request-data";
 import {LoggedInUser} from "../dto/logged-in-user";
 import {CacheService} from "./cache-service";
 import {HttpRequestMethod} from "../dto/http-request-method";
+import {UserPreferenceService} from "./user-preference-service";
 
 @Injectable({
   providedIn: 'root'
@@ -21,15 +22,21 @@ export class AuthService {
   systemReady: boolean = false;
 
   constructor(private http: HttpService,
-              private route: ActivatedRoute,
+              private userPreferenceService: UserPreferenceService,
               private router: Router,
               @Inject('environment') private environment: any) {
 
     this.initialiseUserSession().subscribe(loggedIn => {
-      this.systemReady = true;
-      CacheService.init().subscribe(() => {
+      if (loggedIn) {
+        this.userPreferenceService.loadPreferences().subscribe(() => {
+          this.systemReady = true;
+          CacheService.init().subscribe(() => {
+            this.systemReadySubject$.next(this.loggedInUser);
+          });
+        });
+      } else {
         this.systemReadySubject$.next(this.loggedInUser);
-      });
+      }
     });
   }
 

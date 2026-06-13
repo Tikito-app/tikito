@@ -9,7 +9,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {AuthService} from "../../service/auth.service";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-money-transaction-group-qualifier-form',

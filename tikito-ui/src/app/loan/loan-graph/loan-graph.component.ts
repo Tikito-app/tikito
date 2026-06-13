@@ -7,7 +7,7 @@ import {Util} from "../../util";
 import moment from "moment";
 import {NgxEchartsDirective, provideEchartsCore} from "ngx-echarts";
 import * as echarts from "echarts/core";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-loan-graph',

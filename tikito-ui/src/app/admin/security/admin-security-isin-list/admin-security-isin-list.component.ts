@@ -24,8 +24,7 @@ import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {NgIf} from "@angular/common";
-import {TranslateService} from "../../../service/translate.service";
-import {TranslatePipe} from "../../../service/translate-pipe.pipe";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
@@ -109,8 +108,8 @@ export class AdminSecurityIsinListComponent implements AfterViewInit {
   onDeleteIsin(isin: Isin) {
     this.dialogService.deleteConfirmation().subscribe(() => {
       this.api.deleteIsin(isin.isin).subscribe(() => this.dialogService.snackbar(
-        this.translateService.translate('admin/security/isin/deleted-message'),
-        this.translateService.translate('close')));
+        this.translateService.instant('admin/security/isin/deleted-message'),
+        this.translateService.instant('close')));
     });
   }
 

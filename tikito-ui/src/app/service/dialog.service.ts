@@ -7,7 +7,6 @@ import {
   SetTransactionGroupDialogComponent
 } from "../money/set-transaction-group-dialog/set-transaction-group-dialog.component";
 import MoneyTransactionGroup from "../dto/money/money-transaction-group";
-import {TranslateService} from "./translate.service";
 import {Observable} from "rxjs";
 import {SecurityTransaction} from "../dto/security/security-transaction";
 import {
@@ -17,6 +16,7 @@ import MoneyTransaction from "../dto/money/money-transaction";
 import {
   CreateOrUpdateMoneyTransactionDialogComponent
 } from "../money/money-transaction-dialog/create-or-update-money-transaction-dialog.component";
+import {TranslateService} from "@ngx-translate/core";
 
 @Injectable({
   providedIn: 'root'
@@ -90,7 +90,7 @@ export class DialogService {
   }
 
   snackbar(message: string, close?: string, timeoutToClose?: number) {
-    let snackbar = this._snackbar.open(message, close == null ? this.translateService.translate('snackbar/close') : close);
+    let snackbar = this._snackbar.open(message, close == null ? this.translateService.instant('snackbar/close') : close);
 
     setTimeout(() => {
       snackbar.dismissWithAction();
@@ -112,8 +112,8 @@ export class DialogService {
   deleteConfirmation(): Observable<void> {
     return new Observable(subscriber => {
       this.okCancel(
-        this.translateService.translate('are-you-sure-delete-title'),
-        this.translateService.translate('are-you-sure-delete-text'))
+        this.translateService.instant('are-you-sure-delete-title'),
+        this.translateService.instant('are-you-sure-delete-text'))
         .then((doDelete) => {
           if (doDelete) {
             subscriber.next();

@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, Output, ViewChild} from '@ang
 import SecurityHolding from "../../dto/security/security-holding";
 import {SecurityUtil} from "../../security-util";
 import {MatIcon} from "@angular/material/icon";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {MatDivider} from "@angular/material/divider";
 import {MatList, MatListItem} from "@angular/material/list";
 import {MatButton} from "@angular/material/button";

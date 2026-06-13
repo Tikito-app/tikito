@@ -22,7 +22,7 @@ import {NgIf} from "@angular/common";
 import {SecurityApi} from "../../api/security-api";
 import {AccountApi} from "../../api/account-api";
 import {Account} from "../../dto/account";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 
 export interface MyData {
   transaction: SecurityTransaction;

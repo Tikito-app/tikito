@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {HttpService} from "../../service/http.service";
 import {HttpRequestData} from "../../dto/http-request-data";
 import {MatIcon} from "@angular/material/icon";

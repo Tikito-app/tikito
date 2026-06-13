@@ -7,7 +7,7 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {NgIf} from "@angular/common";
 import {FileImportService} from "../../service/file-import-service";
 import {SecurityApi} from "../../api/security-api";
@@ -25,7 +25,6 @@ import {FileType} from "../../dto/file-type";
 import {Observable, Observer} from "rxjs";
 import {CsvService} from "../../service/csv.service";
 import {ExcelService} from "../../service/excel.service";
-import {TranslateService} from "../../service/translate.service";
 import {AssetType} from "../../dto/asset-type";
 
 @Component({
@@ -102,7 +101,7 @@ export class ImportComponent implements OnInit {
     if (this.importFileState.file) {
       this.fileImportService.setFileTypeAndContent(this.importFileState).subscribe(() => {
         if (this.importFileState.fileType == null) {
-          this.dialogService.snackbar(this.translateService.translate('account/import/unknown-file-type'), this.translateService.translate('account/import/unknown-file-type'));
+          this.dialogService.snackbar(this.translateService.instant('account/import/unknown-file-type'), this.translateService.instant('account/import/unknown-file-type'));
           return;
         }
 
@@ -143,7 +142,7 @@ export class ImportComponent implements OnInit {
     } else if (this.importFileState.fileType == FileType.EXCEL) {
       return this.excelService.parseExcelFile(this.importFileState);
     } else {
-      this.dialogService.snackbar(this.translateService.translate('account/import/unknown-file-type'), this.translateService.translate('account/import/unknown-file-type'));
+      this.dialogService.snackbar(this.translateService.instant('account/import/unknown-file-type'), this.translateService.instant('account/import/unknown-file-type'));
       return new Observable((observer: Observer<void>) => {
       })
     }
@@ -166,13 +165,13 @@ export class ImportComponent implements OnInit {
       this.securityApi.importFile(this.form.value.account.id, this.importFileState.file, dryRun, headers, buyValue, timestampFormat, dateFormat, timeFormat, csvSeparator).subscribe(transactions => {
         this.securityImportResult = transactions;
         this.showLoadingText = false;
-        this.dialogService.snackbar(this.translateService.translate('account/import/file-import-success'));
+        this.dialogService.snackbar(this.translateService.instant('account/import/file-import-success'));
       });
     } else {
       this.moneyApi.importFile(this.form.value.account.id, this.importFileState.file, dryRun, headers, debitCreditValue, timestampFormat, timeFormat, csvSeparator).subscribe(transactions => {
         this.moneyImportResult = transactions;
         this.showLoadingText = false;
-        this.dialogService.snackbar(this.translateService.translate('account/import/file-import-success'));
+        this.dialogService.snackbar(this.translateService.instant('account/import/file-import-success'));
       });
     }
   }

@@ -16,7 +16,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatFabButton} from "@angular/material/button";
 import {Router} from "@angular/router";
 import {AccountApi} from "../../api/account-api";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {NgIf} from "@angular/common";
 import {Account} from "../../dto/account";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
@@ -24,7 +24,6 @@ import {AuthService} from "../../service/auth.service";
 import {CacheService} from "../../service/cache-service";
 import {DialogService} from "../../service/dialog.service";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
-import {TranslateService} from "../../service/translate.service";
 import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
@@ -121,8 +120,8 @@ export class AccountListComponent implements AfterViewInit {
     this.dialogService.deleteConfirmation().subscribe(() => {
       this.api.deleteAccount(account.id).subscribe(() => {
         this.dialogService.snackbar(
-          this.translateService.translate('account/deleted-message'),
-          this.translateService.translate('close'));
+          this.translateService.instant('account/deleted-message'),
+          this.translateService.instant('close'));
         this.reset();
       });
     });

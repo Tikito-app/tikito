@@ -6,7 +6,7 @@ import {NgIf} from "@angular/common";
 import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {Util} from "../../util";
-import {TranslatePipe} from "../../service/translate-pipe.pipe";
+import {TranslatePipe} from "@ngx-translate/core";
 import {AccountApi} from "../../api/account-api";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatOption} from "@angular/material/autocomplete";
