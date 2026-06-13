@@ -1,4 +1,4 @@
-import {Component, computed, EventEmitter, model, OnInit, Output, signal} from '@angular/core';
+import {Component, computed, EventEmitter, model, OnInit, Output, signal, ChangeDetectionStrategy} from '@angular/core';
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {TranslatePipe} from "@ngx-translate/core";
 import {MoneyTransactionListComponent} from "../money-transaction-list/money-transaction-list.component";
@@ -74,6 +74,7 @@ import moment from "moment";
 ],
     templateUrl: './money-transaction-overview.component.html',
     styleUrl: './money-transaction-overview.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'nl-NL' }]
 })
 export class MoneyTransactionOverviewComponent implements OnInit {

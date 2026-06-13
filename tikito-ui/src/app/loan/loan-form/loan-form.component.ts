@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton, MatFabButton} from "@angular/material/button";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
@@ -50,6 +50,7 @@ import {DateRange} from "../../dto/date-range";
 ],
     providers: [provideNativeDateAdapter()],
     templateUrl: './loan-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './loan-form.component.scss'
 })
 export class LoanFormComponent implements OnInit {

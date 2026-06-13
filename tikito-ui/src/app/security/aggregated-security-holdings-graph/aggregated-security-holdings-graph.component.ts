@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import HistoricalHoldingValue from "../../dto/security/historical-holding-value";
 import {SecurityHoldingFilter} from "../../dto/security/security-holding-filter";
 import {SecurityApi} from "../../api/security-api";
@@ -17,6 +17,7 @@ import {AuthService} from "../../service/auth.service";
     ],
     templateUrl: './aggregated-security-holdings-graph.component.html',
     styleUrl: './aggregated-security-holdings-graph.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         provideEchartsCore({ echarts }),
     ]

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatError, MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
@@ -53,6 +53,7 @@ import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/m
 ],
     templateUrl: './money-transaction-group-form.component.html',
     styleUrl: './money-transaction-group-form.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [provideNativeDateAdapter()]
 })
 export class MoneyTransactionGroupFormComponent implements OnInit {

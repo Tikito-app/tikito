@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {MyData} from "../ok-cancel-dialog/ok-cancel-dialog.component";
 import {MatMenuModule} from "@angular/material/menu";
@@ -23,6 +23,7 @@ import {TranslatePipe} from "@ngx-translate/core";
     TranslatePipe
 ],
     templateUrl: './ok-dialog.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./ok-dialog.component.scss']
 })
 export class OkDialogComponent {

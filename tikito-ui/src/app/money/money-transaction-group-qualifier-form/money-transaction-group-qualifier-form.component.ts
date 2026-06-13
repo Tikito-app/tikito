@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import MoneyTransactionGroupQualifier from "../../dto/money/money-transaction-group-qualifier";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -25,6 +25,7 @@ import {TranslatePipe} from "@ngx-translate/core";
         TranslatePipe
     ],
     templateUrl: './money-transaction-group-qualifier-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './money-transaction-group-qualifier-form.component.scss'
 })
 export class MoneyTransactionGroupQualifierFormComponent implements OnInit {

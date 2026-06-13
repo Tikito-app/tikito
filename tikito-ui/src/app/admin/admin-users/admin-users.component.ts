@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 
 import {
   MatCell,
@@ -59,6 +59,7 @@ import {Router} from "@angular/router";
     TranslatePipe
 ],
     templateUrl: './admin-users.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './admin-users.component.scss'
 })
 export class AdminUsersComponent implements OnInit {

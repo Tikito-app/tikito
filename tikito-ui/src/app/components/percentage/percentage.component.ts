@@ -1,9 +1,10 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 
 @Component({
     selector: 'app-percentage',
     imports: [],
     templateUrl: './percentage.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './percentage.component.scss'
 })
 export class PercentageComponent {

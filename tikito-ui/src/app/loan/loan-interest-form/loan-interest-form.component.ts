@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../service/auth.service";
 import {LoanInterest} from "../../dto/loan-interest";
@@ -33,6 +33,7 @@ import {DialogService} from "../../service/dialog.service";
 ],
     providers: [provideNativeDateAdapter()],
     templateUrl: './loan-interest-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './loan-interest-form.component.scss'
 })
 export class LoanInterestFormComponent implements OnInit {

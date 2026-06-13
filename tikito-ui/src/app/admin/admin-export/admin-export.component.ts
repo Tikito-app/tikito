@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {TranslatePipe} from "@ngx-translate/core";
@@ -24,6 +24,7 @@ import {MatCheckbox} from "@angular/material/checkbox";
         TranslatePipe
     ],
     templateUrl: './admin-export.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './admin-export.component.scss'
 })
 export class AdminExportComponent implements OnInit {

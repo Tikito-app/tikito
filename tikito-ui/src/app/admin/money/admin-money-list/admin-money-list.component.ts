@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -56,6 +56,7 @@ import {AccountApi} from "../../../api/account-api";
         MatCardHeader
     ],
     templateUrl: './admin-money-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './admin-money-list.component.scss'
 })
 export class AdminMoneyListComponent implements AfterViewInit {

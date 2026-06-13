@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {MatOption} from "@angular/material/core";
 import {MatFormField, MatLabel, MatSelect} from "@angular/material/select";
@@ -49,6 +49,7 @@ import {AssetType} from "../../../dto/asset-type";
     MatCardHeader
 ],
     templateUrl: './select-columns.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './select-columns.component.scss'
 })
 export class SelectColumnsComponent implements OnInit {

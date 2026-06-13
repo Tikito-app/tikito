@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -64,6 +64,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     ReactiveFormsModule
 ],
     templateUrl: './loan-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './loan-list.component.scss'
 })
 export class LoanListComponent implements AfterViewInit {

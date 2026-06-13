@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MoneyApi} from "../../api/money-api";
 import {AccountApi} from "../../api/account-api";
 import {Account} from "../../dto/account";
@@ -43,6 +43,7 @@ import {AssetType} from "../../dto/asset-type";
     TranslatePipe
 ],
     templateUrl: './import.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './import.component.scss'
 })
 export class ImportComponent implements OnInit {

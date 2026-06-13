@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {TopHeaderComponent} from "./top-header/top-header.component";
 import {FormsModule} from "@angular/forms";
@@ -16,6 +16,7 @@ import {CacheService} from "./service/cache-service";
         FormsModule
     ],
     templateUrl: './app.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {

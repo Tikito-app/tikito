@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from "@angular/router";
 import {MatAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
@@ -11,6 +11,7 @@ import {MatIcon} from "@angular/material/icon";
     MatIcon
 ],
     templateUrl: './header-item.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './header-item.component.scss'
 })
 export class HeaderItemComponent {

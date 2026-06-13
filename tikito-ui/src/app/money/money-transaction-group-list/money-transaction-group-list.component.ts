@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -57,6 +57,7 @@ import {CurrencyComponent} from "../../components/currency/currency.component";
 ],
     templateUrl: './money-transaction-group-list.component.html',
     styleUrl: './money-transaction-group-list.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [TranslatePipe]
 })
 export class MoneyTransactionGroupListComponent implements AfterViewInit {

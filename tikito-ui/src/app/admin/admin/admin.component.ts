@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {MatAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Router} from "@angular/router";
@@ -13,6 +13,7 @@ import {TranslatePipe} from "@ngx-translate/core";
     ],
     templateUrl: './admin.component.html',
     styleUrl: './admin.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [TranslatePipe]
 })
 export class AdminComponent {

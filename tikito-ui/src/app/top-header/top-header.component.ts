@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {HeaderItemComponent} from "../header-item/header-item.component";
 
 import {Util} from "../util";
@@ -13,6 +13,7 @@ import {AdminApi} from "../api/admin-api";
     TranslatePipe
 ],
     templateUrl: './top-header.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './top-header.component.scss'
 })
 export class TopHeaderComponent implements OnInit {

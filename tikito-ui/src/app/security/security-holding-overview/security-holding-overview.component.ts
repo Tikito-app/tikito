@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {SecurityHoldingGraphComponent} from "../security-holding-graph/security-holding-graph.component";
 import {TranslatePipe} from "@ngx-translate/core";
@@ -59,6 +59,7 @@ import {Security} from "../../dto/security/security";
 ],
     templateUrl: './security-holding-overview.component.html',
     styleUrl: './security-holding-overview.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [provideNativeDateAdapter()]
 })
 export class SecurityHoldingOverviewComponent implements OnInit {

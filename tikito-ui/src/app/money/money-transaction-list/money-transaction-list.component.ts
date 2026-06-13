@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -59,6 +59,7 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
         MatCardHeader
     ],
     templateUrl: './money-transaction-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './money-transaction-list.component.scss'
 })
 export class MoneyTransactionListComponent implements OnInit {

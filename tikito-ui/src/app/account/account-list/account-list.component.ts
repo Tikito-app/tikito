@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -51,6 +51,7 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     TranslatePipe
 ],
     templateUrl: './account-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './account-list.component.scss'
 })
 export class AccountListComponent implements AfterViewInit {

@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatPaginator} from "@angular/material/paginator";
 import {Util} from "../../util";
 
@@ -8,6 +8,7 @@ import {Util} from "../../util";
         MatPaginator
     ],
     templateUrl: './paginator.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './paginator.component.scss'
 })
 export class PaginatorComponent {

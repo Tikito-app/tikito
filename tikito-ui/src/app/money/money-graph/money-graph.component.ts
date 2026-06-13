@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {NgxEchartsDirective, provideEchartsCore} from "ngx-echarts";
 import {MoneyTransactionsFilter, TransactionDateRange} from "../../dto/money/money-transactions-filter";
 import {AuthService} from "../../service/auth.service";
@@ -21,6 +21,7 @@ import {TranslateService} from "@ngx-translate/core";
     ],
     templateUrl: './money-graph.component.html',
     styleUrl: './money-graph.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         provideEchartsCore({ echarts }),
     ]

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {LogApiService} from '../../api/log-api.service';
 import {Log} from '../../dto/log';
 
@@ -23,6 +23,7 @@ import {AuthService} from "../../service/auth.service";
     TranslatePipe
 ],
     templateUrl: './logs-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './logs-list.component.scss'
 })
 export class LogsListComponent implements OnInit {

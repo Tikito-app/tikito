@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {
   MAT_DIALOG_DATA,
@@ -53,6 +53,7 @@ export interface MyData {
 ],
     providers: [provideNativeDateAdapter()],
     templateUrl: './create-or-update-security-transaction-dialog.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './create-or-update-security-transaction-dialog.component.scss'
 })
 export class CreateOrUpdateSecurityTransactionDialogComponent implements OnInit {

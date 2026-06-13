@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {TranslatePipe} from "@ngx-translate/core";
@@ -13,6 +13,7 @@ import {ImportExportSettings} from "../../dto/import-export-settings";
         TranslatePipe
     ],
     templateUrl: './admin-import-export-setting.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './admin-import-export-setting.component.scss'
 })
 export class AdminImportExportSettingComponent {

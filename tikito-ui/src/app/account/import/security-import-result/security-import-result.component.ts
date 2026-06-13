@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -47,6 +47,7 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
     MatCardHeader
 ],
     templateUrl: './security-import-result.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './security-import-result.component.scss'
 })
 export class SecurityImportResultComponent implements OnInit {

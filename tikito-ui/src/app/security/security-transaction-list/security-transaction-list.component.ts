@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -58,6 +58,7 @@ import {SecurityTransactionType} from "../../dto/security/security-transaction-t
         MatCardHeader
     ],
     templateUrl: './security-transaction-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './security-transaction-list.component.scss'
 })
 export class SecurityTransactionListComponent implements OnInit {

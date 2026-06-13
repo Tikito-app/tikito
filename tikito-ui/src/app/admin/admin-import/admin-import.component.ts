@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {TranslatePipe} from "@ngx-translate/core";
 
@@ -19,6 +19,7 @@ import {AdminImportExportSettingComponent} from "../admin-import-export-setting/
     TranslatePipe
 ],
     templateUrl: './admin-import.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './admin-import.component.scss'
 })
 export class AdminImportComponent {

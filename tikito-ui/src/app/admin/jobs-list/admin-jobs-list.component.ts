@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {JobApiService} from '../../api/job-api.service';
 import {Job} from '../../dto/job';
 
@@ -23,6 +23,7 @@ import {Router} from "@angular/router";
     TranslatePipe
 ],
     templateUrl: './admin-jobs-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './admin-jobs-list.component.scss'
 })
 export class AdminJobsListComponent implements OnInit {

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {
   MatCell,
@@ -57,6 +57,7 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
     MatCardHeader
 ],
     templateUrl: './admin-security-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './admin-security-list.component.scss'
 })
 export class AdminSecurityListComponent implements AfterViewInit {

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {NgxEchartsDirective, provideEchartsCore} from "ngx-echarts";
 import {SecurityApi} from "../../api/security-api";
 import * as echarts from "echarts/core";
@@ -16,6 +16,7 @@ import {TranslateService} from "@ngx-translate/core";
     ],
     templateUrl: './security-pie-graph.component.html',
     styleUrl: './security-pie-graph.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         provideEchartsCore({ echarts }),
     ]

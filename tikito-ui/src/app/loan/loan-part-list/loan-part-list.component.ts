@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -42,6 +42,7 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
     MatCardHeader
 ],
     templateUrl: './loan-part-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './loan-part-list.component.scss'
 })
 export class LoanPartListComponent implements AfterViewInit {

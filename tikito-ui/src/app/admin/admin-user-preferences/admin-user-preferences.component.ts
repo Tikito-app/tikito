@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {MatCheckbox} from "@angular/material/checkbox";
@@ -37,6 +37,7 @@ import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 ],
     templateUrl: './admin-user-preferences.component.html',
     styleUrl: './admin-user-preferences.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [provideNativeDateAdapter()]
 })
 export class AdminUserPreferencesComponent {

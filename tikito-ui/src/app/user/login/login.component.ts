@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, DOCUMENT} from '@angular/core';
+import {Component, Inject, OnInit, DOCUMENT, ChangeDetectionStrategy} from '@angular/core';
 
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -25,6 +25,7 @@ import {TranslatePipe} from "@ngx-translate/core";
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCardModule, ReactiveFormsModule, MatInputModule, MatIconModule, MatButtonModule, MatListModule, MatOptionModule, MatSelectModule, MatSidenavModule, MatToolbarModule, TranslatePipe]
 })
 export class LoginComponent implements OnInit {

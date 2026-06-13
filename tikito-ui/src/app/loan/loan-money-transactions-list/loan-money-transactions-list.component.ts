@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {CurrencyComponent} from "../../components/currency/currency.component";
 import {DatePipe} from "@angular/common";
 import {
@@ -49,6 +49,7 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
         MatCardHeader
     ],
     templateUrl: './loan-money-transactions-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './loan-money-transactions-list.component.scss'
 })
 export class LoanMoneyTransactionsListComponent implements OnInit {

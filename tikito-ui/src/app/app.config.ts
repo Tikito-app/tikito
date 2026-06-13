@@ -1,6 +1,6 @@
 import {ApplicationConfig, importProvidersFrom} from '@angular/core';
 import {provideRouter} from '@angular/router';
-import {HttpClient, provideHttpClient} from "@angular/common/http";
+import {HttpClient, provideHttpClient, withXhr} from "@angular/common/http";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 
@@ -17,7 +17,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideHttpClient(), // Make HttpClient available
+    provideHttpClient(withXhr()), // Make HttpClient available
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: {

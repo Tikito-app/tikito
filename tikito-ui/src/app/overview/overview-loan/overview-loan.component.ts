@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {Loan} from "../../dto/loan";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {LoanValue} from "../../dto/loan-value";
@@ -17,6 +17,7 @@ import {TranslatePipe} from "@ngx-translate/core";
     TranslatePipe
 ],
     templateUrl: './overview-loan.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './overview-loan.component.scss'
 })
 export class OverviewLoanComponent {

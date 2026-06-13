@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Output, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -76,6 +76,7 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
 ],
     templateUrl: './security-holding-list.component.html',
     styleUrl: './security-holding-list.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [TranslatePipe]
 })
 export class SecurityHoldingListComponent implements AfterViewInit {

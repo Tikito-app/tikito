@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {AdminApi} from "../../../api/admin-api";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -27,6 +27,7 @@ import {TranslatePipe} from "@ngx-translate/core";
     TranslatePipe
 ],
     templateUrl: './admin-security-isin-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './admin-security-isin-form.component.scss'
 })
 export class AdminSecurityIsinFormComponent implements OnInit {

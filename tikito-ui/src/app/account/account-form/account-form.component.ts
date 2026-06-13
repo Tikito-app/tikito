@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
@@ -32,6 +32,7 @@ import {CacheService} from "../../service/cache-service";
     MatError
 ],
     templateUrl: './account-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './account-form.component.scss'
 })
 export class AccountFormComponent implements OnInit {

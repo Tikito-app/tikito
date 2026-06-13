@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AccountApi} from "../api/account-api";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -38,6 +38,7 @@ import {TranslatePipe} from "@ngx-translate/core";
         TranslatePipe
     ],
     templateUrl: './initial-installation.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './initial-installation.component.scss'
 })
 export class InitialInstallationComponent implements OnInit {

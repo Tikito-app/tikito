@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -47,6 +47,7 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
         MatCardHeader
     ],
     templateUrl: './money-import-result.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './money-import-result.component.scss'
 })
 export class MoneyImportResultComponent implements OnInit {

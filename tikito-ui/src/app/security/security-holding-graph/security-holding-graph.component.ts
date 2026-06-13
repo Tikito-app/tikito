@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {SecurityApi} from "../../api/security-api";
 import HistoricalHoldingValue from "../../dto/security/historical-holding-value";
 import {Util} from "../../util";
@@ -32,6 +32,7 @@ class Serie {
     ],
     templateUrl: './security-holding-graph.component.html',
     styleUrl: './security-holding-graph.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         provideEchartsCore({ echarts }),
     ]

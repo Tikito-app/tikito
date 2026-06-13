@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {OverviewApi} from "../api/overview-api";
 import {SecurityApi} from "../api/security-api";
 import {AuthService} from "../service/auth.service";
@@ -33,6 +33,7 @@ import {AssetType} from "../dto/asset-type";
 ],
     templateUrl: './overview.component.html',
     styleUrl: './overview.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         provideEchartsCore({ echarts }),
     ]
