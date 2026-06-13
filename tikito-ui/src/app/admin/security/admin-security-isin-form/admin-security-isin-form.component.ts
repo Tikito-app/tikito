@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {AdminApi} from "../../../api/admin-api";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -8,13 +8,12 @@ import {MatButton} from "@angular/material/button";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
-import {NgIf} from "@angular/common";
+
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-admin-security-isin-form',
-  standalone: true,
-  imports: [
+    selector: 'app-admin-security-isin-form',
+    imports: [
     MatButton,
     MatCard,
     MatCardContent,
@@ -23,13 +22,13 @@ import {TranslatePipe} from "@ngx-translate/core";
     MatFormField,
     MatInput,
     MatLabel,
-    NgIf,
     ReactiveFormsModule,
     TranslatePipe,
     TranslatePipe
-  ],
-  templateUrl: './admin-security-isin-form.component.html',
-  styleUrl: './admin-security-isin-form.component.scss'
+],
+    templateUrl: './admin-security-isin-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './admin-security-isin-form.component.scss'
 })
 export class AdminSecurityIsinFormComponent implements OnInit {
   form: FormGroup;

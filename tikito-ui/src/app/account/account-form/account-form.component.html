@@ -1,55 +1,63 @@
 <div class="main-side-column main-column">
 </div>
 <div class="main-center-column-small main-column">
-  <mat-card class="full-width" *ngIf="form" style="width: 100%;">
-    <mat-card-header>
-      <mat-card-title>{{ 'user-account/create-account' | translate }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <ng-container *ngIf="CacheService.getCurrencies().length == 0">No currencies available, please refresh your browser.</ng-container>
-      <form [formGroup]="form">
-        <ng-container>
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>{{ 'user-account/name' | translate }}</mat-label>
-            <input type="text" [attr.data-cy]="'name'" matInput formControlName="name">
-            <mat-error *ngIf="form.get('name')?.hasError('required')">
-              {{'user-account/form/name-required' | translate}}
-            </mat-error>
-          </mat-form-field>
-          <br/>
-          <mat-form-field appearance="fill">
-            <mat-label>{{ 'user-account/account-number' | translate }}</mat-label>
-            <input type="text" [attr.data-cy]="'account-number'" matInput formControlName="accountNumber">
-            <mat-error *ngIf="form.get('accountNumber')?.hasError('required')">
-              {{'user-account/form/account-number-required' | translate}}
-            </mat-error>
-          </mat-form-field>
-          &nbsp;
-          <mat-form-field>
-            <mat-label>{{ 'currency' | translate }}</mat-label>
-            <mat-select formControlName="currencyId" [attr.data-cy]="'currency'" required>
-              @for (currency of CacheService.getCurrencies(); track currency) {
-                <mat-option [value]="currency.id">{{ 'currency/' + currency.currentIsin | translate }}</mat-option>
+  @if (form) {
+    <mat-card class="full-width" style="width: 100%;">
+      <mat-card-header>
+        <mat-card-title>{{ 'user-account/create-account' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (CacheService.getCurrencies().length == 0) {
+          No currencies available, please refresh your browser.
+        }
+        <form [formGroup]="form">
+          <ng-container>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>{{ 'user-account/name' | translate }}</mat-label>
+              <input type="text" [attr.data-cy]="'name'" matInput formControlName="name">
+              @if (form.get('name')?.hasError('required')) {
+                <mat-error>
+                  {{'user-account/form/name-required' | translate}}
+                </mat-error>
               }
-            </mat-select>
-            <mat-error *ngIf="form.get('currencyId')?.hasError('required')">
-              {{'user-account/form/currency-required' | translate}}
-            </mat-error>
-          </mat-form-field>
-
-        </ng-container>
-        <br/>
-        <button [attr.data-cy]="'save-button'" mat-raised-button color="primary"
-                (click)="onSaveButtonClicked();">{{ 'save' | translate }}
-        </button>&nbsp;
-        <button [attr.data-cy]="'cancel-button'" mat-raised-button color="secondary"
-                (click)="onCancelButtonClicked()">{{ 'cancel' | translate }}
-        </button>
-        <button [attr.data-cy]="'delete-button'" mat-button color="warn" style="float: right;"
-                (click)="onDeleteButtonClicked();">{{ 'delete' | translate }}
-        </button>
-
-      </form>
-    </mat-card-content>
-  </mat-card>
+            </mat-form-field>
+            <br/>
+            <mat-form-field appearance="fill">
+              <mat-label>{{ 'user-account/account-number' | translate }}</mat-label>
+              <input type="text" [attr.data-cy]="'account-number'" matInput formControlName="accountNumber">
+              @if (form.get('accountNumber')?.hasError('required')) {
+                <mat-error>
+                  {{'user-account/form/account-number-required' | translate}}
+                </mat-error>
+              }
+            </mat-form-field>
+            &nbsp;
+            <mat-form-field>
+              <mat-label>{{ 'currency' | translate }}</mat-label>
+              <mat-select formControlName="currencyId" [attr.data-cy]="'currency'" required>
+                @for (currency of CacheService.getCurrencies(); track currency) {
+                  <mat-option [value]="currency.id">{{ 'currency/' + currency.currentIsin | translate }}</mat-option>
+                }
+              </mat-select>
+              @if (form.get('currencyId')?.hasError('required')) {
+                <mat-error>
+                  {{'user-account/form/currency-required' | translate}}
+                </mat-error>
+              }
+            </mat-form-field>
+          </ng-container>
+          <br/>
+          <button [attr.data-cy]="'save-button'" mat-raised-button color="primary"
+            (click)="onSaveButtonClicked();">{{ 'save' | translate }}
+          </button>&nbsp;
+          <button [attr.data-cy]="'cancel-button'" mat-raised-button color="secondary"
+            (click)="onCancelButtonClicked()">{{ 'cancel' | translate }}
+          </button>
+          <button [attr.data-cy]="'delete-button'" mat-button color="warn" style="float: right;"
+            (click)="onDeleteButtonClicked();">{{ 'delete' | translate }}
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  }
 </div>

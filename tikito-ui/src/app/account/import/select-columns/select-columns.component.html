@@ -16,20 +16,26 @@
                   </mat-select>
                 </mat-form-field>
 
-                <mat-form-field appearance="fill" *ngIf="displayBuySellValueFieldOnColumn == i">
-                  <mat-label>{{ 'account/import/buy-value' | translate }}</mat-label>
-                  <input type="text" [attr.data-cy]="'buy-value'" matInput formControlName="buy-value">
-                </mat-form-field>
+                @if (displayBuySellValueFieldOnColumn == i) {
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{ 'account/import/buy-value' | translate }}</mat-label>
+                    <input type="text" [attr.data-cy]="'buy-value'" matInput formControlName="buy-value">
+                  </mat-form-field>
+                }
 
-                <mat-form-field appearance="fill" *ngIf="displayTimestampFormatFieldOnColumn == i">
-                  <mat-label>{{ 'account/import/timestamp-format' | translate }}</mat-label>
-                  <input type="text" [attr.data-cy]="'timestamp-format'" matInput formControlName="timestamp-format">
-                </mat-form-field>
+                @if (displayTimestampFormatFieldOnColumn == i) {
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{ 'account/import/timestamp-format' | translate }}</mat-label>
+                    <input type="text" [attr.data-cy]="'timestamp-format'" matInput formControlName="timestamp-format">
+                  </mat-form-field>
+                }
 
-                <mat-form-field appearance="fill" *ngIf="displayTimeFormatFieldOnColumn == i">
-                  <mat-label>{{ 'account/import/time-format' | translate }}</mat-label>
-                  <input type="text" [attr.data-cy]="'time-format'" matInput formControlName="time-format">
-                </mat-form-field>
+                @if (displayTimeFormatFieldOnColumn == i) {
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{ 'account/import/time-format' | translate }}</mat-label>
+                    <input type="text" [attr.data-cy]="'time-format'" matInput formControlName="time-format">
+                  </mat-form-field>
+                }
 
               </th>
               <td mat-cell *matCellDef="let element"> {{ element[i] }} </td>

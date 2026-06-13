@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {MatCheckbox} from "@angular/material/checkbox";
@@ -6,7 +6,7 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
-import {NgIf} from "@angular/common";
+
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {AuthService} from "../../service/auth.service";
 import {CacheService} from "../../service/cache-service";
@@ -18,9 +18,8 @@ import {Router} from "@angular/router";
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-admin-user-preferences',
-  standalone: true,
-  imports: [
+    selector: 'app-admin-user-preferences',
+    imports: [
     MatButton,
     MatCard,
     MatCardContent,
@@ -32,15 +31,14 @@ import {TranslatePipe, TranslateService} from "@ngx-translate/core";
     MatLabel,
     MatOption,
     MatSelect,
-    NgIf,
     ReactiveFormsModule,
     MatIcon,
-    TranslatePipe,
-    // TranslatePipe
-  ],
-  templateUrl: './admin-user-preferences.component.html',
-  styleUrl: './admin-user-preferences.component.scss',
-  providers: [provideNativeDateAdapter()]
+    TranslatePipe
+],
+    templateUrl: './admin-user-preferences.component.html',
+    styleUrl: './admin-user-preferences.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    providers: [provideNativeDateAdapter()]
 })
 export class AdminUserPreferencesComponent {
   form: FormGroup;

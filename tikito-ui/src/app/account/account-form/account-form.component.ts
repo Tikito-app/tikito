@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
-import {NgIf} from "@angular/common";
+
 import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {Util} from "../../util";
@@ -15,9 +15,8 @@ import {AuthService} from "../../service/auth.service";
 import {CacheService} from "../../service/cache-service";
 
 @Component({
-  selector: 'app-account-form',
-  standalone: true,
-  imports: [
+    selector: 'app-account-form',
+    imports: [
     MatCardModule,
     MatCard,
     MatCardHeader,
@@ -25,16 +24,16 @@ import {CacheService} from "../../service/cache-service";
     ReactiveFormsModule,
     MatLabel,
     MatFormField,
-    NgIf,
     MatInput,
     MatButton,
     MatOption,
     MatSelect,
     TranslatePipe,
     MatError
-  ],
-  templateUrl: './account-form.component.html',
-  styleUrl: './account-form.component.scss'
+],
+    templateUrl: './account-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './account-form.component.scss'
 })
 export class AccountFormComponent implements OnInit {
   form: FormGroup;

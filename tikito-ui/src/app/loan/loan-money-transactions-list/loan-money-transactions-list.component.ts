@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {CurrencyComponent} from "../../components/currency/currency.component";
 import {DatePipe} from "@angular/common";
 import {
@@ -26,31 +26,31 @@ import {Util} from "../../util";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
-  selector: 'app-loan-money-transactions-list',
-  standalone: true,
-  imports: [
-    CurrencyComponent,
-    DatePipe,
-    MatCell,
-    MatCellDef,
-    MatColumnDef,
-    MatFormField,
-    MatHeaderCell,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatInput,
-    MatLabel,
-    MatRow,
-    MatRowDef,
-    MatTable,
-    PaginatorComponent,
-    MatHeaderCellDef,
-    TranslatePipe,
-    MatCard,
-    MatCardHeader
-  ],
-  templateUrl: './loan-money-transactions-list.component.html',
-  styleUrl: './loan-money-transactions-list.component.scss'
+    selector: 'app-loan-money-transactions-list',
+    imports: [
+        CurrencyComponent,
+        DatePipe,
+        MatCell,
+        MatCellDef,
+        MatColumnDef,
+        MatFormField,
+        MatHeaderCell,
+        MatHeaderRow,
+        MatHeaderRowDef,
+        MatInput,
+        MatLabel,
+        MatRow,
+        MatRowDef,
+        MatTable,
+        PaginatorComponent,
+        MatHeaderCellDef,
+        TranslatePipe,
+        MatCard,
+        MatCardHeader
+    ],
+    templateUrl: './loan-money-transactions-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './loan-money-transactions-list.component.scss'
 })
 export class LoanMoneyTransactionsListComponent implements OnInit {
   displayedColumns: string[] = ['timestamp', 'counterparty-account-name', 'counterparty-account-number', 'amount', 'description'];

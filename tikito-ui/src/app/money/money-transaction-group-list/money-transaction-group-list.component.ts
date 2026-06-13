@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -17,7 +17,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatFabButton} from "@angular/material/button";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TranslatePipe} from "@ngx-translate/core";
-import {NgIf} from "@angular/common";
+
 import {MoneyApi} from "../../api/money-api";
 import MoneyTransactionGroup from "../../dto/money/money-transaction-group";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
@@ -30,9 +30,8 @@ import {Util} from "../../util";
 import {CurrencyComponent} from "../../components/currency/currency.component";
 
 @Component({
-  selector: 'app-moneyTransactionGroup-list',
-  standalone: true,
-  imports: [
+    selector: 'app-moneyTransactionGroup-list',
+    imports: [
     MatTable,
     MatColumnDef,
     MatHeaderCell,
@@ -45,7 +44,6 @@ import {CurrencyComponent} from "../../components/currency/currency.component";
     MatRowDef,
     MatIcon,
     MatFabButton,
-    NgIf,
     MatFormField,
     MatInput,
     MatNoDataRow,
@@ -56,10 +54,11 @@ import {CurrencyComponent} from "../../components/currency/currency.component";
     MatCardHeader,
     CurrencyComponent,
     MatButton
-  ],
-  templateUrl: './money-transaction-group-list.component.html',
-  styleUrl: './money-transaction-group-list.component.scss',
-  providers: [TranslatePipe]
+],
+    templateUrl: './money-transaction-group-list.component.html',
+    styleUrl: './money-transaction-group-list.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    providers: [TranslatePipe]
 })
 export class MoneyTransactionGroupListComponent implements AfterViewInit {
   displayedColumns: string[] = ['name', 'budgeted'];

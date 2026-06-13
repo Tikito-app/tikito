@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../service/auth.service";
 import {LoanInterest} from "../../dto/loan-interest";
@@ -10,13 +10,12 @@ import {provideNativeDateAdapter} from "@angular/material/core";
 import {TranslatePipe} from "@ngx-translate/core";
 import {Util} from "../../util";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
-import {NgIf} from "@angular/common";
+
 import {DialogService} from "../../service/dialog.service";
 
 @Component({
-  selector: 'app-loan-interest-form',
-  standalone: true,
-  imports: [
+    selector: 'app-loan-interest-form',
+    imports: [
     FormsModule,
     MatButton,
     MatFormField,
@@ -29,13 +28,13 @@ import {DialogService} from "../../service/dialog.service";
     MatDatepickerToggle,
     MatHint,
     MatSuffix,
-    NgIf,
     TranslatePipe,
     MatError
-  ],
-  providers: [provideNativeDateAdapter()],
-  templateUrl: './loan-interest-form.component.html',
-  styleUrl: './loan-interest-form.component.scss'
+],
+    providers: [provideNativeDateAdapter()],
+    templateUrl: './loan-interest-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './loan-interest-form.component.scss'
 })
 export class LoanInterestFormComponent implements OnInit {
   form: FormGroup;

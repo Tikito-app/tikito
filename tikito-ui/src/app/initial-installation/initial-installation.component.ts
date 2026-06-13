@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AccountApi} from "../api/account-api";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -8,7 +8,7 @@ import {MatError, MatFormField, MatLabel, MatSuffix} from "@angular/material/for
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
-import {NgIf} from "@angular/common";
+
 import {UserAccount} from "../dto/user-account";
 import {HttpRequestData} from "../dto/http-request-data";
 import {HttpService} from "../service/http.service";
@@ -17,9 +17,8 @@ import {CacheService} from "../service/cache-service";
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-initial-installation',
-  standalone: true,
-  imports: [
+    selector: 'app-initial-installation',
+    imports: [
     FormsModule,
     MatCardContent,
     MatFormField,
@@ -33,14 +32,14 @@ import {TranslatePipe} from "@ngx-translate/core";
     MatCardTitle,
     MatError,
     MatSuffix,
-    NgIf,
     TranslatePipe
-  ],
-  providers: [
-    TranslatePipe
-  ],
-  templateUrl: './initial-installation.component.html',
-  styleUrl: './initial-installation.component.scss'
+],
+    providers: [
+        TranslatePipe
+    ],
+    templateUrl: './initial-installation.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './initial-installation.component.scss'
 })
 export class InitialInstallationComponent implements OnInit {
 

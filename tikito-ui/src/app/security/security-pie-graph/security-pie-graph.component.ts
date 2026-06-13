@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {NgxEchartsDirective, provideEchartsCore} from "ngx-echarts";
 import {SecurityApi} from "../../api/security-api";
 import * as echarts from "echarts/core";
@@ -10,16 +10,16 @@ import {Util} from "../../util";
 import {TranslateService} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-trading-company-pie-graph',
-  standalone: true,
+    selector: 'app-trading-company-pie-graph',
     imports: [
         NgxEchartsDirective,
     ],
-  templateUrl: './security-pie-graph.component.html',
-  styleUrl: './security-pie-graph.component.scss',
-  providers: [
-    provideEchartsCore({echarts}),
-  ]
+    templateUrl: './security-pie-graph.component.html',
+    styleUrl: './security-pie-graph.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    providers: [
+        provideEchartsCore({ echarts }),
+    ]
 })
 export class SecurityPieGraphComponent implements OnInit {
 

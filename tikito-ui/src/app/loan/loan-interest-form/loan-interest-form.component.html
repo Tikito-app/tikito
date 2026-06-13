@@ -4,32 +4,42 @@
       <mat-label>{{'start-date' | translate}}</mat-label>
       <input matInput [matDatepicker]="pickerStartDate" formControlName="startDate" [attr.data-cy]="'start-date'">
       <mat-hint>MM/DD/YYYY</mat-hint>
-      <mat-icon *ngIf="form.value['startDate']" matIconSuffix (click)="form.controls['startDate'].setValue(null);" class="clickable">close</mat-icon>
+      @if (form.value['startDate']) {
+        <mat-icon matIconSuffix (click)="form.controls['startDate'].setValue(null);" class="clickable">close</mat-icon>
+      }
       <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
       <mat-datepicker #pickerStartDate></mat-datepicker>
-      <mat-error *ngIf="form.get('startDate')?.hasError('required')">
-        {{'loan/form/start-date-required' | translate}}
-      </mat-error>
+      @if (form.get('startDate')?.hasError('required')) {
+        <mat-error>
+          {{'loan/form/start-date-required' | translate}}
+        </mat-error>
+      }
     </mat-form-field>
     <mat-form-field class="half-width">
       <mat-label>{{'end-date' | translate}}</mat-label>
       <input matInput [matDatepicker]="pickerEndDate" formControlName="endDate" [attr.data-cy]="'end-date'">
       <mat-hint>MM/DD/YYYY</mat-hint>
-      <mat-icon *ngIf="form.value['endDate']" matIconSuffix (click)="form.controls['endDate'].setValue(null);" class="clickable">close</mat-icon>
+      @if (form.value['endDate']) {
+        <mat-icon matIconSuffix (click)="form.controls['endDate'].setValue(null);" class="clickable">close</mat-icon>
+      }
       <mat-datepicker-toggle matIconSuffix [for]="pickerEndDate"></mat-datepicker-toggle>
       <mat-datepicker #pickerEndDate></mat-datepicker>
-      <mat-error *ngIf="form.get('endDate')?.hasError('required')">
-        {{'loan/form/end-date-required' | translate}}
-      </mat-error>
+      @if (form.get('endDate')?.hasError('required')) {
+        <mat-error>
+          {{'loan/form/end-date-required' | translate}}
+        </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="fill" style="width: 50%">
       <mat-label>{{'loan/part/interest/amount' | translate}}</mat-label>
       <input type="text" [attr.data-cy]="'amount'" matInput formControlName="amount" required>
 
-      <mat-error *ngIf="form.get('amount')?.hasError('required')">
-        {{'loan/form/amount-required' | translate}}
-      </mat-error>
+      @if (form.get('amount')?.hasError('required')) {
+        <mat-error>
+          {{'loan/form/amount-required' | translate}}
+        </mat-error>
+      }
     </mat-form-field>
   </ng-container>
   <br/>

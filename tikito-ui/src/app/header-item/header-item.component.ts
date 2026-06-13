@@ -1,19 +1,18 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from "@angular/router";
 import {MatAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
-import {NgIf} from "@angular/common";
+
 
 @Component({
-  selector: 'app-header-item',
-  standalone: true,
-  imports: [
+    selector: 'app-header-item',
+    imports: [
     MatAnchor,
-    MatIcon,
-    NgIf
-  ],
-  templateUrl: './header-item.component.html',
-  styleUrl: './header-item.component.scss'
+    MatIcon
+],
+    templateUrl: './header-item.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './header-item.component.scss'
 })
 export class HeaderItemComponent {
   @Input()

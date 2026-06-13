@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MoneyApi} from "../../api/money-api";
 import {AccountApi} from "../../api/account-api";
 import {Account} from "../../dto/account";
@@ -8,7 +8,7 @@ import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
-import {NgIf} from "@angular/common";
+
 import {FileImportService} from "../../service/file-import-service";
 import {SecurityApi} from "../../api/security-api";
 import {AuthService} from "../../service/auth.service";
@@ -28,24 +28,23 @@ import {ExcelService} from "../../service/excel.service";
 import {AssetType} from "../../dto/asset-type";
 
 @Component({
-  selector: 'app-import',
-  standalone: true,
-  imports: [
+    selector: 'app-import',
+    imports: [
     MatFormField,
     MatLabel,
     MatOption,
     MatSelect,
     ReactiveFormsModule,
-    NgIf,
     MoneyImportResultComponent,
     SecurityImportResultComponent,
     MatButton,
     SelectColumnsComponent,
     MatInput,
     TranslatePipe
-  ],
-  templateUrl: './import.component.html',
-  styleUrl: './import.component.scss'
+],
+    templateUrl: './import.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './import.component.scss'
 })
 export class ImportComponent implements OnInit {
   accounts: Account[];

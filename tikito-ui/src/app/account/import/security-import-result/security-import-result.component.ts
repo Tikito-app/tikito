@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -16,7 +16,7 @@ import {PaginatorComponent} from "../../../components/paginator/paginator.compon
 import {MatSort} from "@angular/material/sort";
 import {Util} from "../../../util";
 import {CurrencyComponent} from "../../../components/currency/currency.component";
-import {DatePipe, NgIf} from "@angular/common";
+import { DatePipe } from "@angular/common";
 import {TranslatePipe} from "@ngx-translate/core";
 import {SecurityTransactionImportLine} from "../../../dto/security/security-transaction-import-line";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
@@ -24,9 +24,8 @@ import {MatInput} from "@angular/material/input";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
-  selector: 'app-security-import-result',
-  standalone: true,
-  imports: [
+    selector: 'app-security-import-result',
+    imports: [
     CurrencyComponent,
     DatePipe,
     MatCell,
@@ -38,7 +37,6 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
     MatRow,
     MatRowDef,
     MatTable,
-    NgIf,
     PaginatorComponent,
     MatHeaderCellDef,
     MatFormField,
@@ -47,9 +45,10 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
     TranslatePipe,
     MatCard,
     MatCardHeader
-  ],
-  templateUrl: './security-import-result.component.html',
-  styleUrl: './security-import-result.component.scss'
+],
+    templateUrl: './security-import-result.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './security-import-result.component.scss'
 })
 export class SecurityImportResultComponent implements OnInit {
 

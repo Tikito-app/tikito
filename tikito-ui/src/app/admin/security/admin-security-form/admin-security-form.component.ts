@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
@@ -6,7 +6,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
-import {NgIf} from "@angular/common";
+
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../../service/auth.service";
@@ -16,9 +16,8 @@ import {CacheService} from "../../../service/cache-service";
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-admin-security-form',
-  standalone: true,
-  imports: [
+    selector: 'app-admin-security-form',
+    imports: [
     MatButton,
     MatCard,
     MatCardContent,
@@ -30,12 +29,12 @@ import {TranslatePipe} from "@ngx-translate/core";
     MatLabel,
     MatOption,
     MatSelect,
-    NgIf,
     ReactiveFormsModule,
     TranslatePipe
-  ],
-  templateUrl: './admin-security-form.component.html',
-  styleUrl: './admin-security-form.component.scss'
+],
+    templateUrl: './admin-security-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './admin-security-form.component.scss'
 })
 export class AdminSecurityFormComponent implements OnInit {
   form: FormGroup;

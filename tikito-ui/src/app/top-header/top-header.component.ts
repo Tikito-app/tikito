@@ -1,21 +1,20 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {HeaderItemComponent} from "../header-item/header-item.component";
-import {NgIf} from "@angular/common";
+
 import {Util} from "../util";
 import {AuthService} from "../service/auth.service";
 import {TranslatePipe} from "@ngx-translate/core";
 import {AdminApi} from "../api/admin-api";
 
 @Component({
-  selector: 'app-top-header',
-  standalone: true,
-  imports: [
+    selector: 'app-top-header',
+    imports: [
     HeaderItemComponent,
-    NgIf,
-    TranslatePipe,
-  ],
-  templateUrl: './top-header.component.html',
-  styleUrl: './top-header.component.scss'
+    TranslatePipe
+],
+    templateUrl: './top-header.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './top-header.component.scss'
 })
 export class TopHeaderComponent implements OnInit {
   loggedIn: boolean;

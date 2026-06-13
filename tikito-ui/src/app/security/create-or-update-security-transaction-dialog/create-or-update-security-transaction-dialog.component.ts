@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {
   MAT_DIALOG_DATA,
@@ -18,7 +18,7 @@ import {Util} from "../../util";
 import {UserPreferenceService} from "../../service/user-preference-service";
 import {UserPreference} from "../../dto/user-preference";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
-import {NgIf} from "@angular/common";
+
 import {SecurityApi} from "../../api/security-api";
 import {AccountApi} from "../../api/account-api";
 import {Account} from "../../dto/account";
@@ -29,9 +29,8 @@ export interface MyData {
 }
 
 @Component({
-  selector: 'app-security-transaction-dialog',
-  standalone: true,
-  imports: [
+    selector: 'app-security-transaction-dialog',
+    imports: [
     MatButton,
     MatDialogActions,
     MatDialogContent,
@@ -49,13 +48,13 @@ export interface MyData {
     MatDatepickerToggle,
     MatHint,
     MatSuffix,
-    NgIf,
     TranslatePipe,
-    MatError,
-  ],
-  providers: [provideNativeDateAdapter()],
-  templateUrl: './create-or-update-security-transaction-dialog.component.html',
-  styleUrl: './create-or-update-security-transaction-dialog.component.scss'
+    MatError
+],
+    providers: [provideNativeDateAdapter()],
+    templateUrl: './create-or-update-security-transaction-dialog.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './create-or-update-security-transaction-dialog.component.scss'
 })
 export class CreateOrUpdateSecurityTransactionDialogComponent implements OnInit {
   form: FormGroup;

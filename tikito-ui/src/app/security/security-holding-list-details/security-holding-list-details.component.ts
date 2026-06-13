@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import SecurityHolding from "../../dto/security/security-holding";
 import {SecurityUtil} from "../../security-util";
 import {MatIcon} from "@angular/material/icon";
@@ -15,21 +15,21 @@ import {SecurityHoldingFilter} from "../../dto/security/security-holding-filter"
 import {PercentageComponent} from "../../components/percentage/percentage.component";
 
 @Component({
-  selector: 'app-security-holding-list-details',
-  standalone: true,
-  imports: [
-    MatIcon,
-    MatDivider,
-    MatList,
-    MatListItem,
-    MatButton,
-    SecurityHoldingGraphComponent,
-    CurrencyComponent,
-    PercentageComponent,
-    TranslatePipe
-  ],
-  templateUrl: './security-holding-list-details.component.html',
-  styleUrl: './security-holding-list-details.component.scss'
+    selector: 'app-security-holding-list-details',
+    imports: [
+        MatIcon,
+        MatDivider,
+        MatList,
+        MatListItem,
+        MatButton,
+        SecurityHoldingGraphComponent,
+        CurrencyComponent,
+        PercentageComponent,
+        TranslatePipe
+    ],
+    templateUrl: './security-holding-list-details.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './security-holding-list-details.component.scss'
 })
 export class SecurityHoldingListDetailsComponent implements OnChanges {
 

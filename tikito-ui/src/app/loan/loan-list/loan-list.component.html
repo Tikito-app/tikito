@@ -1,44 +1,49 @@
 <div class="main-side-column main-column">
-  <mat-form-field *ngIf="tabIndex == 1">
-    <mat-label>{{ 'money/filter' | translate }}</mat-label>
-    <input matInput (keyup)="applyFilter($event)" #input>
-  </mat-form-field>
+  @if (tabIndex == 1) {
+    <mat-form-field>
+      <mat-label>{{ 'money/filter' | translate }}</mat-label>
+      <input matInput (keyup)="applyFilter($event)" #input>
+    </mat-form-field>
+  }
 
-  <app-loan-graph-filter *ngIf="tabIndex == 0 || tabIndex == null"></app-loan-graph-filter>
+  @if (tabIndex == 0 || tabIndex == null) {
+    <app-loan-graph-filter></app-loan-graph-filter>
+  }
 </div>
 
-<div class="{{tabIndex == 1 ? 'main-center-column-small' : 'main-center-column'}} main-column" *ngIf="loans.length > 0">
-  <mat-tab-group (selectedIndexChange)="onTabSelectionChanged($event)">
-    <mat-tab label="{{'loan/graph' | translate}}" [attr.data-cy]="'loan-graph-tab'">
-      <app-loan-graph [loans]="loans" [loanValues]="allValues" *ngIf="loans.length > 0"></app-loan-graph>
-    </mat-tab>
-    <mat-tab label="{{'loan/loans' | translate}}" [attr.data-cy]="'loan-list-tab'">
-
-      @if(dataSource) {
-        <mat-card>
-          <mat-card-header>
-            <table mat-table [dataSource]="dataSource" class="full-width">
-
-              <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef>{{'loan/name' | translate}}</th>
-                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-              </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClicked(row)" class="clickable"></tr>
-
-            </table>
-          </mat-card-header>
-        </mat-card>
-        <app-paginator></app-paginator>
-      }
-    </mat-tab>
-    <mat-tab label="{{'loan/transactions' | translate}}" [attr.data-cy]="'loan-transactions-tab'">
-      <app-loan-money-transactions-list></app-loan-money-transactions-list>
-    </mat-tab>
-  </mat-tab-group>
-
-</div>
-<div class="main-side-column main-column" *ngIf="tabIndex == 1 || loans.length == 0">
-  <button mat-fab [attr.data-cy]="'add'" (click)="onAddLoanButtonClicked()" class="fab-button"><mat-icon>add</mat-icon></button>
-</div>
+@if (loans.length > 0) {
+  <div class="{{tabIndex == 1 ? 'main-center-column-small' : 'main-center-column'}} main-column">
+    <mat-tab-group (selectedIndexChange)="onTabSelectionChanged($event)">
+      <mat-tab label="{{'loan/graph' | translate}}" [attr.data-cy]="'loan-graph-tab'">
+        @if (loans.length > 0) {
+          <app-loan-graph [loans]="loans" [loanValues]="allValues"></app-loan-graph>
+        }
+      </mat-tab>
+      <mat-tab label="{{'loan/loans' | translate}}" [attr.data-cy]="'loan-list-tab'">
+        @if(dataSource) {
+          <mat-card>
+            <mat-card-header>
+              <table mat-table [dataSource]="dataSource" class="full-width">
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef>{{'loan/name' | translate}}</th>
+                  <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClicked(row)" class="clickable"></tr>
+              </table>
+            </mat-card-header>
+          </mat-card>
+          <app-paginator></app-paginator>
+        }
+      </mat-tab>
+      <mat-tab label="{{'loan/transactions' | translate}}" [attr.data-cy]="'loan-transactions-tab'">
+        <app-loan-money-transactions-list></app-loan-money-transactions-list>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+}
+@if (tabIndex == 1 || loans.length == 0) {
+  <div class="main-side-column main-column">
+    <button mat-fab [attr.data-cy]="'add'" (click)="onAddLoanButtonClicked()" class="fab-button"><mat-icon>add</mat-icon></button>
+  </div>
+}

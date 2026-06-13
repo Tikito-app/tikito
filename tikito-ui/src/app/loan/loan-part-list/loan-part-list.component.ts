@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -17,16 +17,15 @@ import {MatSort} from "@angular/material/sort";
 import {ActivatedRoute, Router} from "@angular/router";
 import {LoanApi} from "../../api/loan-api";
 import {Loan} from "../../dto/loan";
-import {NgIf} from "@angular/common";
+
 import {TranslatePipe} from "@ngx-translate/core";
 import {AuthService} from "../../service/auth.service";
 import {LoanPart} from "../../dto/loan-part";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
-  selector: 'app-loan-part-list',
-  standalone: true,
-  imports: [
+    selector: 'app-loan-part-list',
+    imports: [
     MatCell,
     MatCellDef,
     MatColumnDef,
@@ -36,15 +35,15 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
     MatRow,
     MatRowDef,
     MatTable,
-    NgIf,
     PaginatorComponent,
     MatHeaderCellDef,
     TranslatePipe,
     MatCard,
     MatCardHeader
-  ],
-  templateUrl: './loan-part-list.component.html',
-  styleUrl: './loan-part-list.component.scss'
+],
+    templateUrl: './loan-part-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './loan-part-list.component.scss'
 })
 export class LoanPartListComponent implements AfterViewInit {
   displayedColumns: string[] = ['name'];

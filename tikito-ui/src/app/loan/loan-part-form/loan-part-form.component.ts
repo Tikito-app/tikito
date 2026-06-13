@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton, MatFabButton} from "@angular/material/button";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
@@ -7,7 +7,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
-import {NgForOf, NgIf} from "@angular/common";
+
 import {TranslatePipe} from "@ngx-translate/core";
 import {Account} from "../../dto/account";
 import {AccountApi} from "../../api/account-api";
@@ -31,9 +31,8 @@ import {DialogService} from "../../service/dialog.service";
 import {LoanType} from "../../dto/loan-type";
 
 @Component({
-  selector: 'app-loan-part-form',
-  standalone: true,
-  imports: [
+    selector: 'app-loan-part-form',
+    imports: [
     FormsModule,
     MatButton,
     MatCard,
@@ -47,8 +46,6 @@ import {LoanType} from "../../dto/loan-type";
     MatLabel,
     MatOption,
     MatSelect,
-    NgForOf,
-    NgIf,
     ReactiveFormsModule,
     LoanInterestListItemComponent,
     LoanInterestFormComponent,
@@ -59,10 +56,11 @@ import {LoanType} from "../../dto/loan-type";
     MatSuffix,
     TranslatePipe,
     MatError
-  ],
-  providers: [provideNativeDateAdapter()],
-  templateUrl: './loan-part-form.component.html',
-  styleUrl: './loan-part-form.component.scss'
+],
+    providers: [provideNativeDateAdapter()],
+    templateUrl: './loan-part-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './loan-part-form.component.scss'
 })
 export class LoanPartFormComponent implements OnInit {
   form: FormGroup;

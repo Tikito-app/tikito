@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -23,14 +23,13 @@ import {Util} from "../../../util";
 import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
-import {NgIf} from "@angular/common";
+
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
-  selector: 'app-admin-security-isin-list',
-  standalone: true,
-  imports: [
+    selector: 'app-admin-security-isin-list',
+    imports: [
     MatButton,
     MatCell,
     MatCellDef,
@@ -44,7 +43,6 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
     MatRow,
     MatRowDef,
     MatTable,
-    NgIf,
     PaginatorComponent,
     MatMenuTrigger,
     MatHeaderCellDef,
@@ -52,9 +50,10 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
     TranslatePipe,
     MatCard,
     MatCardHeader
-  ],
-  templateUrl: './admin-security-isin-list.component.html',
-  styleUrl: './admin-security-isin-list.component.scss'
+],
+    templateUrl: './admin-security-isin-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './admin-security-isin-list.component.scss'
 })
 export class AdminSecurityIsinListComponent implements AfterViewInit {
   displayedColumns: string[] = ['isin', 'symbol', 'valid-from', 'valid-to'];

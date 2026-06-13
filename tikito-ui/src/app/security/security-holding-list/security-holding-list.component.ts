@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Output, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -14,7 +14,7 @@ import {
 } from "@angular/material/table";
 import {MatIcon} from "@angular/material/icon";
 import {Router} from "@angular/router";
-import {NgIf} from "@angular/common";
+
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
 import SecurityHolding from "../../dto/security/security-holding";
 import {SecurityApi} from "../../api/security-api";
@@ -43,9 +43,8 @@ import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {MatCard, MatCardHeader} from "@angular/material/card";
 
 @Component({
-  selector: 'app-security-holding-list',
-  standalone: true,
-  imports: [
+    selector: 'app-security-holding-list',
+    imports: [
     MatTable,
     MatColumnDef,
     MatHeaderCell,
@@ -57,7 +56,6 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
     MatCellDef,
     MatRowDef,
     MatIcon,
-    NgIf,
     PaginatorComponent,
     SecurityHoldingListDetailsComponent,
     CurrencyComponent,
@@ -75,10 +73,11 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
     TranslatePipe,
     MatCard,
     MatCardHeader
-  ],
-  templateUrl: './security-holding-list.component.html',
-  styleUrl: './security-holding-list.component.scss',
-  providers: [TranslatePipe]
+],
+    templateUrl: './security-holding-list.component.html',
+    styleUrl: './security-holding-list.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    providers: [TranslatePipe]
 })
 export class SecurityHoldingListComponent implements AfterViewInit {
   displayedColumns: string[] = ['security-name', 'security-type', 'position-value', 'isin', 'performance', 'profit-loss', 'options'];

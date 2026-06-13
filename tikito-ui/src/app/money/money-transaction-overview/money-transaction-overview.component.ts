@@ -1,4 +1,4 @@
-import {Component, computed, EventEmitter, model, OnInit, Output, signal} from '@angular/core';
+import {Component, computed, EventEmitter, model, OnInit, Output, signal, ChangeDetectionStrategy} from '@angular/core';
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {TranslatePipe} from "@ngx-translate/core";
 import {MoneyTransactionListComponent} from "../money-transaction-list/money-transaction-list.component";
@@ -27,7 +27,7 @@ import {UserPreference} from "../../dto/user-preference";
 import {MatIcon, MatIconModule} from "@angular/material/icon";
 import {PopoverModule} from "../../components/popover/popover.module";
 import {PopoverComponent} from "../../components/popover/popover.component";
-import {NgIf} from "@angular/common";
+
 import {AccountApi} from "../../api/account-api";
 import {Account} from "../../dto/account";
 import {MatChipsModule} from "@angular/material/chips";
@@ -39,9 +39,8 @@ import {MoneyGraphComponent} from "../money-graph/money-graph.component";
 import moment from "moment";
 
 @Component({
-  selector: 'app-money-transaction-overview',
-  standalone: true,
-  imports: [
+    selector: 'app-money-transaction-overview',
+    imports: [
     MatTabGroup,
     MatTab,
     MoneyTransactionListComponent,
@@ -69,14 +68,14 @@ import moment from "moment";
     MatIconModule,
     MatChipsModule,
     PopoverComponent,
-    NgIf,
     FormsModule,
     TranslatePipe,
     MoneyGraphComponent
-  ],
-  templateUrl: './money-transaction-overview.component.html',
-  styleUrl: './money-transaction-overview.component.scss',
-  providers: [provideNativeDateAdapter(), {provide: MAT_DATE_LOCALE, useValue: 'nl-NL'}],
+],
+    templateUrl: './money-transaction-overview.component.html',
+    styleUrl: './money-transaction-overview.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    providers: [provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'nl-NL' }]
 })
 export class MoneyTransactionOverviewComponent implements OnInit {
   accountId: number;

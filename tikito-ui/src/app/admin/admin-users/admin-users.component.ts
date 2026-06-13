@@ -1,5 +1,5 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {NgIf} from "@angular/common";
+import {Component, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
+
 import {
   MatCell,
   MatCellDef,
@@ -31,9 +31,8 @@ import {MatInput} from "@angular/material/input";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-admin-users',
-  standalone: true,
-  imports: [
+    selector: 'app-admin-users',
+    imports: [
     MatCell,
     MatCellDef,
     MatColumnDef,
@@ -43,7 +42,6 @@ import {Router} from "@angular/router";
     MatRow,
     MatRowDef,
     MatTable,
-    NgIf,
     PaginatorComponent,
     MatHeaderCellDef,
     MatIcon,
@@ -59,9 +57,10 @@ import {Router} from "@angular/router";
     MatSuffix,
     ReactiveFormsModule,
     TranslatePipe
-  ],
-  templateUrl: './admin-users.component.html',
-  styleUrl: './admin-users.component.scss'
+],
+    templateUrl: './admin-users.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './admin-users.component.scss'
 })
 export class AdminUsersComponent implements OnInit {
   displayedColumns: string[] = ['name'];

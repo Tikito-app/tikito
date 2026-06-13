@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatError, MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
-import {NgForOf, NgIf} from "@angular/common";
+
 import {MatInput} from "@angular/material/input";
 import {MatButton, MatFabButton} from "@angular/material/button";
 import {Util} from "../../util";
@@ -26,9 +26,8 @@ import {Account} from "../../dto/account";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 
 @Component({
-  selector: 'app-moneyTransactionGroup-form',
-  standalone: true,
-  imports: [
+    selector: 'app-moneyTransactionGroup-form',
+    imports: [
     MatCardModule,
     MatCard,
     MatCardHeader,
@@ -37,10 +36,8 @@ import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/m
     MatLabel,
     MatFormField,
     MatIcon,
-    NgIf,
     MatInput,
     MatButton,
-    NgForOf,
     MoneyTransactionGroupQualifierListItemComponent,
     MatFabButton,
     MoneyTransactionGroupQualifierFormComponent,
@@ -53,10 +50,11 @@ import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/m
     MatHint,
     MatSuffix,
     MatError
-  ],
-  templateUrl: './money-transaction-group-form.component.html',
-  styleUrl: './money-transaction-group-form.component.scss',
-  providers: [provideNativeDateAdapter()],
+],
+    templateUrl: './money-transaction-group-form.component.html',
+    styleUrl: './money-transaction-group-form.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    providers: [provideNativeDateAdapter()]
 })
 export class MoneyTransactionGroupFormComponent implements OnInit {
   form: FormGroup;

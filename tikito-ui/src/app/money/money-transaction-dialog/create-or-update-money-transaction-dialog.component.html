@@ -9,9 +9,11 @@
           <mat-option [value]="account.id">{{account.name}}</mat-option>
         }
       </mat-select>
-      <mat-error *ngIf="form.get('name')?.hasError('required')">
-        {{'user-account/form/name-required' | translate}}
-      </mat-error>
+      @if (form.get('name')?.hasError('required')) {
+        <mat-error>
+          {{'user-account/form/name-required' | translate}}
+        </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="full-width">
@@ -33,17 +35,21 @@
           <mat-option [value]="currency.id">{{ 'currency/' + currency.currentIsin | translate }}</mat-option>
         }
       </mat-select>
-      <mat-error *ngIf="form.get('name')?.hasError('required')">
-        {{'user-account/form/name-required' | translate}}
-      </mat-error>
+      @if (form.get('name')?.hasError('required')) {
+        <mat-error>
+          {{'user-account/form/name-required' | translate}}
+        </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>{{ 'money/transaction/amount' | translate }}</mat-label>
       <input type="number" [attr.data-cy]="'amount'" matInput formControlName="amount">
-      <mat-error *ngIf="form.get('name')?.hasError('required')">
-        {{'user-account/form/name-required' | translate}}
-      </mat-error>
+      @if (form.get('name')?.hasError('required')) {
+        <mat-error>
+          {{'user-account/form/name-required' | translate}}
+        </mat-error>
+      }
     </mat-form-field>
     <br/>
 
@@ -63,12 +69,16 @@
       <mat-label>{{'money/transaction/timestamp' | translate}}</mat-label>
       <input matInput [matDatepicker]="pickerTimestamp" formControlName="timestamp">
       <mat-hint>MM/DD/YYYY</mat-hint>
-      <mat-icon *ngIf="form.value['timestamp']" matIconSuffix (click)="form.controls['timestamp'].setValue(null);" class="clickable">close</mat-icon>
+      @if (form.value['timestamp']) {
+        <mat-icon matIconSuffix (click)="form.controls['timestamp'].setValue(null);" class="clickable">close</mat-icon>
+      }
       <mat-datepicker-toggle matIconSuffix [for]="pickerTimestamp"></mat-datepicker-toggle>
       <mat-datepicker #pickerTimestamp></mat-datepicker>
-      <mat-error *ngIf="form.get('name')?.hasError('required')">
-        {{'user-account/form/name-required' | translate}}
-      </mat-error>
+      @if (form.get('name')?.hasError('required')) {
+        <mat-error>
+          {{'user-account/form/name-required' | translate}}
+        </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="full-width">

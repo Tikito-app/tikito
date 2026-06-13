@@ -1,5 +1,5 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {CommonModule, DOCUMENT} from '@angular/common'
+import {Component, Inject, OnInit, DOCUMENT, ChangeDetectionStrategy} from '@angular/core';
+
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
@@ -22,21 +22,11 @@ import {EnvService} from "../../service/env.service";
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
-  imports: [CommonModule, MatCardModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-    MatListModule,
-    MatOptionModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    TranslatePipe],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [MatCardModule, ReactiveFormsModule, MatInputModule, MatIconModule, MatButtonModule, MatListModule, MatOptionModule, MatSelectModule, MatSidenavModule, MatToolbarModule, TranslatePipe]
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;

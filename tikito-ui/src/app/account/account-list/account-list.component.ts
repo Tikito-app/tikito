@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -17,7 +17,7 @@ import {MatButton, MatFabButton} from "@angular/material/button";
 import {Router} from "@angular/router";
 import {AccountApi} from "../../api/account-api";
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
-import {NgIf} from "@angular/common";
+
 import {Account} from "../../dto/account";
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
 import {AuthService} from "../../service/auth.service";
@@ -27,9 +27,8 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
-  selector: 'app-account-list',
-  standalone: true,
-  imports: [
+    selector: 'app-account-list',
+    imports: [
     MatTable,
     MatColumnDef,
     MatHeaderCell,
@@ -42,7 +41,6 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatRowDef,
     MatIcon,
     MatFabButton,
-    NgIf,
     PaginatorComponent,
     MatButton,
     MatMenu,
@@ -51,9 +49,10 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatCard,
     MatCardContent,
     TranslatePipe
-  ],
-  templateUrl: './account-list.component.html',
-  styleUrl: './account-list.component.scss'
+],
+    templateUrl: './account-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './account-list.component.scss'
 })
 export class AccountListComponent implements AfterViewInit {
   displayedColumns: string[] = ['name', 'account-number', 'currency', 'options'];

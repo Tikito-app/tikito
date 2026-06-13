@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {
   MAT_DIALOG_DATA,
@@ -21,22 +21,22 @@ export interface MyData {
 }
 
 @Component({
-  selector: 'app-set-transaction-group-dialog',
-  standalone: true,
-  imports: [
-    MatButton,
-    MatDialogActions,
-    MatDialogContent,
-    MatDialogTitle,
-    MatLabel,
-    MatFormField,
-    MatOption,
-    MatSelect,
-    ReactiveFormsModule,
-    TranslatePipe
-  ],
-  templateUrl: './set-transaction-group-dialog.component.html',
-  styleUrl: './set-transaction-group-dialog.component.scss'
+    selector: 'app-set-transaction-group-dialog',
+    imports: [
+        MatButton,
+        MatDialogActions,
+        MatDialogContent,
+        MatDialogTitle,
+        MatLabel,
+        MatFormField,
+        MatOption,
+        MatSelect,
+        ReactiveFormsModule,
+        TranslatePipe
+    ],
+    templateUrl: './set-transaction-group-dialog.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './set-transaction-group-dialog.component.scss'
 })
 export class SetTransactionGroupDialogComponent implements OnInit {
   groups: MoneyTransactionGroup[];

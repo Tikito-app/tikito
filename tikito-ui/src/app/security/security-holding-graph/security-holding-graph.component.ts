@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {SecurityApi} from "../../api/security-api";
 import HistoricalHoldingValue from "../../dto/security/historical-holding-value";
 import {Util} from "../../util";
@@ -26,16 +26,16 @@ class Serie {
 }
 
 @Component({
-  selector: 'app-security-holding-graph',
-  standalone: true,
-  imports: [
-    NgxEchartsDirective
-  ],
-  templateUrl: './security-holding-graph.component.html',
-  styleUrl: './security-holding-graph.component.scss',
-  providers: [
-    provideEchartsCore({echarts}),
-  ]
+    selector: 'app-security-holding-graph',
+    imports: [
+        NgxEchartsDirective
+    ],
+    templateUrl: './security-holding-graph.component.html',
+    styleUrl: './security-holding-graph.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    providers: [
+        provideEchartsCore({ echarts }),
+    ]
 })
 export class SecurityHoldingGraphComponent implements OnInit {
 

@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+
 import {AuthService} from "../../service/auth.service";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-logout',
-  standalone: true,
-  templateUrl: './logout.component.html',
-  styleUrls: ['./logout.component.scss'],
-  imports: [CommonModule]
+    selector: 'app-logout',
+    templateUrl: './logout.component.html',
+    styleUrls: ['./logout.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: []
 })
 export class LogoutComponent {
   constructor(private router: Router,

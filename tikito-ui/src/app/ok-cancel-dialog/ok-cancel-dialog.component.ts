@@ -1,8 +1,8 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
-import {CommonModule} from '@angular/common';
+
 import {MatBadgeModule} from "@angular/material/badge";
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -15,21 +15,20 @@ export interface MyData {
 }
 
 @Component({
-  selector: 'app-ok-cancel-dialog',
-  standalone: true,
-  imports: [
+    selector: 'app-ok-cancel-dialog',
+    imports: [
     MatMenuModule,
     MatIconModule,
-    CommonModule,
     MatBadgeModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatDialogModule,
     TranslatePipe
-  ],
-  templateUrl: './ok-cancel-dialog.component.html',
-  styleUrls: ['./ok-cancel-dialog.component.scss']
+],
+    templateUrl: './ok-cancel-dialog.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrls: ['./ok-cancel-dialog.component.scss']
 })
 export class OkCancelDialogComponent {
 

@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {LogApiService} from '../../api/log-api.service';
 import {Log} from '../../dto/log';
-import {CommonModule} from '@angular/common';
+
 import {MatTableModule} from '@angular/material/table';
 import {MatCardModule} from '@angular/material/card';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -13,19 +13,18 @@ import {Router} from "@angular/router";
 import {AuthService} from "../../service/auth.service";
 
 @Component({
-  selector: 'app-logs-list',
-  standalone: true,
-  imports: [
-    CommonModule,
+    selector: 'app-logs-list',
+    imports: [
     MatTableModule,
     MatCardModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
     TranslatePipe
-  ],
-  templateUrl: './logs-list.component.html',
-  styleUrl: './logs-list.component.scss'
+],
+    templateUrl: './logs-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './logs-list.component.scss'
 })
 export class LogsListComponent implements OnInit {
   logs: Log[] = [];

@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NgIf} from "@angular/common";
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
+
 import {MatOption} from "@angular/material/core";
 import {MatFormField, MatLabel, MatSelect} from "@angular/material/select";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
@@ -26,9 +26,8 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
 import {AssetType} from "../../../dto/asset-type";
 
 @Component({
-  selector: 'app-select-columns',
-  standalone: true,
-  imports: [
+    selector: 'app-select-columns',
+    imports: [
     MatOption,
     MatSelect,
     ReactiveFormsModule,
@@ -43,15 +42,15 @@ import {AssetType} from "../../../dto/asset-type";
     MatRow,
     MatRowDef,
     MatTable,
-    NgIf,
     MatHeaderCellDef,
     MatInput,
     TranslatePipe,
     MatCard,
     MatCardHeader
-  ],
-  templateUrl: './select-columns.component.html',
-  styleUrl: './select-columns.component.scss'
+],
+    templateUrl: './select-columns.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './select-columns.component.scss'
 })
 export class SelectColumnsComponent implements OnInit {
 

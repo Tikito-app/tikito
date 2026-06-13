@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {LoanApi} from "../../api/loan-api";
 import {AuthService} from "../../service/auth.service";
 import {LoanValue} from "../../dto/loan-value";
@@ -10,17 +10,17 @@ import * as echarts from "echarts/core";
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-loan-graph',
-  standalone: true,
-  imports: [
-    NgxEchartsDirective,
-    TranslatePipe
-  ],
-  providers: [
-    provideEchartsCore({echarts}),
-  ],
-  templateUrl: './loan-graph.component.html',
-  styleUrl: './loan-graph.component.scss'
+    selector: 'app-loan-graph',
+    imports: [
+        NgxEchartsDirective,
+        TranslatePipe
+    ],
+    providers: [
+        provideEchartsCore({ echarts }),
+    ],
+    templateUrl: './loan-graph.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './loan-graph.component.scss'
 })
 export class LoanGraphComponent implements OnInit {
   @Input()

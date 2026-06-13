@@ -14,8 +14,8 @@ import {AssetType} from "./dto/asset-type";
 import {MoneyType} from "./dto/money/money-type";
 
 export class Util {
-  public static DATE_FORMAT: string = 'dd-MM-YYYY';
-  public static TIMESTAMP_FORMAT: 'dd-LL-YYYY HH:mm';
+  public static DATE_FORMAT: string = 'dd-MM-yyyy';
+  public static TIMESTAMP_FORMAT: 'dd-LL-yyyy HH:mm';
   public static PAGE_SIZE_OPTIONS = [5, 10, 20];
   public static DEFAULT_PAGE_SIZE = 10;
 

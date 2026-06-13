@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {NgxEchartsDirective, provideEchartsCore} from "ngx-echarts";
 import {MoneyTransactionsFilter, TransactionDateRange} from "../../dto/money/money-transactions-filter";
 import {AuthService} from "../../service/auth.service";
@@ -14,17 +14,17 @@ import {Util} from "../../util";
 import {TranslateService} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-money-graph',
-  standalone: true,
-  imports: [
-    NgxEchartsDirective,
-    EChartModule
-  ],
-  templateUrl: './money-graph.component.html',
-  styleUrl: './money-graph.component.scss',
-  providers: [
-    provideEchartsCore({echarts}),
-  ]
+    selector: 'app-money-graph',
+    imports: [
+        NgxEchartsDirective,
+        EChartModule
+    ],
+    templateUrl: './money-graph.component.html',
+    styleUrl: './money-graph.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    providers: [
+        provideEchartsCore({ echarts }),
+    ]
 })
 export class MoneyGraphComponent implements OnInit {
   @Input()

@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {JobApiService} from '../../api/job-api.service';
 import {Job} from '../../dto/job';
-import {CommonModule} from '@angular/common';
+
 import {MatTableModule} from '@angular/material/table';
 import {MatCardModule} from '@angular/material/card';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -13,19 +13,18 @@ import {AuthService} from "../../service/auth.service";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-jobs-list',
-  standalone: true,
-  imports: [
-    CommonModule,
+    selector: 'app-jobs-list',
+    imports: [
     MatTableModule,
     MatCardModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
     TranslatePipe
-  ],
-  templateUrl: './admin-jobs-list.component.html',
-  styleUrl: './admin-jobs-list.component.scss'
+],
+    templateUrl: './admin-jobs-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './admin-jobs-list.component.scss'
 })
 export class AdminJobsListComponent implements OnInit {
   jobs: Job[] = [];

@@ -1,7 +1,7 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {TranslatePipe} from "@ngx-translate/core";
-import {NgIf} from "@angular/common";
+
 import {SecurityTransactionImportLine} from "../../dto/security/security-transaction-import-line";
 import {HttpRequestData} from "../../dto/http-request-data";
 import {HttpService} from "../../service/http.service";
@@ -11,17 +11,16 @@ import {Router} from "@angular/router";
 import {AdminImportExportSettingComponent} from "../admin-import-export-setting/admin-import-export-setting.component";
 
 @Component({
-  selector: 'app-admin-import',
-  standalone: true,
-  imports: [
+    selector: 'app-admin-import',
+    imports: [
     MatButton,
-    NgIf,
     MatIcon,
     AdminImportExportSettingComponent,
     TranslatePipe
-  ],
-  templateUrl: './admin-import.component.html',
-  styleUrl: './admin-import.component.scss'
+],
+    templateUrl: './admin-import.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './admin-import.component.scss'
 })
 export class AdminImportComponent {
   file: File;

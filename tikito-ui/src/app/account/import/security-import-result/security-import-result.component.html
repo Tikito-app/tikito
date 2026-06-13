@@ -51,12 +51,12 @@
         <ng-container matColumnDef="description">
           <th mat-header-cell *matHeaderCellDef>{{'security/transaction/description' | translate}}</th>
           <td mat-cell *matCellDef="let element">
-            <ng-container *ngIf="element.description">
+            @if (element.description) {
               {{element.description}}
-            </ng-container>
-            <ng-container *ngIf="!element.description">
+            }
+            @if (!element.description) {
               {{'security/transaction/type/' + element.transactionType | translate}}
-            </ng-container>
+            }
           </td>
         </ng-container>
 

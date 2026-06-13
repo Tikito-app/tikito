@@ -1,17 +1,17 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {CurrencyPipe} from "@angular/common";
 import {CacheService} from "../../service/cache-service";
 import {SecurityType} from "../../dto/security/security-type";
 import {Security} from "../../dto/security/security";
 
 @Component({
-  selector: 'app-currency',
-  standalone: true,
-  imports: [
-    CurrencyPipe,
-  ],
-  templateUrl: './currency.component.html',
-  styleUrl: './currency.component.scss'
+    selector: 'app-currency',
+    imports: [
+        CurrencyPipe,
+    ],
+    templateUrl: './currency.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './currency.component.scss'
 })
 export class CurrencyComponent {
   @Input()

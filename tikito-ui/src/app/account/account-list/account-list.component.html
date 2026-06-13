@@ -1,9 +1,11 @@
 <div class="main-side-column main-column"></div>
 
 <div class="main-center-column-small main-column">
-  <div *ngIf="accounts.length == 0">
-<!--    {{'account/introduction-text' | translatePipePipe}}-->
-  </div>
+  @if (accounts.length == 0) {
+    <div>
+      <!--    {{'account/introduction-text' | translatePipePipe}}-->
+    </div>
+  }
   @if(accounts.length > 0) {
     <mat-card>
       <mat-card-content>

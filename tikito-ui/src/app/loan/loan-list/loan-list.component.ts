@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -16,7 +16,7 @@ import {MatFabButton} from "@angular/material/button";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {NgIf} from "@angular/common";
+
 import {PaginatorComponent} from "../../components/paginator/paginator.component";
 import {TranslatePipe} from "@ngx-translate/core";
 import {Loan} from "../../dto/loan";
@@ -34,9 +34,8 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @Component({
-  selector: 'app-loan-list',
-  standalone: true,
-  imports: [
+    selector: 'app-loan-list',
+    imports: [
     MatCell,
     MatCellDef,
     MatColumnDef,
@@ -51,7 +50,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     MatRow,
     MatRowDef,
     MatTable,
-    NgIf,
     PaginatorComponent,
     MatHeaderCellDef,
     MatTab,
@@ -64,9 +62,10 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     MatCardHeader,
     FormsModule,
     ReactiveFormsModule
-  ],
-  templateUrl: './loan-list.component.html',
-  styleUrl: './loan-list.component.scss'
+],
+    templateUrl: './loan-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './loan-list.component.scss'
 })
 export class LoanListComponent implements AfterViewInit {
   displayedColumns: string[] = ['name'];

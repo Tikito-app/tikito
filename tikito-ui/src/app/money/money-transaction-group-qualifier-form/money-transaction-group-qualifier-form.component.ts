@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import MoneyTransactionGroupQualifier from "../../dto/money/money-transaction-group-qualifier";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -12,21 +12,21 @@ import {AuthService} from "../../service/auth.service";
 import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-money-transaction-group-qualifier-form',
-  standalone: true,
-  imports: [
-    MatFormField,
-    MatSelect,
-    MatOption,
-    MatIcon,
-    ReactiveFormsModule,
-    MatLabel,
-    MatInput,
-    MatButton,
-    TranslatePipe
-  ],
-  templateUrl: './money-transaction-group-qualifier-form.component.html',
-  styleUrl: './money-transaction-group-qualifier-form.component.scss'
+    selector: 'app-money-transaction-group-qualifier-form',
+    imports: [
+        MatFormField,
+        MatSelect,
+        MatOption,
+        MatIcon,
+        ReactiveFormsModule,
+        MatLabel,
+        MatInput,
+        MatButton,
+        TranslatePipe
+    ],
+    templateUrl: './money-transaction-group-qualifier-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './money-transaction-group-qualifier-form.component.scss'
 })
 export class MoneyTransactionGroupQualifierFormComponent implements OnInit {
   form: FormGroup;
