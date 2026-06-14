@@ -57,7 +57,7 @@
   "account/import/row": "Rij",
   "account/import/file-import-success": "Het bestand is succesvol geïmporteerd",
   "account/import/failed-reason": "Reden",
-  "account/import/buy-value": "Aankoopwaarde",
+  "account/import/buy-value": "Koop text",
   "account/import/test-custom-import": "Test de import (dry run)",
   "account/import/csv-file-separator": "Csv scheidingsteken",
   "account/import/continue": "Doorgaan",
@@ -122,7 +122,7 @@
   "security/holding/transaction-costs": "Transactiekosten",
   "security/holding/taxes": "Belastingen",
   "security/holding/worth": "Waarde",
-  "security/holding/amount": "Bedrag",
+  "security/holding/amount": "Hoeveelheid",
   "security/holding/cash-invested": "Geïnvesteerd",
   "security/holding/deleted-message": "De positie is verwijderd",
 
@@ -323,7 +323,7 @@
   "admin/jobs": "Taken",
   "admin/jobs/timestamp": "Tijdstip",
   "admin/jobs/job-type": "Type",
-  "admin/jobs/security-id": "Waardepapier",
+  "admin/jobs/security-id": "Taak ID",
   "admin/jobs/account-id": "Rekening",
   "admin/jobs/loan-id": "Lening",
 
