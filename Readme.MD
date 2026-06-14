@@ -44,7 +44,7 @@
 | Budgeting                               | Yes         |
 | Manually add/edit transactions          | Yes         |
 | Crypto                                  | Yes         |
+| Translations                            | Yes         |
 | More options to import data             | Comnig soon |
-| Translations                            | Comnig soon |
 | Generic loans                           | Comnig soon |
 
