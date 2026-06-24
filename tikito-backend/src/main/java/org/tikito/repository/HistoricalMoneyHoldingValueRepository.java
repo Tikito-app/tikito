@@ -13,6 +13,8 @@ public interface HistoricalMoneyHoldingValueRepository extends JpaRepository<His
     @Modifying
     void deleteByAccountId(long accountId);
 
+    List<HistoricalMoneyHoldingValue> findByUserId(long userId);
+
     @Query("""
             select v from HistoricalMoneyHoldingValue v where
                 v.userId = :userId and
