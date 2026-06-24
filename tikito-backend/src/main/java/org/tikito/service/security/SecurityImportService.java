@@ -112,7 +112,7 @@ public class SecurityImportService {
                                                                  final String timeFormat) throws UnsupportedImportFormatException, IOException {
 
         final ImportFileType fileType = FileReader.getImportFileType(file);
-        final AccountDto account = accountRepository.findById(accountId).orElseThrow().toDto();
+        final AccountDto account = accountRepository.findByUserIdAndId(userId, accountId).orElseThrow().toDto();
 
         final List<List<String>> lines = fileType == ImportFileType.CSV ?
                 FileReader.readCsv(file, separatorChar, quoteChar) :

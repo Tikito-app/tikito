@@ -118,7 +118,7 @@ public class MoneyHoldingService implements JobProcessor {
     @Transactional(propagation = Propagation.MANDATORY)
     public void recalculateAggregatedHistoricalHoldingValues(final long userId) {
         log.info("Recalculating aggregated historical values");
-        final List<HistoricalMoneyHoldingValue> allHistoricalValues = historicalMoneyHoldingValueRepository.findAll();
+        final List<HistoricalMoneyHoldingValue> allHistoricalValues = historicalMoneyHoldingValueRepository.findByUserId(userId);
         final Map<LocalDate, List<HistoricalMoneyHoldingValue>> historicalValuesByDate = new HashMap<>();
         allHistoricalValues.forEach(historicalSecurityHoldingValue -> {
             historicalValuesByDate.putIfAbsent(historicalSecurityHoldingValue.getDate(), new ArrayList<>());

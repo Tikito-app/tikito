@@ -56,6 +56,7 @@ public class AdminController {
 
     @PostMapping("/users/{userAccountId}")
     public ResponseEntity<UserAccountDto> editUser(final AuthUser authUser, @PathVariable("userAccountId") final long userAccountId, @Valid @RequestBody final AdminEditUserRequest request) throws PasswordNotLongEnoughException {
+        // todo: assert authorized to edit this user
         return ResponseEntity.ok(userAccountService.editUser(userAccountId, request.getEmail(), request.getPassword()));
     }
 
