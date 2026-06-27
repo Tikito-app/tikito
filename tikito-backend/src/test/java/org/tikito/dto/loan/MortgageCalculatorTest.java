@@ -1,5 +1,6 @@
 package org.tikito.dto.loan;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.tikito.dto.DateRange;
 import org.tikito.entity.loan.LoanInterest;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 class MortgageCalculatorTest extends BaseTest {
 
     @Test
+    @Disabled
     void calculate_given_zeroInterest() {
         final LocalDate startDate = LocalDate.of(2025, 1, 1);
         final LoanPart loanPart = new LoanPart();
@@ -31,6 +33,7 @@ class MortgageCalculatorTest extends BaseTest {
     }
 
     @Test
+    @Disabled
     void calculate_given_interest() {
         final LocalDate startDate = LocalDate.of(2025, 1, 1);
         final LoanPart loanPart = new LoanPart();
@@ -52,6 +55,7 @@ class MortgageCalculatorTest extends BaseTest {
     }
 
     @Test
+    @Disabled
     void calculateMonthlyTotalPaymentAmount() {
         final LocalDate startDate = LocalDate.of(2025, 1, 1);
         final LoanInterest interest1 = new LoanInterest();

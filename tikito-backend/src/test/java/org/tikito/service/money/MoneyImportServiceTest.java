@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.tikito.config.TestcontainersConfiguration;
 import org.tikito.dto.AccountDto;
 import org.tikito.dto.money.MoneyTransactionImportLine;
 import org.tikito.dto.money.MoneyTransactionImportResultDto;
@@ -31,6 +33,7 @@ import static org.tikito.service.importer.money.CustomMoneyImportHeaderName.*;
 
 @SpringBootTest
 @Transactional
+@ContextConfiguration(classes = TestcontainersConfiguration.class)
 class MoneyImportServiceTest extends BaseIntegrationTest {
 
     @Autowired

@@ -1,14 +1,17 @@
 package org.tikito.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tikito.dto.AccountDto;
 import org.tikito.dto.DateRange;
+import org.tikito.dto.export.ImportExportSettings;
+import org.tikito.dto.export.TikitoExportDto;
 import org.tikito.dto.loan.LoanType;
 import org.tikito.dto.money.MoneyTransactionGroupQualifierType;
 import org.tikito.dto.money.MoneyTransactionGroupType;
-import org.tikito.dto.security.SecurityType;
 import org.tikito.entity.Account;
 import org.tikito.entity.UserAccount;
 import org.tikito.entity.loan.Loan;
@@ -22,6 +25,7 @@ import org.tikito.repository.*;
 import org.tikito.service.export.ImportExportService;
 import org.tikito.service.security.SecurityHoldingService;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -32,6 +36,7 @@ import java.util.Set;
 
 import static org.tikito.TestUtil.randomDouble;
 import static org.tikito.TestUtil.randomString;
+import static org.tikito.dto.security.SecurityType.CURRENCY;
 
 public class BaseIntegrationTest extends BaseTest {
 
@@ -113,6 +118,9 @@ public class BaseIntegrationTest extends BaseTest {
     @Autowired
     protected TimeService timeService;
 
+    protected final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+
     @AfterEach
     @BeforeEach
     public void tearDown() {
@@ -129,6 +137,9 @@ public class BaseIntegrationTest extends BaseTest {
         userAccountRepository.deleteAll();
         loanRepository.deleteAll();
         moneyHoldingRepository.deleteAll();
+
+        withExistingCurrency("EUR", "Euro");
+        withExistingCurrency("USD", "Dollar");
 
         cacheService.refreshSecurities();
         cacheService.refreshCurrencies();
@@ -177,7 +188,7 @@ public class BaseIntegrationTest extends BaseTest {
     protected Security withExistingCurrency(final String identifier, final String displayName) {
         final Security security = new Security();
         security.setName(displayName);
-        security.setSecurityType(SecurityType.CURRENCY);
+        security.setSecurityType(CURRENCY);
         security.setCurrentIsin(identifier);
         final Security persistedSecurity = securityRepository.saveAndFlush(security);
         final Isin isin = new Isin(identifier);
@@ -313,5 +324,17 @@ public class BaseIntegrationTest extends BaseTest {
         final UserAccount userAccount = userAccountRepository.saveAndFlush(userAccount(email, password, activationCode));
         cacheService.refreshFirstEverUser();
         return userAccount;
+    }
+
+    protected void importFromFile(final String path) throws IOException {
+        final String json = getClassPathResource(path);
+        final TikitoExportDto importDto = objectMapper.readValue(json, TikitoExportDto.class);
+        final ImportExportSettings settings = new ImportExportSettings();
+        settings.setAccounts(true);
+        settings.setMoneyTransactions(true);
+        settings.setMoneyTransactionGroups(false);
+        settings.setSecurityTransactions(false);
+        settings.setLoans(false);
+        importExportService.importFrom(DEFAULT_USER_ACCOUNT.getId(), importDto, settings);
     }
 }

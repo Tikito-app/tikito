@@ -97,8 +97,7 @@
     {
       "name": "Groceries",
       "groupTypes": [
-        "MONEY",
-        "BUDGET"
+        "MONEY"
       ],
       "qualifiers": [
         {
@@ -145,8 +144,7 @@
     {
       "name": "Insurance",
       "groupTypes": [
-        "MONEY",
-        "BUDGET"
+        "MONEY"
       ],
       "qualifiers": [
         {

@@ -253,7 +253,6 @@ export class MoneyGraphComponent implements OnInit {
           let firstValue = moneyValue != null ? moneyValue : cashHoldingValue;
 
           if(firstValue != null || budgetValue != null) {
-            // todo: convert amount to value?
             let value = firstValue != null ? firstValue.value ? firstValue.value : firstValue.amount : null;
             let isCurrency = firstValue != null && firstValue.groupKey == null;
 
