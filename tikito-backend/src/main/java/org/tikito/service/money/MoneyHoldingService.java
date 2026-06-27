@@ -148,10 +148,7 @@ public class MoneyHoldingService implements JobProcessor {
                 .findByUserId(userId)
                 .stream()
                 .map(MoneyHolding::toDto)
-                .map(holding -> {
-                    holding.setAccount(accountMap.get(holding.getAccountId()));
-                    return holding;
-                })
+                .peek(holding -> holding.setAccount(accountMap.get(holding.getAccountId())))
                 .sorted(Comparator.comparing(o -> o.getAccount().getName()))
                 .toList();
     }
@@ -168,11 +165,12 @@ public class MoneyHoldingService implements JobProcessor {
         return holdingValues;
     }
 
+    /**
+     * Aggregate the holding values. Multiplies the amount with the exchange rate.
+     */
     private static void aggregateHoldingValue(final HistoricalMoneyHoldingValue historicalSecurityHoldingValue, final AggregatedHistoricalMoneyHoldingValue aggregatedMoneyValue) {
-        final double currencyMultiplier = historicalSecurityHoldingValue.getCurrencyMultiplier();
-
         aggregatedMoneyValue.setDate(historicalSecurityHoldingValue.getDate());
-        aggregatedMoneyValue.setAmount(aggregatedMoneyValue.getAmount() + (historicalSecurityHoldingValue.getAmount() * currencyMultiplier));
+        aggregatedMoneyValue.setAmount(aggregatedMoneyValue.getAmount() + historicalSecurityHoldingValue.getAmount() * historicalSecurityHoldingValue.getCurrencyMultiplier());
     }
 
     /**
@@ -195,6 +193,8 @@ public class MoneyHoldingService implements JobProcessor {
              currentTimestamp = currentTimestamp.plusDays(1)) {
 
             final double currencyMultiplier = cacheService.getCurrencyMultiplier(currencyId, currentTimestamp);
+
+            // We set the exchange rate here, but this can be overriden by the transactions if it's set
             currentHoldingValue.setCurrencyMultiplier(currencyMultiplier);
 
             currentHoldingValue = calculateHistoricalValue(
@@ -231,6 +231,9 @@ public class MoneyHoldingService implements JobProcessor {
             newHoldingValue.setAmount(transaction.getFinalBalance());
         } else {
             newHoldingValue.setAmount(newHoldingValue.getAmount() + transaction.getAmount());
+        }
+        if(transaction.getExchangeRate() != 0) {
+            newHoldingValue.setCurrencyMultiplier(transaction.getExchangeRate());
         }
     }
 

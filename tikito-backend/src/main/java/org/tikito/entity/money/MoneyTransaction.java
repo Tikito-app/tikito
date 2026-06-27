@@ -42,7 +42,7 @@ public class MoneyTransaction {
         this.counterpartyAccountNumber = line.getCounterpartyAccountNumber();
         this.timestamp = line.getTimestamp();
         this.amount = line.getAmount();
-        this.finalBalance = line.getFinalBalance() == null ? null : line.getFinalBalance() * line.getExchangeRate();
+        this.finalBalance = line.getFinalBalance() == null ? null : line.getFinalBalance();
         this.description = line.getDescription();
         this.currencyId = line.getCurrencyId();
         this.exchangeRate = line.getExchangeRate();

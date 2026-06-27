@@ -1,0 +1,88 @@
+{
+  "accounts": [
+    {
+      "name": "Money EUR Account",
+      "accountNumber": "EUR-001",
+      "currency": "EUR",
+      "securityTransactions": [],
+      "moneyTransactions": [
+        {
+          "accountName": "Money EUR Account",
+          "counterpartyAccountName": "Counterparty",
+          "counterpartyAccountNumber": "NL01TEST0000000001",
+          "timestamp": "2026-03-01T12:00:00Z",
+          "amount": 200.0,
+          "finalBalance": 200.0,
+          "description": "Transaction 1",
+          "currency": "EUR",
+          "exchangeRate": 1
+        },
+        {
+          "accountName": "Money EUR Account",
+          "counterpartyAccountName": "Counterparty",
+          "counterpartyAccountNumber": "NL01TEST0000000001",
+          "timestamp": "2026-04-15T12:00:00Z",
+          "amount": 50.0,
+          "finalBalance": 250.0,
+          "description": "Transaction 2",
+          "currency": "EUR",
+          "exchangeRate": 1
+        },
+        {
+          "accountName": "Money EUR Account",
+          "counterpartyAccountName": "Counterparty",
+          "counterpartyAccountNumber": "NL01TEST0000000001",
+          "timestamp": "2026-05-20T12:00:00Z",
+          "amount": -100.0,
+          "finalBalance": 150.0,
+          "description": "Transaction 3",
+          "currency": "EUR",
+          "exchangeRate": 1
+        }
+      ]
+    },
+    {
+      "name": "Money USD Account",
+      "accountNumber": "USD-001",
+      "currency": "USD",
+      "securityTransactions": [],
+      "moneyTransactions": [
+        {
+          "accountName": "Money USD Account",
+          "counterpartyAccountName": "Counterparty",
+          "counterpartyAccountNumber": "NL01TEST0000000002",
+          "timestamp": "2026-03-01T12:00:00Z",
+          "amount": 100.0,
+          "finalBalance": 100.0,
+          "description": "Transaction 1",
+          "currency": "USD",
+          "exchangeRate": 2
+        },
+        {
+          "accountName": "Money USD Account",
+          "counterpartyAccountName": "Counterparty",
+          "counterpartyAccountNumber": "NL01TEST0000000002",
+          "timestamp": "2026-04-15T12:00:00Z",
+          "amount": 30.0,
+          "finalBalance": 130.0,
+          "description": "Transaction 2",
+          "currency": "USD",
+          "exchangeRate": 3
+        },
+        {
+          "accountName": "Money USD Account",
+          "counterpartyAccountName": "Counterparty",
+          "counterpartyAccountNumber": "NL01TEST0000000002",
+          "timestamp": "2026-05-20T12:00:00Z",
+          "amount": -50.0,
+          "finalBalance": 80.0,
+          "description": "Transaction 3",
+          "currency": "USD",
+          "exchangeRate": 4
+        }
+      ]
+    }
+  ],
+  "moneyGroups": [],
+  "loans": []
+}

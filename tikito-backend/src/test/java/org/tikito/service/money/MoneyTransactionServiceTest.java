@@ -1,5 +1,7 @@
 package org.tikito.service.money;
 
+import org.springframework.test.context.ContextConfiguration;
+import org.tikito.config.TestcontainersConfiguration;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.service.BaseIntegrationTest;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 @Transactional
+@ContextConfiguration(classes = TestcontainersConfiguration.class)
 class MoneyTransactionServiceTest extends BaseIntegrationTest {
     @Autowired
     private MoneyTransactionService service;

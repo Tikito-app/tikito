@@ -3,6 +3,7 @@ package org.tikito.dto.export;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jspecify.annotations.Nullable;
 import org.tikito.dto.money.MoneyTransactionImportLine;
 
 import java.time.Instant;
@@ -19,7 +20,7 @@ public class MoneyTransactionExportDto {
     private Double finalBalance;
     private String description;
     private String currency;
-    private double exchangeRate;
+    private @Nullable Double exchangeRate;
 
     public MoneyTransactionExportDto(final String accountName,
                                      final String counterpartyAccountName,

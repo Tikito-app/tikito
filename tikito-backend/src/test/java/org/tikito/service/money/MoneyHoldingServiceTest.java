@@ -1,33 +1,33 @@
 package org.tikito.service.money;
 
-import org.tikito.entity.money.AggregatedHistoricalMoneyHoldingValue;
-import org.tikito.entity.money.MoneyHolding;
-import org.tikito.entity.money.MoneyTransaction;
-import org.tikito.entity.money.HistoricalMoneyHoldingValue;
-import org.tikito.service.BaseIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.tikito.config.TestcontainersConfiguration;
+import org.tikito.entity.Account;
+import org.tikito.entity.money.AggregatedHistoricalMoneyHoldingValue;
+import org.tikito.entity.money.HistoricalMoneyHoldingValue;
+import org.tikito.service.BaseIntegrationTest;
 
+import java.io.IOException;
 import java.time.LocalDate;
-import java.time.ZoneOffset;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 @Transactional
+@ContextConfiguration(classes = TestcontainersConfiguration.class)
 class MoneyHoldingServiceTest extends BaseIntegrationTest {
 
     @Autowired
     private MoneyHoldingService service;
-
-    private List<MoneyTransaction> defaultTransactions;
-    private List<MoneyTransaction> dollarTransactions;
 
     @BeforeEach
     void setup() {
@@ -35,121 +35,83 @@ class MoneyHoldingServiceTest extends BaseIntegrationTest {
         withDefaultUserAccount();
         withDefaultAccounts();
         loginWithDefaultUser();
-        dollarTransactions = withDefaultMoneyTransactions(DEBIT_DOLLAR_ACCOUNT_DTO, true);
     }
 
-    @Test
-    void shouldRecalculateHistoricalHoldingValues_given_finalBalanceSet() {
-        defaultTransactions = withDefaultMoneyTransactions(DEFAULT_DEBIT_ACCOUNT_DTO, true);
-        service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId());
-        final List<HistoricalMoneyHoldingValue> all = historicalMoneyHoldingValueRepository.findAll();
-        final MoneyHolding holding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId()).getFirst();
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "money-holding/eur-usd-transactions-with-final-balance.json",
+            "money-holding/eur-usd-transactions-without-final-balance.json"
+    })
+    void regenerateAggregatedHistoricalHoldingValues(final String filename) throws IOException {
+        importFromFile(filename);
 
-        final double v1 = defaultTransactions.getFirst().getFinalBalance();
-        final double v2 = defaultTransactions.get(2).getFinalBalance();
-        final double v3 = defaultTransactions.getLast().getFinalBalance();
+        final Account eurAccount = getAccount("Money EUR Account");
+        final Account usdAccount = getAccount("Money USD Account");
 
-        final LocalDate t1 = LocalDate.ofInstant(defaultTransactions.getFirst().getTimestamp(), ZoneOffset.UTC);
-        final LocalDate t2 = LocalDate.ofInstant(defaultTransactions.get(2).getTimestamp(), ZoneOffset.UTC);
-        final LocalDate t3 = LocalDate.ofInstant(defaultTransactions.getLast().getTimestamp(), ZoneOffset.UTC);
-
-        final double c1 = cacheService.getCurrencyMultiplier(DEFAULT_DEBIT_ACCOUNT.getCurrencyId(), t1);
-        final double c2 = cacheService.getCurrencyMultiplier(DEFAULT_DEBIT_ACCOUNT.getCurrencyId(), t2);
-        final double c3 = cacheService.getCurrencyMultiplier(DEFAULT_DEBIT_ACCOUNT.getCurrencyId(), t3);
-
-        final HistoricalMoneyHoldingValue historicalHolding1 = getByDate(t1, all);
-        final HistoricalMoneyHoldingValue historicalHolding2 = getByDate(LocalDate.ofInstant(defaultTransactions.get(2).getTimestamp(), ZoneOffset.UTC), all);
-        final HistoricalMoneyHoldingValue historicalHolding3 = getByDate(LocalDate.ofInstant(defaultTransactions.getLast().getTimestamp(), ZoneOffset.UTC), all);
-
-        assertEquals(v1, historicalHolding1.getAmount());
-        assertEquals(v2, historicalHolding2.getAmount());
-        assertEquals(v3, historicalHolding3.getAmount());
-
-        assertEquals(c1, historicalHolding1.getCurrencyMultiplier());
-        assertEquals(c2, historicalHolding2.getCurrencyMultiplier());
-        assertEquals(c3, historicalHolding3.getCurrencyMultiplier());
-
-        assertEquals(t1, all.getFirst().getDate());
-        assertEquals(t3, all.getLast().getDate());
-
-        assertEquals(holding.getAmount(), all.getLast().getAmount());
-    }
-
-    @Test
-    void shouldRecalculateHistoricalHoldingValues_given_noFinalBalanceSet() {
-        defaultTransactions = withDefaultMoneyTransactions(DEFAULT_DEBIT_ACCOUNT_DTO, false);
-        service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId());
-        final List<HistoricalMoneyHoldingValue> all = historicalMoneyHoldingValueRepository.findAll();
-        final MoneyHolding holding = moneyHoldingRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId()).getFirst();
-
-        final Double v1 = defaultTransactions.getFirst().getFinalBalance();
-        final Double v2 = defaultTransactions.get(2).getFinalBalance();
-        final Double v3 = defaultTransactions.getLast().getFinalBalance();
-
-        final LocalDate t1 = LocalDate.ofInstant(defaultTransactions.getFirst().getTimestamp(), ZoneOffset.UTC);
-
-        final HistoricalMoneyHoldingValue historicalHolding1 = getByDate(t1, all);
-        final HistoricalMoneyHoldingValue historicalHolding3 = getByDate(LocalDate.ofInstant(defaultTransactions.getLast().getTimestamp(), ZoneOffset.UTC), all);
-
-        assertNull(v1);
-        assertNull(v2);
-        assertNull(v3);
-
-        assertEquals(holding.getAmountOffset() + defaultTransactions.getFirst().getNormalizedAmount(), historicalHolding1.getAmount());
-        assertEquals(holding.getAmountOffset() + defaultTransactions.stream().mapToDouble(MoneyTransaction::getNormalizedAmount).sum(), historicalHolding3.getAmount());
-
-        assertEquals(holding.getAmount(), all.getLast().getAmount());
-    }
-
-
-    @Test
-    void regenerateAggregatedHistoricalHoldingValues() {
-        defaultTransactions = withDefaultMoneyTransactions(DEFAULT_DEBIT_ACCOUNT_DTO, true);
-        service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_DEBIT_ACCOUNT.getId());
-        service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), DEBIT_DOLLAR_ACCOUNT_DTO.getId());
+        service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), eurAccount.getId());
+        service.recalculateHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId(), usdAccount.getId());
         service.recalculateAggregatedHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId());
 
-        final List<AggregatedHistoricalMoneyHoldingValue> all = aggregatedHistoricalMoneyHoldingValueRepository.findAllByUserId(DEFAULT_USER_ACCOUNT.getId())
+        final List<HistoricalMoneyHoldingValue> all = historicalMoneyHoldingValueRepository.findAll();
+
+        final List<AggregatedHistoricalMoneyHoldingValue> allAggregated = aggregatedHistoricalMoneyHoldingValueRepository
+                .findAllByUserId(DEFAULT_USER_ACCOUNT.getId())
                 .stream()
-                .sorted(Comparator.comparing(AggregatedHistoricalMoneyHoldingValue::getDate)).toList();
+                .sorted(Comparator.comparing(AggregatedHistoricalMoneyHoldingValue::getDate))
+                .toList();
 
-        final LocalDate t1 = LocalDate.ofInstant(defaultTransactions.getFirst().getTimestamp(), ZoneOffset.UTC);
-        final LocalDate t2 = LocalDate.ofInstant(defaultTransactions.get(2).getTimestamp(), ZoneOffset.UTC);
-        final LocalDate t3 = LocalDate.ofInstant(defaultTransactions.getLast().getTimestamp(), ZoneOffset.UTC);
+        final LocalDate t1 = LocalDate.of(2026, 3, 1);
+        final LocalDate t2 = LocalDate.of(2026, 4, 15);
+        final LocalDate t3 = LocalDate.of(2026, 5, 20);
 
-        final double c1 = cacheService.getCurrencyMultiplier(DEBIT_DOLLAR_ACCOUNT.getCurrencyId(), t1);
-        final double c2 = cacheService.getCurrencyMultiplier(DEBIT_DOLLAR_ACCOUNT.getCurrencyId(), t2);
-        final double c3 = cacheService.getCurrencyMultiplier(DEBIT_DOLLAR_ACCOUNT.getCurrencyId(), t3);
+        final HistoricalMoneyHoldingValue v1Euro = getByDate(t1, eurAccount.getId(), all);
+        final HistoricalMoneyHoldingValue v2Euro = getByDate(t2, eurAccount.getId(), all);
+        final HistoricalMoneyHoldingValue v3Euro = getByDate(t3, eurAccount.getId(), all);
 
-        final double v1 = defaultTransactions.getFirst().getFinalBalance() + dollarTransactions.getFirst().getFinalBalance() * c1;
-        final double v2 = defaultTransactions.get(2).getFinalBalance() + dollarTransactions.get(2).getFinalBalance() * c2;
-        final double v3 = defaultTransactions.getLast().getFinalBalance() + dollarTransactions.getLast().getFinalBalance() * c3;
+        final HistoricalMoneyHoldingValue v1Usd = getByDate(t1, usdAccount.getId(), all);
+        final HistoricalMoneyHoldingValue v2Usd = getByDate(t2, usdAccount.getId(), all);
+        final HistoricalMoneyHoldingValue v3Usd = getByDate(t3, usdAccount.getId(), all);
 
-        final AggregatedHistoricalMoneyHoldingValue value1 = getAggregatedByDate(t1, all);
-        final AggregatedHistoricalMoneyHoldingValue value2 = getAggregatedByDate(LocalDate.ofInstant(defaultTransactions.get(2).getTimestamp(), ZoneOffset.UTC), all);
-        final AggregatedHistoricalMoneyHoldingValue value3 = getAggregatedByDate(LocalDate.ofInstant(defaultTransactions.getLast().getTimestamp(), ZoneOffset.UTC), all);
+        assertEquals(200, v1Euro.getAmount());
+        assertEquals(250, v2Euro.getAmount());
+        assertEquals(150, v3Euro.getAmount());
 
-        assertEquals(v1, value1.getAmount());
-        assertEquals(v2, value2.getAmount());
-        assertEquals(v3, value3.getAmount());
+        assertEquals(1, v1Euro.getCurrencyMultiplier());
+        assertEquals(1, v2Euro.getCurrencyMultiplier());
+        assertEquals(1, v3Euro.getCurrencyMultiplier());
 
-        assertEquals(t1, all.getFirst().getDate());
-        assertEquals(t3, all.getLast().getDate());
+        assertEquals(100, v1Usd.getAmount());
+        assertEquals(130, v2Usd.getAmount());
+        assertEquals(80, v3Usd.getAmount());
+
+        assertEquals(2, v1Usd.getCurrencyMultiplier());
+        assertEquals(3, v2Usd.getCurrencyMultiplier());
+        assertEquals(4, v3Usd.getCurrencyMultiplier());
+
+        assertEquals(t1, allAggregated.getFirst().getDate());
+        assertDoubleEquals(400, getAmountOnDate(t1, allAggregated));
+        assertDoubleEquals(640, getAmountOnDate(t2, allAggregated));
+        assertDoubleEquals(470, getAmountOnDate(t3, allAggregated));
     }
 
-    private HistoricalMoneyHoldingValue getByDate(final LocalDate date, final List<HistoricalMoneyHoldingValue> list) {
+    private Account getAccount(final String name) {
+        return accountRepository.findByUserIdAndName(DEFAULT_USER_ACCOUNT.getId(), Set.of(name)).getFirst();
+    }
+
+    private HistoricalMoneyHoldingValue getByDate(final LocalDate date, final long accountId, final List<HistoricalMoneyHoldingValue> list) {
         return list
                 .stream()
-                .filter(v -> v.getDate().equals(date))
+                .filter(v -> v.getDate().equals(date) && v.getAccountId() == accountId)
                 .findFirst()
                 .orElseThrow();
     }
 
-    private AggregatedHistoricalMoneyHoldingValue getAggregatedByDate(final LocalDate date, final List<AggregatedHistoricalMoneyHoldingValue> list) {
+    private double getAmountOnDate(final LocalDate date, final List<AggregatedHistoricalMoneyHoldingValue> list) {
         return list
                 .stream()
                 .filter(v -> v.getDate().equals(date))
                 .findFirst()
+                .map(AggregatedHistoricalMoneyHoldingValue::getAmount)
                 .orElseThrow();
     }
 }
