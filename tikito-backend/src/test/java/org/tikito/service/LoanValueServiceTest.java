@@ -4,7 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.tikito.config.TestcontainersConfiguration;
 import org.tikito.dto.DateRange;
 import org.tikito.dto.loan.LoanType;
 import org.tikito.dto.money.MoneyTransactionGroupQualifierType;
@@ -27,6 +29,7 @@ import static org.tikito.TestUtil.randomString;
 
 @SpringBootTest
 @Transactional
+@ContextConfiguration(classes = TestcontainersConfiguration.class)
 class LoanValueServiceTest extends BaseIntegrationTest {
 
     @Autowired

@@ -316,7 +316,7 @@ public class BaseIntegrationTest extends BaseTest {
     }
 
     protected UserAccount withDefaultUserAccount() {
-        DEFAULT_USER_ACCOUNT = withExistingUserAccount(randomString(10), DEFAULT_USER_ACCOUNT_PASSWORD, null);
+        DEFAULT_USER_ACCOUNT = withExistingUserAccount("tikito-user", DEFAULT_USER_ACCOUNT_PASSWORD, null);
         return DEFAULT_USER_ACCOUNT;
     }
 

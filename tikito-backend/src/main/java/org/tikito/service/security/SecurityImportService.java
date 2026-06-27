@@ -288,8 +288,11 @@ public class SecurityImportService {
                         }
                     } else {
                         final SecurityHolding securityHolding = result.getExistingSecurityHoldingsForAccount().get(transaction.getSecurity().getId());
+                        final SecurityHolding securityHoldingWithoutAccount = result.getExistingSecurityHoldingsForAll().get(transaction.getSecurity().getId());
+
                         securityHolding.setAccountId(accountId);
                         securityHolding.mutateAmount(transaction);
+                        securityHoldingWithoutAccount.mutateAmount(transaction);
                     }
                 });
         result.getNewSecurityHoldings().addAll(newHoldingsMapForAccount.values());

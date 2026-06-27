@@ -1,8 +1,14 @@
 package org.tikito.cucumber;
 
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 
 public class UserStepDefinitions extends BaseStepDefinitions {
+
+    @Before
+    public void beforeEachScenario() {
+        tearDown();
+    }
 
     @Given("default currencies")
     public void default_currencies() {

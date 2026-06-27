@@ -1,19 +1,19 @@
 package org.tikito.cucumber;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.tikito.dto.export.ImportExportSettings;
 import org.tikito.dto.security.HistoricalSecurityHoldingValueDto;
 import org.tikito.dto.security.SecurityDto;
+import org.tikito.entity.UserAccount;
 import org.tikito.repository.AccountRepository;
+import org.tikito.repository.UserAccountRepository;
 import org.tikito.service.BaseIntegrationTest;
 import org.tikito.service.CacheService;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -27,12 +27,24 @@ public class BaseStepDefinitions extends BaseIntegrationTest {
         return currencyId == null ? 0 : currencyId;
     }
 
-    public static Long getAccountId(final Map<String, String> map, final AccountRepository accountRepository) {
+    public static long getUserId(final Map<String, String> map, final UserAccountRepository userAccountRepository) {
+        final String account = map.get("user");
+        if ("null".equals(account)) {
+            return 0;
+        }
+        final Optional<UserAccount> maybeUser = userAccountRepository.findByEmail(map.get("user"));
+        if(maybeUser.isEmpty()) {
+            return 0;
+        }
+        return maybeUser.get().getId();
+    }
+
+    public static Long getAccountId(final Map<String, String> map, final AccountRepository accountRepository, final UserAccountRepository userAccountRepository) {
         final String account = map.get("account");
         if ("null".equals(account)) {
             return null;
         }
-        return accountRepository.findByUserIdAndName(Long.parseLong(map.get("userId")), Set.of(account)).getFirst().getId();
+        return accountRepository.findByUserIdAndName(getUserId(map, userAccountRepository), Set.of(account)).getFirst().getId();
     }
 
     public static Long getCurrencyId(final Map<String, String> map) {
