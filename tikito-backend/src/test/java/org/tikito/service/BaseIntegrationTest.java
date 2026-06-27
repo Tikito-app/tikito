@@ -138,8 +138,8 @@ public class BaseIntegrationTest extends BaseTest {
         loanRepository.deleteAll();
         moneyHoldingRepository.deleteAll();
 
-        withExistingCurrency("EUR", "Euro");
-        withExistingCurrency("USD", "Dollar");
+        CURRENCY_EURO_ID = withExistingCurrency("EUR", "Euro").getId();
+        CURRENCY_DOLLAR_ID = withExistingCurrency("USD", "Dollar").getId();
 
         cacheService.refreshSecurities();
         cacheService.refreshCurrencies();

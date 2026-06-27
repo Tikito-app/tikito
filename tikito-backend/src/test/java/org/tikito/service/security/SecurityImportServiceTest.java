@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.tikito.config.TestcontainersConfiguration;
 import org.tikito.dto.security.SecurityTransactionImportResultDto;
 import org.tikito.dto.security.SecurityTransactionType;
 import org.tikito.dto.security.SecurityType;
@@ -28,6 +30,7 @@ import static org.tikito.dto.security.SecurityTransactionImportResultDto.*;
 
 @SpringBootTest
 @Transactional
+@ContextConfiguration(classes = TestcontainersConfiguration.class)
 public class SecurityImportServiceTest extends BaseIntegrationTest {
 
     @Autowired
@@ -167,8 +170,9 @@ public class SecurityImportServiceTest extends BaseIntegrationTest {
     void testImportNewHoldingResultsInZeroAssets() throws IOException, UnsupportedImportFormatException {
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-new-holding-results-in-zero-assets.csv", "Account.csv");
         final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
-        assertEquals(1, result.getNewSecurityHoldings().size());
-        assertEquals(0, result.getNewSecurityHoldings().getFirst().getAmount());
+        assertEquals(2, result.getNewSecurityHoldings().size());
+        assertEquals(0, result.getNewSecurityHoldings().get(0).getAmount());
+        assertEquals(0, result.getNewSecurityHoldings().get(1).getAmount());
     }
 
     @Test
