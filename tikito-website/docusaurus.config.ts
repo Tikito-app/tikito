@@ -46,7 +46,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/Tikito-app/tikito/tree/main/tikito-website/',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -87,6 +87,10 @@ const config: Config = {
             {
               label: 'How to use Tikito',
               to: '/docs/how-to-use',
+            },
+            {
+              label: 'Quick start',
+              to: '/docs/overview/quick-start',
             },
           ],
         },

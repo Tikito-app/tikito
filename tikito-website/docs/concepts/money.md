@@ -4,11 +4,28 @@ sidebar_position: 3
 
 # Money
 
-TODO: make tree, start at asset, then split money/security/loan, then split fiat/crypto and stock/etf and lineary/annuitiet/generic
+A money holding represents a liquid financial position — a bank account balance, a cash amount, or a cryptocurrency balance that you hold directly (not through a broker).
 
+## Types of money holdings
 
-Money can mean that you have a debit account with a bank, a cryptocurrency, or hard cash. 
-In the future it will be possible to specify an interest (https://github.com/Tikito-app/tikito/issues/114).
+- **Debit / savings account** — a regular bank account balance. Transactions increase or decrease the balance over time.
+- **Cash** — physical cash you hold in a specific currency.
+- **Cryptocurrency** — a crypto balance held directly in a wallet (e.g. Bitcoin held on Bitvavo), as opposed to a crypto position traded through a broker.
 
-You can specify the starting balance of a debit/credit account. This is useful when you miss any historical transactions. This way, you can still see the proper final balance being calculated.
-However, some banks support the final balance field in their exports. If this is the case, Tikito will use that field and ignore and initial offset to the balance of a debit/credit account
+## Starting balance
+
+You can set a starting balance on a money holding. This is useful when you do not have all historical transactions available — the starting balance anchors the balance from a known point in time so that subsequent imports produce the correct final balance.
+
+Some bank export formats (e.g. ING) include a final balance field in each transaction row. When Tikito detects this, it uses that value instead of computing it from the starting balance offset.
+
+## Balance calculation
+
+Tikito calculates the running balance by summing all [transactions](/docs/concepts/transaction) in chronological order. Each transaction either adds to or subtracts from the balance. Transactions imported from your bank are automatically matched to the correct money holding based on the account number.
+
+## Currency
+
+Every money holding is denominated in a specific [currency](/docs/concepts/currency). Tikito converts all holdings to the base currency of the [account](/docs/concepts/account) they belong to when displaying totals.
+
+## Grouping transactions
+
+You can create [money groups](/docs/features/money-graph) to categorise your transactions by description, counterparty name, or counterparty account number. Groups make it easy to see spending patterns and can also be linked to a [loan](/docs/concepts/loan) to track mortgage or other loan payments.

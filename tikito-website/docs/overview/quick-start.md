@@ -3,61 +3,52 @@ sidebar_position: 3
 ---
 
 # Quick start
-This guide will provide you with the quickest default installation for Tikito.
+
+Get Tikito running in minutes using Docker Compose.
 
 ## Requirements
-- Any system will probably do
-- [Docker](https://docs.docker.com/engine/install/)
 
-> For a more detailed list of requirements, see the [requirements page](/docs/installation/requirements).
+- Any system (Linux recommended)
+- [Docker](https://docs.docker.com/engine/install/) with the Compose plugin
+- A free [Finnhub](https://finnhub.io/) API token (only needed if you track stocks/ETFs)
 
-## Setup the backend
+## Step 1 - Create files
 
-### Step 1 - Create files
-Create a directory that will contain the `docker-compose.yaml` and `.env` files:
-
-```bash title="Create the directory"
-mkdir ./tikito
-cd ./tikito
-```
-
-Download the `docker-compose.yaml` and `.env` files:
-
-```bash title="Get docker-compose.yml file"
+```bash title="Create a directory and download the config files"
+mkdir ./tikito && cd ./tikito
 wget -O docker-compose.yaml https://raw.githubusercontent.com/Tikito-app/tikito/refs/heads/main/docker-compose.yaml
-```
-
-```bash title="Get .env file"
 wget -O .env https://raw.githubusercontent.com/Tikito-app/tikito/refs/heads/main/example.env
 ```
 
-### Step 2 - Enter the Finnhub token
-Tikito uses Finnhub to get financial information. 
-Don't worry, you can get a free token
-In the .env file, you have to write the [Finnhub](https://finnhub.io/) token (e.g. 12345):
-```
+## Step 2 - Configure
+
+Open `.env` and fill in the values:
+
+```env
 TIKITO_API_HOSTNAME=http://localhost
 TIKITO_API_PORT=4242
 TIKITO_UI_PORT=8080
 
 DB_USER=tikito
 DB_PASSWORD=some-random-password
-FINNHUB_TOKEN=12345
-```
-Tikito uses Finnhub to convert an isin to a symbol for stock securities.
 
-### Step 3 - Start
-Start the containers:
-
-```bash title="Start conatiners"
-docker-compose up -d
+FINNHUB_TOKEN=your-token-here
 ```
 
-### Step 4 - Setup of the system
-Open [http://localhost:8080](http://localhost:8080) and you will see the screen below to register the admin user.
+## Step 3 - Start
 
-![alt text](/tikito-screenshots/initial-installation.png)
+```bash title="Start containers"
+docker compose up -d
+```
 
-### Try Tikito
-Try uploading an export of your banking or stock portfolio system.
+## Step 4 - Set up
 
+Open [http://localhost:8080](http://localhost:8080) and register the admin user.
+
+![Initial installation screen](/tikito-screenshots/initial-installation.png)
+
+## Next steps
+
+- [Create an account and import banking transactions](/docs/installation/import-money)
+- [Import your stock portfolio](/docs/installation/import-security)
+- Read [Post installation](/docs/installation/post-install) for more details

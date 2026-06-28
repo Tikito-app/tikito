@@ -2,29 +2,38 @@
 sidebar_position: 5
 ---
 
-# Import your stock portfolio
-After creating an account for your securities, you can now use the export of your broker and import it into Tikito. 
-Several [files](/docs/importing/security) are supported. Please refer to you broker on details how to export your transactions.
+# Import security transactions
 
-## Step 1 - Import the file from your broker
-Click on `Import` from the top menu. Select the account you created for your portfolio and the file you exported from your broker account.
+After creating an account for your broker, you can import your portfolio export.
 
-## Step 2 - Enrich securities
-In order to get the historical prices of a stock, Tikito needs to have the symbol of that stock. For that, you need to manually enrich the security once after importing. 
-This will also gather other information about the stock, such as the sector an industry.
-This means that Tikito will try to find the correct symbol for it.
+## Step 1 - Export from your broker
 
-From the top menu to go `Admin` and click in the left menu on `Securities` and you will see a list of securities. 
-You can also filter by name.
-Find your security and click the three dots in the right side of the table and click Enrich.
+Download a transaction export from your broker. See [supported file formats](/docs/importing/security) for which brokers are supported. For DeGiro, download both the **Account** export and the **Transactions** export.
 
-## Step 3 - Fetch historical security prices
-Now you can click the three dots again and click `Update prices`. 
+## Step 2 - Import into Tikito
 
-## Step 4 - Recalculate historical values
-Click on the three dots for the last time and click `Recalculate historical value`. 
+Click **Import** in the top navigation. Select the broker account you created and upload the file. Tikito will detect the broker format automatically.
 
-## Visualize it
-Now you can go to `Securities` from the top menu and you will see that for the updated security, you can see all the statistics. 
-Click on a position to see more detail. 
-Double click on the security and you will be redirected to the graph view, where you can see even more information about your holding.
+If your broker is not supported, use the [generic CSV/Excel format](/docs/importing/security#generic-import-custom-file).
+
+## Step 3 - Enrich securities
+
+After importing, Tikito needs to resolve each security's ISIN to a market symbol (e.g. `ASML` on Euronext) before it can fetch historical prices.
+
+Go to **Admin → Securities** and find the newly imported securities (filter by name if needed). For each one, click the three-dot menu on the right and select **Enrich**. This calls the Finnhub API to find the correct symbol and fetches metadata (sector, industry, exchange).
+
+You only need to do this once per security.
+
+## Step 4 - Fetch historical prices
+
+After enriching, click the three-dot menu again and select **Update prices**. This fetches the full price history for the security.
+
+## Step 5 - Recalculate historical values
+
+Finally, click the three-dot menu and select **Recalculate historical value**. This calculates the value of your holding on each day based on the prices and your transaction history.
+
+Steps 3–5 are triggered automatically in the background as [jobs](/docs/features/jobs) when you import for the first time, but you can also run them manually if something did not process correctly.
+
+## Visualise
+
+Go to **Securities** in the top navigation to see your portfolio overview. Click a position to see details and double-click to open the holding value graph.
