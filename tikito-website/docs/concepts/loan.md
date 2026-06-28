@@ -12,8 +12,8 @@ A loan in Tikito represents a debt you are paying off over time, such as a mortg
 |---|---|
 | **Annuity mortgage** (`MORTGAGE_ANNUITEIT`) | Fixed monthly payment; the interest portion decreases and principal portion increases over time |
 | **Linear mortgage** (`MORTGAGE_LINEAR`) | Fixed principal repayment each period; total payment decreases over time as interest falls |
-| **Student loan** (`STUDENT`) | Flexible repayment typically with income-based terms |
-| **Generic** (`GENERIC`) | A generic loan for any other scenario |
+| **Student loan** (`STUDENT`) | Under construction |
+| **Generic** (`GENERIC`) | Under construction |
 
 ## Loan parts
 

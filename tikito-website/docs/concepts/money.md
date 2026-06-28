@@ -4,13 +4,12 @@ sidebar_position: 3
 
 # Money
 
-A money holding represents a liquid financial position — a bank account balance, a cash amount, or a cryptocurrency balance that you hold directly (not through a broker).
+A money holding represents a liquid financial position — a bank account balance or a cryptocurrency balance that you hold directly (not through a broker).
 
 ## Types of money holdings
 
-- **Debit / savings account** — a regular bank account balance. Transactions increase or decrease the balance over time.
-- **Cash** — physical cash you hold in a specific currency.
-- **Cryptocurrency** — a crypto balance held directly in a wallet (e.g. Bitcoin held on Bitvavo), as opposed to a crypto position traded through a broker.
+- **Fiat** — a balance in a regular currency (EUR, USD, etc.), such as a bank account or savings account. Transactions increase or decrease the balance over time.
+- **Cryptocurrency** — a crypto balance held directly (e.g. Bitcoin on Bitvavo), as opposed to a crypto position traded through a broker.
 
 ## Starting balance
 

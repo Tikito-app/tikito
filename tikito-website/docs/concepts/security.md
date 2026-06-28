@@ -21,9 +21,9 @@ Every security is identified by an **ISIN** (International Securities Identifica
 
 After you import transactions for a security, Tikito needs to resolve its ISIN to a **market symbol** (e.g. `ASML` on Euronext) so it can fetch historical prices. You trigger this once via the Enrich action in the Admin panel.
 
-## Broker account (cash position)
+## Cash position
 
-Every security holding has a corresponding [money](/docs/concepts/money) holding that represents the cash account at the broker. Transfers into the broker account, dividend payments, and transaction costs all flow through this cash position.
+Each security holding tracks a **cash position** — the running cash balance at the broker for that holding. This is a field on the holding itself, not a separate money holding. It reflects transfers into the broker account, dividend payments received, and transaction costs paid, giving you a picture of how much cash is sitting at the broker alongside your shares.
 
 ## Historical prices
 
