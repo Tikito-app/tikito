@@ -78,7 +78,8 @@
           "amount": -200,
           "finalBalance": 40.37,
           "description": "Name: Counter part name IBAN: NL12SOMETHING ",
-          "currency": "EUR"
+          "currency": "EUR",
+          "exchangeRate": 1
         },
         {
           "accountName": "ING",
@@ -88,7 +89,8 @@
           "amount": -20,
           "finalBalance": 250.31,
           "description": "Hello, I hope you are doing good",
-          "currency": "EUR"
+          "currency": "EUR",
+          "exchangeRate": 1
         }
       ]
     }

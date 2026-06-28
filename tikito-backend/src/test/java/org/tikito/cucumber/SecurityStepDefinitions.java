@@ -9,6 +9,7 @@ import org.tikito.dto.export.ImportExportSettings;
 import org.tikito.dto.export.SecurityTransactionExportDto;
 import org.tikito.dto.export.TikitoExportDto;
 import org.tikito.dto.security.*;
+import org.tikito.entity.UserAccount;
 import org.tikito.entity.security.*;
 import org.tikito.service.CacheService;
 
@@ -45,10 +46,11 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
         });
     }
 
-    @When("importing security transactions for user {int}:")
-    public void import_securities(final int userId, final List<Map<String, String>> map) {
+    @When("importing security transactions for user {string}:")
+    public void import_securities(final String email, final List<Map<String, String>> map) {
         final TikitoExportDto exportDto = new TikitoExportDto();
         final Map<String, AccountExportDto> accountMap = new HashMap<>();
+        final UserAccount userAccount = userAccountRepository.findByEmail(email).orElseThrow();
 
         map.forEach(row -> {
             final String accountName = row.get("account");
@@ -59,7 +61,7 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
         final ImportExportSettings settings = generateImportSettings();
         settings.setSecurityTransactions(true);
         exportDto.setAccounts(accountMap.values().stream().toList());
-        importExportService.importFrom(userId, exportDto, settings);
+        importExportService.importFrom(userAccount.getId(), exportDto, settings);
     }
 
     @Then("securities persisted are:")
@@ -201,8 +203,11 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
         if (expectedMap.containsKey("userId") && Long.parseLong(expectedMap.get("userId")) != persisted.getUserId()) {
             return "userId";
         }
+        if (expectedMap.containsKey("user") && BaseStepDefinitions.getUserId(expectedMap, userAccountRepository) != persisted.getUserId()) {
+            return "user";
+        }
         if (expectedMap.containsKey("account")) {
-            final Long accountId = getAccountId(expectedMap, accountRepository);
+            final Long accountId = getAccountId(expectedMap, accountRepository, userAccountRepository);
             if(accountId == null && persisted.getAccountId() != null) {
                 return "account";
             } else if (accountId != null && persisted.getAccountId() != null && accountId.longValue() != persisted.getAccountId()) {
@@ -256,11 +261,14 @@ public class SecurityStepDefinitions extends BaseStepDefinitions {
         if (expectedMap.containsKey("id") && Long.parseLong(expectedMap.get("id")) != persisted.getId()) {
             return "id";
         }
+        if (expectedMap.containsKey("user") && BaseStepDefinitions.getUserId(expectedMap, userAccountRepository) != persisted.getUserId()) {
+            return "user";
+        }
         if (expectedMap.containsKey("userId") && Long.parseLong(expectedMap.get("userId")) != persisted.getUserId()) {
             return "userId";
         }
         if (expectedMap.containsKey("account")) {
-            final Long accountId = getAccountId(expectedMap, accountRepository);
+            final Long accountId = getAccountId(expectedMap, accountRepository, userAccountRepository);
             if(accountId == null && persisted.getAccountId() != null) {
                 return "account";
             } else if (accountId != null && persisted.getAccountId() != null && accountId.longValue() != persisted.getAccountId()) {

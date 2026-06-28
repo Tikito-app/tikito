@@ -72,7 +72,7 @@ class SecurityHoldingServiceTest extends BaseTest {
 
         final ArgumentCaptor<List<AggregatedHistoricalSecurityHoldingValue>> captor = ArgumentCaptor.forClass(List.class);
         final List<HistoricalSecurityHoldingValue> holdingValues = List.of(value1, value2, value3);
-        when(historicalSecurityHoldingValueRepository.findAll()).thenReturn(holdingValues);
+        when(historicalSecurityHoldingValueRepository.findByUserIdAndAccountId(DEFAULT_USER_ACCOUNT.getId(), null)).thenReturn(holdingValues);
         service.recalculateAggregatedHistoricalHoldingValues(DEFAULT_USER_ACCOUNT.getId());
         verify(aggregatedHistoricalSecurityHoldingValueRepository).saveAllAndFlush(captor.capture());
         final List<AggregatedHistoricalSecurityHoldingValue> result = captor.getAllValues().getFirst().stream().sorted(Comparator.comparing(AggregatedHistoricalSecurityHoldingValue::getDate)).toList();

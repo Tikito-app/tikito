@@ -1,5 +1,7 @@
 package org.tikito.service.security;
 
+import org.springframework.test.context.ContextConfiguration;
+import org.tikito.config.TestcontainersConfiguration;
 import org.tikito.dto.security.SecurityPriceDto;
 import org.tikito.entity.security.Isin;
 import org.tikito.entity.security.Security;
@@ -26,6 +28,7 @@ import static org.tikito.TestUtil.randomDouble;
 
 @SpringBootTest
 @Transactional
+@ContextConfiguration(classes = TestcontainersConfiguration.class)
 class SecurityServiceTest extends BaseIntegrationTest {
 
     @Autowired

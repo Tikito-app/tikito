@@ -138,8 +138,8 @@ public class BaseIntegrationTest extends BaseTest {
         loanRepository.deleteAll();
         moneyHoldingRepository.deleteAll();
 
-        withExistingCurrency("EUR", "Euro");
-        withExistingCurrency("USD", "Dollar");
+        CURRENCY_EURO_ID = withExistingCurrency("EUR", "Euro").getId();
+        CURRENCY_DOLLAR_ID = withExistingCurrency("USD", "Dollar").getId();
 
         cacheService.refreshSecurities();
         cacheService.refreshCurrencies();
@@ -251,6 +251,7 @@ public class BaseIntegrationTest extends BaseTest {
         final MoneyTransaction transaction = moneyTransactionRepository.saveAndFlush(moneyTransaction(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId(), date.atStartOfDay().plusHours(5).toInstant(ZoneOffset.UTC), CURRENCY_EURO_ID, amount, 0.0, "", "", "Mortgage"));
         transaction.setGroupId(groupId);
         transaction.setLoanId(loanId);
+        transaction.setExchangeRate(1);
         return moneyTransactionRepository.saveAndFlush(transaction);
     }
 
@@ -316,7 +317,7 @@ public class BaseIntegrationTest extends BaseTest {
     }
 
     protected UserAccount withDefaultUserAccount() {
-        DEFAULT_USER_ACCOUNT = withExistingUserAccount(randomString(10), DEFAULT_USER_ACCOUNT_PASSWORD, null);
+        DEFAULT_USER_ACCOUNT = withExistingUserAccount("tikito-user", DEFAULT_USER_ACCOUNT_PASSWORD, null);
         return DEFAULT_USER_ACCOUNT;
     }
 

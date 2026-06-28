@@ -59,6 +59,7 @@ public class MoneyTransaction {
         this.finalBalance = dto.getFinalBalance();
         this.description = dto.getDescription();
         this.currencyId = currencyId;
+        this.exchangeRate = dto.getExchangeRate() != null ? dto.getExchangeRate() : 1;
         // todo: groupID, etc
     }
 

@@ -3,7 +3,9 @@ package org.tikito.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.tikito.config.TestcontainersConfiguration;
 import org.tikito.controller.request.CreateOrUpdateAccountRequest;
 import org.tikito.dto.AccountDto;
 import org.tikito.entity.Account;
@@ -16,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 @SpringBootTest
 @Transactional
+@ContextConfiguration(classes = TestcontainersConfiguration.class)
 class AccountServiceTest extends BaseIntegrationTest {
 
     @BeforeEach
@@ -30,12 +33,6 @@ class AccountServiceTest extends BaseIntegrationTest {
 
         final List<Account> accounts = accountRepository.findByUserIdAndName(DEFAULT_USER_ACCOUNT.getId(), Set.of(ACCOUNT_NAME_ONE));
         assertEquals(1, accounts.size());
-    }
-
-    private void assertHoldingMatches(final AccountDto account, final MoneyHolding holding) {
-        assertEquals(account.getId().longValue(), holding.getAccountId());
-        assertEquals(account.getCurrencyId(), holding.getCurrencyId());
-        assertEquals(account.getUserId(), holding.getUserId());
     }
 
     private AccountDto createAccount(final long userId, final String accountName) {

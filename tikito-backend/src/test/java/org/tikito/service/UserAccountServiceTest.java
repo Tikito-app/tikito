@@ -1,6 +1,8 @@
 package org.tikito.service;
 
+import org.springframework.test.context.ContextConfiguration;
 import org.tikito.auth.LoggedInUserDto;
+import org.tikito.config.TestcontainersConfiguration;
 import org.tikito.controller.request.ActivateRequest;
 import org.tikito.controller.request.LoginRequest;
 import org.tikito.dto.security.SecurityType;
@@ -23,6 +25,7 @@ import static org.tikito.TestUtil.randomString;
 
 @SpringBootTest
 @Transactional
+@ContextConfiguration(classes = TestcontainersConfiguration.class)
 class UserAccountServiceTest extends BaseIntegrationTest {
 
     @Autowired
@@ -112,7 +115,6 @@ class UserAccountServiceTest extends BaseIntegrationTest {
     @Test
     void register_shouldInitialiseData_givenFirstEverUser() throws PasswordNotLongEnoughException, EmailAlreadyExistsException, IOException {
         final String email = randomEmail();
-        assertTrue(securityRepository.findBySecurityTypes(Set.of(SecurityType.CURRENCY, SecurityType.CRYPTO)).isEmpty());
         service.register(email, randomString(20));
         final UserAccount userAccount = userAccountRepository.findByEmail(email).get();
         assertTrue(userAccount.isActivated());

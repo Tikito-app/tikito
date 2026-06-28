@@ -191,7 +191,7 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
 
     private static MoneyTransaction getMoneyTransaction() {
         final MoneyTransaction transaction = new MoneyTransaction();
-        transaction.setAccountId(DEFAULT_SECURITY_ACCOUNT.getId());
+        transaction.setAccountId(DEFAULT_DEBIT_ACCOUNT.getId());
         transaction.setTimestamp(Instant.parse("2023-11-19T11:43:00Z"));
         transaction.setCurrencyId(CURRENCY_EURO_ID);
         transaction.setAmount(-3.14);

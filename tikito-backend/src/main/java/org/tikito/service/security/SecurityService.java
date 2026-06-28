@@ -79,7 +79,7 @@ public class SecurityService implements JobProcessor {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void updateSecurityPrices(final long securityId) {
-        final SecurityDto security = getSecurity(securityId);
+        final Security security = securityRepository.findById(securityId).orElseThrow();
         final List<Isin> isins = isinRepository.findBySecurityId(securityId);
         final Set<String> processedDates = securityPriceRepository
                 .findAllBySecurityId(securityId)
@@ -146,7 +146,7 @@ public class SecurityService implements JobProcessor {
 
         fillInTheGaps(exchangeRateHistory);
         if (!exchangeRateHistory.isEmpty()) {
-            securityRepository.setLastPriceDate(security.getId(), exchangeRateHistory.getLast().getDate());
+            security.setLastPriceDate(exchangeRateHistory.getLast().getDate());
         }
 
         securityPriceRepository.saveAllAndFlush(

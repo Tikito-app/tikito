@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.tikito.config.TestcontainersConfiguration;
 import org.tikito.dto.security.SecurityTransactionImportResultDto;
 import org.tikito.dto.security.SecurityTransactionType;
 import org.tikito.dto.security.SecurityType;
@@ -28,6 +30,7 @@ import static org.tikito.dto.security.SecurityTransactionImportResultDto.*;
 
 @SpringBootTest
 @Transactional
+@ContextConfiguration(classes = TestcontainersConfiguration.class)
 public class SecurityImportServiceTest extends BaseIntegrationTest {
 
     @Autowired
@@ -141,34 +144,42 @@ public class SecurityImportServiceTest extends BaseIntegrationTest {
 
     @Test
     void testImportNewAndExistingSecurityHolding() throws IOException, UnsupportedImportFormatException {
+        storeSecurityHolding(DEFAULT_SECURITY_ACCOUNT.getId());
+        storeSecurityHolding(null);
+
+        final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-new-and-existing-security-holding.csv", "Account.csv");
+        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
+        assertEquals(2, result.getNewSecurityHoldings().size());
+        assertNotEquals(WOLTER_KLUWER.getId(), result.getNewSecurityHoldings().get(0).getSecurityId());
+        assertNotEquals(WOLTER_KLUWER.getId(), result.getNewSecurityHoldings().get(1).getSecurityId());
+    }
+
+    private void storeSecurityHolding(final Long accountId) {
         final SecurityHolding securityHolding = new SecurityHolding();
-        securityHolding.setAccountId(DEFAULT_SECURITY_ACCOUNT.getId());
+        securityHolding.setAccountId(accountId);
         securityHolding.setSecurityType(SecurityType.STOCK);
         securityHolding.setSecurityId(WOLTER_KLUWER.getId());
         securityHolding.setAmount(5);
         securityHolding.setUserId(DEFAULT_USER_ACCOUNT.getId());
         securityHoldingRepository.saveAndFlush(securityHolding);
-
-        final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-new-and-existing-security-holding.csv", "Account.csv");
-        final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
-        assertEquals(1, result.getNewSecurityHoldings().size());
-        assertNotEquals(WOLTER_KLUWER.getId(), result.getNewSecurityHoldings().getFirst().getSecurityId());
     }
 
     @Test
     void testImportExistingHoldingResultsInZeroAssets() throws IOException, UnsupportedImportFormatException {
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-holding-results-in-zero-assets.csv", "Account.csv");
         final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
-        assertEquals(1, result.getNewSecurityHoldings().size());
-        assertEquals(0, result.getNewSecurityHoldings().getFirst().getAmount());
+        assertEquals(2, result.getNewSecurityHoldings().size());
+        assertEquals(0, result.getNewSecurityHoldings().get(0).getAmount());
+        assertEquals(0, result.getNewSecurityHoldings().get(1).getAmount());
     }
 
     @Test
     void testImportNewHoldingResultsInZeroAssets() throws IOException, UnsupportedImportFormatException {
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-new-holding-results-in-zero-assets.csv", "Account.csv");
         final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
-        assertEquals(1, result.getNewSecurityHoldings().size());
-        assertEquals(0, result.getNewSecurityHoldings().getFirst().getAmount());
+        assertEquals(2, result.getNewSecurityHoldings().size());
+        assertEquals(0, result.getNewSecurityHoldings().get(0).getAmount());
+        assertEquals(0, result.getNewSecurityHoldings().get(1).getAmount());
     }
 
     @Test
@@ -176,7 +187,7 @@ public class SecurityImportServiceTest extends BaseIntegrationTest {
         final String oldIsin = "GB00B03MLX29";
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-import-isin-change-with-same-isin.csv", "Account.csv");
         final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
-        assertEquals(1, result.getNewSecurityHoldings().size());
+        assertEquals(2, result.getNewSecurityHoldings().size());
         assertEquals(1, result.getNewSecuritiesByIsin().size());
         assertTrue(result.getNewSecuritiesByIsin().containsKey(oldIsin));
 
@@ -194,12 +205,14 @@ public class SecurityImportServiceTest extends BaseIntegrationTest {
         final String oldIsin = "GB00B03MLX29";
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-import-product-change-no-new-isin.csv", "Account.csv");
         final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
-        assertEquals(1, result.getNewSecurityHoldings().size());
+        assertEquals(2, result.getNewSecurityHoldings().size());
         assertEquals(1, result.getNewSecuritiesByIsin().size());
         assertTrue(result.getNewSecuritiesByIsin().containsKey(oldIsin));
 
-        final SecurityHolding holding = result.getNewSecurityHoldings().getFirst();
-        assertEquals(65, holding.getAmount());
+        final SecurityHolding holding1 = result.getNewSecurityHoldings().get(0);
+        final SecurityHolding holding2 = result.getNewSecurityHoldings().get(1);
+        assertEquals(65, holding1.getAmount());
+        assertEquals(65, holding2.getAmount());
 
         assertTrue(result.getNewSecuritiesByIsin().containsKey(oldIsin));
         final Security security = result.getNewSecuritiesByIsin().get(oldIsin);

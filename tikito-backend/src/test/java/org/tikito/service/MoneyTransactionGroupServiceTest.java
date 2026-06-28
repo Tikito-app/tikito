@@ -1,6 +1,8 @@
 package org.tikito.service;
 
+import org.springframework.test.context.ContextConfiguration;
 import org.tikito.TestUtil;
+import org.tikito.config.TestcontainersConfiguration;
 import org.tikito.controller.request.CreateOrUpdateMoneyTransactionGroupRequest;
 import org.tikito.dto.money.MoneyTransactionGroupDto;
 import org.tikito.dto.money.MoneyTransactionGroupQualifierDto;
@@ -30,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 @Transactional
+@ContextConfiguration(classes = TestcontainersConfiguration.class)
 class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
 
     @Autowired
