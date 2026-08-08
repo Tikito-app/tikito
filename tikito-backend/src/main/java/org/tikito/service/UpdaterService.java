@@ -54,8 +54,10 @@ public class UpdaterService {
     }
 
     private void updateSecurities() {
-        securityHoldingRepository.findAll().forEach(securityHolding ->
-                jobFactoryService.addJob(Job.security(RECALCULATE_HISTORICAL_SECURITY_VALUES, securityHolding.getSecurityId(), securityHolding.getUserId()).build()));
+        securityHoldingRepository.findAll().forEach(securityHolding -> {
+            jobFactoryService.addJob(Job.security(RECALCULATE_HISTORICAL_SECURITY_VALUES, securityHolding.getSecurityId(), securityHolding.getUserId()).build());
+            jobFactoryService.addJob(Job.security(UPDATE_SECURITY_PRICES, securityHolding.getSecurityId(), securityHolding.getUserId()).build());
+        });
 
         userAccountRepository.findAll().forEach(userAccount ->
                 jobFactoryService.addJob(Job.user(RECALCULATE_AGGREGATED_HISTORICAL_SECURITY_VALUES, userAccount.getId()).build()));
