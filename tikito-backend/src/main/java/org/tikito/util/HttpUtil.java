@@ -1,18 +1,25 @@
 package org.tikito.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContextBuilder;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.config.ConnectionConfig;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.ssl.DefaultClientTlsStrategy;
+import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
+import org.apache.hc.client5.http.ssl.TlsSocketStrategy;
+import org.apache.hc.core5.http.ClassicHttpResponse;
+import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.ssl.SSLContextBuilder;
+import org.apache.hc.core5.util.Timeout;
 import org.tikito.exception.ResourceNotFoundException;
 
+import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -21,7 +28,7 @@ import java.util.Random;
 
 @Slf4j
 public final class HttpUtil {
-    private static HttpClient httpClient;
+    private static CloseableHttpClient httpClient;
 
     private HttpUtil() {
     }
@@ -34,56 +41,45 @@ public final class HttpUtil {
         if (httpClient == null) {
             httpClient = createTrustAllHttpClientBuilder().build();
         }
-        final HttpResponse response;
         final HttpGet get = new HttpGet(url);
-        try {
-            response = httpClient.execute(get);
-            if (response.getStatusLine().getStatusCode() == 404) {
+        try (final ClassicHttpResponse response = httpClient.executeOpen(null, get, null)) {
+            if (response.getCode() == 404) {
                 throw new ResourceNotFoundException(url);
             }
             return EntityUtils.toString(response.getEntity());
-        } catch (final IOException e) {
+        } catch (final IOException | ParseException e) {
             log.error("Error", e);
             return null;
-        } finally {
-            get.releaseConnection();
         }
-    }
-
-    public static byte[] downloadUrlAsBytes(final String url) throws IOException, ResourceNotFoundException {
-        if (httpClient == null) {
-            httpClient = createTrustAllHttpClientBuilder().build();
-        }
-        final HttpResponse response;
-        log.info("Downloading as bytes {}", url);
-        response = httpClient.execute(new HttpGet(url));
-        if (response.getStatusLine().getStatusCode() == 404) {
-            throw new ResourceNotFoundException(url);
-        }
-        return EntityUtils.toByteArray(response.getEntity());
     }
 
     public static HttpClientBuilder createTrustAllHttpClientBuilder() {
-        final SSLContextBuilder builder = new SSLContextBuilder();
+        final SSLContextBuilder builder = SSLContextBuilder.create();
         try {
-            builder.loadTrustMaterial(null, (chain, authType) -> true);
+            builder.loadTrustMaterial(null, (_, _) -> true);
         } catch (final NoSuchAlgorithmException | KeyStoreException e) {
             log.error(e.getMessage(), e);
         }
-        SSLConnectionSocketFactory sslsf = null;
+        TlsSocketStrategy tlsSocketStrategy = null;
         try {
-            sslsf = new
-                    SSLConnectionSocketFactory(builder.build(), NoopHostnameVerifier.INSTANCE);
+            final SSLContext sslContext = builder.build();
+            tlsSocketStrategy = new DefaultClientTlsStrategy(sslContext, NoopHostnameVerifier.INSTANCE);
         } catch (final NoSuchAlgorithmException | KeyManagementException e) {
             log.error(e.getMessage(), e);
         }
-        final int timeout = 5000;
+        final Timeout timeout = Timeout.ofMilliseconds(5000);
         final RequestConfig.Builder requestBuilder = RequestConfig.custom();
-        requestBuilder.setConnectTimeout(timeout);
         requestBuilder.setConnectionRequestTimeout(timeout);
-        requestBuilder.setSocketTimeout(timeout);
+        requestBuilder.setResponseTimeout(timeout);
 
-        final HttpClientBuilder builder1 = HttpClients.custom().setSSLSocketFactory(sslsf);
+        final PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
+                .setTlsSocketStrategy(tlsSocketStrategy)
+                .setDefaultConnectionConfig(ConnectionConfig.custom()
+                        .setConnectTimeout(timeout)
+                        .build())
+                .build();
+
+        final HttpClientBuilder builder1 = HttpClients.custom().setConnectionManager(connectionManager);
         builder1.setDefaultRequestConfig(requestBuilder.build());
         builder1.setUserAgent("Mozilla/5.0 Firefox/" + randomInt(25, 50) + ".0");
         return builder1;

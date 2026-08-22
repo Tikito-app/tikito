@@ -1,7 +1,5 @@
 package org.tikito.service.export;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -11,6 +9,8 @@ import org.tikito.dto.export.ImportExportSettings;
 import org.tikito.dto.export.TikitoExportDto;
 import org.tikito.entity.Account;
 import org.tikito.service.BaseIntegrationTest;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.util.Set;
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ContextConfiguration(classes = TestcontainersConfiguration.class)
 class ImportExportServiceTest extends BaseIntegrationTest {
 
-    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+    private final ObjectMapper objectMapper = JsonMapper.shared();
 
     @Test
     void testImportExport() throws IOException {

@@ -289,4 +289,8 @@ export class Util {
   static emptyToNull(value: any): any {
     return value == '' ? null : value;
   }
+
+  static isButton(event: any): boolean {
+    return event?.target?.closest?.('button') != null;
+  }
 }

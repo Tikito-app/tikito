@@ -10,8 +10,6 @@ import org.tikito.exception.PasswordNotLongEnoughException;
 import org.tikito.service.CacheService;
 import org.tikito.service.UserAccountService;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("/api/user/register")
 public class RegisterController {
@@ -26,7 +24,7 @@ public class RegisterController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<Void> register(@Valid @RequestBody final RegisterRequest request) throws EmailAlreadyExistsException, PasswordNotLongEnoughException, IOException {
+    public ResponseEntity<Void> register(@Valid @RequestBody final RegisterRequest request) throws EmailAlreadyExistsException, PasswordNotLongEnoughException {
         userService.register(request.getEmail(), request.getPassword());
         return ResponseEntity.ok().build();
     }

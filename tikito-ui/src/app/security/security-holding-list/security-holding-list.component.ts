@@ -129,22 +129,14 @@ export class SecurityHoldingListComponent implements AfterViewInit {
   }
 
   onRowClicked(holding: SecurityHolding, event: any) {
-    if (this.isButton(event)) {
+    if (Util.isButton(event)) {
       return;
     }
     this.selectedHolding = holding;
   }
 
-  isButton(event: any): boolean {
-    return (event != null &&
-      event.target != null &&
-      event.target.classList != null &&
-      event.target.classList.length > 0 &&
-      event.target.classList[0] == 'mat-mdc-button-touch-target');
-  }
-
   onRowDblClicked(holding: SecurityHolding, event: any) {
-    if (this.isButton(event)) {
+    if (Util.isButton(event)) {
       return;
     }
     this.router.navigate(['/security-holding'], {fragment: 'securityIds=' + holding.securityId});

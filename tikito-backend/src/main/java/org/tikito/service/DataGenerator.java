@@ -22,7 +22,6 @@ import org.tikito.service.money.MoneyTransactionGroupService;
 import org.tikito.service.security.SecurityHoldingService;
 import org.tikito.service.security.SecurityService;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.*;
@@ -93,7 +92,7 @@ public class DataGenerator {
         this.securityService = securityService;
     }
 
-    public void generate() throws PasswordNotLongEnoughException, EmailAlreadyExistsException, IOException {
+    public void generate() throws PasswordNotLongEnoughException, EmailAlreadyExistsException {
         userAccountService.register("demo", "demodemodemo");
         generateAccounts();
         EURO_ID = securityRepository.findAll().stream()

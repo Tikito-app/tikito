@@ -1,7 +1,5 @@
 package org.tikito.service.security;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,6 +25,8 @@ import org.tikito.service.importer.security.DeGiroAccountImporter;
 import org.tikito.service.importer.security.DeGiroTransactionsImporter;
 import org.tikito.service.importer.security.SecurityTransactionImporter;
 import org.tikito.service.job.JobType;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.util.*;
@@ -90,7 +90,7 @@ public class SecurityImportService {
                                                                  final String timestampFormat,
                                                                  final String dateFormat,
                                                                  final String timeFormat) throws UnsupportedImportFormatException, IOException {
-        final ObjectMapper mapper = new ObjectMapper();
+        final JsonMapper mapper = JsonMapper.shared();
         final TypeReference<HashMap<String, Integer>> typeRef = new TypeReference<>() {
         };
 

@@ -25,6 +25,7 @@ import {CacheService} from "../../service/cache-service";
 import {DialogService} from "../../service/dialog.service";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatCard, MatCardContent} from "@angular/material/card";
+import {Util} from "../../util";
 
 @Component({
     selector: 'app-account-list',
@@ -93,7 +94,7 @@ export class AccountListComponent implements AfterViewInit {
   }
 
   onRowClicked(row: Account, event: any) {
-    if (this.isButton(event)) {
+    if (Util.isButton(event)) {
       return;
     }
     this.router.navigate(['/account/' + row.id]);
@@ -105,14 +106,6 @@ export class AccountListComponent implements AfterViewInit {
       return '';
     }
     return currency.name;
-  }
-
-  isButton(event: any): boolean {
-    return (event != null &&
-      event.target != null &&
-      event.target.classList != null &&
-      event.target.classList.length > 0 &&
-      event.target.classList[0] == 'mat-mdc-button-touch-target');
   }
 
   onDeleteAccount(account: Account) {

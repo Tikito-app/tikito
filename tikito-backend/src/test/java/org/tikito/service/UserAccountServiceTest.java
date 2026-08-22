@@ -1,24 +1,21 @@
 package org.tikito.service;
 
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import org.tikito.auth.LoggedInUserDto;
 import org.tikito.config.TestcontainersConfiguration;
 import org.tikito.controller.request.ActivateRequest;
 import org.tikito.controller.request.LoginRequest;
-import org.tikito.dto.security.SecurityType;
 import org.tikito.entity.UserAccount;
 import org.tikito.exception.EmailAlreadyExistsException;
 import org.tikito.exception.InvalidCredentialsException;
 import org.tikito.exception.PasswordNotLongEnoughException;
 import org.tikito.exception.RequestNotAllowedException;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.tikito.TestUtil.randomString;
@@ -89,7 +86,7 @@ class UserAccountServiceTest extends BaseIntegrationTest {
     }
 
     @Test
-    void register_shouldRegister_givenValidData() throws PasswordNotLongEnoughException, EmailAlreadyExistsException, IOException {
+    void register_shouldRegister_givenValidData() throws PasswordNotLongEnoughException, EmailAlreadyExistsException {
         withDefaultUserAccount();
         final String email = randomEmail();
         service.register(email, DEFAULT_USER_ACCOUNT_PASSWORD);
@@ -113,7 +110,7 @@ class UserAccountServiceTest extends BaseIntegrationTest {
     }
 
     @Test
-    void register_shouldInitialiseData_givenFirstEverUser() throws PasswordNotLongEnoughException, EmailAlreadyExistsException, IOException {
+    void register_shouldInitialiseData_givenFirstEverUser() throws PasswordNotLongEnoughException, EmailAlreadyExistsException {
         final String email = randomEmail();
         service.register(email, randomString(20));
         final UserAccount userAccount = userAccountRepository.findByEmail(email).get();

@@ -50,7 +50,7 @@ class SecurityServiceTest extends BaseIntegrationTest {
         final String json = getClassPathResource("yahoo-wolter-kluwer-rates.json");
         final String yahooUrl = "https://query1.finance.yahoo.com/v8/finance/chart/WKL.AS?events=split&formatted=true&includeAdjustedClose=true&interval=1d&period1=1714176000&period2=1745712000&symbol=WKL.AS&userYfid=true&lang=en-US&region=US";
         try (final MockedStatic<HttpUtil> utilities = Mockito.mockStatic(HttpUtil.class)) {
-            utilities.when(() -> HttpUtil.downloadUrl(eq(yahooUrl))).thenAnswer(invocationOnMock -> json);
+            utilities.when(() -> HttpUtil.downloadUrl(eq(yahooUrl))).thenAnswer(_ -> json);
 
             final List<SecurityPriceDto> rates = SecurityService.getExchangeRateHistory("WKL.AS", WOLTER_KLUWER.getId(), ONE_YEAR_AGO, NOW, new HashSet<>());
             assertEquals(254, rates.size());
@@ -70,13 +70,13 @@ class SecurityServiceTest extends BaseIntegrationTest {
                     eq(WOLTER_KLUWER.getId()),
                     any(),
                     eq(isinValidTo),
-                    anySet())).thenAnswer(invocationOnMock -> firstList);
+                    anySet())).thenAnswer(_ -> firstList);
             yahooImporter.when(() -> YahooImporter.retrieveHistoricalSecurityPrice(
                     eq("WKL.AS"),
                     eq(WOLTER_KLUWER.getId()),
                     eq(isinValidTo.plusDays(1)),
                     any(),
-                    anySet())).thenAnswer(invocationOnMock -> secondList);
+                    anySet())).thenAnswer(_ -> secondList);
 
             securityService.updateSecurityPrices(WOLTER_KLUWER.getId());
 
@@ -101,7 +101,7 @@ class SecurityServiceTest extends BaseIntegrationTest {
         securityRepository.save(WOLTER_KLUWER);
 
         try (final MockedStatic<HttpUtil> utilities = Mockito.mockStatic(HttpUtil.class)) {
-            utilities.when(() -> HttpUtil.downloadUrl(eq(yahooUrl))).thenAnswer(invocationOnMock -> json);
+            utilities.when(() -> HttpUtil.downloadUrl(eq(yahooUrl))).thenAnswer(_ -> json);
 
             // todo
             securityEnricherService.enrichSecurity(WOLTER_KLUWER.getId());
