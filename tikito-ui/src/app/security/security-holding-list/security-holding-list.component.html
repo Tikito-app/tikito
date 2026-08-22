@@ -48,6 +48,13 @@
           <mat-card-header>
             <table mat-table [dataSource]="dataSource">
 
+              <ng-container matColumnDef="security-logo">
+                <th mat-header-cell *matHeaderCellDef>{{ 'logo' | translate }}</th>
+                <td mat-cell *matCellDef="let element">
+                  <app-security-logo [isin]="element.security.currentIsin"></app-security-logo>
+                </td>
+              </ng-container>
+
               <ng-container matColumnDef="security-name">
                 <th mat-header-cell *matHeaderCellDef>{{ 'security' | translate }}</th>
                 <td mat-cell *matCellDef="let element">

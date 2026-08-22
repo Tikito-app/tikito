@@ -1,4 +1,4 @@
-<h2>{{holding.security.name}}</h2>
+<h2><app-security-logo [size]="30" [isin]="holding.security.currentIsin"></app-security-logo> {{holding.security.name}}</h2>
 <div style="float: right">
   <button mat-button (click)="onDetailsButtonClicked()" color="primary">{{'details' | translate}}</button>
   <button mat-button (click)="onCloseButtonClicked()"><mat-icon>close</mat-icon></button>

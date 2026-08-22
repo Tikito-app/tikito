@@ -13,20 +13,22 @@ import {CurrencyComponent} from "../../components/currency/currency.component";
 import {CacheService} from "../../service/cache-service";
 import {SecurityHoldingFilter} from "../../dto/security/security-holding-filter";
 import {PercentageComponent} from "../../components/percentage/percentage.component";
+import {SecurityLogoComponent} from "../security-logo/security-logo.component";
 
 @Component({
     selector: 'app-security-holding-list-details',
-    imports: [
-        MatIcon,
-        MatDivider,
-        MatList,
-        MatListItem,
-        MatButton,
-        SecurityHoldingGraphComponent,
-        CurrencyComponent,
-        PercentageComponent,
-        TranslatePipe
-    ],
+  imports: [
+    MatIcon,
+    MatDivider,
+    MatList,
+    MatListItem,
+    MatButton,
+    SecurityHoldingGraphComponent,
+    CurrencyComponent,
+    PercentageComponent,
+    TranslatePipe,
+    SecurityLogoComponent
+  ],
     templateUrl: './security-holding-list-details.component.html',
     changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './security-holding-list-details.component.scss'

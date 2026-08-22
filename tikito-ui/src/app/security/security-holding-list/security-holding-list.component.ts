@@ -41,10 +41,11 @@ import {SecurityTransactionListComponent} from "../security-transaction-list/sec
 import {SecurityHoldingFilter} from "../../dto/security/security-holding-filter";
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {MatCard, MatCardHeader} from "@angular/material/card";
+import {SecurityLogoComponent} from "../security-logo/security-logo.component";
 
 @Component({
     selector: 'app-security-holding-list',
-    imports: [
+  imports: [
     MatTable,
     MatColumnDef,
     MatHeaderCell,
@@ -72,15 +73,16 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
     SecurityTransactionListComponent,
     TranslatePipe,
     MatCard,
-    MatCardHeader
-],
+    MatCardHeader,
+    SecurityLogoComponent
+  ],
     templateUrl: './security-holding-list.component.html',
     styleUrl: './security-holding-list.component.scss',
     changeDetection: ChangeDetectionStrategy.Eager,
     providers: [TranslatePipe]
 })
 export class SecurityHoldingListComponent implements AfterViewInit {
-  displayedColumns: string[] = ['security-name', 'security-type', 'position-value', 'isin', 'performance', 'profit-loss', 'options'];
+  displayedColumns: string[] = ['security-logo', 'security-name', 'security-type', 'position-value', 'isin', 'performance', 'profit-loss', 'options'];
   dataSource: MatTableDataSource<SecurityHolding>;
   allHoldings: SecurityHolding[];
   selectedHolding: SecurityHolding | null;
