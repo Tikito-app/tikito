@@ -11,7 +11,6 @@ import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.exception.CannotReadFileException;
 import org.tikito.service.money.MoneyImportService;
 import org.tikito.service.money.MoneyTransactionService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -68,12 +67,8 @@ public class MoneyTransactionController {
                                                                                @RequestParam(name = "timestamp-format", required = false) final String timestampFormat,
                                                                                @RequestParam(name = "time-format", required = false) final String timeFormat,
                                                                                @RequestParam("dryRun") final boolean dryRun) throws CannotReadFileException {
-        try {
-            return ResponseEntity.ok(moneyImportService
-                    .importTransactions(authUser.getId(), accountId, file, dryRun, customHeaderConfigString, debitIndication, timestampFormat, timeFormat, csvSeparator)
-                    .getLines());
-        } catch (final JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        return ResponseEntity.ok(moneyImportService
+                .importTransactions(authUser.getId(), accountId, file, dryRun, customHeaderConfigString, debitIndication, timestampFormat, timeFormat, csvSeparator)
+                .getLines());
     }
 }

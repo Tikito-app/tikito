@@ -90,18 +90,10 @@ export class AdminSecurityIsinListComponent implements AfterViewInit {
   }
 
   onRowClicked(row: Isin, event: any) {
-    if (this.isButton(event)) {
+    if (Util.isButton(event)) {
       return;
     }
     this.router.navigate(['/admin/security/' + this.security.id + '/isin/' + row.isin]);
-  }
-
-  isButton(event: any): boolean {
-    return (event != null &&
-      event.target != null &&
-      event.target.classList != null &&
-      event.target.classList.length > 0 &&
-      event.target.classList[0] == 'mat-mdc-button-touch-target');
   }
 
   onDeleteIsin(isin: Isin) {

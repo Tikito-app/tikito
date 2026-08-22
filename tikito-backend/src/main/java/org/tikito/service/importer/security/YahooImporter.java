@@ -1,8 +1,5 @@
 package org.tikito.service.importer.security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.tikito.dto.security.SecurityPriceDto;
@@ -11,14 +8,14 @@ import org.tikito.entity.security.Security;
 import org.tikito.exception.ResourceNotFoundException;
 import org.tikito.service.LogService;
 import org.tikito.util.HttpUtil;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.tikito.dto.LogMessage.CANNOT_RETRIEVE_HISTORICAL_SECURITY_PRICE;
 import static org.tikito.dto.LogMessage.CANNOT_RETRIEVE_SECURITY_INFO;
@@ -35,7 +32,7 @@ public final class YahooImporter {
 
         try {
             final String json = HttpUtil.downloadUrl(url);
-            final JsonNode jsonNode = new ObjectMapper().reader().readTree(json);
+            final JsonNode jsonNode = JsonMapper.shared().readTree(json);
             final JsonNode innerNode = jsonNode.get("chart").get("result").get(0);
 
             if (innerNode == null) {
@@ -54,13 +51,13 @@ public final class YahooImporter {
             for (int i = 0; i < timestampNode.size(); i++) {
                 try {
                     final long epoch = timestampNode.get(i).asLong();
-                    final double value = adjclose.get(i).asDouble();
+                    final OptionalDouble maybeValue = adjclose.get(i).doubleValueOpt();
                     final Instant timestamp = Instant.ofEpochSecond(epoch);
                     final LocalDate date = LocalDate.ofInstant(timestamp, ZoneOffset.UTC);
                     final String dateString = date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth();
 
-                    if (!processedDates.contains(dateString)) {
-                        rates.add(new SecurityPriceDto(securityId, date, value));
+                    if (!processedDates.contains(dateString) && maybeValue.isPresent()) {
+                        rates.add(new SecurityPriceDto(securityId, date, maybeValue.getAsDouble()));
                         processedDates.add(dateString);
                     }
                 } catch (final Exception e) {
@@ -72,7 +69,7 @@ public final class YahooImporter {
                     .stream()
                     .sorted(Comparator.comparing(SecurityPriceDto::getDate))
                     .toList();
-        } catch (final ResourceNotFoundException | JsonProcessingException e) {
+        } catch (final ResourceNotFoundException | JacksonException e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
@@ -91,7 +88,7 @@ public final class YahooImporter {
         try {
             log.info(searchUrl);
             final String json = HttpUtil.downloadUrl(searchUrl);
-            final JsonNode jsonNode = new ObjectMapper().reader().readTree(json);
+            final JsonNode jsonNode = JsonMapper.shared().readTree(json);
 
             if (jsonNode.has("quotes")) {
                 final JsonNode quotes = jsonNode.get("quotes");
@@ -111,7 +108,7 @@ public final class YahooImporter {
                     }
                 }
             }
-        } catch (final ResourceNotFoundException | JsonProcessingException e) {
+        } catch (final ResourceNotFoundException | JacksonException e) {
             log.warn("Cannot retrieve security info for isin {}:", isin, e);
             LogService.log(CANNOT_RETRIEVE_SECURITY_INFO, isin);
         }
@@ -122,7 +119,7 @@ public final class YahooImporter {
     private static String getValueOrNull(final JsonNode quotes, final String key) {
         final JsonNode node = quotes.get(0).get(key);
         if (node != null) {
-            return node.textValue();
+            return node.stringValue();
         }
         return null;
     }

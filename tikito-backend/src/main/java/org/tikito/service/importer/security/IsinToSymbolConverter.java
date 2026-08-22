@@ -2,10 +2,10 @@ package org.tikito.service.importer.security;
 
 import org.tikito.exception.ResourceNotFoundException;
 import org.tikito.util.HttpUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Optional;
 
@@ -16,13 +16,14 @@ public final class IsinToSymbolConverter {
 
         try {
             final String json = HttpUtil.downloadUrl(url);
-            final JsonNode jsonNode = new ObjectMapper().reader().readTree(json);
+            final JsonNode jsonNode = JsonMapper.shared().readTree(json);
             final JsonNode result = jsonNode.get("result");
+
             if (!result.isEmpty()) {
-                return Optional.of(result.get(0).get("symbol").textValue());
+                return Optional.of(result.get(0).get("symbol").stringValue());
             }
             return Optional.empty();
-        } catch (final JsonProcessingException | ResourceNotFoundException e) {
+        } catch (final JacksonException | ResourceNotFoundException e) {
             log.error("Could not fetch isin {}", isin, e);
             return Optional.empty();
         }

@@ -9,7 +9,6 @@ import org.tikito.config.TestcontainersConfiguration;
 import org.tikito.controller.request.CreateOrUpdateAccountRequest;
 import org.tikito.dto.AccountDto;
 import org.tikito.entity.Account;
-import org.tikito.entity.money.MoneyHolding;
 
 import java.util.List;
 import java.util.Set;

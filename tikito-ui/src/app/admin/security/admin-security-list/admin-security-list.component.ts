@@ -28,6 +28,7 @@ import {MatInput} from "@angular/material/input";
 import {SecurityType} from "../../../dto/security/security-type";
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {MatCard, MatCardHeader} from "@angular/material/card";
+import {Util} from "../../../util";
 
 @Component({
     selector: 'app-admin-security-list',
@@ -89,7 +90,7 @@ export class AdminSecurityListComponent implements AfterViewInit {
   }
 
   onRowClicked(row: Security, event: any) {
-    if (this.isButton(event)) {
+    if (Util.isButton(event)) {
       return;
     }
     this.router.navigate(['/admin/security/' + row.id]);
@@ -110,14 +111,6 @@ export class AdminSecurityListComponent implements AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }
-
-  isButton(event: any): boolean {
-    return (event != null &&
-      event.target != null &&
-      event.target.classList != null &&
-      event.target.classList.length > 0 &&
-      event.target.classList[0] == 'mat-mdc-button-touch-target');
   }
 
   onDeleteSecurity(security: Security) {

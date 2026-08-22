@@ -21,7 +21,6 @@ import org.tikito.repository.MoneyTransactionGroupRepository;
 import org.tikito.service.job.JobType;
 import org.tikito.util.Util;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;

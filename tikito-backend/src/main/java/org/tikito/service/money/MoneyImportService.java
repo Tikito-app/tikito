@@ -1,8 +1,5 @@
 package org.tikito.service.money;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -27,6 +24,8 @@ import org.tikito.service.importer.FileReader;
 import org.tikito.service.importer.money.*;
 import org.tikito.service.job.JobType;
 import org.tikito.util.Util;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -77,8 +76,8 @@ public class MoneyImportService {
                                                               final String debitIndication,
                                                               final String timestampFormat,
                                                               final String timeFormat,
-                                                              final String csvSeparator) throws CannotReadFileException, JsonProcessingException {
-        final ObjectMapper mapper = new ObjectMapper();
+                                                              final String csvSeparator) throws CannotReadFileException {
+        final JsonMapper mapper = JsonMapper.shared();
         final TypeReference<HashMap<String, Integer>> typeRef = new TypeReference<>() {
         };
 

@@ -1,7 +1,5 @@
 package org.tikito.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,8 @@ import org.tikito.entity.security.SecurityPrice;
 import org.tikito.repository.*;
 import org.tikito.service.export.ImportExportService;
 import org.tikito.service.security.SecurityHoldingService;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Set;
 
 import static org.tikito.TestUtil.randomDouble;
-import static org.tikito.TestUtil.randomString;
 import static org.tikito.dto.security.SecurityType.CURRENCY;
 
 public class BaseIntegrationTest extends BaseTest {
@@ -118,7 +117,7 @@ public class BaseIntegrationTest extends BaseTest {
     @Autowired
     protected TimeService timeService;
 
-    protected final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+    protected final ObjectMapper objectMapper = JsonMapper.shared();
 
 
     @AfterEach
