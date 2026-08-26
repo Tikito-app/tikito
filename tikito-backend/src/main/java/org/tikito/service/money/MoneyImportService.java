@@ -261,6 +261,11 @@ public class MoneyImportService {
             line.setCurrencyId(accountDto.getCurrencyId());
         }
 
+        if (line.getTimestamp() == null) {
+            line.setFailedReason(FAILED_NO_VALID_TIMESTAMP);
+            return;
+        }
+
         if (line.getExchangeRate() == null) {
             line.setExchangeRate(cacheService.getCurrencyMultiplier(line.getCurrencyId(), LocalDate.ofInstant(line.getTimestamp(), ZoneOffset.UTC)));
         }
@@ -270,10 +275,6 @@ public class MoneyImportService {
             return;
         }
 
-        if (line.getTimestamp() == null) {
-            line.setFailedReason(FAILED_NO_VALID_TIMESTAMP);
-            return;
-        }
         if (StringUtils.hasText(line.getCounterpartyAccountNumber())) {
             line.setCounterpartyAccountNumber(line.getCounterpartyAccountNumber().replace(" ", ""));
         }

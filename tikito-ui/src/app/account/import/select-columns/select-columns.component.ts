@@ -90,6 +90,7 @@ export class SelectColumnsComponent implements OnInit {
     group['buy-value'] = new FormControl();
     group['timestamp-format'] = new FormControl();
     group['time-format'] = new FormControl();
+    group['credit-indication'] = new FormControl();
 
     this.form = new FormGroup(group);
     this.dataSource = new MatTableDataSource<any>(this.state.parsedContent);
@@ -108,35 +109,35 @@ export class SelectColumnsComponent implements OnInit {
   }
 
   getBuyValue() {
-    if (this.displayBuySellValueFieldOnColumn) {
+    if (this.displayBuySellValueFieldOnColumn != null) {
       return this.form.value['buy-value'];
     }
     return null;
   }
 
   getDebitCreditValue() {
-    if (this.displayCreditDebitValueFieldOnColumn) {
-      return this.form.value['debit-credit-value'];
+    if (this.displayCreditDebitValueFieldOnColumn != null) {
+      return this.form.value['credit-indication'];
     }
     return null;
   }
 
   getTimestampFormatValue() {
-    if (this.displayTimestampFormatFieldOnColumn) {
+    if (this.displayTimestampFormatFieldOnColumn != null) {
       return this.form.value['timestamp-format'];
     }
     return null;
   }
 
   getDateFormatValue() {
-    if (this.displayDateFormatFieldOnColumn) {
+    if (this.displayDateFormatFieldOnColumn != null) {
       return this.form.value['date-format'];
     }
     return null;
   }
 
   getTimeFormatValue() {
-    if (this.displayTimeFormatFieldOnColumn) {
+    if (this.displayTimeFormatFieldOnColumn != null) {
       return this.form.value['time-format'];
     }
     return null;
