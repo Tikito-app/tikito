@@ -61,6 +61,8 @@
   "account/import/test-custom-import": "Test de import (dry run)",
   "account/import/csv-file-separator": "Csv scheidingsteken",
   "account/import/continue": "Doorgaan",
+  "account/import/timestamp-format": "Formaat",
+  "account/import/credit-indication": "Debit indicatie",
 
   "account/import/required-column-date": "Datum",
   "account/import/required-column-isin": "Isin",
@@ -105,6 +107,7 @@
   "security/type/ETF": "ETF",
   "security/type/STOCK": "Aandeel",
   "security/type/CURRENCY": "Valuta",
+  "security/type/CRYPTO": "Crypto",
   "security/security-holdings": "Posities",
   "security/show-closed-positions": "Toon gesloten posities",
   "security/graph": "Grafiek",

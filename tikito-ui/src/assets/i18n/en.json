@@ -63,6 +63,8 @@
   "account/import/test-custom-import": "Test the import (dry run)",
   "account/import/csv-file-separator": "Csv separator",
   "account/import/continue": "Continue",
+  "account/import/timestamp-format": "Format",
+  "account/import/credit-indication": "Credit indication",
 
   "account/import/required-column-date": "Date",
   "account/import/required-column-isin": "Isin",
@@ -107,6 +109,7 @@
   "security/type/ETF": "ETF",
   "security/type/STOCK": "Stock",
   "security/type/CURRENCY": "Currency",
+  "security/type/CRYPTO": "Crypto",
   "security/security-holdings": "Security holdings",
   "security/show-closed-positions": "Show closed positions",
   "security/graph": "Graph",

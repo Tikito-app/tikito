@@ -33,6 +33,6 @@ public final class MT940Enricher {
             }
         });
         // todo
-        final Optional<Instant> instant = DateExtractor.extractDateSlashed(transaction.getDescription());
+        final Optional<Instant> instant = DateExtractor.extractDate(transaction.getDescription());
     }
 }

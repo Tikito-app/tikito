@@ -86,7 +86,7 @@ export class MoneyApi {
     formData.append("csv-separator", csvSeparator);
     formData.append("timestamp-format", timestampFormat);
     formData.append("time-format", timeFormat);
-    formData.append("debit-credit-value", debitCreditValue);
+    formData.append("credit-indication", debitCreditValue);
     formData.append("header-config", JSON.stringify(customHeaderConfig));
     formData.append('dryRun', dryRun ? 'true' : 'false')
 

@@ -181,7 +181,7 @@ export class ImportComponent implements OnInit {
       let commaCount = lines[0].split(',').length;
       let semicolonCount = lines[0].split(';').length;
 
-      this.importFileState.csvSeparator = commaCount > semicolonCount ? ',' : '';
+      this.importFileState.csvSeparator = commaCount > semicolonCount ? ',' : ';';
       this.form.controls['csvSeparator'].setValue(this.importFileState.csvSeparator);
     }
   }
