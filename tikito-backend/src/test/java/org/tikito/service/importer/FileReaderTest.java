@@ -1,12 +1,13 @@
 package org.tikito.service.importer;
 
-import org.tikito.dto.ImportFileType;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
+import org.tikito.dto.ImportFileType;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class FileReaderTest {
 

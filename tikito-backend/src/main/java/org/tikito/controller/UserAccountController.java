@@ -1,13 +1,13 @@
 package org.tikito.controller;
 
-import org.tikito.auth.AuthUser;
-import org.tikito.auth.LoggedInUserDto;
-import org.tikito.service.CacheService;
-import org.tikito.service.UserAccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.tikito.auth.AuthUser;
+import org.tikito.auth.LoggedInUserDto;
+import org.tikito.service.CacheService;
+import org.tikito.service.UserAccountService;
 
 @RestController
 @RequestMapping("/api/user")

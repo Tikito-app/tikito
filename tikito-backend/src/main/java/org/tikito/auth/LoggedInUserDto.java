@@ -1,10 +1,10 @@
 package org.tikito.auth;
 
-import org.tikito.entity.UserAccount;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.entity.UserAccount;
 
 @AllArgsConstructor
 @NoArgsConstructor

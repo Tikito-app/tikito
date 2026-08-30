@@ -1,9 +1,9 @@
 package org.tikito.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.tikito.dto.JobDto;
 import org.tikito.service.job.JobType;
-import lombok.*;
 
 import java.time.Instant;
 

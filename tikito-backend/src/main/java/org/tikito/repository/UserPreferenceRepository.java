@@ -1,8 +1,8 @@
 package org.tikito.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.tikito.dto.UserPreferenceKey;
 import org.tikito.entity.UserPreference;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;

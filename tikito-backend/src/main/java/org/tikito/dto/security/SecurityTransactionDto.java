@@ -1,11 +1,11 @@
 package org.tikito.dto.security;
 
-import org.tikito.entity.security.SecurityTransaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.util.StringUtils;
+import org.tikito.entity.security.SecurityTransaction;
 
 import java.time.Instant;
 

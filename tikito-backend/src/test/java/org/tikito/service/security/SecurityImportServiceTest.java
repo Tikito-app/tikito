@@ -150,7 +150,7 @@ public class SecurityImportServiceTest extends BaseIntegrationTest {
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-new-and-existing-security-holding.csv", "Account.csv");
         final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertEquals(2, result.getNewSecurityHoldings().size());
-        assertNotEquals(WOLTER_KLUWER.getId(), result.getNewSecurityHoldings().get(0).getSecurityId());
+        assertNotEquals(WOLTER_KLUWER.getId(), result.getNewSecurityHoldings().getFirst().getSecurityId());
         assertNotEquals(WOLTER_KLUWER.getId(), result.getNewSecurityHoldings().get(1).getSecurityId());
     }
 
@@ -169,7 +169,7 @@ public class SecurityImportServiceTest extends BaseIntegrationTest {
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-holding-results-in-zero-assets.csv", "Account.csv");
         final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertEquals(2, result.getNewSecurityHoldings().size());
-        assertEquals(0, result.getNewSecurityHoldings().get(0).getAmount());
+        assertEquals(0, result.getNewSecurityHoldings().getFirst().getAmount());
         assertEquals(0, result.getNewSecurityHoldings().get(1).getAmount());
     }
 
@@ -178,7 +178,7 @@ public class SecurityImportServiceTest extends BaseIntegrationTest {
         final MockMultipartFile file = getClassPathResourceToImport("security/degiro-account-new-holding-results-in-zero-assets.csv", "Account.csv");
         final SecurityTransactionImportResultDto result = securityImportService.importTransactions(DEFAULT_USER_ACCOUNT.getId(), DEFAULT_SECURITY_ACCOUNT.getId(), file, ';', '"', false, headerConfig, buyValue, timestampFormat, dateFormat, timeFormat);
         assertEquals(2, result.getNewSecurityHoldings().size());
-        assertEquals(0, result.getNewSecurityHoldings().get(0).getAmount());
+        assertEquals(0, result.getNewSecurityHoldings().getFirst().getAmount());
         assertEquals(0, result.getNewSecurityHoldings().get(1).getAmount());
     }
 
@@ -209,7 +209,7 @@ public class SecurityImportServiceTest extends BaseIntegrationTest {
         assertEquals(1, result.getNewSecuritiesByIsin().size());
         assertTrue(result.getNewSecuritiesByIsin().containsKey(oldIsin));
 
-        final SecurityHolding holding1 = result.getNewSecurityHoldings().get(0);
+        final SecurityHolding holding1 = result.getNewSecurityHoldings().getFirst();
         final SecurityHolding holding2 = result.getNewSecurityHoldings().get(1);
         assertEquals(65, holding1.getAmount());
         assertEquals(65, holding2.getAmount());

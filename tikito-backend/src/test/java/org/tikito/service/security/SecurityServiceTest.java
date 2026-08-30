@@ -1,6 +1,13 @@
 package org.tikito.service.security;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import org.tikito.config.TestcontainersConfiguration;
 import org.tikito.dto.security.SecurityPriceDto;
 import org.tikito.entity.security.Isin;
@@ -9,13 +16,6 @@ import org.tikito.entity.security.SecurityPrice;
 import org.tikito.service.BaseIntegrationTest;
 import org.tikito.service.importer.security.YahooImporter;
 import org.tikito.util.HttpUtil;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -82,7 +82,7 @@ class SecurityServiceTest extends BaseIntegrationTest {
 
             final List<SecurityPrice> prices = securityPriceRepository.findAllBySecurityId(WOLTER_KLUWER.getId());
             assertEquals(4, prices.size());
-            assertEquals(isinValidTo.minusDays(1), prices.get(0).getDate());
+            assertEquals(isinValidTo.minusDays(1), prices.getFirst().getDate());
             assertEquals(isinValidTo, prices.get(1).getDate());
             assertEquals(isinValidTo.plusDays(1), prices.get(2).getDate());
             assertEquals(isinValidTo.plusDays(2), prices.get(3).getDate());

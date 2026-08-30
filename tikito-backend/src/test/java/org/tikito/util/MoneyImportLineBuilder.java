@@ -1,7 +1,7 @@
 package org.tikito.util;
 
-import org.tikito.TestUtil;
 import lombok.Getter;
+import org.tikito.TestUtil;
 
 @Getter
 public class MoneyImportLineBuilder {

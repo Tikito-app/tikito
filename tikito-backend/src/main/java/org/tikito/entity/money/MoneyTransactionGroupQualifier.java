@@ -1,14 +1,14 @@
 package org.tikito.entity.money;
 
-import org.tikito.dto.export.MoneyTransactionGroupQualifierExportDto;
-import org.tikito.dto.money.MoneyTransactionField;
-import org.tikito.dto.money.MoneyTransactionGroupQualifierDto;
-import org.tikito.dto.money.MoneyTransactionGroupQualifierType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.dto.export.MoneyTransactionGroupQualifierExportDto;
+import org.tikito.dto.money.MoneyTransactionField;
+import org.tikito.dto.money.MoneyTransactionGroupQualifierDto;
+import org.tikito.dto.money.MoneyTransactionGroupQualifierType;
 
 import java.util.Objects;
 

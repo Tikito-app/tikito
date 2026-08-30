@@ -1,13 +1,13 @@
 package org.tikito.dto;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.tikito.dto.security.SecurityTransactionDto;
 import org.tikito.dto.security.SecurityTransactionImportLine;
 import org.tikito.dto.security.SecurityTransactionType;
 import org.tikito.entity.UserAccount;
 import org.tikito.entity.security.SecurityTransaction;
 import org.tikito.service.BaseTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.util.UUID;

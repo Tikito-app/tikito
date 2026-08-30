@@ -1,12 +1,12 @@
 package org.tikito.service.money;
 
+import org.springframework.util.StringUtils;
 import org.tikito.dto.DebitCredit;
 import org.tikito.dto.money.MoneyTransactionImportLine;
 import org.tikito.dto.money.MoneyTransactionImportResultDto;
 import org.tikito.service.importer.money.MoneyTransactionFileParser;
 import org.tikito.service.importer.money.MoneyTransactionImportSettings;
 import org.tikito.util.Util;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

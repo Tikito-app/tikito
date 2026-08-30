@@ -1,11 +1,11 @@
 package org.tikito.dto.money;
 
+import lombok.Getter;
 import org.tikito.dto.AccountDto;
 import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.service.MT940.MT940Transaction;
 import org.tikito.service.importer.money.MoneyTransactionFileParser;
 import org.tikito.service.importer.money.MoneyTransactionImportSettings;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;

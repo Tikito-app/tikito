@@ -1,7 +1,7 @@
 package org.tikito.service.MT940.lines;
 
-import org.tikito.service.MT940.MT940Line;
 import lombok.Getter;
+import org.tikito.service.MT940.MT940Line;
 
 import java.time.LocalDate;
 

@@ -1,9 +1,9 @@
 package org.tikito.dto.money;
 
-import org.tikito.entity.money.MoneyTransaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.tikito.entity.money.MoneyTransaction;
 
 import java.time.Instant;
 import java.time.LocalDate;

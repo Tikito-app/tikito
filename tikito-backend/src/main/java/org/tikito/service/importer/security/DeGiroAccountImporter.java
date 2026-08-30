@@ -1,9 +1,9 @@
 package org.tikito.service.importer.security;
 
-import org.tikito.dto.security.SecurityTransactionImportLine;
-import org.tikito.dto.security.SecurityTransactionType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.tikito.dto.security.SecurityTransactionImportLine;
+import org.tikito.dto.security.SecurityTransactionType;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -92,7 +92,7 @@ public class DeGiroAccountImporter extends SecurityTransactionImporter {
         final Instant timestamp;
 
         try {
-            final LocalDate date = LocalDate.parse(line.getCells().get(0), dateFormatter);
+            final LocalDate date = LocalDate.parse(line.getCells().getFirst(), dateFormatter);
             final LocalTime time = LocalTime.parse(line.getCells().get(1));
             timestamp = LocalDateTime.of(date, time).toInstant(ZoneOffset.UTC);
         } catch (final Exception e) {

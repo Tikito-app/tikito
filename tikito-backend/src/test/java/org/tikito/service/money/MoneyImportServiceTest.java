@@ -156,7 +156,7 @@ class MoneyImportServiceTest extends BaseIntegrationTest {
         final Instant expectedTimestamp1 = LocalDateTime.of(2024, 11, 12, 0, 0).toInstant(ZoneOffset.UTC);
         assertEquals(3, result.getLines().size());
         assertEquals(3, result.getImportedTransactions().size());
-        final MoneyTransaction transaction1 = result.getImportedTransactions().get(0);
+        final MoneyTransaction transaction1 = result.getImportedTransactions().getFirst();
         final MoneyTransaction transaction2 = result.getImportedTransactions().get(1);
         final MoneyTransaction transaction3 = result.getImportedTransactions().get(2);
 

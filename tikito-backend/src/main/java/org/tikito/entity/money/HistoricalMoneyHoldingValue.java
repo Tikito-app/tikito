@@ -1,6 +1,5 @@
 package org.tikito.entity.money;
 
-import org.tikito.dto.money.HistoricalMoneyHoldingValueDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,6 +7,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.dto.money.HistoricalMoneyHoldingValueDto;
 
 import java.time.LocalDate;
 

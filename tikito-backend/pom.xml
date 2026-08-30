@@ -25,7 +25,21 @@
 		<apache.httpcomoponents.version>5.6.4</apache.httpcomoponents.version>
 		<prowidesoftware.version>SRU2025-10.3.18</prowidesoftware.version>
 		<cucumber.version>7.34.3</cucumber.version>
+		<openrewrite.version>6.21.0</openrewrite.version>
 	</properties>
+
+	<repositories>
+		<repository>
+			<id>codegenome</id>
+			<url>https://artifacts.codegenomeproject.org/maven</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>codegenome</id>
+			<url>https://artifacts.codegenomeproject.org/maven</url>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<dependencies>
 		<dependency>
@@ -149,10 +163,10 @@
 			<scope>test</scope>
 			<version>${testcontainers.version}</version>
 		</dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-java</artifactId>
@@ -205,6 +219,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.15.0</version>
 				<configuration>
 					<annotationProcessorPaths>
 						<path>
@@ -212,6 +227,48 @@
 							<artifactId>lombok</artifactId>
 						</path>
 					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.openrewrite.maven</groupId>
+				<artifactId>rewrite-maven-plugin</artifactId>
+				<version>${openrewrite.version}</version>
+				<configuration>
+					<activeRecipes>
+						<recipe>org.openrewrite.java.OrderImports</recipe>
+						<recipe>org.openrewrite.java.migrate.UpgradeToJava21</recipe>
+						<recipe>org.openrewrite.java.migrate.UpgradeToJava17</recipe>
+						<recipe>org.openrewrite.java.migrate.UpgradeToJava25</recipe>
+						<recipe>org.openrewrite.staticanalysis.FinalClass</recipe>
+						<recipe>org.openrewrite.java.RemoveUnusedImports</recipe>
+					</activeRecipes>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.openrewrite.recipe</groupId>
+						<artifactId>rewrite-migrate-java</artifactId>
+						<version>3.42.1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>get-mockito-agent-path</id>
+						<goals>
+							<goal>properties</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!--suppress MavenModelInspection -->
+					<argLine>-javaagent:${org.mockito:mockito-core:jar}</argLine>
 				</configuration>
 			</plugin>
 		</plugins>
