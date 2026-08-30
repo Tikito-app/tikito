@@ -1,3 +1,9 @@
-<a mat-flat-button (click)="routeTo()" class="clickable">@if (icon) {
-  <mat-icon>{{icon}}</mat-icon>
-}{{displayValue}}</a>
+<a mat-flat-button (click)="routeTo()" class="clickable">
+  <span class="label" [class.active]="active">
+    @if (icon) {
+      <mat-icon>{{icon}}</mat-icon>
+    }
+
+    {{displayValue}}
+  </span>
+</a>

@@ -1,0 +1,9 @@
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  &.active {
+    color: #3494ff;
+  }
+}

@@ -41,44 +41,44 @@ import { LogsListComponent } from './admin/logs-list/logs-list.component';
 import {AdminJobsListComponent} from "./admin/jobs-list/admin-jobs-list.component";
 
 export const routes: Routes = [
-  {path: '', component: OverviewComponent},
+  {path: '', component: OverviewComponent, data: {menu: 'home'}},
 
-  {path: 'login', component: LoginComponent},
+  {path: 'login', component: LoginComponent, data: {menu: 'login'}},
   {path: 'logout', component: LogoutComponent},
   {path: 'register', component: RegisterComponent},
 
-  {path: 'account', component: AccountListComponent},
-  {path: 'account/create', component: AccountFormComponent},
-  {path: 'account/import', component: ImportComponent},
-  {path: 'account/:accountId', component: AccountFormComponent},
+  {path: 'account', component: AccountListComponent, data: {menu: 'account'}},
+  {path: 'account/create', component: AccountFormComponent, data: {menu: 'account'}},
+  {path: 'account/import', component: ImportComponent, data: {menu: 'import'}},
+  {path: 'account/:accountId', component: AccountFormComponent, data: {menu: 'account'}},
 
-  {path: 'money-transaction', component: MoneyTransactionOverviewComponent},
+  {path: 'money-transaction', component: MoneyTransactionOverviewComponent, data: {menu: 'money'}},
 
-  {path: 'security', component: SecurityHoldingListComponent},
+  {path: 'security', component: SecurityHoldingListComponent, data: {menu: 'securities'}},
 
-  {path: 'security-holding', component: SecurityHoldingOverviewComponent},
+  {path: 'security-holding', component: SecurityHoldingOverviewComponent, data: {menu: 'securities'}},
 
-  {path: 'money/transaction-group', component: MoneyTransactionGroupListComponent},
-  {path: 'money/transaction-group/:groupId', component: MoneyTransactionGroupFormComponent},
+  {path: 'money/transaction-group', component: MoneyTransactionGroupListComponent, data: {menu: 'money'}},
+  {path: 'money/transaction-group/:groupId', component: MoneyTransactionGroupFormComponent, data: {menu: 'money'}},
 
-  {path: 'loan', component: LoanListComponent},
-  {path: 'loan/:loanId', component: LoanFormComponent},
-  {path: 'loan/:loanId/part', component: LoanPartFormComponent},
-  {path: 'loan/:loanId/part/:loanPartId', component: LoanPartFormComponent},
+  {path: 'loan', component: LoanListComponent, data: {menu: 'loan'}},
+  {path: 'loan/:loanId', component: LoanFormComponent, data: {menu: 'loan'}},
+  {path: 'loan/:loanId/part', component: LoanPartFormComponent, data: {menu: 'loan'}},
+  {path: 'loan/:loanId/part/:loanPartId', component: LoanPartFormComponent, data: {menu: 'loan'}},
 
-  {path: 'admin', component: AdminComponent},
-  {path: 'admin/user-preferences', component: AdminUserPreferencesComponent},
-  {path: 'admin/users', component: AdminUsersComponent},
-  {path: 'admin/money', component: AdminMoneyListComponent},
-  {path: 'admin/export', component: AdminExportComponent},
-  {path: 'admin/import', component: AdminImportComponent},
-  {path: 'admin/jobs', component: AdminJobsListComponent},
-  {path: 'admin/logs', component: LogsListComponent},
+  {path: 'admin', component: AdminComponent, data: {menu: 'admin'}},
+  {path: 'admin/user-preferences', component: AdminUserPreferencesComponent, data: {menu: 'admin'}},
+  {path: 'admin/users', component: AdminUsersComponent, data: {menu: 'admin'}},
+  {path: 'admin/money', component: AdminMoneyListComponent, data: {menu: 'admin'}},
+  {path: 'admin/export', component: AdminExportComponent, data: {menu: 'admin'}},
+  {path: 'admin/import', component: AdminImportComponent, data: {menu: 'admin'}},
+  {path: 'admin/jobs', component: AdminJobsListComponent, data: {menu: 'admin'}},
+  {path: 'admin/logs', component: LogsListComponent, data: {menu: 'admin'}},
 
-  {path: 'admin/security', component: AdminSecurityListComponent},
-  {path: 'admin/security/:securityId', component: AdminSecurityFormComponent},
-  {path: 'admin/security/:securityId/isin', component: AdminSecurityIsinListComponent},
-  {path: 'admin/security/:securityId/isin/:isin', component: AdminSecurityIsinFormComponent},
+  {path: 'admin/security', component: AdminSecurityListComponent, data: {menu: 'admin'}},
+  {path: 'admin/security/:securityId', component: AdminSecurityFormComponent, data: {menu: 'admin'}},
+  {path: 'admin/security/:securityId/isin', component: AdminSecurityIsinListComponent, data: {menu: 'admin'}},
+  {path: 'admin/security/:securityId/isin/:isin', component: AdminSecurityIsinFormComponent, data: {menu: 'admin'}},
 
   {path: 'initial-installation', component: InitialInstallationComponent},
 ];
