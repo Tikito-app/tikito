@@ -1,5 +1,7 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {HeaderItemComponent} from "../header-item/header-item.component";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
+import {filter} from "rxjs/operators";
 
 import {Util} from "../util";
 import {AuthService} from "../service/auth.service";
@@ -20,9 +22,12 @@ export class TopHeaderComponent implements OnInit {
   loggedIn: boolean;
   initialInstallation: boolean;
   jobsPending: number = 0;
+  currentMenu: string | null = null;
 
   constructor(private authService: AuthService,
-              private adminApi: AdminApi) {
+              private adminApi: AdminApi,
+              private router: Router,
+              private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -35,6 +40,18 @@ export class TopHeaderComponent implements OnInit {
 
     this.authService.onUserLoggedIn((user: any) => this.loggedIn = true);
     this.authService.onUserLoggedOut(() => this.loggedIn = false);
+
+    this.updateCurrentMenu();
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => this.updateCurrentMenu());
+  }
+
+  private updateCurrentMenu(): void {
+    let route = this.activatedRoute.root;
+    while (route.firstChild) {
+      route = route.firstChild;
+    }
+    this.currentMenu = route.snapshot.data['menu'] ?? null;
   }
 
   updateJobsCount() {

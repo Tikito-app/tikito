@@ -2,28 +2,28 @@
   <div class="top-menu">
     <div class="top-menu-links" id="top-menu-links" style="float: left;">
       @if (!initialInstallation) {
-        <app-header-item icon="home" [attr.data-cy]="'top-menu-home-button'" displayValue="Home" routerLink="/"></app-header-item>
+        <app-header-item icon="home" [attr.data-cy]="'top-menu-home-button'" displayValue="Home" routerLink="/" [active]="currentMenu === 'home'"></app-header-item>
       }
       @if (loggedIn) {
-        <app-header-item routerLink="/account" icon="location_city" [displayValue]="'user-account' | translate"></app-header-item>
+        <app-header-item routerLink="/account" icon="location_city" [displayValue]="'user-account' | translate" [active]="currentMenu === 'account'"></app-header-item>
       }
       @if (loggedIn) {
-        <app-header-item icon="account_balance" routerLink="/money-transaction" [displayValue]="'money/money' | translate"></app-header-item>
+        <app-header-item icon="account_balance" routerLink="/money-transaction" [displayValue]="'money/money' | translate" [active]="currentMenu === 'money'"></app-header-item>
       }
       @if (loggedIn) {
-        <app-header-item icon="bar_chart" routerLink="/security" [displayValue]="'security/securities' | translate"></app-header-item>
+        <app-header-item icon="bar_chart" routerLink="/security" [displayValue]="'security/securities' | translate" [active]="currentMenu === 'securities'"></app-header-item>
       }
       @if (loggedIn) {
-        <app-header-item icon="bar_chart" routerLink="/loan" [displayValue]="'loan/loans' | translate"></app-header-item>
+        <app-header-item icon="bar_chart" routerLink="/loan" [displayValue]="'loan/loans' | translate" [active]="currentMenu === 'loan'"></app-header-item>
       }
       @if (loggedIn) {
-        <app-header-item icon="cloud_download" routerLink="/account/import" [displayValue]="'import' | translate"></app-header-item>
+        <app-header-item icon="cloud_download" routerLink="/account/import" [displayValue]="'import' | translate" [active]="currentMenu === 'import'"></app-header-item>
       }
       @if (loggedIn) {
-        <app-header-item icon="build" routerLink="/admin" [displayValue]="'admin' | translate"></app-header-item>
+        <app-header-item icon="build" routerLink="/admin" [displayValue]="'admin' | translate" [active]="currentMenu === 'admin'"></app-header-item>
       }
       @if (!loggedIn && !initialInstallation) {
-        <app-header-item icon="person" routerLink="/login" [displayValue]="'login' | translate"></app-header-item>
+        <app-header-item icon="person" routerLink="/login" [displayValue]="'login' | translate" [active]="currentMenu === 'login'"></app-header-item>
       }
       <!--      <app-header-item icon="person" routerLink="/register" *ngIf="!loggedIn" [displayValue]="'register' | translate"></app-header-item>-->
       @if (loggedIn) {
@@ -31,7 +31,7 @@
       }
 
       @if (loggedIn && jobsPending > 0) {
-        <app-header-item routerLink="/admin/jobs" [displayValue]="jobsPending + ' job pending' | translate"></app-header-item>
+        <app-header-item routerLink="/admin/jobs" [displayValue]="jobsPending + ' job pending' | translate" [active]="currentMenu === 'admin'"></app-header-item>
       }
     </div>
     <div style="float: right"><img src="/assets/images/logo.png" style="width: 75px; height: 75px; padding-right: 50px; padding-top: 10px"/></div>
