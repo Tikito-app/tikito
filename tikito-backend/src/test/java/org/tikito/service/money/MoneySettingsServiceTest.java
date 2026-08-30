@@ -1,11 +1,11 @@
 package org.tikito.service.money;
 
+import org.junit.jupiter.api.Test;
 import org.tikito.dto.DebitCredit;
 import org.tikito.dto.money.MoneyTransactionImportLine;
 import org.tikito.dto.money.MoneyTransactionImportResultDto;
 import org.tikito.service.importer.money.MoneyTransactionImportSettings;
 import org.tikito.util.MoneyImportLineBuilder;
-import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;

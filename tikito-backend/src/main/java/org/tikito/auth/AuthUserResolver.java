@@ -1,6 +1,5 @@
 package org.tikito.auth;
 
-import org.tikito.exception.RequestNotAllowedException;
 import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -8,6 +7,7 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.tikito.exception.RequestNotAllowedException;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

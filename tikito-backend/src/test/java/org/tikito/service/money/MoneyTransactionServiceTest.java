@@ -1,15 +1,15 @@
 package org.tikito.service.money;
 
-import org.springframework.test.context.ContextConfiguration;
-import org.tikito.config.TestcontainersConfiguration;
-import org.tikito.entity.money.MoneyTransaction;
-import org.tikito.service.BaseIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.tikito.config.TestcontainersConfiguration;
+import org.tikito.entity.money.MoneyTransaction;
+import org.tikito.service.BaseIntegrationTest;
 
 import java.util.NoSuchElementException;
 

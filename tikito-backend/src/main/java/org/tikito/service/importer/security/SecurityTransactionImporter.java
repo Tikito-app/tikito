@@ -1,7 +1,7 @@
 package org.tikito.service.importer.security;
 
-import org.tikito.dto.security.SecurityTransactionImportLine;
 import org.springframework.util.StringUtils;
+import org.tikito.dto.security.SecurityTransactionImportLine;
 
 import java.util.List;
 import java.util.Objects;

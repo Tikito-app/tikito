@@ -1,7 +1,7 @@
 package org.tikito.service.importer.security;
 
-import org.tikito.dto.security.SecurityTransactionImportLine;
 import org.springframework.stereotype.Service;
+import org.tikito.dto.security.SecurityTransactionImportLine;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,7 +47,7 @@ public class DeGiroTransactionsImporter extends SecurityTransactionImporter {
         lines.add(line);
 
         try {
-            final LocalDate date = LocalDate.parse(line.getCells().get(0), dateFormatter);
+            final LocalDate date = LocalDate.parse(line.getCells().getFirst(), dateFormatter);
             final LocalTime time = LocalTime.parse(line.getCells().get(1));
 
             line.setTimestamp(LocalDateTime.of(date, time).toInstant(ZoneOffset.UTC));

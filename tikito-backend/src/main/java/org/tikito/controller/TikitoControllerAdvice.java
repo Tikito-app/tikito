@@ -9,9 +9,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.tikito.exception.ClientFormExceptionResponse;
+import org.tikito.exception.ClientFormExceptionResponse.ClientFormValidationExceptionField;
 import org.tikito.exception.ClientValidationException;
 import org.tikito.exception.InvalidCredentialsException;
-import org.tikito.exception.ClientFormExceptionResponse.ClientFormValidationExceptionField;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.NoSuchElementException;
 public class TikitoControllerAdvice {
 
     @ExceptionHandler(value = {Exception.class})
-    protected ResponseEntity<Object> handleClientValidationEdxception(final Exception ex) {
+    protected ResponseEntity<Object> handleClientValidationException(final Exception ex) {
         log.warn(ex.getMessage(), ex);
         return handleExceptionInternal(ex, new ServerResponse<>(ex), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }

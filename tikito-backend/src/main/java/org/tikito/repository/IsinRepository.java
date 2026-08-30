@@ -1,7 +1,7 @@
 package org.tikito.repository;
 
-import org.tikito.entity.security.Isin;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.tikito.entity.security.Isin;
 
 import java.util.List;
 

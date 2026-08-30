@@ -1,9 +1,9 @@
 package org.tikito.service;
 
+import org.springframework.stereotype.Service;
 import org.tikito.dto.OverviewDto;
 import org.tikito.entity.security.AggregatedHistoricalSecurityHoldingValue;
 import org.tikito.repository.AggregatedHistoricalSecurityHoldingValueRepository;
-import org.springframework.stereotype.Service;
 
 @Service
 public class OverviewService {

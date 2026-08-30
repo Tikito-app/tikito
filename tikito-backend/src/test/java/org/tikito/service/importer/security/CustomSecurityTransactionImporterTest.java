@@ -1,11 +1,11 @@
 package org.tikito.service.importer.security;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.tikito.dto.security.SecurityTransactionImportLine;
 import org.tikito.dto.security.SecurityTransactionImportResultDto;
 import org.tikito.dto.security.SecurityTransactionType;
 import org.tikito.service.BaseTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.tikito.service.importer.security.CustomSecurityHeaderName.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.tikito.service.importer.security.CustomSecurityHeaderName.*;
 
 class CustomSecurityTransactionImporterTest extends BaseTest {
     private CustomSecurityTransactionImporter importer;
@@ -41,7 +41,7 @@ class CustomSecurityTransactionImporterTest extends BaseTest {
     void map_shouldSucceed_givenValidData() {
         final List<SecurityTransactionImportLine> lines = importer.map(generateLine());
 
-        final SecurityTransactionImportLine buyLine = lines.get(0);
+        final SecurityTransactionImportLine buyLine = lines.getFirst();
         final SecurityTransactionImportLine transactionCostLine = lines.get(1);
         final SecurityTransactionImportLine adminCostLine = lines.get(2);
 

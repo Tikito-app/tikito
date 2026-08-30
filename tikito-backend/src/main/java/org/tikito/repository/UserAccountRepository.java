@@ -1,8 +1,8 @@
 package org.tikito.repository;
 
-import org.tikito.entity.UserAccount;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.tikito.entity.UserAccount;
 
 import java.util.Optional;
 

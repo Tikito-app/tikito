@@ -61,7 +61,7 @@ class LoanValueServiceTest extends BaseIntegrationTest {
         service.generateLoanValues(DEFAULT_USER_ACCOUNT.getId(), loan.getId());
         final List<LoanValue> values = loanValueRepository.findAll();
 
-        assertLoanValue(22, 11, 11, 0, 0, 0, values.get(0));
+        assertLoanValue(22, 11, 11, 0, 0, 0, values.getFirst());
         assertLoanValue(11, 22, 11, 0, 0, 0, values.get(1));
         assertLoanValue(0, 33, 11, 0, 0, 0, values.get(2));
     }
@@ -81,7 +81,7 @@ class LoanValueServiceTest extends BaseIntegrationTest {
         service.generateLoanValues(DEFAULT_USER_ACCOUNT.getId(), loan.getId());
         final List<LoanValue> values = loanValueRepository.findAll();
 
-        assertLoanValue(22, 11, 11, 0, 0, 0, values.get(0));
+        assertLoanValue(22, 11, 11, 0, 0, 0, values.getFirst());
         assertLoanValue(12, 21, 10, 0, 0, 0, values.get(1));
         assertLoanValue(0, 33, 12, 0, 0, 0, values.get(2));
     }
@@ -101,7 +101,7 @@ class LoanValueServiceTest extends BaseIntegrationTest {
         service.generateLoanValues(DEFAULT_USER_ACCOUNT.getId(), loan.getId());
         final List<LoanValue> values = loanValueRepository.findAll();
 
-        assertLoanValue(22.44587, 10.55413, 10.55413, 0, 1.375, 1.375, values.get(0));
+        assertLoanValue(22.44587, 10.55413, 10.55413, 0, 1.375, 1.375, values.getFirst());
         assertLoanValue(11.45198, 21.54802, 10.99389, 0, 2.31024, 0.93524, values.get(1));
         assertLoanValue(0, 33, 11.45197, 0, 2.78741, 0.47717, values.get(2));
     }
@@ -117,7 +117,7 @@ class LoanValueServiceTest extends BaseIntegrationTest {
         service.generateLoanValues(DEFAULT_USER_ACCOUNT.getId(), loan.getId());
         final List<LoanValue> values = loanValueRepository.findAll();
 
-        assertLoanValue(22.44587, 10.55413, 10.55413, 0, 1.375, 1.375, values.get(0));
+        assertLoanValue(22.44587, 10.55413, 10.55413, 0, 1.375, 1.375, values.getFirst());
         assertLoanValue(41.12259, 18.87741, 18.87741, 0, 3.5, 3.5, values.get(1));
         assertLoanValue(11.45198, 21.54802, 10.99389, 0, 2.31024, 0.93524, values.get(2));
         assertLoanValue(21.14401, 38.85599, 19.97859, 0, 5.89882, 2.39882, values.get(3));
@@ -136,7 +136,7 @@ class LoanValueServiceTest extends BaseIntegrationTest {
         service.generateLoanValues(DEFAULT_USER_ACCOUNT.getId(), loan.getId());
         final List<LoanValue> values = loanValueRepository.findAll();
 
-        assertLoanValue(22.4459, 10.55414, 10.55414, 0, 1.375, 1.375, values.get(0));
+        assertLoanValue(22.4459, 10.55414, 10.55414, 0, 1.375, 1.375, values.getFirst());
         assertLoanValue(12.38111, 20.61889, 10.06476, 0, 2.31024, 0.93524, values.get(1));
         assertLoanValue(0, 33, 12.38111, 0, 2.82612, 0.51588, values.get(2));
     }
@@ -152,7 +152,7 @@ class LoanValueServiceTest extends BaseIntegrationTest {
         service.generateLoanValues(DEFAULT_USER_ACCOUNT.getId(), loan.getId());
         final List<LoanValue> values = loanValueRepository.findAll();
 
-        assertLoanValue(22.4459, 10.55414, 10.55414, 0, 1.375, 1.375, values.get(0));
+        assertLoanValue(22.4459, 10.55414, 10.55414, 0, 1.375, 1.375, values.getFirst());
         assertLoanValue(41.12259, 18.87741, 18.87741, 0, 3.5, 3.5, values.get(1));
         assertLoanValue(11.45198, 21.54802, 10.99389, 0, 2.31024, 0.93524, values.get(2));
         assertLoanValue(35.45055, 24.54945, 5.67205, 0, 5.89882, 2.39882, values.get(3));
@@ -171,7 +171,7 @@ class LoanValueServiceTest extends BaseIntegrationTest {
         service.generateLoanValues(DEFAULT_USER_ACCOUNT.getId(), loan.getId());
         final List<LoanValue> values = loanValueRepository.findAll();
 
-        assertLoanValue(22.4459, 10.55414, 10.55414, 0, 1.375, 1.375, values.get(0));
+        assertLoanValue(22.4459, 10.55414, 10.55414, 0, 1.375, 1.375, values.getFirst());
         assertLoanValue(8.38111, 24.61889, 14.06476, 0, 2.31024, 0.93524, values.get(1));
         assertLoanValue(0, 33, 8.38111, 0, 2.65946, 0.34921, values.get(2));
     }
@@ -187,7 +187,7 @@ class LoanValueServiceTest extends BaseIntegrationTest {
         service.generateLoanValues(DEFAULT_USER_ACCOUNT.getId(), loan.getId());
         final List<LoanValue> values = loanValueRepository.findAll();
 
-        assertLoanValue(22.4459, 10.55414, 10.55414, 0, 1.375, 1.375, values.get(0));
+        assertLoanValue(22.4459, 10.55414, 10.55414, 0, 1.375, 1.375, values.getFirst());
         assertLoanValue(41.12259, 18.87741, 18.87741, 0, 3.5, 3.5, values.get(1));
         assertLoanValue(0, 33, 22.44586, 0, 2.31024, 0.93524, values.get(2));
         assertLoanValue(6.90252, 53.09748, 34.22007, 0, 5.89882, 2.3988, values.get(3));
@@ -206,7 +206,7 @@ class LoanValueServiceTest extends BaseIntegrationTest {
         service.generateLoanValues(DEFAULT_USER_ACCOUNT.getId(), loan.getId());
         final List<LoanValue> values = loanValueRepository.findAll();
 
-        assertLoanValue(23.375, 9.625, 9.625, 0, 1.375, 1.375, values.get(0));
+        assertLoanValue(23.375, 9.625, 9.625, 0, 1.375, 1.375, values.getFirst());
         assertLoanValue(23.375, 9.625, 0, 0.97396, 1.375, 0, values.get(1));
         assertLoanValue(13.32292, 19.67708, 10.05208, 0, 3.32292, 1.94792, values.get(2));
     }
@@ -224,11 +224,11 @@ class LoanValueServiceTest extends BaseIntegrationTest {
         service.generateLoanValues(DEFAULT_USER_ACCOUNT.getId(), loan.getId());
         final List<LoanValue> values = loanValueRepository.findAll();
 
-        assertLoanValue(22, 11, 11, 0, 0, 0, values.get(0));
+        assertLoanValue(22, 11, 11, 0, 0, 0, values.getFirst());
         assertLoanValue(11, 22, 11, 0, 0, 0, values.get(1));
         assertLoanValue(0, 33, 11, 0, 0, 0, values.get(2));
 
-        assertFalse(values.get(0).isSimulated());
+        assertFalse(values.getFirst().isSimulated());
         assertTrue(values.get(1).isSimulated());
         assertTrue(values.get(2).isSimulated());
     }
@@ -247,11 +247,11 @@ class LoanValueServiceTest extends BaseIntegrationTest {
         final List<LoanValue> values = loanValueRepository.findAll();
 
         // exact same as a not simulated exact payment
-        assertLoanValue(22.44587, 10.55413, 10.55413, 0, 1.375, 1.375, values.get(0));
+        assertLoanValue(22.44587, 10.55413, 10.55413, 0, 1.375, 1.375, values.getFirst());
         assertLoanValue(11.45198, 21.54802, 10.99389, 0, 2.31024, 0.93524, values.get(1));
         assertLoanValue(0, 33, 11.45197, 0, 2.78741, 0.47717, values.get(2));
 
-        assertFalse(values.get(0).isSimulated());
+        assertFalse(values.getFirst().isSimulated());
         assertTrue(values.get(1).isSimulated());
         assertTrue(values.get(2).isSimulated());
     }
@@ -267,7 +267,7 @@ class LoanValueServiceTest extends BaseIntegrationTest {
         service.generateLoanValues(DEFAULT_USER_ACCOUNT.getId(), loan.getId());
         final List<LoanValue> values = loanValueRepository.findAll();
 
-        assertLoanValue(22, 11, 11, 0, 0, 0, values.get(0));
+        assertLoanValue(22, 11, 11, 0, 0, 0, values.getFirst());
         assertLoanValue(40, 20, 20, 0, 0, 0, values.get(1));
         assertLoanValue(11, 22, 11, 0, 0, 0, values.get(2));
         assertLoanValue(20, 40, 20, 0, 0, 0, values.get(3));
@@ -286,7 +286,7 @@ class LoanValueServiceTest extends BaseIntegrationTest {
         service.generateLoanValues(DEFAULT_USER_ACCOUNT.getId(), loan.getId());
         final List<LoanValue> values = loanValueRepository.findAll();
 
-        assertLoanValue(22.44587, 10.55413, 10.55413, 0, 1.375, 1.375, values.get(0));
+        assertLoanValue(22.44587, 10.55413, 10.55413, 0, 1.375, 1.375, values.getFirst());
         assertLoanValue(41.12259, 18.87741, 18.87741, 0, 3.5, 3.5, values.get(1));
         assertLoanValue(22.44586, 10.55414, 0, 0.9352, 1.375, 0, values.get(2));
         assertLoanValue(41.12259, 18.87741, 0, 2.39882, 3.5, 0, values.get(3));

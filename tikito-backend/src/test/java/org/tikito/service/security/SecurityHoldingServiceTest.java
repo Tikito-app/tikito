@@ -79,7 +79,7 @@ class SecurityHoldingServiceTest extends BaseTest {
         assertEquals(2, result.size());
 
         assertEquals(value1.getDate(), result.get(1).getDate());
-        assertEquals(value2.getDate(), result.get(0).getDate());
+        assertEquals(value2.getDate(), result.getFirst().getDate());
         assertDoubleEquals(value1.getWorth() + (value3.getWorth()), result.get(1).getWorth());
     }
 }

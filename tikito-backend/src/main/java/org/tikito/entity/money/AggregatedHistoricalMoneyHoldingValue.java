@@ -1,10 +1,10 @@
 package org.tikito.entity.money;
 
-import org.tikito.dto.money.AggregatedHistoricalMoneyHoldingValueDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.dto.money.AggregatedHistoricalMoneyHoldingValueDto;
 import org.tikito.service.money.MoneyType;
 
 import java.time.LocalDate;

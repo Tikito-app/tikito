@@ -1,10 +1,10 @@
 package org.tikito.dto.security;
 
 import jakarta.validation.constraints.NotNull;
-import org.tikito.dto.DateRange;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.dto.DateRange;
 import org.tikito.util.Util;
 
 import java.time.Instant;

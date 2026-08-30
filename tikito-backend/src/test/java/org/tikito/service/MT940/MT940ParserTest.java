@@ -78,8 +78,8 @@ class MT940ParserTest {
 
         assertEquals(-3.14, transactions.getFirst().getAmount());
         assertEquals(LocalDate.of(2024, 11, 19), transactions.getFirst().getDate());
-        assertNull(transactions.get(0).getToAccountNumber());
-        assertNull(transactions.get(0).getToAccountName());
+        assertNull(transactions.getFirst().getToAccountNumber());
+        assertNull(transactions.getFirst().getToAccountName());
 
         assertEquals(-11.01, transactions.get(1).getAmount());
         assertEquals(LocalDate.of(2024, 11, 20), transactions.get(1).getDate());

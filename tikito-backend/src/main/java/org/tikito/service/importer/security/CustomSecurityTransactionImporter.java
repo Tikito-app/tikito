@@ -1,9 +1,9 @@
 package org.tikito.service.importer.security;
 
+import org.springframework.util.StringUtils;
 import org.tikito.dto.security.SecurityTransactionImportLine;
 import org.tikito.dto.security.SecurityTransactionImportResultDto;
 import org.tikito.dto.security.SecurityTransactionType;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

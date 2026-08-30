@@ -1,8 +1,8 @@
 package org.tikito.service.importer.security;
 
+import lombok.extern.slf4j.Slf4j;
 import org.tikito.exception.ResourceNotFoundException;
 import org.tikito.util.HttpUtil;
-import lombok.extern.slf4j.Slf4j;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;

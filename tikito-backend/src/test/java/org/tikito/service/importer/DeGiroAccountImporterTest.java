@@ -1,9 +1,9 @@
 package org.tikito.service.importer;
 
+import org.junit.jupiter.api.Test;
 import org.tikito.dto.security.SecurityTransactionImportLine;
 import org.tikito.dto.security.SecurityTransactionImportResultDto;
 import org.tikito.service.importer.security.DeGiroAccountImporter;
-import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.tikito.dto.security.SecurityTransactionType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.tikito.dto.security.SecurityTransactionType.*;
 
 class DeGiroAccountImporterTest {
 

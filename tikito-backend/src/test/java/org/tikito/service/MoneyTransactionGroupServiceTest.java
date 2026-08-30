@@ -1,6 +1,11 @@
 package org.tikito.service;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import org.tikito.TestUtil;
 import org.tikito.config.TestcontainersConfiguration;
 import org.tikito.controller.request.CreateOrUpdateMoneyTransactionGroupRequest;
@@ -12,11 +17,6 @@ import org.tikito.entity.money.MoneyTransaction;
 import org.tikito.entity.money.MoneyTransactionGroup;
 import org.tikito.entity.money.MoneyTransactionGroupQualifier;
 import org.tikito.service.money.MoneyTransactionGroupService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -24,11 +24,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.tikito.dto.money.MoneyTransactionField.DESCRIPTION;
 import static org.tikito.dto.money.MoneyTransactionGroupQualifierType.REGEX;
 import static org.tikito.dto.money.MoneyTransactionGroupQualifierType.SIMILAR;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 @Transactional
@@ -59,8 +59,8 @@ class MoneyTransactionGroupServiceTest extends BaseIntegrationTest {
         assertEquals("My group", dto.getName());
         assertEquals(2, dto.getQualifiers().size());
         assertEquals(REGEX, dto.getQualifiers().getFirst().getQualifierType());
-        assertEquals("Some value", dto.getQualifiers().get(0).getQualifier());
-        assertEquals(DESCRIPTION, dto.getQualifiers().get(0).getTransactionField());
+        assertEquals("Some value", dto.getQualifiers().getFirst().getQualifier());
+        assertEquals(DESCRIPTION, dto.getQualifiers().getFirst().getTransactionField());
         assertEquals(SIMILAR, dto.getQualifiers().get(1).getQualifierType());
         assertEquals("Other value", dto.getQualifiers().get(1).getQualifier());
         assertEquals(DESCRIPTION, dto.getQualifiers().get(1).getTransactionField());

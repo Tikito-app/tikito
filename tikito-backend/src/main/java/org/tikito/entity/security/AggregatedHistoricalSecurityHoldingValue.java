@@ -1,11 +1,11 @@
 package org.tikito.entity.security;
 
-import org.tikito.dto.security.AggregatedHistoricalSecurityHoldingValueDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tikito.dto.security.AggregatedHistoricalSecurityHoldingValueDto;
 
 import java.time.LocalDate;
 import java.util.HashSet;
