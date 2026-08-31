@@ -14,10 +14,7 @@ import org.tikito.entity.loan.LoanInterest;
 import org.tikito.entity.loan.LoanPart;
 import org.tikito.entity.loan.LoanValue;
 import org.tikito.entity.money.MoneyTransactionGroup;
-import org.tikito.repository.LoanPartRepository;
-import org.tikito.repository.LoanRepository;
-import org.tikito.repository.LoanValueRepository;
-import org.tikito.repository.MoneyTransactionGroupRepository;
+import org.tikito.repository.*;
 import org.tikito.service.job.JobType;
 import org.tikito.util.Util;
 
@@ -33,19 +30,22 @@ public class LoanService {
     private final LoanValueRepository loanValueRepository;
     private final JobFactoryService jobFactoryService;
     private final TimeService timeService;
+    private final MoneyTransactionRepository moneyTransactionRepository;
 
     public LoanService(final LoanRepository loanRepository,
                        final LoanPartRepository loanPartRepository,
                        final MoneyTransactionGroupRepository moneyTransactionGroupRepository,
                        final LoanValueRepository loanValueRepository,
                        final JobFactoryService jobFactoryService,
-                       final TimeService timeService) {
+                       final TimeService timeService,
+                       final MoneyTransactionRepository moneyTransactionRepository) {
         this.loanRepository = loanRepository;
         this.loanPartRepository = loanPartRepository;
         this.moneyTransactionGroupRepository = moneyTransactionGroupRepository;
         this.loanValueRepository = loanValueRepository;
         this.jobFactoryService = jobFactoryService;
         this.timeService = timeService;
+        this.moneyTransactionRepository = moneyTransactionRepository;
     }
 
     public List<LoanDto> getLoans(final long userId) {
@@ -151,6 +151,7 @@ public class LoanService {
         loanRepository.findByUserIdAndId(userId, loanId).orElseThrow();
         loanRepository.deleteByUserIdAndId(userId, loanId);
         loanValueRepository.deleteByLoanId(loanId);
+        moneyTransactionRepository.resetLoanId(loanId);
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
