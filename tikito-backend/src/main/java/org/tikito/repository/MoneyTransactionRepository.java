@@ -51,4 +51,8 @@ public interface MoneyTransactionRepository extends JpaRepository<MoneyTransacti
 
     @Query("select t from MoneyTransaction t where t.userId = :userId and t.loanId is not null")
     List<MoneyTransaction> findByUserIdAndLoanIdNotNull(long userId);
+
+    @Modifying
+    @Query("update MoneyTransaction t set t.loanId = null where t.loanId = :loanId")
+    void resetLoanId(long loanId);
 }
