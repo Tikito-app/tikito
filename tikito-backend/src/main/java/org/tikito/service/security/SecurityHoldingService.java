@@ -89,8 +89,8 @@ public class SecurityHoldingService implements JobProcessor {
              currentTimestamp.isBefore(timeService.now().plusDays(1));
              currentTimestamp = currentTimestamp.plusDays(1)) {
 
-            final double currencyMultiplier = cacheService.getCurrencyMultiplier(currencyId, currentTimestamp);
-            currentHoldingValue.setCurrencyMultiplier(currencyMultiplier);
+            final double exchangeRate = cacheService.getExchangeRate(currencyId, currentTimestamp);
+            currentHoldingValue.setExchangeRate(exchangeRate);
 
             currentHoldingValue = SecurityCalculator.calculateHistoricalValue(
                     currentTimestamp,

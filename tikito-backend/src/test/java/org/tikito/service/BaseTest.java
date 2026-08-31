@@ -71,7 +71,7 @@ public class BaseTest {
                 .builder()
                 .accountId(accountId)
                 .currencyId(currencyId)
-                .currencyMultiplier(randomDouble(1, 2))
+                .exchangeRate(randomDouble(1, 2))
                 .date(LocalDate.now().minusDays(randomInt(0, 1000)))
                 .price(randomDouble(1, 100))
                 .amount(randomInt(10, 100))

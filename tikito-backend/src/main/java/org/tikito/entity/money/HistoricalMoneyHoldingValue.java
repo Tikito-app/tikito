@@ -23,7 +23,7 @@ public class HistoricalMoneyHoldingValue {
     private long accountId;
     private LocalDate date;
     private long currencyId;
-    private double currencyMultiplier;
+    private double exchangeRate;
     private double amount;
     private boolean manuallySet;
 
@@ -32,7 +32,7 @@ public class HistoricalMoneyHoldingValue {
         this.accountId = dto.getAccountId();
         this.date = dto.getDate();
         this.currencyId = dto.getCurrencyId();
-        this.currencyMultiplier = dto.getCurrencyMultiplier();
+        this.exchangeRate = dto.getExchangeRate();
         this.amount = dto.getAmount();
     }
 
@@ -41,7 +41,7 @@ public class HistoricalMoneyHoldingValue {
                 accountId,
                 date,
                 currencyId,
-                currencyMultiplier,
+                exchangeRate,
                 amount);
     }
 }

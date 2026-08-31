@@ -17,7 +17,7 @@ public class HistoricalSecurityHoldingValueDto {
     private Long securityId;
     private LocalDate date;
     private long currencyId;
-    private double currencyMultiplier;
+    private double exchangeRate;
     private int amount = 0;
     private double price = 0;
     private double totalDividend = 0;
@@ -37,7 +37,7 @@ public class HistoricalSecurityHoldingValueDto {
         this.securityHoldingId = previousValue.getSecurityHoldingId();
         this.securityId = previousValue.getSecurityId();
         this.currencyId = previousValue.getCurrencyId();
-        this.currencyMultiplier = previousValue.getCurrencyMultiplier();
+        this.exchangeRate = previousValue.getExchangeRate();
         this.amount = previousValue.getAmount();
         this.price = previousValue.getPrice();
         this.totalDividend = previousValue.getTotalDividend();
