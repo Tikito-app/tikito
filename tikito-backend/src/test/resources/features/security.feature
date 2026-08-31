@@ -20,7 +20,7 @@ Feature: Security fully works
 #      | WOLTERS KLUWER |
 #
 #    Then historical security holding values persisted have:
-##      | security | date | amount | price | currencyMultiplier | totalDividend | totalAdministrativeCosts | totalTaxes | totalTransactionCosts | totalCashInvested | totalCashWithdrawn | worth | maxCashInvested | cashOnHand |
+##      | security | date | amount | price | exchangeRate | totalDividend | totalAdministrativeCosts | totalTaxes | totalTransactionCosts | totalCashInvested | totalCashWithdrawn | worth | maxCashInvested | cashOnHand |
 #      | security       | date       | amount | price | performance |
 #      | WOLTERS KLUWER | 2026-05-24 | 5      | 12.5  | 10.5        |
 

@@ -170,7 +170,7 @@ public class MoneyHoldingService implements JobProcessor {
      */
     private static void aggregateHoldingValue(final HistoricalMoneyHoldingValue historicalSecurityHoldingValue, final AggregatedHistoricalMoneyHoldingValue aggregatedMoneyValue) {
         aggregatedMoneyValue.setDate(historicalSecurityHoldingValue.getDate());
-        aggregatedMoneyValue.setAmount(aggregatedMoneyValue.getAmount() + historicalSecurityHoldingValue.getAmount() * historicalSecurityHoldingValue.getCurrencyMultiplier());
+        aggregatedMoneyValue.setAmount(aggregatedMoneyValue.getAmount() + historicalSecurityHoldingValue.getAmount() * historicalSecurityHoldingValue.getExchangeRate());
     }
 
     /**
@@ -192,10 +192,10 @@ public class MoneyHoldingService implements JobProcessor {
              currentTimestamp.isBefore(timeService.now().plusDays(1));
              currentTimestamp = currentTimestamp.plusDays(1)) {
 
-            final double currencyMultiplier = cacheService.getCurrencyMultiplier(currencyId, currentTimestamp);
+            final double exchangeRate = cacheService.getExchangeRate(currencyId, currentTimestamp);
 
             // We set the exchange rate here, but this can be overriden by the transactions if it's set
-            currentHoldingValue.setCurrencyMultiplier(currencyMultiplier);
+            currentHoldingValue.setExchangeRate(exchangeRate);
 
             currentHoldingValue = calculateHistoricalValue(
                     currentTimestamp,
@@ -233,7 +233,7 @@ public class MoneyHoldingService implements JobProcessor {
             newHoldingValue.setAmount(newHoldingValue.getAmount() + transaction.getAmount());
         }
         if(transaction.getExchangeRate() != 0) {
-            newHoldingValue.setCurrencyMultiplier(transaction.getExchangeRate());
+            newHoldingValue.setExchangeRate(transaction.getExchangeRate());
         }
     }
 

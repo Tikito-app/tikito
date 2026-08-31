@@ -25,7 +25,7 @@ public class HistoricalSecurityHoldingValue {
     private Long securityId; // todo: can we remove this?
     private LocalDate date;
     private long currencyId; // or this
-    private double currencyMultiplier;
+    private double exchangeRate;
     private int amount;
     private double price;
     private double totalDividend;
@@ -47,17 +47,17 @@ public class HistoricalSecurityHoldingValue {
         this.currencyId = dto.getCurrencyId();
         this.date = dto.getDate();
         this.amount = dto.getAmount();
-        this.price = dto.getPrice() * dto.getCurrencyMultiplier();
-        this.totalDividend = dto.getTotalDividend() * dto.getCurrencyMultiplier();
-        this.totalAdministrativeCosts = dto.getTotalAdministrativeCosts() * dto.getCurrencyMultiplier();
-        this.totalTaxes = dto.getTotalTaxes() * dto.getCurrencyMultiplier();
-        this.totalTransactionCosts = dto.getTotalTransactionCosts() * dto.getCurrencyMultiplier();
-        this.totalCashInvested = dto.getTotalCashInvested() * dto.getCurrencyMultiplier();
-        this.totalCashWithdrawn = dto.getTotalCashWithdrawn() * dto.getCurrencyMultiplier();
-        this.worth = dto.getWorth() * dto.getCurrencyMultiplier();
-        this.maxCashInvested = dto.getMaxCashInvested() * dto.getCurrencyMultiplier();
-        this.cashOnHand = dto.getCashOnHand() * dto.getCurrencyMultiplier();
-        this.currencyMultiplier = dto.getCurrencyMultiplier();
+        this.price = dto.getPrice() * dto.getExchangeRate();
+        this.totalDividend = dto.getTotalDividend() * dto.getExchangeRate();
+        this.totalAdministrativeCosts = dto.getTotalAdministrativeCosts() * dto.getExchangeRate();
+        this.totalTaxes = dto.getTotalTaxes() * dto.getExchangeRate();
+        this.totalTransactionCosts = dto.getTotalTransactionCosts() * dto.getExchangeRate();
+        this.totalCashInvested = dto.getTotalCashInvested() * dto.getExchangeRate();
+        this.totalCashWithdrawn = dto.getTotalCashWithdrawn() * dto.getExchangeRate();
+        this.worth = dto.getWorth() * dto.getExchangeRate();
+        this.maxCashInvested = dto.getMaxCashInvested() * dto.getExchangeRate();
+        this.cashOnHand = dto.getCashOnHand() * dto.getExchangeRate();
+        this.exchangeRate = dto.getExchangeRate();
     }
 
     public HistoricalSecurityHoldingValueDto toDto() {
@@ -69,7 +69,7 @@ public class HistoricalSecurityHoldingValue {
                 securityId,
                 date,
                 currencyId,
-                currencyMultiplier,
+                exchangeRate,
                 amount,
                 price,
                 totalDividend,

@@ -27,7 +27,7 @@ public class CacheService {
 
     private static Map<Long, SecurityDto> securitiesById = new HashMap<>();
     private Map<Long, List<IsinDto>> isinsBySecurityId = new HashMap<>();
-    private final Map<Long, Map<LocalDate, Double>> currencyToEuroMultiplier = new HashMap<>();
+    private final Map<Long, Map<LocalDate, Double>> exchangeRatesToEuro = new HashMap<>();
     private final List<SecurityDto> currencies = new ArrayList<>();
     private Boolean firstEverUser;
     private final Map<Long, Boolean> isCryptoCache = new HashMap<>();
@@ -77,11 +77,11 @@ public class CacheService {
                 .stream()
                 .map(SecurityDto::getId)
                 .collect(Collectors.toSet());
-        currencyIds.forEach(id -> currencyToEuroMultiplier.put(id, new HashMap<>()));
+        currencyIds.forEach(id -> exchangeRatesToEuro.put(id, new HashMap<>()));
         securityPriceRepository
                 .findAllBySecurityIdIn(currencyIds)
                 .forEach(price ->
-                        currencyToEuroMultiplier.get(price.getSecurityId())
+                        exchangeRatesToEuro.get(price.getSecurityId())
                                 .put(price.getDate(), price.getPrice()));
 
     }
@@ -128,8 +128,8 @@ public class CacheService {
                 .findAny();
     }
 
-    public double getCurrencyMultiplier(final long currencyId, final LocalDate date) {
-        final Map<LocalDate, Double> pricePerDate = currencyToEuroMultiplier.get(currencyId);
+    public double getExchangeRate(final long currencyId, final LocalDate date) {
+        final Map<LocalDate, Double> pricePerDate = exchangeRatesToEuro.get(currencyId);
         if (pricePerDate == null) {
             return 1;
         }

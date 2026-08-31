@@ -183,7 +183,7 @@ public class SecurityIsinMappingService {
 
     private void enrichValidateAndMapExchangeRate(final SecurityTransactionImportLine line) {
         if (line.getExchangeRate() == null) {
-            line.setExchangeRate(cacheService.getCurrencyMultiplier(line.getCurrencyId(), LocalDate.ofInstant(line.getTimestamp(), ZoneOffset.UTC)));
+            line.setExchangeRate(cacheService.getExchangeRate(line.getCurrencyId(), LocalDate.ofInstant(line.getTimestamp(), ZoneOffset.UTC)));
         }
 
         if (line.getExchangeRate() == null) {

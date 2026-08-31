@@ -1,0 +1,2 @@
+alter table historical_security_holding_value rename column currency_multiplier to exchange_rate;
+alter table historical_money_holding_value rename column currency_multiplier to exchange_rate;

@@ -292,7 +292,7 @@ export class MoneyGraphProcessor {
       }
 
       if (value != null) {
-        let exchangedValue = value.amount * value.currencyMultiplier;
+        let exchangedValue = value.amount * value.exchangeRate;
         dataDto.seriesPerGroupKey[key.toString()].push(exchangedValue);
         dataDto.cashHoldingValuesPerGroupAndDateRange[key.toString()][currentRangedString] = value;
       } else {

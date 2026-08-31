@@ -261,7 +261,7 @@ export class MoneyGraphComponent implements OnInit {
             } else if(budgetValue != null) {
               totalBudgeted += budgetValue.value;
             } else if(isCurrency) {
-              totalCurrencyValue += firstValue.amount * firstValue.currencyMultiplier;
+              totalCurrencyValue += firstValue.amount * firstValue.exchangeRate;
             }
 
             // set the value when only budget is selected: we still want to show the spent amount

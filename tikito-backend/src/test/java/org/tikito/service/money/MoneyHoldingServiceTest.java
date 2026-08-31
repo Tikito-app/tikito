@@ -76,17 +76,17 @@ class MoneyHoldingServiceTest extends BaseIntegrationTest {
         assertEquals(250, v2Euro.getAmount());
         assertEquals(150, v3Euro.getAmount());
 
-        assertEquals(1, v1Euro.getCurrencyMultiplier());
-        assertEquals(1, v2Euro.getCurrencyMultiplier());
-        assertEquals(1, v3Euro.getCurrencyMultiplier());
+        assertEquals(1, v1Euro.getExchangeRate());
+        assertEquals(1, v2Euro.getExchangeRate());
+        assertEquals(1, v3Euro.getExchangeRate());
 
         assertEquals(100, v1Usd.getAmount());
         assertEquals(130, v2Usd.getAmount());
         assertEquals(80, v3Usd.getAmount());
 
-        assertEquals(2, v1Usd.getCurrencyMultiplier());
-        assertEquals(3, v2Usd.getCurrencyMultiplier());
-        assertEquals(4, v3Usd.getCurrencyMultiplier());
+        assertEquals(2, v1Usd.getExchangeRate());
+        assertEquals(3, v2Usd.getExchangeRate());
+        assertEquals(4, v3Usd.getExchangeRate());
 
         assertEquals(t1, allAggregated.getFirst().getDate());
         assertDoubleEquals(400, getAmountOnDate(t1, allAggregated));
